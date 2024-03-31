@@ -46,32 +46,79 @@ const SwapArrayOfItems = () => {
   };
 
   return (
-    <div style={{ display: "block" }}>
-      <h1>List 1</h1>
+    <>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          alignItems: "center",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            gap: "30px",
+          }}
+        >
+          <h1>List 1</h1>
 
-      {stateOne.map((items, index) => {
-        return (
-          <div key={items.id}>
-            <input
-              value={items.id}
-              type="checkbox"
-              checked={items.isChecked}
-              onChange={() => handleChange(items, index)}
-            />
-            {items.name}
-          </div>
-        );
-      })}
+          {stateOne.map((items, index) => {
+            return (
+              <div key={items.id}>
+                <input
+                  value={items.id}
+                  type="checkbox"
+                  checked={items.isChecked}
+                  onChange={() => handleChange(items, index)}
+                />
+                {items.name}
+              </div>
+            );
+          })}
+        </div>
 
-      <br />
-      <h1>List 2</h1>
-      {stateTwo.map((items, index) => {
-        return <div key={items.id}>{items.name}</div>;
-      })}
-      <div style={{ display: "block", textAlign: "center" }}>
-        <button onClick={handleSwap}> SWAP</button>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            flexDirection: "column",
+            gap: "30px",
+          }}
+        >
+          <h1>List 2</h1>
+          {stateTwo.map((items, index) => {
+            return <div key={items.id}>{items.name}</div>;
+          })}
+        </div>
       </div>
-    </div>
+      <div
+        style={{
+          display: "block",
+          textAlign: "center",
+          position: "relative",
+          top: "100px",
+        }}
+      >
+        <button
+          onClick={handleSwap}
+          style={{
+            width: "150px",
+            height: "40px",
+            fontSize: "20px",
+            fontWeight: "500",
+            border: "none",
+            cursor: "pointer",
+          }}
+        >
+          {" "}
+          SWAP
+        </button>
+      </div>
+    </>
   );
 };
 
