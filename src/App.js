@@ -7,7 +7,7 @@ import ShuffleItems from "./Components/ShuffleArrayItems/ShuffleArrayItems";
 import FindTotalAmount from "./Components/FindCount/FindTotalAmount";
 function App() {
   return (
-    <div className="App">
+    <div className="">
       <Suspense fallback="Loading...">
         <BrowserRouter>
           <NavLinks />
