@@ -221,7 +221,43 @@ The increment method increments the value of counter by 1. Any time the incremen
 In ES6, there are several ways to create Singletons.
 
 `Classes`
-// 1. Creating a singleton with an ES2015 class can be done by:
+// A. Creating a singleton with an ES2015 class can be done by:
+
+let counter = 0;
+
+class Counter {
+  getInstance() {
+    return this;
+  }
+
+  getCount() {
+    return counter;
+  }
+
+  increment() {
+    return ++counter;
+  }
+
+  decrement() {
+    return --counter;
+  }
+}
+
+const counter1 = new Counter();
+const counter2 = new Counter();
+
+console.log(counter1.getInstance() === counter2.getInstance()); // false
+
+1.` However,Above  this class doesn’t meet the criteria for a Singleton! A Singleton should only be able to get instantiated once. Currently, we can create multiple instances of the Counter class.`
+2. `By calling the new method twice, we just set counter1 and counter2 equal to different instances. The values returned by the getInstance method on counter1 and counter2 effectively returned references to different instances: they aren’t strictly equal!`
+
+
+
+//  B. Let’s make sure that only one instance of the Counter class can be created.
+
+`METHOD TO CREATE : - only one instance`
+
+One way to make sure that only one instance can be created, is by creating a variable called instance. `In the constructor of Counter`, we can set instance equal to a reference to the instance when a `new instance` is created. We can prevent `new instantiations` `by checking if the instance variable already had a value`. `If that’s the case, an instance already exists`. This shouldn’t happen: `an error should get thrown to let the user know.`
 
 
 let instance;
@@ -236,7 +272,9 @@ class Counter {
     this.counter = counter;
     instance = this;
   }
-
+  getInstance() {
+    return this;
+  }
   getCount() {
     return this.counter;
   }
@@ -258,7 +296,7 @@ const singletonCounter = Object.freeze(new Counter());
 export default singletonCounter;
 
 
-`Objects`
+- BY `Objects`
 
 // We can also directly create objects without having to use a class, which can lead to much simpler and cleaner code.
 // To create a singleton using a regular object, we have to:
@@ -279,7 +317,7 @@ const singletonCounter = Object.freeze(counterObject);
 export default singletonCounter;
 
 
-> NOTE : We could even export the frozen object directly, without having to declare multiple variables : **cloning**.
+> NOTE : We could even `export` the frozen object directly, without having to declare multiple variables : **cloning**.
 
 let counter = 0;
 
@@ -289,6 +327,8 @@ export default Object.freeze({
   decrement: () => --counter,
 });
 ```
+
+`The Object.freeze`: method makes sure that consuming code cannot modify the Singleton. Properties on the frozen instance cannot be added or modified, which reduces the risk of accidentally overwriting the values on the Singleton.
 
 ## Tradeoffs
 
@@ -602,11 +642,7 @@ interface IPizzaBuilder {
 }
 
 class Pizza implements IPizza {
-  constructor(
-    public name: string,
-    public size: string,
-    public isCheese: boolean
-  ) {}
+  constructor(public name: string, public size: string, public isCheese: boolean) {}
 }
 
 class PizzaBuilder implements IPizzaBuilder {
@@ -641,11 +677,7 @@ class PizzaDirector {
     return this.builder.setName(name).setSize(size).build();
   }
 
-  public buildFullFeaturedPizza(
-    name: string,
-    size: string,
-    isCheese: boolean
-  ): IPizza {
+  public buildFullFeaturedPizza(name: string, size: string, isCheese: boolean): IPizza {
     return this.builder.setName(name).setSize(size).setCheese(isCheese).build();
   }
 }
@@ -653,15 +685,8 @@ class PizzaDirector {
 // Usage:
 const builder: IPizzaBuilder = new PizzaBuilder();
 const director: PizzaDirector = new PizzaDirector(builder);
-const pizzaWithoutCheese: IPizza = director.buildMinimalPizza(
-  "Pepperoni",
-  "Medium"
-);
-const pizzaWithCheese: IPizza = director.buildFullFeaturedPizza(
-  "Hawaiian",
-  "Small",
-  true
-);
+const pizzaWithoutCheese: IPizza = director.buildMinimalPizza("Pepperoni", "Medium");
+const pizzaWithCheese: IPizza = director.buildFullFeaturedPizza("Hawaiian", "Small", true);
 
 console.log(pizzaWithoutCheese); // Pizza: { name: 'Pepperoni', size: 'Medium', isCheese: false}
 console.log(pizzaWithCheese); // Pizza: { name: 'Hawaiian', size :'Small', isCheese: true}
@@ -712,17 +737,13 @@ abstract class Car {
 
 class Sedan extends Car {
   displayCarInfo() {
-    console.log(
-      `This is a Sedan. Model: ${this.model}, Production Year: ${this.productionYear}`
-    );
+    console.log(`This is a Sedan. Model: ${this.model}, Production Year: ${this.productionYear}`);
   }
 }
 
 class Hatchback extends Car {
   displayCarInfo() {
-    console.log(
-      `This is a Hatchback. Model: ${this.model}, Production Year: ${this.productionYear}`
-    );
+    console.log(`This is a Hatchback. Model: ${this.model}, Production Year: ${this.productionYear}`);
   }
 }
 
@@ -1424,11 +1445,7 @@ class MultimediaFacade {
   private videoPlayer: VideoPlayer;
   private projector: Projector;
 
-  constructor(
-    audioPlayer: AudioPlayer,
-    videoPlayer: VideoPlayer,
-    projector: Projector
-  ) {
+  constructor(audioPlayer: AudioPlayer, videoPlayer: VideoPlayer, projector: Projector) {
     this.audioPlayer = audioPlayer;
     this.videoPlayer = videoPlayer;
     this.projector = projector;
@@ -1452,11 +1469,7 @@ const audioPlayer = new AudioPlayer();
 const videoPlayer = new VideoPlayer();
 const projector = new Projector();
 
-const multimediaFacade = new MultimediaFacade(
-  audioPlayer,
-  videoPlayer,
-  projector
-);
+const multimediaFacade = new MultimediaFacade(audioPlayer, videoPlayer, projector);
 
 console.log(multimediaFacade.startMovie()); // Playing audio, Playing video, Projector displaying content
 console.log(multimediaFacade.stopMovie()); // Stopping multimedia playback
@@ -1512,9 +1525,7 @@ class SharedTextStyle implements TextStyle {
   }
 
   applyStyle(): void {
-    console.log(
-      `Applying style - Font: ${this.font}, Size: ${this.size}, Color: ${this.color}`
-    );
+    console.log(`Applying style - Font: ${this.font}, Size: ${this.size}, Color: ${this.color}`);
   }
 }
 
@@ -1616,9 +1627,7 @@ class ProxyInternet implements Internet {
   accessWebsite(website: string): void {
     // Check if the website is restricted
     if (this.restrictedWebsites.has(website)) {
-      console.log(
-        `Access to ${website} is denied due to content restrictions.`
-      );
+      console.log(`Access to ${website} is denied due to content restrictions.`);
       return;
     }
 
