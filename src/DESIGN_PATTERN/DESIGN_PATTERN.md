@@ -257,7 +257,7 @@ console.log(counter1.getInstance() === counter2.getInstance()); // false
 
 `METHOD TO CREATE : - only one instance`
 
-One way to make sure that only one instance can be created, is by creating a variable called instance. `In the constructor of Counter`, we can set instance equal to a reference to the instance when a `new instance` is created. We can prevent `new instantiations` `by checking if the instance variable already had a value`. `If that’s the case, an instance already exists`. This shouldn’t happen: `an error should get thrown to let the user know.`
+- One way to make sure that only one instance can be created, is by creating a variable called instance. `In the constructor of Counter`, we can set instance equal to a reference to the instance when a `new instance` is created. We can prevent `new instantiations` `by checking if the instance variable already had a value`. `If that’s the case, an instance already exists`. This shouldn’t happen: `an error should get thrown to let the user know.`
 
 
 let instance;
@@ -317,7 +317,7 @@ const singletonCounter = Object.freeze(counterObject);
 export default singletonCounter;
 
 
-> NOTE : We could even `export` the frozen object directly, without having to declare multiple variables : **cloning**.
+- NOTE : We could even `export` the frozen object directly, without having to declare multiple variables :
 
 let counter = 0;
 
@@ -341,6 +341,14 @@ export default Object.freeze({
 `Global Scope Pollution`: The global behavior of Singletons is essentially the same as a global variable. Global Scope Pollution can end up in accidentally overwriting the value of a global variable, which can lead to a lot of unexpected behavior. Usually, certain parts of the codebase modify the values within global state, whereas others consume that data. The order of execution here is important, understanding the data flow when using a global state can get very tricky as your application grows, and dozens of components rely on each other.
 
 `Testing`: Since we can't create new instances each time, all tests rely on the modification to the global instance of the previous test. The order of the tests matter in this case, and one small modification can lead to an entire test suite failing. After testing, we need to reset the entire instance in order to reset the modifications made by the tests.
+
+
+### State management in React
+
+- In React, we often rely on a global state through state management tools such as Redux or React Context instead of using Singletons. Although their global state behavior might seem similar to that of a Singleton, these tools provide a read-only state rather than the mutable state of the Singleton. When using Redux, only pure function reducers can update the state, after a component has sent an action through a dispatcher.
+
+- Although the downsides to having a global state don’t magically disappear by using these tools, we can at least make sure that the global state is mutated the way we intend it, since components cannot update the state directly.
+
 
 ### Points To Remember
 
