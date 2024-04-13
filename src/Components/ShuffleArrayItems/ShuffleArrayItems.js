@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 import "./shuffle.css";
+import singletonCounter from "../../PATTERN_MODULES/SingletonPatternExample";
 const ShuffleItems = () => {
-  const [arrayOfItems, setArrayOfItems] = useState([
-    "Apple",
-    "Ball",
-    "Bat",
-    "Call",
-    "Doll",
-    "Tally",
-    "John",
-  ]);
+  const [arrayOfItems, setArrayOfItems] = useState(["Apple", "Ball", "Bat", "Call", "Doll", "Tally", "John"]);
 
   //    Method 1.
   const handleShuffle = () => {
+    singletonCounter.increment();
     const sortedItem = [...arrayOfItems];
     const Length = sortedItem.length - 1;
 
@@ -61,14 +55,15 @@ const ShuffleItems = () => {
         <button className="shuffle-btn" onClick={handleShuffle}>
           Shuffle 1
         </button>
-
         <button className="shuffle-btn" onClick={handleShuffleTwo}>
           Shuffle 2
         </button>
-
         <button className="shuffle-btn" onClick={handleShuffleThree}>
           Shuffle 3
         </button>
+        <br />
+        Singleton Example :{"  "}
+        {singletonCounter.getCount()}
       </div>
     </div>
   );

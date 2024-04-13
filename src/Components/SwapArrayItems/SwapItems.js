@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import singletonCounter from "../../PATTERN_MODULES/SingletonPatternExample";
 const SwapArrayOfItems = () => {
   const [stateOne, setStateOne] = useState([
     { id: 1, name: "item 1", isChecked: false },
@@ -13,13 +13,12 @@ const SwapArrayOfItems = () => {
   ]);
 
   const handleChange = (event, index) => {
-    const data = stateOne.map((item) =>
-      item.id === event.id ? { ...item, isChecked: !item.isChecked } : item
-    );
+    const data = stateOne.map((item) => (item.id === event.id ? { ...item, isChecked: !item.isChecked } : item));
     setStateOne(data);
   };
 
   const handleSwap = () => {
+    singletonCounter.increment(); // It for testing singleton pattern.
     const isSwaped = stateOne.some((item) => item.isChecked);
     if (!isSwaped) return;
 
@@ -29,10 +28,7 @@ const SwapArrayOfItems = () => {
     const lengthOfItem = stateItemOne.length;
 
     for (let x = 0; x < lengthOfItem; x++) {
-      if (
-        stateItemOne[x].isChecked &&
-        stateItemOne[x].id === stateItemTwo[x].id
-      ) {
+      if (stateItemOne[x].isChecked && stateItemOne[x].id === stateItemTwo[x].id) {
         let tempVariable = stateItemOne[x];
         stateItemOne[x] = stateItemTwo[x];
         stateItemTwo[x] = tempVariable;
@@ -68,12 +64,7 @@ const SwapArrayOfItems = () => {
           {stateOne.map((items, index) => {
             return (
               <div key={items.id}>
-                <input
-                  value={items.id}
-                  type="checkbox"
-                  checked={items.isChecked}
-                  onChange={() => handleChange(items, index)}
-                />
+                <input value={items.id} type="checkbox" checked={items.isChecked} onChange={() => handleChange(items, index)} />
                 {items.name}
               </div>
             );
@@ -116,7 +107,9 @@ const SwapArrayOfItems = () => {
         >
           {" "}
           SWAP
-        </button>
+        </button><br />
+        Singleton Example :{"  "}
+        {singletonCounter.getCount()}
       </div>
     </>
   );
