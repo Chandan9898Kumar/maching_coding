@@ -345,7 +345,7 @@ res.div()
 
 ```
 
-### Count repeated number of words in string, exclude empty strings.
+### 11. Count repeated number of words in string, exclude empty strings.
 
 ```ts
 const string = " hi hello how    are you     sir       hi hello how is this that ball this   ";
@@ -363,7 +363,7 @@ const result = arrays.reduce((acc, curr) => {
 console.log(result);
 ```
 
-### Find First word whose count is 1.
+### 12. Find First word whose count is 1.
 
 ```ts
 const string = " hi hello how    are you     sir       hi hello how is this that ball this   ";
