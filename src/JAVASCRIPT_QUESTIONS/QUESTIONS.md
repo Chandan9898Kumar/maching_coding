@@ -344,3 +344,48 @@ res.mul()
 res.div()
 
 ```
+
+### Count repeated number of words in string, exclude empty strings.
+
+```ts
+const string = " hi hello how    are you     sir       hi hello how is this that ball this   ";
+
+const arrays = string.split(" ");
+
+const result = arrays.reduce((acc, curr) => {
+  if (curr) {
+    acc[curr] = (acc[curr] || 0) + 1;
+  }
+
+  return acc;
+}, {});
+
+console.log(result);
+```
+
+### Find First word whose count is 1.
+
+```ts
+const string = " hi hello how    are you     sir       hi hello how is this that ball this   ";
+
+const arrays = string.split(" ");
+
+function findValue(arrays) {
+  const obj = arrays.reduce((acc, curr) => {
+    if (curr) {
+      acc[curr] = (acc[curr] || 0) + 1;
+    }
+
+    return acc;
+  }, {});
+
+  for (let x in obj) {
+    if (obj[x] === 1) {
+      return { [x]: obj[x] };
+    }
+  }
+}
+
+const result = findValue(arrays);
+console.log(result);
+```
