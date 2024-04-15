@@ -389,3 +389,37 @@ function findValue(arrays) {
 const result = findValue(arrays);
 console.log(result);
 ```
+
+### Sort An Array In Ascending Order, Without Using Sort Method.
+
+```ts
+const arrays = [18, 2, 5, 1, 19, 4, 3, 6];
+const len = arrays.length;
+
+for (let x = 0; x < len - 1; x++) {
+  for (let y = x + 1; y < len; y++) {
+    if (arrays[x] > arrays[y]) {
+      [arrays[x], arrays[y]] = [arrays[y], arrays[x]];
+    }
+  }
+}
+
+console.log(arrays);
+```
+
+### Sort An Array In descending Order, Without Using Sort Method.
+
+```ts
+const arrays = [18, 2, 5, 1, 19, 4, 3, 6];
+const len = arrays.length;
+
+for (let x = 0; x < len - 1; x++) {
+  for (let y = x + 1; y < len; y++) {
+    if (arrays[x] < arrays[y]) {
+      [arrays[x], arrays[y]] = [arrays[y], arrays[x]];
+    }
+  }
+}
+
+console.log(arrays);
+```
