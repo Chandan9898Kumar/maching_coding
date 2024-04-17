@@ -576,7 +576,7 @@ function expensiveOperation(input) {
 const result = expensiveOperation(10);
 ```
 
-### 19. Remove Duplicate Objects From An Array. It should not return new array.
+### 19. Remove Duplicate Objects From An Array using built-in functions. It should not return new array.
 
 ```ts
 const person1 = { name: "aryan", height: 18 };
@@ -600,6 +600,69 @@ for (let x of arrayOfObject) {
   }
 }
 const parseData = unique.map((item) => JSON.parse(item));
+// NOTE: If condition is to return results in new array then we can simply return parseData. No need to of below codes. But When condition is not return new array,
+//  We have modify in the existing array then use below code.
+
 arrayOfObject.splice(0, arrayOfObject.length, ...parseData); // First removing entire existing data from an array then pushing result into it.
 console.log(arrayOfObject);
+```
+
+### 20. Remove Duplicate Objects From An Array Without using built-in functions. It should not return new array.
+
+```ts
+const uniqueData = [];
+const person1 = { name: "aryan", height: 18 };
+const person2 = { name: "kaush", height: 182 };
+const person3 = { name: "abhishek", height: 176 };
+const person4 = { name: "aryan", height: 78 };
+const person5 = { name: "kaush", height: 82 };
+const person6 = { name: "abhishek", height: 76 };
+const person7 = { name: "aryan", height: 18 };
+const person8 = { name: "kaush", height: 182 };
+const person9 = { name: "abhishek", height: 16 };
+const person10 = { name: "abhishek", height: 16 };
+const person11 = { name: "abhishek", height: 16 };
+
+let arrayOfObject = [person1, person2, person3, person4, person5, person6, person7, person8, person9, person10, person11];
+
+for (let x = 0; x < arrayOfObject.length; x++) {
+  let uniq = true;
+
+  for (let j = x + 1; j < arrayOfObject.length; j++) {
+    let isConditionTrue = arrayOfObject[x].name === arrayOfObject[j].name && arrayOfObject[x].height === arrayOfObject[j].height;
+    if (isConditionTrue) {
+      uniq = false;
+      break;
+    }
+  }
+  if (uniq) {
+    uniqueData.push(arrayOfObject[x]);
+  }
+}
+arrayOfObject = uniqueData;
+console.log("unique", arrayOfObject);
+
+//  NOTE : If condition is to return a new array then simply  return uniqueData instead of assign it to arrayOfObject.
+```
+
+### 21. Remove Duplicate items From An Array Without using built-in functions. It should not return new array.
+
+```ts
+const uniqueData = [];
+let arrayOfObject = [1, 2, 3, 4, 2, 1];
+for (let x = 0; x < arrayOfObject.length; x++) {
+  let uniq = true;
+  for (let j = x + 1; j < arrayOfObject.length; j++) {
+    if (arrayOfObject[x] === arrayOfObject[j]) {
+      uniq = false;
+      break;
+    }
+  }
+  if (uniq) {
+    uniqueData.push(arrayOfObject[x]);
+  }
+}
+arrayOfObject = uniqueData;
+console.log(arrayOfObject);
+//  NOTE : If condition is to return a new array then simply  return uniqueData instead of assign it to arrayOfObject.
 ```
