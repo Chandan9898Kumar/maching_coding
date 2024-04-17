@@ -390,7 +390,7 @@ const result = findValue(arrays);
 console.log(result);
 ```
 
-### Sort An Array In Ascending Order, Without Using Sort Method.
+### 13. Sort An Array In Ascending Order, Without Using Sort Method.
 
 ```ts
 const arrays = [18, 2, 5, 1, 19, 4, 3, 6];
@@ -407,7 +407,7 @@ for (let x = 0; x < len - 1; x++) {
 console.log(arrays);
 ```
 
-### Sort An Array In descending Order, Without Using Sort Method.
+### 14. Sort An Array In descending Order, Without Using Sort Method.
 
 ```ts
 const arrays = [18, 2, 5, 1, 19, 4, 3, 6];
@@ -423,3 +423,134 @@ for (let x = 0; x < len - 1; x++) {
 
 console.log(arrays);
 ```
+
+### 15. Find The Missing Number From The Array
+
+```ts
+`# Approach 1:`
+- Using Arithmetic Progression Formula
+
+const array = [1, 2, 4, 6, 3, 7, 8];
+function findMissingNumber(value) {
+  // We are aware that (n(n+1))/2 is the sum of all items in the range of 1 to n
+  const n = value.length + 1;
+  const expectedSum = (n * (n + 1)) / 2;
+  const actualSum = value.reduce((acc, curr) => acc + curr, 0);
+  return expectedSum - actualSum;
+}
+
+const missingNumber = findMissingNumber(array);
+
+
+
+`# Approach 2:`
+- Using Summation Formula
+
+function findMissingNumber(inputArray, length) {
+  let result = Math.floor((length + 1) * (length + 2) / 2);
+  for (let i = 0; i < length; i++) result -= inputArray[i];
+  return result;
+ }
+
+ let myArray = [1, 2, 3, 5];
+ let missingNumber = findMissingNumber(myArray, myArray.length);
+ console.log(missingNumber);
+
+
+ `# Approach 3:`
+- Using XOR
+
+unction findMissingNumberWithXOR(sequence) {
+    const length = sequence.length + 1; // Including the missing number
+    let xorOfAllNumbers = 0;
+
+    for (let i = 1; i <= length; i++) {
+        xorOfAllNumbers ^= i;
+    }
+
+    let xorOfArrayElements = sequence.reduce((acc, num) => acc ^ num, 0);
+
+    return xorOfAllNumbers ^ xorOfArrayElements;
+}
+
+const inputSequence = [2, 4, 6, 8, 10, 12, 14];
+const result = findMissingNumberWithXOR(inputSequence);
+console.log(`Missing number in the sequence ${inputSequence}: ${result}`);
+```
+
+### 16. Find The OutPut
+
+```ts
+foo(); // Output: "Hello"
+function foo() {
+  console.log("Hello");
+}
+// The above code is equivalent to:
+function foo() {
+  console.log("Hello");
+}
+foo(); // Output: "Hello"
+
+
+- In above example, we define `a function foo()` and call it before the actual declaration. Surprisingly, the code works without any errors. This is `because function declarations are hoisted to the top of their scope`, allowing us to `call the function before its declaration in the code`.
+```
+
+### Difference between Micro-task Queue and Callback Queue ?
+
+In JavaScript, both the Micro-task Queue (also known as the Job Queue) and the Callback Queue (also known as the Task Queue) are parts of the event loop mechanism that helps manage asynchronous operations. However, they serve different purposes and have distinct characteristics. Let’s explore the differences between the Micro-task Queue and the Callback Queue:
+
+## Micro-task Queue (Job Queue):
+
+Priority:
+
+1. Higher priority than the Callback Queue.
+2. Microtasks are executed before the next rendering, which makes them suitable for tasks that should be executed before the user interface updates.
+
+`Examples of Microtasks:`
+
+1. Promises: then(), catch(), and finally() callbacks.
+2. process.nextTick in Node.js.
+
+`Order of Execution:`
+
+1. Microtasks are processed in a FIFO (First-In-First-Out) order.
+2. Once the call stack is empty, the event loop checks the Microtask Queue and processes each microtask one by one.
+
+`Usage Scenario:`
+
+1. Often used for tasks that need to be executed before the browser renders, making it suitable for UI-related updates and ensuring faster response times.
+
+## Callback Queue (Task Queue):
+
+`Priority:`
+
+1. Lower priority than the Microtask Queue.
+2. Callbacks in the Callback Queue are executed after the Microtask Queue is empty.
+
+`Examples of Callbacks:`
+
+1. setTimeout and setInterval callbacks.
+2. DOM events like click, input, etc.
+3. I/O operations in Node.js.
+
+`Order of Execution:`
+
+1. Callbacks in the Callback Queue are processed in a FIFO order, similar to the Microtask Queue.
+   The event loop checks the Callback Queue only when the Microtask Queue is empty.
+
+`Usage Scenario:`
+
+1. Used for general asynchronous tasks and I/O operations that don’t require immediate attention and can be deferred.
+
+## Relationship:
+
+1. Execution Order:
+
+A. When the call stack is empty, the event loop first checks the Microtask Queue. If there are microtasks, it executes them all.
+B. After the Microtask Queue is empty, the event loop checks the Callback Queue and executes any available callbacks.
+C. This process continues in a loop.
+
+2. Interaction:
+
+A. Microtasks are often used for tasks that need to be completed immediately and impact the rendering process.
+B. Callbacks in the Callback Queue are typically used for less critical tasks, such as deferred or background operations.
