@@ -495,7 +495,7 @@ foo(); // Output: "Hello"
 - In above example, we define `a function foo()` and call it before the actual declaration. Surprisingly, the code works without any errors. This is `because function declarations are hoisted to the top of their scope`, allowing us to `call the function before its declaration in the code`.
 ```
 
-### Difference between Micro-task Queue and Callback Queue ?
+### 17. Difference between Micro-task Queue and Callback Queue ?
 
 In JavaScript, both the Micro-task Queue (also known as the Job Queue) and the Callback Queue (also known as the Task Queue) are parts of the event loop mechanism that helps manage asynchronous operations. However, they serve different purposes and have distinct characteristics. Let’s explore the differences between the Micro-task Queue and the Callback Queue:
 
@@ -554,3 +554,52 @@ C. This process continues in a loop.
 
 A. Microtasks are often used for tasks that need to be completed immediately and impact the rendering process.
 B. Callbacks in the Callback Queue are typically used for less critical tasks, such as deferred or background operations.
+
+### 18. use HASH MAP for Caching
+
+HashMaps can be used effectively for caching frequently accessed data in an application. By using a HashMap as a cache, you can store the results of expensive operations and retrieve them quickly when needed. This can significantly improve the performance of your application.
+
+```ts
+// Create a HashMap for caching (also an example of memoization)
+const cache = new Map();
+function expensiveOperation(input) {
+  if (cache.has(input)) {
+    return cache.get(input);
+  }
+  // Perform the expensive operation
+  const result = performExpensiveOperation(input);
+  // Store the result in the cache
+  cache.set(input, result);
+  return result;
+}
+
+const result = expensiveOperation(10);
+```
+
+### 19. Remove Duplicate Objects From An Array. It should not return new array.
+
+```ts
+const person1 = { name: "aryan", height: 18 };
+const person2 = { name: "kaush", height: 182 };
+const person3 = { name: "abhishek", height: 176 };
+const person4 = { name: "aryan", height: 78 };
+const person5 = { name: "kaush", height: 82 };
+const person6 = { name: "abhishek", height: 76 };
+const person7 = { name: "aryan", height: 18 };
+const person8 = { name: "kaush", height: 182 };
+const person9 = { name: "abhishek", height: 16 };
+
+const arrayOfObject = [person1, person2, person3, person4, person5, person6, person7, person8, person9];
+
+const unique = [];
+
+for (let x of arrayOfObject) {
+  const value = JSON.stringify(x); // To compare two object converting them into string.
+  if (!unique.includes(value)) {
+    unique.push(value);
+  }
+}
+const parseData = unique.map((item) => JSON.parse(item));
+arrayOfObject.splice(0, arrayOfObject.length, ...parseData); // First removing entire existing data from an array then pushing result into it.
+console.log(arrayOfObject);
+```
