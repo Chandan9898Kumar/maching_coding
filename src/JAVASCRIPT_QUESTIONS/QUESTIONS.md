@@ -605,6 +605,25 @@ const parseData = unique.map((item) => JSON.parse(item));
 
 arrayOfObject.splice(0, arrayOfObject.length, ...parseData); // First removing entire existing data from an array then pushing result into it.
 console.log(arrayOfObject);
+
+
+//  NOTE Condition 2. : If condition is to return a new array then  below code should be used. it is more simplified.
+
+const data = arrayOfObject.filter((item, index, arr) => {
+  return index === arr.findIndex((value, ind) => item.name === value.name && item.height === value.height);
+});
+
+console.log(data);
+
+// The findIndex() method executes a function for each array element.
+
+// The findIndex() method returns the index (position) of the first element that passes a test.
+
+// The findIndex() method returns -1 if no match is found.
+
+// The findIndex() method does not execute the function for empty array elements.
+
+// The findIndex() method does not change the original array.
 ```
 
 ### 20. Remove Duplicate Objects From An Array Without using built-in functions. It should not return new array.
