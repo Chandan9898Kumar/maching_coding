@@ -392,6 +392,8 @@ console.log(result);
 
 ### 13. Sort An Array In Ascending Order, Without Using Sort Method.
 
+`Bubble sort algorithm : Bubble sort is a simple sorting algorithm that works by repeatedly stepping through the list to be sorted`
+
 ```ts
 const arrays = [18, 2, 5, 1, 19, 4, 3, 6];
 const len = arrays.length;
@@ -720,4 +722,113 @@ const resultTwo = arrayOfObject.filter((item,index,arr)=>{
 })
 
 console.log(resultOne,resultTwo)
+```
+
+### 22. Write a JavaScript program to list the keys and values of a JavaScript object and get the length of a JavaScript object.
+
+```ts
+const student = {
+  name: "David Rayy",
+  sclass: "VI",
+  rollno: 12,
+};
+
+const key = Object.keys(student);
+const value = Object.values(student);
+const lengthOfObject = key.length;
+console.log(key, value, lengthOfObject);
+```
+
+### 23. Write a JavaScript program to delete the rollno property from the following object. Also print the object before or after deleting the property.
+
+```ts
+const student = {
+  name: "David Rayy",
+  sclass: "VI",
+  rollno: 12,
+};
+
+//  Method 1.
+delete student.rollno;
+
+console.log(student);
+
+// Method 2.
+
+const { rollno, ...rest } = student;
+console.log(rest);
+```
+
+### 24. Write a JavaScript function to convert an object into a list of `[key, value]` pairs.
+
+```ts
+const student = {
+  name: "David Rayy",
+  sclass: "VI",
+  rollno: 12,
+};
+
+console.log(Object.entries(student));
+```
+
+### 25. Get a copy of the object where the keys have become the values and the values the keys.
+
+```ts
+const student = {
+  name: "David Rayy",
+  sclass: "VI",
+  rollno: 12,
+};
+
+function exchange(objects) {
+  let exchangeData = {};
+
+  for (let x in objects) {
+    exchangeData[objects[x]] = x;
+  }
+
+  return exchangeData;
+}
+
+const result = exchange(student);
+
+console.log(student, "student", result);
+```
+
+### Write a JavaScript function to parse an URL.
+
+```ts
+function parse_URL(url) {
+  var a = document.createElement("a");
+  a.href = url;
+  return {
+    source: url,
+    protocol: a.protocol.replace(":", ""),
+    host: a.hostname,
+    port: a.port,
+    query: a.search,
+    params: (function () {
+      var ret = {},
+        seg = a.search.replace(/^\?/, "").split("&"),
+        len = seg.length,
+        i = 0,
+        s;
+      for (; i < len; i++) {
+        if (!seg[i]) {
+          continue;
+        }
+        s = seg[i].split("=");
+        ret[s[0]] = s[1];
+      }
+      return ret;
+    })(),
+    file: (a.pathname.match(/\/([^\/?#]+)$/i) || [, ""])[1],
+    hash: a.hash.replace("#", ""),
+    path: a.pathname.replace(/^([^\/])/, "/$1"),
+    relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [, ""])[1],
+    segments: a.pathname.replace(/^\//, "").split("/"),
+  };
+}
+
+console.log(parse_URL("https://github.com/pubnub/python/search?utf8=%E2%9C%93&q=python"));
 ```
