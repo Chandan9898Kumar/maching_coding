@@ -24,6 +24,7 @@ To get started, follow the navigation below to explore different sections of thi
    - [Builder 👷](#builder-)
    - [Factory Method 🏭](#factory-method-)
    - [Abstract Factory 🔨](#abstract-factory-)
+   - [Module Pattern 💍](#module-pattern)
 2. [Structural Design Patterns 🛠️](#structural-design-patterns-)
    - [Adapter 🔌](#adapter-)
    - [Bridge 🌉](#bridge-)
@@ -342,13 +343,11 @@ export default Object.freeze({
 
 `Testing`: Since we can't create new instances each time, all tests rely on the modification to the global instance of the previous test. The order of the tests matter in this case, and one small modification can lead to an entire test suite failing. After testing, we need to reset the entire instance in order to reset the modifications made by the tests.
 
-
 ### State management in React
 
 - In React, we often rely on a global state through state management tools such as Redux or React Context instead of using Singletons. Although their global state behavior might seem similar to that of a Singleton, these tools provide a read-only state rather than the mutable state of the Singleton. When using Redux, only pure function reducers can update the state, after a component has sent an action through a dispatcher.
 
 - Although the downsides to having a global state don’t magically disappear by using these tools, we can at least make sure that the global state is mutated the way we intend it, since components cannot update the state directly.
-
 
 ### Points To Remember
 
@@ -1026,11 +1025,57 @@ renderUI(new MacOSFactory());
 - **Tight Coupling And Dependency 🔗:** Client code becomes dependent on the Abstract Factory interface, requiring changes if the interface changes.
 - **Limited Flexibility In Modifying Product Families 🚫:** Adding new types of products may require changing the core factory interface, violating the Open/Closed Principle.
 
+## Module Pattern 💍
+
+- The Module Pattern leverages JavaScript’s function scope and closures to achieve this encapsulation.
+- Modules should be Immediately-Invoked-Function-Expressions (IIFE) to allow for private scopes — that is, a closure that protect variables and methods
+- Private variables and methods are contained within the closure. They are accessible only within the closure and are not exposed to the outer environment.
+- Public methods (and sometimes variables) are returned from this closure and are accessible outside.
+
+```ts
+const CounterModule = (function () {
+  // Private variable
+  let count = 0;
+
+  // Private method
+  function logChange(action) {
+    console.log(`Counter was ${action}. Current count: ${count}`);
+  }
+
+  return {
+    // Public methods
+    increment: function () {
+      count++;
+      logChange("incremented");
+    },
+
+    decrement: function () {
+      count--;
+      logChange("decremented");
+    },
+
+    getCount: function () {
+      return count;
+    },
+  };
+})();
+
+// Using the CounterModule
+CounterModule.increment(); // "Counter was incremented. Current count: 1"
+CounterModule.increment(); // "Counter was incremented. Current count: 2"
+CounterModule.decrement(); // "Counter was decremented. Current count: 1"
+
+console.log(CounterModule.getCount()); // 1
+
+// This will result in an error since 'count' and 'logChange' are private
+// console.log(CounterModule.count); // undefined
+// CounterModule.logChange('tested'); // Error
+```
+
 # Structural Design Patterns 🛠
 
 Structural design patterns are a type of design pattern that deal with object composition and the structure of classes/objects. They help ensure that when a change is made in one part of a system, it doesn't require changes in other parts. This makes the system more flexible and easier to maintain.
 
-![Structural Design Patterns](./images/structural-design-patterns.png)
 <br/>
 
 <hr/>
