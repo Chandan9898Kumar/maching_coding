@@ -24,7 +24,7 @@ To get started, follow the navigation below to explore different sections of thi
    - [Builder 👷](#builder-)
    - [Factory Method 🏭](#factory-method-)
    - [Abstract Factory 🔨](#abstract-factory-)
-   - [Module Pattern 💍](#module-pattern)
+   - [Module Pattern ](#module-)
 2. [Structural Design Patterns 🛠️](#structural-design-patterns-)
    - [Adapter 🔌](#adapter-)
    - [Bridge 🌉](#bridge-)
@@ -1025,7 +1025,7 @@ renderUI(new MacOSFactory());
 - **Tight Coupling And Dependency 🔗:** Client code becomes dependent on the Abstract Factory interface, requiring changes if the interface changes.
 - **Limited Flexibility In Modifying Product Families 🚫:** Adding new types of products may require changing the core factory interface, violating the Open/Closed Principle.
 
-## Module Pattern 💍
+## Module Pattern
 
 - The Module Pattern leverages JavaScript’s function scope and closures to achieve this encapsulation.
 - Modules should be Immediately-Invoked-Function-Expressions (IIFE) to allow for private scopes — that is, a closure that protect variables and methods
