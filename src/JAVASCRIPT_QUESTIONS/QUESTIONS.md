@@ -407,6 +407,26 @@ for (let x = 0; x < len - 1; x++) {
 }
 
 console.log(arrays);
+
+// Method 2 . By making Array.prototype.
+
+Array.prototype.bubbleSort_algo = function () {
+  var is_sorted = false;
+  while (!is_sorted) {
+    is_sorted = true;
+    for (var n = 0; n < this.length - 1; n++) {
+      if (this[n] > this[n + 1]) {
+        var x = this[n + 1];
+        this[n + 1] = this[n];
+        this[n] = x;
+        is_sorted = false;
+      }
+    }
+  }
+  return this;
+};
+
+console.log([6, 4, 0, 3, -2, 1].bubbleSort_algo());
 ```
 
 ### 14. Sort An Array In descending Order, Without Using Sort Method.
@@ -795,7 +815,53 @@ const result = exchange(student);
 console.log(student, "student", result);
 ```
 
-### Write a JavaScript function to parse an URL.
+### 26. Write a JavaScript program that returns a subset of a string.
+
+```ts
+// Input string
+let str = "dog";
+// An empty array which will store the combinations.
+let result = [];
+
+/**
+ * getCombination() method is used to get all the combinations of all the array elements passed as a parameter.
+ */
+function getCombination(inputArr) {
+  // variable which will store the combination string.
+  let temp = "";
+  // Iterating input array to get elements one by one.
+  inputArr.forEach((elem, index) => {
+    // Pushing the element into result array.
+    result.push(temp + elem);
+    // To make the combination updating temp variable with the elem.
+    temp += elem + "";
+  });
+}
+
+// Once combination done for one iteration, removing the first element from an array and then again calling getCombination() method to get the combination for next set of elements.
+str.split("").forEach((elem, index) => {
+  getCombination([...str.slice(index)]);
+});
+
+// Expected result : Output: ["d", "do", "dog", "o", "og", "g"]
+console.log(result);
+
+//  OR Method 2 by creating prototype of string.
+
+String.prototype.sub_String = function () {
+  let subset = [];
+  for (let m = 0; m < this.length; m++) {
+    for (let n = m + 1; n < this.length + 1; n++) {
+      subset.push(this.slice(m, n));
+    }
+  }
+  return subset;
+};
+
+console.log("dog".sub_String());
+```
+
+### 27. Write a JavaScript function to parse an URL.
 
 ```ts
 function parse_URL(url) {
