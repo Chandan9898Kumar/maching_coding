@@ -678,6 +678,7 @@ console.log("unique", arrayOfObject);
 ```ts
 const uniqueData = [];
 let arrayOfObject = [1, 2, 3, 4, 2, 1];
+
 for (let x = 0; x < arrayOfObject.length; x++) {
   let uniq = true;
   for (let j = x + 1; j < arrayOfObject.length; j++) {
@@ -692,5 +693,31 @@ for (let x = 0; x < arrayOfObject.length; x++) {
 }
 arrayOfObject = uniqueData;
 console.log(arrayOfObject);
-//  NOTE : If condition is to return a new array then simply  return uniqueData instead of assign it to arrayOfObject.
+//  NOTE : If condition is to return a new array then simply return uniqueData instead of assign it to arrayOfObject.
+
+
+
+- Remove Duplicate items From An Array With using built-in functions.
+
+let arrayOfObject = [1, 2, 3, 4, 2, 1];
+
+//  Method 1.
+const resultOne = arrayOfObject.reduce((acc,curr)=>{
+
+  if(!acc.includes(curr)){
+    acc.push(curr)
+  }
+  return acc
+},[])
+
+//  Method 2.
+const resultTwo = arrayOfObject.filter((item,index,arr)=>{
+      const isTrue=index === arr.findIndex((value,index,arr)=>item===value)
+      if(isTrue){
+        return item
+      }
+
+})
+
+console.log(resultOne,resultTwo)
 ```
