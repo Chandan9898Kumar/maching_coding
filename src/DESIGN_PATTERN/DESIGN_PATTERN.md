@@ -1,9 +1,5 @@
 <br>
 <p align="center">
-  <img src="./.github/banner.png" width="100%"/>
-</p>
-
-<p align="center">
   🔮 Comprehensive Guide to Design Patterns. 🔮
 </p>
 <p align="center">

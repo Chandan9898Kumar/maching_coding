@@ -345,7 +345,7 @@ res.div()
 
 ```
 
-### 11. Count repeated number of words in string, exclude empty strings.
+### 11. Count repeated number of words in string (Counts the frequency), exclude empty strings.
 
 ```ts
 const string = " hi hello how    are you     sir       hi hello how is this that ball this   ";
@@ -861,7 +861,110 @@ String.prototype.sub_String = function () {
 console.log("dog".sub_String());
 ```
 
-### 27. Write a JavaScript function to parse an URL.
+### 27. write a function that counts the frequency of each value in an object:
+
+```ts
+const obj = {
+  name: "John Cena",
+  homeName: "John Cena",
+  place: "Manchester",
+  bithPlace: "Manchester",
+  age: 22,
+  country: "United kingdom",
+};
+
+//                                                          Method 1.
+function countFrequency1(objValue) {
+  let frequency = {};
+
+  for (let x in objValue) {
+    frequency[objValue[x]] = (frequency[objValue[x]] || 0) + 1;
+  }
+
+  return frequency;
+}
+
+const result = countFrequency1(obj);
+
+//                                                              Method 2.
+function countFrequency2(objValue) {
+  return Object.keys(objValue).reduce((acc, curr, ind, arr) => {
+    acc[objValue[curr]] = (acc[objValue[curr]] || 0) + 1;
+
+    return acc;
+  }, {});
+}
+
+const result = countFrequency2(obj);
+
+//                                                              Method 3
+
+function countFrequency3(obj) {
+  const frequency = {};
+  Object.entries(obj).forEach(([key, value]) => {
+    frequency[value] = (frequency[value] || 0) + 1;
+  });
+
+  return frequency;
+}
+
+const result = countFrequency3(obj);
+
+//                                                               Method 4
+
+function countFrequency4(obj) {
+  const frequency = {};
+
+  Object.keys(obj).forEach((key) => {
+    const value = obj[key];
+    frequency[value] = (frequency[value] || 0) + 1;
+  });
+
+  return frequency;
+}
+
+const result = countFrequency4(obj);
+
+//                                                               Method 5
+
+function countFrequency5(obj) {
+  const frequency = {};
+
+  Object.values(obj).forEach((value) => {
+    frequency[value] = (frequency[value] || 0) + 1;
+  });
+
+  return frequency;
+}
+const result = countFrequency5(obj);
+
+console.log(result, "result");
+```
+
+### 28. write a function that counts the character(string character) of each value in an object:
+
+```ts
+const obj = {
+  name: "John Cena",
+  homeName: "John",
+  place: "Manchester",
+  country: "United kingdom",
+};
+
+function countObjectValueCharacters(objVal) {
+  return Object.keys(objVal).reduce((acc, curr, ind, arr) => {
+    const stringLength = objVal[curr].length;
+    acc[objVal[curr]] = (acc[objVal[curr]] || 0) + stringLength;
+    return acc;
+  }, {});
+}
+
+const result = countObjectValueCharacters(obj);
+
+console.log(result);
+```
+
+### 29. Write a JavaScript function to parse an URL.
 
 ```ts
 function parse_URL(url) {
