@@ -964,7 +964,48 @@ const result = countObjectValueCharacters(obj);
 console.log(result);
 ```
 
-### 29. Write a JavaScript function to parse an URL.
+### 29. Given an array of student details containing registration numbers, scores, and subjects,aggregate the scores for each unique registration number and return the result as an array of objects with registration numbers and total scores.
+
+```ts
+let studentDetails = [
+  { resgisterNo: 101, score: 70, subject: "Science" },
+  { resgisterNo: 101, score: 50, subject: "Maths" },
+  { resgisterNo: 101, score: 30, subject: "GK" },
+  { resgisterNo: 101, score: 100, subject: "Sanskrit" },
+  { resgisterNo: 102, score: 60, subject: "Science" },
+  { resgisterNo: 102, score: 40, subject: "SST" },
+  { resgisterNo: 103, score: 40, subject: "Hindi" },
+];
+
+function findData(arrayVal) {
+  const registerDetails = arrayVal
+    .reduce((acc, curr) => {
+      if (!acc.includes(curr.resgisterNo)) {
+        acc.push(curr.resgisterNo);
+      }
+      return acc;
+    }, [])
+    .reduce((acc, curr) => {
+      let sum = 0;
+      for (let x = 0; x < arrayVal.length; x++) {
+        if (curr === arrayVal[x].resgisterNo) {
+          sum = sum + arrayVal[x].score;
+        }
+      }
+
+      acc.push({ resgisterNo: curr, score: sum });
+      return acc;
+    }, []);
+
+  return registerDetails;
+}
+
+const result = findData(studentDetails);
+
+console.log(result, "result");
+```
+
+### 30. Write a JavaScript function to parse an URL.
 
 ```ts
 function parse_URL(url) {
