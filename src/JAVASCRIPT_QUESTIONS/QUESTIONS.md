@@ -977,6 +977,7 @@ let studentDetails = [
   { resgisterNo: 103, score: 40, subject: "Hindi" },
 ];
 
+//                                                            Method 1
 function findData(arrayVal) {
   const registerDetails = arrayVal
     .reduce((acc, curr) => {
@@ -1002,7 +1003,41 @@ function findData(arrayVal) {
 
 const result = findData(studentDetails);
 
+//                                                          Method 2.
+
+function findData(arrayVal) {
+  const studentData = values.reduce((acc, curr) => {
+    const studentDetails = acc.find((student) => student.resgisterNo === curr.resgisterNo);
+    // Note:  Here in studentDetails we are directly changing values  inside it and it will reflect in acc because acc data and return data of acc.find are referential equal.
+    //  Also you might notice that  we are pushing studentDetails in acc because it is not need reason is that data of studentDetails and acc both are equal by reference.
+    //  Meaning changing any values in acc or studentDetails will reflect in both.
+
+    if (studentDetails) {
+      studentDetails.score = studentDetails.score + curr.score;
+    } else {
+      acc.push({ resgisterNo: curr.resgisterNo, score: curr.score });
+    }
+
+    return acc;
+  }, []);
+
+  return studentData;
+}
+
+const result = findData(studentDetails);
+
 console.log(result, "result");
+
+/**                                                       For Better understanding of reference equal :
+const data = [1,2,3].reduce((acc,curr)=>{
+  let data = acc[0]
+  data.game='GTA'
+  return acc
+},[{ resgisterNo: 101, score: 70, subject: 'Science' }])
+
+console.log(data,'result')
+
+ */
 ```
 
 ### 30. Write a JavaScript function to parse an URL.
