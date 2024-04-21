@@ -14,6 +14,47 @@ function sumOfFruits(arr) {
   }, {});
 }
 let result = sumOfFruits(arr);
+
+//                                               Second Type of question might br asked.
+
+//  count number of each fruits.
+let fruits = [
+  { apple: 4, orange: 7, grape: 3 },
+  { guava: 6, lemon: 4, banana: 8 },
+  { orange: 5, pineapple: 7, apple: 7 },
+];
+
+function fruitsCount(arrayValue) {
+  const fruits = arrayValue.reduce((acc, curr) => {
+    for (x in curr) {
+      acc[x] = (acc[x] || 0) + curr[x];
+    }
+    return acc;
+  }, {});
+
+  return fruits;
+}
+
+const result = fruitsCount(fruits);
+console.log(result, "result");
+
+//                                              Third Type of Question
+
+//   Count how the occurrence of the fruits .
+function fruitsCount(arrayValue) {
+  let items = [];
+  const fruits = arrayValue.reduce((acc, curr) => {
+    for (x in curr) {
+      acc[x] = (acc[x] || 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  return fruits;
+}
+
+const result = fruitsCount(fruits);
+console.log(result, "result");
 ```
 
 ### 2. - count on the basis of name.
