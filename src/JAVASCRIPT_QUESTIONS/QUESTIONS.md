@@ -1081,7 +1081,31 @@ console.log(data,'result')
  */
 ```
 
-### 30. Write a JavaScript function to parse an URL.
+### 30. Create a function which will accepts two arrays arr1 and arr2. The function should return true .if every value in arr1 has its corresponding value squared in array2. The frequency of values must be same.
+
+```ts
+//     Method 1.  By sorting items in ascending order and comparing by JSON.stringify(); If items are not sorted then stringify will give false.
+const arr1 = [1, 2, 5];
+const arr2 = [5, 2, 1];
+
+arr1.sort((a, b) => a - b);
+arr2.sort((a, b) => a - b);
+
+function compareArray(val1, val2) {
+  const one = JSON.stringify(val1);
+  const two = JSON.stringify(val2);
+
+  return one === two;
+}
+const result = compareArray(arr1, arr2);
+console.log(result);
+
+//  Method 2.
+
+
+```
+
+### 31. Write a JavaScript function to parse an URL.
 
 ```ts
 function parse_URL(url) {
