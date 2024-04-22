@@ -1085,6 +1085,9 @@ console.log(data,'result')
 
 ```ts
 //     Method 1.  By sorting items in ascending order and comparing by JSON.stringify(); If items are not sorted then stringify will give false.
+
+// JSON.stringify() :  This method allows you to serialize each array by converting the array to a JSON string. You can then compare the two JSON strings.
+
 const arr1 = [1, 2, 5];
 const arr2 = [5, 2, 1];
 
@@ -1100,9 +1103,47 @@ function compareArray(val1, val2) {
 const result = compareArray(arr1, arr2);
 console.log(result);
 
-//  Method 2.
+//  Method 2.  By Using toString()
 
+// this method converts any data type to a string and can similarly convert an object to a string.
 
+const array1 = [1, 2, 5];
+const array2 = [5, 2, 1];
+
+array1.sort((a, b) => a - b);
+array2.sort((a, b) => a - b);
+
+console.log(array1.toString() === array2.toString());
+
+//  NOTE : You you do not use sort then it will throw false.
+
+// Method 3. By Using for loop.  Remember we are using sort method then only it will work, else will throw false if we interchange the items.
+
+const arr1 = [1, 2, 5];
+const arr2 = [1, 5, 2];
+
+arr1.sort((a, b) => a - b);
+arr2.sort((a, b) => a - b);
+
+function compare(val1, val2) {
+  if (val1.length !== val2.length) {
+    return false;
+  }
+
+  const lengths = arr1.length;
+
+  for (let x = 0; x < lengths; x++) {
+    if (arr1[x] !== arr2[x]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+const result = compare(arr1, arr2);
+console.log(result, "result");
+
+//  Method 4.  Without using sort method.
 ```
 
 ### 31. Write a JavaScript function to parse an URL.
