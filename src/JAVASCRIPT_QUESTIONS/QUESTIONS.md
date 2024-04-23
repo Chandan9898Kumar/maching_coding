@@ -1175,7 +1175,6 @@ function compare(val1, val2) {
 
   for (let x of key2) {
     if (!key1.includes(x)) {
-      console.log(x, "xxxxx");
       return false;
     }
   }
