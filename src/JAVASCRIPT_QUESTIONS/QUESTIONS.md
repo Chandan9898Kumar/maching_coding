@@ -1144,6 +1144,54 @@ const result = compare(arr1, arr2);
 console.log(result, "result");
 
 //  Method 4.  Without using sort method.
+
+const arr1 = [1, 2, 5];
+const arr2 = [5, 1, 2];
+
+function compare(val1, val2) {
+  if (val1.length !== val2.length) {
+    return false;
+  }
+
+  const obj1 = val1.reduce((acc, curr) => {
+    acc[curr] = (acc[curr] || 0) + 1;
+    return acc;
+  }, {});
+
+  const obj2 = val2.reduce((acc, curr) => {
+    acc[curr] = (acc[curr] || 0) + 1;
+    return acc;
+  }, {});
+
+  let key1 = Object.keys(obj1);
+  let value1 = Object.values(obj1);
+
+  let key2 = Object.keys(obj2);
+  let value2 = Object.values(obj2);
+
+  if (key1.length !== key2.length && value1.length !== value2.length) {
+    return false;
+  }
+
+  for (let x of key2) {
+    if (!key1.includes(x)) {
+      console.log(x, "xxxxx");
+      return false;
+    }
+  }
+
+  for (let y of value2) {
+    if (!value1.includes(y)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+const result = compare(arr1, arr2);
+
+console.log(result, "result");
 ```
 
 ### 31. Write a JavaScript function to parse an URL.
