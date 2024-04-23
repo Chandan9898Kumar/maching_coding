@@ -15,7 +15,7 @@ function sumOfFruits(arr) {
 }
 let result = sumOfFruits(arr);
 
-//                                               Second Type of question might br asked.
+//                                               Second Type of question might be asked.
 
 //  count number of each fruits.
 let fruits = [
@@ -1189,6 +1189,52 @@ function compare(val1, val2) {
 }
 
 const result = compare(arr1, arr2);
+
+//                                                OR we can solve like this way as well.
+
+const arr1 = [1, 2, 3];
+const arr2 = [1, 3, 2];
+
+function compare(val1, val2) {
+  if (val1.length !== val2.length) {
+    return false;
+  }
+
+  const obj1 = val1.reduce((acc, curr) => {
+    acc[curr] = (acc[curr] || 0) + 1;
+    return acc;
+  }, {});
+
+  const obj2 = val2.reduce((acc, curr) => {
+    acc[curr] = (acc[curr] || 0) + 1;
+    return acc;
+  }, {});
+
+  const obj1Leng = Object.keys(obj1).length;
+  const obj2Leng = Object.keys(obj2).length;
+  
+  const isMatched = {};
+
+  for (let x in obj1) {
+    for (let y in obj2) {
+      if (x === y && obj1[x] === obj2[y]) {
+        isMatched[x] = obj1[x];
+        break;
+      }
+    }
+  }
+  const isMatchedLength = Object.keys(isMatched).length;
+
+  if (isMatchedLength === obj1Leng && isMatchedLength === obj2Leng && obj1Leng === obj2Leng) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+const result = compare(arr1, arr2);
+
+console.log(result, "result");
 
 console.log(result, "result");
 ```
