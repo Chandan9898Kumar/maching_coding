@@ -490,13 +490,53 @@ console.log(arrays);
 ### 15. Find The Missing Number From The Array
 
 ```ts
-`# Approach 1:`
-- Using Arithmetic Progression Formula
+const array =[0,1,2,3,5,6]
 
-const array = [1, 2, 4, 6, 3, 7, 8];
+// Brute force solution
+// Time complexity - O(n^2)
+// Space complexity - O(1)
+function missingNumber1(nums) {
+  for (let i = 0; i <= nums.length; i++) {
+    let flag = 0;
+
+    for (let j = 0; j < nums.length; j++) {
+      if (i === nums[j]) {
+        flag = 1;
+        break;
+      }
+    }
+
+    if (flag == 0) {
+      return i;
+    }
+  }
+}
+
+// Better solution
+// Time complexity - O(n logn) + O(n) = O(n logn)
+// Space complexity - O(1)
+function missingNumber2(nums) {
+  nums.sort();
+
+  let result = nums.length;
+  for (let i = 0; i < nums.length; i++) {
+    if (i !== nums[i]) {
+      result = i;
+      break;
+    }
+  }
+
+  return result;
+}
+
+
+// Optimal solution
+// Time complexity - O(n)
+// Space complexity - O(1)
+- Using Arithmetic Progression Formula
 function findMissingNumber(value) {
   // We are aware that (n(n+1))/2 is the sum of all items in the range of 1 to n
-  const n = value.length + 1;
+  const n = value.length;
   const expectedSum = (n * (n + 1)) / 2;
   const actualSum = value.reduce((acc, curr) => acc + curr, 0);
   return expectedSum - actualSum;
@@ -504,41 +544,6 @@ function findMissingNumber(value) {
 
 const missingNumber = findMissingNumber(array);
 
-
-
-`# Approach 2:`
-- Using Summation Formula
-
-function findMissingNumber(inputArray, length) {
-  let result = Math.floor((length + 1) * (length + 2) / 2);
-  for (let i = 0; i < length; i++) result -= inputArray[i];
-  return result;
- }
-
- let myArray = [1, 2, 3, 5];
- let missingNumber = findMissingNumber(myArray, myArray.length);
- console.log(missingNumber);
-
-
- `# Approach 3:`
-- Using XOR
-
-unction findMissingNumberWithXOR(sequence) {
-    const length = sequence.length + 1; // Including the missing number
-    let xorOfAllNumbers = 0;
-
-    for (let i = 1; i <= length; i++) {
-        xorOfAllNumbers ^= i;
-    }
-
-    let xorOfArrayElements = sequence.reduce((acc, num) => acc ^ num, 0);
-
-    return xorOfAllNumbers ^ xorOfArrayElements;
-}
-
-const inputSequence = [2, 4, 6, 8, 10, 12, 14];
-const result = findMissingNumberWithXOR(inputSequence);
-console.log(`Missing number in the sequence ${inputSequence}: ${result}`);
 ```
 
 ### 16. Find The OutPut
@@ -1212,7 +1217,7 @@ function compare(val1, val2) {
 
   const obj1Leng = Object.keys(obj1).length;
   const obj2Leng = Object.keys(obj2).length;
-  
+
   const isMatched = {};
 
   for (let x in obj1) {
@@ -1235,11 +1240,66 @@ function compare(val1, val2) {
 const result = compare(arr1, arr2);
 
 console.log(result, "result");
+```
+
+### 31. Count elements whose type is number in a nested array.
+
+```ts
+const arr = [[1, [2, [3, 4, "foo", { a: 1, b: 2 }]], "bar", 5], 6];
+
+function count(arrayVal) {
+  let total = 0;
+
+  function findTotal(values) {
+    for (let x of values) {
+      if (Array.isArray(x)) {
+        find(x);
+      } else {
+        if (typeof x === "number") {
+          total += 1;
+        }
+      }
+    }
+  }
+  findTotal(arrayVal);
+
+  return total;
+}
+
+const result = count(arr);
 
 console.log(result, "result");
 ```
 
-### 31. Write a JavaScript function to parse an URL.
+### 32. Given a nested array and a callback function, count all the elements that pass the test in the callback and return the count.
+
+```ts
+const arr = [6, [1, [2, [3, 4, "foo", { a: 1, b: 2 }]], "bar", 5]];
+
+function countInArray(arrayVal, callBackTest) {
+  let total = 0;
+
+  function find(values, callBackTest) {
+    for (let x of values) {
+      if (Array.isArray(x)) {
+        find(x, callBackTest);
+      } else {
+        if (callBackTest(x)) {
+          total += 1;
+        }
+      }
+    }
+  }
+  find(arrayVal, callBackTest);
+
+  return total;
+}
+
+const count = countInArray(arr, (e) => typeof e === "number");
+console.log(count);
+```
+
+### 33. Write a JavaScript function to parse an URL.
 
 ```ts
 function parse_URL(url) {
