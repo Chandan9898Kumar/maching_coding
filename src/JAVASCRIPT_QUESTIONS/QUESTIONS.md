@@ -747,6 +747,7 @@ console.log("unique", arrayOfObject);
 const uniqueData = [];
 let arrayOfObject = [1, 2, 3, 4, 2, 1];
 let lengthOfArray = arrayOfObject.length
+
 for (let x = 0; x < lengthOfArray; x++) {
   let uniq = true;
   for (let j = x + 1; j < lengthOfArray; j++) {
@@ -759,8 +760,24 @@ for (let x = 0; x < lengthOfArray; x++) {
     uniqueData.push(arrayOfObject[x]);
   }
 }
+
 arrayOfObject = uniqueData;
 console.log(arrayOfObject);
+
+
+// More Optimal Solution. Only 1 for loop is used.
+
+    for (i = 0; i < lengthOfArray; i++) {
+        if (uniqueData.indexOf(arrayOfObject[i]) === -1) {
+            uniqueData.push(arrayOfObject[i]);
+        }
+    }
+
+arrayOfObject = uniqueData
+
+console.log(uniqueData,'uniqueData')
+
+
 //  NOTE : If condition is to return a new array then simply return uniqueData instead of assign it to arrayOfObject.
 
 
