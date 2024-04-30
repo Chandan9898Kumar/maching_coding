@@ -746,10 +746,10 @@ console.log("unique", arrayOfObject);
 ```ts
 const uniqueData = [];
 let arrayOfObject = [1, 2, 3, 4, 2, 1];
-
-for (let x = 0; x < arrayOfObject.length; x++) {
+let lengthOfArray = arrayOfObject.length
+for (let x = 0; x < lengthOfArray; x++) {
   let uniq = true;
-  for (let j = x + 1; j < arrayOfObject.length; j++) {
+  for (let j = x + 1; j < lengthOfArray; j++) {
     if (arrayOfObject[x] === arrayOfObject[j]) {
       uniq = false;
       break;
