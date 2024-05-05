@@ -112,3 +112,36 @@ function parse_URL(url) {
 
 console.log(parse_URL("https://github.com/pubnub/python/search?utf8=%E2%9C%93&q=python"));
 ```
+
+### 4. What is Document Object Model (DOM)
+
+- The Document Object Model (DOM) is an application programming interface (API) for manipulating HTML documents.
+
+- The DOM represents an HTML document as a tree of nodes. The DOM provides functions that allow you to add, remove, and modify parts of the document effectively.
+
+- Note that the DOM is cross-platform and language-independent ways of manipulating HTML and XML documents.
+
+- In this DOM tree, the document is the root node. The root node has one child node which is the <html> element. The <html> element is called the document element.
+
+- Each document can have only one document element. In an HTML document, the document element is the <html> element. Each markup can be represented by a node in the tree.
+
+`Note :`the getElementById() and querySelector() returns an object with the Element type while getElementsByTagName() or querySelectorAll() returns NodeList which is a collection of nodes.
+
+`Node Relationships`
+
+- Any node has relationships to other nodes in the DOM tree. The relationships are the same as the ones described in a traditional family tree.
+
+1. For example, <body> is a child node of the <html> node, and <html> is the parent of the <body> node.
+
+2. The <body> node is the sibling of the <head> node because they share the same immediate parent, which is the <html> element.
+
+<!-- How to flatten a deeply nested array?
+How to implement Array indexOf method?
+How to implement Array includes method?
+How to implement Array findIndex method?
+How to implement Array find method?
+How to implement Array at method?
+How to implement Array some method?
+How to implement Array every method?
+How to implement Array unshift method?
+How to implement Array pop method? -->
