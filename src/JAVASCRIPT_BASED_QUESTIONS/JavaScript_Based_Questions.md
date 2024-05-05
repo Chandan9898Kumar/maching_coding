@@ -125,7 +125,9 @@ console.log(parse_URL("https://github.com/pubnub/python/search?utf8=%E2%9C%93&q=
 
 - Each document can have only one document element. In an HTML document, the document element is the <html> element. Each markup can be represented by a node in the tree.
 
-`Note :`the getElementById() and querySelector() returns an object with the Element type while getElementsByTagName() or querySelectorAll() returns NodeList which is a collection of nodes.
+# NOTE :
+
+`The getElementById()` and `querySelector()` returns an object with the Element type while `getElementsByTagName()` or `querySelectorAll()` returns NodeList which is a collection of nodes.
 
 `Node Relationships`
 
