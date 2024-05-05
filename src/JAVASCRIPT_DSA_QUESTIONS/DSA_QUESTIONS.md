@@ -546,84 +546,7 @@ const missingNumber = findMissingNumber(array);
 
 ```
 
-### 16. Find The OutPut
-
-```ts
-foo(); // Output: "Hello"
-function foo() {
-  console.log("Hello");
-}
-// The above code is equivalent to:
-function foo() {
-  console.log("Hello");
-}
-foo(); // Output: "Hello"
-
-
-- In above example, we define `a function foo()` and call it before the actual declaration. Surprisingly, the code works without any errors. This is `because function declarations are hoisted to the top of their scope`, allowing us to `call the function before its declaration in the code`.
-```
-
-### 17. Difference between Micro-task Queue and Callback Queue ?
-
-In JavaScript, both the Micro-task Queue (also known as the Job Queue) and the Callback Queue (also known as the Task Queue) are parts of the event loop mechanism that helps manage asynchronous operations. However, they serve different purposes and have distinct characteristics. Let’s explore the differences between the Micro-task Queue and the Callback Queue:
-
-## Micro-task Queue (Job Queue):
-
-Priority:
-
-1. Higher priority than the Callback Queue.
-2. Microtasks are executed before the next rendering, which makes them suitable for tasks that should be executed before the user interface updates.
-
-`Examples of Microtasks:`
-
-1. Promises: then(), catch(), and finally() callbacks.
-2. process.nextTick in Node.js.
-
-`Order of Execution:`
-
-1. Microtasks are processed in a FIFO (First-In-First-Out) order.
-2. Once the call stack is empty, the event loop checks the Microtask Queue and processes each microtask one by one.
-
-`Usage Scenario:`
-
-1. Often used for tasks that need to be executed before the browser renders, making it suitable for UI-related updates and ensuring faster response times.
-
-## Callback Queue (Task Queue):
-
-`Priority:`
-
-1. Lower priority than the Microtask Queue.
-2. Callbacks in the Callback Queue are executed after the Microtask Queue is empty.
-
-`Examples of Callbacks:`
-
-1. setTimeout and setInterval callbacks.
-2. DOM events like click, input, etc.
-3. I/O operations in Node.js.
-
-`Order of Execution:`
-
-1. Callbacks in the Callback Queue are processed in a FIFO order, similar to the Microtask Queue.
-   The event loop checks the Callback Queue only when the Microtask Queue is empty.
-
-`Usage Scenario:`
-
-1. Used for general asynchronous tasks and I/O operations that don’t require immediate attention and can be deferred.
-
-## Relationship:
-
-1. Execution Order:
-
-A. When the call stack is empty, the event loop first checks the Microtask Queue. If there are microtasks, it executes them all.
-B. After the Microtask Queue is empty, the event loop checks the Callback Queue and executes any available callbacks.
-C. This process continues in a loop.
-
-2. Interaction:
-
-A. Microtasks are often used for tasks that need to be completed immediately and impact the rendering process.
-B. Callbacks in the Callback Queue are typically used for less critical tasks, such as deferred or background operations.
-
-### 18. use HASH MAP for Caching
+### 16. use HASH MAP for Caching
 
 HashMaps can be used effectively for caching frequently accessed data in an application. By using a HashMap as a cache, you can store the results of expensive operations and retrieve them quickly when needed. This can significantly improve the performance of your application.
 
@@ -644,7 +567,7 @@ function expensiveOperation(input) {
 const result = expensiveOperation(10);
 ```
 
-### 19. Remove Duplicate Objects From An Array using built-in functions. It should not return new array.
+### 17. Remove Duplicate Objects From An Array using built-in functions. It should not return new array.
 
 ```ts
 const person1 = { name: "aryan", height: 18 };
@@ -703,7 +626,7 @@ arrayOfObject = UniqueValues;
 console.log(arrayOfObject);
 ```
 
-### 20. Remove Duplicate Objects From An Array Without using built-in functions. It should not return new array.
+### 18. Remove Duplicate Objects From An Array Without using built-in functions. It should not return new array.
 
 ```ts
 const uniqueData = [];
@@ -741,7 +664,7 @@ console.log("unique", arrayOfObject);
 //  NOTE : If condition is to return a new array then simply  return uniqueData instead of assign it to arrayOfObject.
 ```
 
-### 21. Remove Duplicate items From An Array Without using built-in functions. It should not return new array.
+### 19. Remove Duplicate items From An Array Without using built-in functions. It should not return new array.
 
 ```ts
 const uniqueData = [];
@@ -807,7 +730,7 @@ const resultTwo = arrayOfObject.filter((item,index,arr)=>{
 console.log(resultOne,resultTwo)
 ```
 
-### 22. Write a JavaScript program to list the keys and values of a JavaScript object and get the length of a JavaScript object.
+### 20. Write a JavaScript program to list the keys and values of a JavaScript object and get the length of a JavaScript object.
 
 ```ts
 const student = {
@@ -822,7 +745,7 @@ const lengthOfObject = key.length;
 console.log(key, value, lengthOfObject);
 ```
 
-### 23. Write a JavaScript program to delete the rollno property from the following object. Also print the object before or after deleting the property.
+### 21. Write a JavaScript program to delete the rollno property from the following object. Also print the object before or after deleting the property.
 
 ```ts
 const student = {
@@ -842,7 +765,7 @@ const { rollno, ...rest } = student;
 console.log(rest);
 ```
 
-### 24. Write a JavaScript function to convert an object into a list of `[key, value]` pairs.
+### 22. Write a JavaScript function to convert an object into a list of `[key, value]` pairs.
 
 ```ts
 const student = {
@@ -854,7 +777,7 @@ const student = {
 console.log(Object.entries(student));
 ```
 
-### 25. Get a copy of the object where the keys have become the values and the values the keys.
+### 23. Get a copy of the object where the keys have become the values and the values the keys.
 
 ```ts
 const student = {
@@ -878,7 +801,7 @@ const result = exchange(student);
 console.log(student, "student", result);
 ```
 
-### 26. Write a JavaScript program that returns a subset of a string.
+### 24. Write a JavaScript program that returns a subset of a string.
 
 ```ts
 // Input string
@@ -924,7 +847,7 @@ String.prototype.sub_String = function () {
 console.log("dog".sub_String());
 ```
 
-### 27. write a function that counts the frequency of each value in an object:
+### 25. write a function that counts the frequency of each value in an object:
 
 ```ts
 const obj = {
@@ -1004,7 +927,7 @@ const result = countFrequency5(obj);
 console.log(result, "result");
 ```
 
-### 28. write a function that counts the character(string character) of each value in an object:
+### 26. write a function that counts the character(string character) of each value in an object:
 
 ```ts
 const obj = {
@@ -1027,7 +950,7 @@ const result = countObjectValueCharacters(obj);
 console.log(result);
 ```
 
-### 29. Given an array of student details containing registration numbers, scores, and subjects,aggregate the scores for each unique registration number and return the result as an array of objects with registration numbers and total scores.
+### 27. Given an array of student details containing registration numbers, scores, and subjects,aggregate the scores for each unique registration number and return the result as an array of objects with registration numbers and total scores.
 
 ```ts
 let studentDetails = [
@@ -1103,7 +1026,7 @@ console.log(data,'result')
  */
 ```
 
-### 30. Create a function which will accepts two arrays arr1 and arr2. The function should return true .if every value in arr1 has its corresponding value squared in array2. The frequency of values must be same.
+### 28. Create a function which will accepts two arrays arr1 and arr2. The function should return true .if every value in arr1 has its corresponding value squared in array2. The frequency of values must be same.
 
 ```ts
 //     Method 1.  By sorting items in ascending order and comparing by JSON.stringify(); If items are not sorted then stringify will give false.
@@ -1259,7 +1182,7 @@ const result = compare(arr1, arr2);
 console.log(result, "result");
 ```
 
-### 31. Count elements whose type is number in a nested array.
+### 29. Count elements whose type is number in a nested array.
 
 ```ts
 const arr = [[1, [2, [3, 4, "foo", { a: 1, b: 2 }]], "bar", 5], 6];
@@ -1288,7 +1211,7 @@ const result = count(arr);
 console.log(result, "result");
 ```
 
-### 32. Given a nested array and a callback function, count all the elements that pass the test in the callback and return the count.
+### 30. Given a nested array and a callback function, count all the elements that pass the test in the callback and return the count.
 
 ```ts
 const arr = [6, [1, [2, [3, 4, "foo", { a: 1, b: 2 }]], "bar", 5]];
@@ -1314,42 +1237,4 @@ function countInArray(arrayVal, callBackTest) {
 
 const count = countInArray(arr, (e) => typeof e === "number");
 console.log(count);
-```
-
-### 33. Write a JavaScript function to parse an URL.
-
-```ts
-function parse_URL(url) {
-  var a = document.createElement("a");
-  a.href = url;
-  return {
-    source: url,
-    protocol: a.protocol.replace(":", ""),
-    host: a.hostname,
-    port: a.port,
-    query: a.search,
-    params: (function () {
-      var ret = {},
-        seg = a.search.replace(/^\?/, "").split("&"),
-        len = seg.length,
-        i = 0,
-        s;
-      for (; i < len; i++) {
-        if (!seg[i]) {
-          continue;
-        }
-        s = seg[i].split("=");
-        ret[s[0]] = s[1];
-      }
-      return ret;
-    })(),
-    file: (a.pathname.match(/\/([^\/?#]+)$/i) || [, ""])[1],
-    hash: a.hash.replace("#", ""),
-    path: a.pathname.replace(/^([^\/])/, "/$1"),
-    relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [, ""])[1],
-    segments: a.pathname.replace(/^\//, "").split("/"),
-  };
-}
-
-console.log(parse_URL("https://github.com/pubnub/python/search?utf8=%E2%9C%93&q=python"));
 ```
