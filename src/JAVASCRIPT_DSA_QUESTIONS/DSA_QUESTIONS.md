@@ -992,7 +992,7 @@ const result = findData(studentDetails);
 //                                                          Method 2.
 
 function findData(arrayVal) {
-  const studentData = values.reduce((acc, curr) => {
+  const studentData = arrayVal.reduce((acc, curr) => {
     const studentDetails = acc.find((student) => student.resgisterNo === curr.resgisterNo);
     // Note:  Here in studentDetails we are directly changing values  inside it and it will reflect in acc because acc data and return data of acc.find are referential equal.
     //  Also you might notice that  we are pushing studentDetails in acc because it is not need reason is that data of studentDetails and acc both are equal by reference.
