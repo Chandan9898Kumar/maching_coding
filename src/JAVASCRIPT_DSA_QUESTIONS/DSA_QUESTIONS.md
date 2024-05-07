@@ -1238,3 +1238,120 @@ function countInArray(arrayVal, callBackTest) {
 const count = countInArray(arr, (e) => typeof e === "number");
 console.log(count);
 ```
+
+### 31. deepEqual Object.
+
+```ts
+let value = { a: 1 };
+let other = undefined;
+
+let value = { a: 1 };
+let other = { a: 1 };
+
+let value = { a: { b: { c: { d: 2 } } } };
+let other = window.structuredClone(value);
+
+let value = { a: 2 };
+let other = { a: 3 };
+
+let value = { a: 1 };
+let other = null;
+
+let value = { a: 1 };
+let other = undefined;
+
+let value = { a: 1, b: 2, c: [1, 2, 3, 4] };
+let other = { b: 2, a: 1, c: [1, 2, 3, 4] };
+
+let value = { a: 1, b: 2, c: [1, 2, 3, 4] };
+let other = { b: 2, a: 1, c: [1, 2, 4, 3] };
+
+function deepEqual(obj1, obj2) {
+  // Base case: If both objects are identical, return true.
+  if (obj1 === obj2) {
+    return true;
+  }
+
+  //  Objects values are array,then sort it.
+  if (Array.isArray(obj1)) {
+    obj1.sort();
+  }
+  if (Array.isArray(obj2)) {
+    obj2.sort();
+  }
+
+  // Check if both objects are objects and not null.
+  if (typeof obj1 !== "object" || typeof obj2 !== "object" || obj1 === null || obj2 === null) {
+    return false;
+  }
+  // Get the keys of both objects.
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+  // Check if the number of keys is the same.
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+  // Iterate through the keys and compare their values recursively.
+  for (const key of keys1) {
+    if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {
+      return false;
+    }
+  }
+  // If all checks pass, the objects are deep equal.
+  return true;
+}
+
+const res = deepEqual(value, other);
+
+console.log(res, "RES ");
+```
+
+### 32. Given two objects obj1 and obj2 and the task are to check that obj1 contains all the property values of obj2 in JavaScript.
+
+```ts
+
+const obj1= { name: "John", age: 23; degree: "CS" }
+const obj2= {age: 23, degree: "CS"}
+
+// Output: true
+
+const obj1={ name: "John", degree: "CS" }
+const obj2={name: "Max", age: 23, degree: "CS"}
+
+// Output: false
+
+
+//                                         For Loop
+// Define the function check
+function check(obj1, obj2) {
+
+	// Iterate the obj2 using for..in
+	for (key in obj2) {
+
+		// Check if both objects do
+		// not have the equal values
+		// of same key
+		if (obj1[key] !== obj2[key]) {
+			return false;
+		}
+	}
+	return true
+}
+
+// Call the function
+console.log(check(obj1, obj2))
+
+
+
+//                           Every Method
+const every = Object.keys(obj2).every((item)=>{
+
+  if(!obj1.hasOwnProperty(item) && obj1[item]!==obj2[item]){
+    return false
+  }
+  return true
+})
+
+console.log(every,'every')
+
+```
