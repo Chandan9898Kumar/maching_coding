@@ -1239,7 +1239,7 @@ const count = countInArray(arr, (e) => typeof e === "number");
 console.log(count);
 ```
 
-### 31. deepEqual Object.
+### 31. Compare To objects deepEqual .
 
 ```ts
 let value = { a: 1 };
@@ -1354,4 +1354,55 @@ const every = Object.keys(obj2).every((item)=>{
 
 console.log(every,'every')
 
+```
+
+### Flat an array to up to given depth.
+
+```ts
+// const nestedArray = [1,2,[3,4,5,6,[7,[8,[9],[10]]]],[11,12,[13,14]]]
+
+const nestedArray = [1, 2, [3], [4], 5, [6, 7], [8, 9, 10, [11, 12]]];
+
+const deep = 3;
+
+const flatArray = (arrays, deep) => {
+  if (deep === "undefined" || deep === null || deep < 0) {
+    return arrays;
+  }
+  let flatData = [];
+
+  for (let x of arrays) {
+    if (Array.isArray(x) && deep) {
+      deep = deep - 1;
+      flatData.push(...flatArray(x, deep));
+    } else {
+      flatData.push(x);
+    }
+  }
+
+  return flatData;
+};
+
+const result = flatArray(nestedArray, deep);
+
+//       Method 2.                By Flat()
+
+const result = nestedArray.flat(deep);
+
+//   Method 3.                   By Reduce()
+
+const flatten = (arr, deep) => {
+  return arr.reduce((flat, flatArray) => {
+    if (Array.isArray(flatArray) && deep) {
+      flat.push(...flatten(flatArray, deep - 1));
+    } else {
+      flat.push(flatArray);
+    }
+    return flat;
+  }, []);
+};
+
+const result = flatten(nestedArray, deep);
+
+console.log(result, "result");
 ```
