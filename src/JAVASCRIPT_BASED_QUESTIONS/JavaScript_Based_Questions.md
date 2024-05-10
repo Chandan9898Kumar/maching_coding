@@ -147,3 +147,30 @@ How to implement Array some method?
 How to implement Array every method?
 How to implement Array unshift method?
 How to implement Array pop method? -->
+
+### 5. What is the Output
+
+```ts
+setTimeout(() => {
+  console.log("timeout 1");
+
+  Promise.resolve().then(() => {
+    console.log("promise 1");
+  });
+}, 0);
+
+new Promise(function (resolve, reject) {
+  console.log("promise 2");
+
+  setTimeout(() => {
+    console.log("timeout 2");
+
+    resolve("resolve 1");
+  }, 0);
+}).then((res) => {
+  console.log("dot then 1");
+  setTimeout(() => {
+    console.log(res);
+  }, 0);
+});
+```
