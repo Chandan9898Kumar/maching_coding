@@ -1356,7 +1356,7 @@ console.log(every,'every')
 
 ```
 
-### Flat an array to up to given depth.
+### 33. Flat an array to up to given depth.
 
 ```ts
 // const nestedArray = [1,2,[3,4,5,6,[7,[8,[9],[10]]]],[11,12,[13,14]]]
@@ -1403,6 +1403,37 @@ const flatten = (arr, deep) => {
 };
 
 const result = flatten(nestedArray, deep);
+
+console.log(result, "result");
+```
+
+### 34. Remove Vowels from string.
+
+```ts
+const strings = "Hello World";
+const vowels = ["a", "e", "o", "u", "i"];
+
+function removeVowels(strings, vowels) {
+  let consonants = "";
+
+  for (let x of strings) {
+    if (!vowels.includes(x.toLowerCase())) {
+      consonants = consonants + x;
+    }
+  }
+
+  return consonants;
+}
+
+const result = removeVowels(strings, vowels);
+
+//    Method 2.   BY Regular Expression.
+
+function removeVowels(strings) {
+  return strings.replace(/[aeouiAEUOI]/g, "");
+}
+
+const result = removeVowels(strings);
 
 console.log(result, "result");
 ```
