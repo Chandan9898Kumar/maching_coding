@@ -1437,3 +1437,58 @@ const result = removeVowels(strings);
 
 console.log(result, "result");
 ```
+
+### 35. Sum of digits of a number.
+
+```ts
+//                                    By Using Reduce Method
+function sumOfDigits(number) {
+  let arrayNumber = String(number).split("");
+
+  const totalSum = arrayNumber.reduce((acc, curr) => {
+    acc = acc + Number(curr);
+    return acc;
+  }, 0);
+
+  return totalSum;
+}
+
+//                                  By Using Loop
+
+function sumOfDigits(num) {
+  let sum = 0;
+  while (num > 0) {
+    sum += num % 10;
+    num = Math.floor(num / 10);
+  }
+  return sum;
+}
+
+console.log(sumOfDigits(1287));
+```
+
+### 36. Count the number of digits of a number.
+
+```ts
+//  Method 1.
+function countDigits(num) {
+  const arrays = String(Math.abs(num)).split("");
+
+  return arrays.length;
+}
+
+//    Method 2.
+
+function countDigits(num) {
+  num = Math.abs(num);
+  let count = 0;
+  do {
+    count++;
+    num = Math.floor(num / 10);
+  } while (num > 0);
+  return count;
+}
+
+console.log(countDigits(121)); // 3
+console.log(countDigits(-1211413131)); // 10
+```
