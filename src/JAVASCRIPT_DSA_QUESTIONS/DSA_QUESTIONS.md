@@ -1541,3 +1541,47 @@ const removeDecimal = (value) => {
 
 console.log(removeDecimal("22.334.788.3445.544"));
 ```
+
+### 38. In a string, turn digits (1) into spelled words (one)
+
+```ts
+const replaceDigits = (str) => {
+  return str
+    .replace(/1/g, "one")
+    .replace(/2/g, "two")
+    .replace(/3/g, "three")
+    .replace(/4/g, "four")
+    .replace(/5/g, "five")
+    .replace(/6/g, "six")
+    .replace(/7/g, "seven")
+    .replace(/8/g, "eight")
+    .replace(/9/g, "nine")
+    .replace(/0/g, "zero");
+};
+
+//           By For Loop
+
+const object = {
+  1: "one",
+  2: "two",
+  3: "three",
+  4: "four",
+  5: "five",
+  6: "six",
+  7: "seven",
+  8: "eight",
+  9: "nine",
+  0: "zero",
+};
+
+const replaceDigits = (value) => {
+  let newStr = "";
+
+  for (let x of value) {
+    newStr = newStr + " " + object[x];
+  }
+  return newStr;
+};
+
+console.log(replaceDigits("1254346790"));
+```
