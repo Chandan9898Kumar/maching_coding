@@ -1585,3 +1585,43 @@ const replaceDigits = (value) => {
 
 console.log(replaceDigits("1254346790"));
 ```
+
+### 39. Hide every elements with "\*" except last 4 digits
+
+```ts
+const fruits = "2673-3342-3445-5449";
+const len = fruits.length;
+const citrus = fruits.slice(-4).padStart(len, "*");
+
+console.log(citrus, "citrus");
+
+//      By For Loop
+
+const digits = "2673-3342-34457-5449";
+
+const hideElement = (values) => {
+  const len = values.length - 4;
+  const lastElement = values.slice(-4);
+  let newStr = "";
+
+  for (let x = 0; x < len; x++) {
+    newStr = newStr + "*";
+  }
+
+  return newStr + lastElement;
+};
+
+const result = hideElement(digits);
+
+console.log(result, "result");
+```
+
+### 40. Hide every elements with "\*" except first 4 digits
+
+```ts
+const fruits = "2673-3342-3445-5449";
+const len = fruits.length;
+const citrus = fruits.slice(0, 4).padEnd(len, "*");
+
+console.log(citrus, "citrus");
+```
