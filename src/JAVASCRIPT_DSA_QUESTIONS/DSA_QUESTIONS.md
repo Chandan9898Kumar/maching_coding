@@ -1492,3 +1492,52 @@ function countDigits(num) {
 console.log(countDigits(121)); // 3
 console.log(countDigits(-1211413131)); // 10
 ```
+
+### 36. Generates a random unique session ID
+
+```ts
+/**
+ * Generates a random unique session ID
+ * @return {string} random unique ID
+ */
+
+//  A function to return the replacement text:
+export const generateUUID = () => {
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+    const r = (Math.random() * 16) | 0,
+      v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+};
+```
+
+### 37. Remove All Dots from given value
+
+```ts
+//       By Replace Method
+const removeDecimal = (value) => {
+  const reg = value.replace(/[.]/g, "");
+  return reg;
+};
+
+//    By   ReplaceAll Method
+
+const removeDecimal = (value) => {
+  const reg = value.replaceAll(".", "");
+  return reg;
+};
+
+//        By For Loop
+
+const removeDecimal = (value) => {
+  let removedDots = "";
+  for (let x of value) {
+    if (x !== ".") {
+      removedDots = removedDots + x;
+    }
+  }
+  return removedDots;
+};
+
+console.log(removeDecimal("22.334.788.3445.544"));
+```
