@@ -1625,3 +1625,61 @@ const citrus = fruits.slice(0, 4).padEnd(len, "*");
 
 console.log(citrus, "citrus");
 ```
+
+### 41. Remove full-stop, comma and spaces from a string
+
+```ts
+var str = "abc abc a, .aa 22.3333.4434.435";
+
+var regex = /[.,\s]/g;
+
+var result = str.replace(regex, "");
+
+console.log(result);
+```
+
+### 42. How to find the most frequent word in a paragraph ?
+
+```ts
+`Functional Requirements`:
+// - Words in the paragraph are not case sensitive.
+// - The answer should be returned in lowercase. If the second argument is provided i.e. list of banned words then return the most frequent word that is not in the list of banned words.
+
+
+const text = 'Bob hit a ball, the hit ball flew far after it was hit.'
+const bannedWords = ['hit'];
+
+const mostUsedWord=(textValue,nextWord='')=>{
+    var regex = /[.,]/g;
+    let frequent =0
+    let key=''
+
+    const splitText = textValue.replace(regex,"").split(" ")
+
+    const object= splitText.reduce((acc,curr)=>{
+        acc[curr] = (acc[curr] || 0) +1
+        return acc
+    },{})
+
+
+//  If bannedWords is present then fetch 2nd highest frequent.
+  for(let x in object){
+    if(frequent<object[x] && !nextWord.includes(x)){
+      frequent = object[x]
+      key = x
+    }
+  }
+
+  return key
+
+ }
+
+
+const answer = mostUsedWord(text);
+// answer => hit
+
+const answer = mostUsedWord(text, bannedWords);
+// answer => ball
+
+
+```
