@@ -147,7 +147,9 @@ const result = rever(str);
 console.log(result);
 ```
 
-### 5. Sort on this basis of height,ig height is same then sort on name.
+### 5. Sort on this basis of height and name.
+
+<!--  The sort() method of Array instances sorts the elements of an array in place and returns the reference to the same array, now sorted. The default sort order is ascending. It changes the original Array -->
 
 ```ts
 const person1 = { name: "aryan", height: 178 };
@@ -163,6 +165,7 @@ const person10 = { name: "abhishea", height: 16 };
 
 const arr = [person1, person2, person3, person4, person5, person6, person7, person8, person9, person10];
 
+//  Way 1.
 const result = arr.sort((a, b) => {
   if (a["height"] > b["height"]) {
     return 1;
@@ -176,7 +179,27 @@ const result = arr.sort((a, b) => {
   }
 });
 
-console.log(result, "result");
+// Way 2.
+const newResult = arr.sort((a, b) => a.height - b.height);
+
+console.log(result, "result", newResult);
+
+// -  Sort on this basis of name ?
+const sortName = arr.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
+
+//   Long Way
+const sortName = items.sort((a, b) => {
+  const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+  const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+  if (nameA < nameB) {
+    return -1;
+  }
+  if (nameA > nameB) {
+    return 1;
+  }
+  // names must be equal
+  return 0;
+});
 ```
 
 ### 6. find smallest word by length in an array.if length match then compare by ascii character.
