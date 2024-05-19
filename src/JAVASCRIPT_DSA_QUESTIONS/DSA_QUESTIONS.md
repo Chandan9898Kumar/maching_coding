@@ -184,7 +184,7 @@ const newResult = arr.sort((a, b) => a.height - b.height);
 
 console.log(result, "result", newResult);
 
-// -  Sort on this basis of name ?
+//                                                   -  Sort on this basis of name ?
 const sortName = arr.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1));
 
 //   Long Way
@@ -200,6 +200,19 @@ const sortName = items.sort((a, b) => {
   // names must be equal
   return 0;
 });
+console.log(sortName,'sortName)
+
+
+//    Sort On the Basis of Height , If Height is same then sort on the basis of name.
+const sortedData = arr.sort((a, b) => {
+  if (a.height === b.height) {
+    return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1;
+  } else {
+    return a.height - b.height;
+  }
+});
+
+console.log(sortedData,'sortedData)
 ```
 
 ### 6. find smallest word by length in an array.if length match then compare by ascii character.
