@@ -1719,3 +1719,52 @@ const answer = mostUsedWord(text, bannedWords);
 
 
 ```
+
+### 43. Implement a Credit Card Masker
+
+- Functional Requirements
+
+1. It should replace all but the 1st and last 4 digits in the provided sequence.
+2. Should not mask input shorter than 6 characters.
+3. Should not mask non-numeric characters.
+4. Should return empty string for all other input types apart from string and number.
+
+```ts
+const maskify = (cardNumber) => {
+  if (typeof cardNumber !== "number" && typeof cardNumber !== "string") {
+    return "";
+  }
+  if ((typeof cardNumber === "number" || typeof cardNumber === "string") && cardNumber.length < 6) {
+    return cardNumber;
+  }
+  cardNumber = String(cardNumber);
+
+  let length = cardNumber.length;
+  const firstChar = cardNumber.slice(0, 1);
+  const lastChar = cardNumber.slice(length - 4, length);
+  let loopingNumber = length - 4;
+  let maskedOutput = "";
+  for (let x = 1; x < loopingNumber; x++) {
+    maskedOutput += isNaN(parseInt(cardNumber[x])) ? cardNumber[x] : "#";
+  }
+
+  return `${firstChar}${maskedOutput}${lastChar}`;
+};
+
+console.log(maskify("5512103073210694"));
+// 5###########0694
+
+console.log(maskify("4556-3646-0793-5616"));
+// 4###-####-####-5616
+
+console.log(maskify(""));
+// ''
+
+console.log(maskify("Devtools Tech"));
+// Devtools Tech
+
+console.log(maskify("S2k3i4p65p7y"));
+// S#k#i#p#5p7y
+
+console.log(maskify("82k3i4p65p7y1125"));
+```
