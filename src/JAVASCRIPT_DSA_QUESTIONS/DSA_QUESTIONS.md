@@ -244,13 +244,13 @@ const result = smallest(arr) o/p = 'bo'
 ```ts
 // method 1. When no duplicates are there.
 const arr = [2, 6, 3, 8, 9, 11, 4];
-const result = arr.sort((a, b) => b - a);
+const result = arr.sort((a, b) => b - a)[1];
 console.log(result);
 
 // 2. when duplicates are there.
-function sortarr() {
+function sortArr() {
   const arr2 = [4, 2, 14, 11, 5, 14];
-  const newarr = arr2
+  const newArr = arr2
     .reduce((acc, curr) => {
       if (acc.includes(curr)) {
         return acc;
@@ -260,9 +260,9 @@ function sortarr() {
     }, [])
     .sort((a, b) => b - a)[1];
 
-  return newarr;
+  return newArr;
 }
-const result = sortarr();
+const result = sortArr();
 console.log(result);
 ```
 
@@ -1529,24 +1529,6 @@ console.log(countDigits(121)); // 3
 console.log(countDigits(-1211413131)); // 10
 ```
 
-### 36. Generates a random unique session ID
-
-```ts
-/**
- * Generates a random unique session ID
- * @return {string} random unique ID
- */
-
-//  A function to return the replacement text:
-export const generateUUID = () => {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-    const r = (Math.random() * 16) | 0,
-      v = c === "x" ? r : (r & 0x3) | 0x8;
-    return v.toString(16);
-  });
-};
-```
-
 ### 37. Remove All Dots from given value
 
 ```ts
@@ -1767,4 +1749,67 @@ console.log(maskify("S2k3i4p65p7y"));
 // S#k#i#p#5p7y
 
 console.log(maskify("82k3i4p65p7y1125"));
+```
+
+### 44. Make this function work using currying: add(4)(5)(7)(9)()
+
+```ts
+//    Currying
+
+function add(a) {
+  return function (b) {
+    if (b) {
+      return add(a + b);
+    }
+    return a;
+  };
+}
+
+const result = add(4)(5)(7)(9)();
+
+console.log(result, "result");
+```
+
+### 45. Make this function work : cal().add(10).sub(5).mult(20).div(2).result()
+
+```ts
+function cal() {
+  let count = 0;
+
+  function add(val1) {
+    count = count + val1;
+    return this;
+  }
+
+  function sub(val1) {
+    count = count - val1;
+    return this;
+  }
+
+  function mult(val1) {
+    count = count * val1;
+    return this;
+  }
+
+  function div(val1) {
+    count = count / val1;
+    return this;
+  }
+
+  function result() {
+    return count;
+  }
+
+  return {
+    add: add,
+    sub: sub,
+    mult: mult,
+    div: div,
+    result: result,
+  };
+}
+
+const outcome = cal().add(10).sub(5).mult(20).div(2).result();
+
+console.log(outcome, "outcome");
 ```
