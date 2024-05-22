@@ -1440,7 +1440,50 @@ const flatten = (arr, deep) => {
 
 const result = flatten(nestedArray, deep);
 
+//   Method 4.
+const emptyArray = [];
+const flatArray = (array, newArray) => {
+  for (let x of array) {
+    if (Array.isArray(x)) {
+      flatArray(x, newArray);
+    } else {
+      newArray.push(x);
+    }
+  }
+
+  return newArray;
+};
+
+const result = flatArray(nestedArray, emptyArray);
+
+//   Method 5 by using toString Or String Method. : NOTE : toString Or String Method converts array into a single string.
+function flatArray(array) {
+  //  After converting array into single string then we are splitting based on "," and then using map method to return strings as a number.
+  //  Number inside map will convert digits which are in string into Number.
+  const flattedArray = array.toString().split(",").map(Number);
+  const ArrayFlatted = String(array).split(",").map(Number);
+
+  return flattedArray;
+}
+
+const result = flatArray(nestedArray);
+
 console.log(result, "result");
+
+
+//  NOTE : Below Example shows how to convert array into a single string and convert back that string into original  array.
+const array = [12, 13, 14, 15, "hi", "hello"];
+
+let convertString = array.toString();
+
+const backToArray = convertString.split(",").map((item) => {
+  if (isNaN(Number(item))) {
+    return item;
+  }
+  return Number(item);
+});
+
+console.log(convertString, "convertString", backToArray);
 ```
 
 ### 34. Remove Vowels from string.
