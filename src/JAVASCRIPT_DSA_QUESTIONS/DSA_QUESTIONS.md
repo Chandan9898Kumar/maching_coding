@@ -1470,7 +1470,6 @@ const result = flatArray(nestedArray);
 
 console.log(result, "result");
 
-
 //  NOTE : Below Example shows how to convert array into a single string and convert back that string into original  array.
 const array = [12, 13, 14, 15, "hi", "hello"];
 
@@ -1712,8 +1711,8 @@ const bannedWords = ['hit'];
 
 const mostUsedWord=(textValue,nextWord='')=>{
     var regex = /[.,]/g;
-    let frequent =0
-    let key=''
+    let frequent = 0
+    let key = ''
 
     const splitText = textValue.replace(regex,"").split(" ")
 
@@ -1855,4 +1854,86 @@ function cal() {
 const outcome = cal().add(10).sub(5).mult(20).div(2).result();
 
 console.log(outcome, "outcome");
+```
+
+### 46. After flating this Object, get properties which is having values.
+
+```ts
+let nestedObject = {
+  id: 28802695164,
+  date: "December 31, 2016",
+  data: {
+    totalUsers: 99,
+    online: 80,
+    onlineStatus: {
+      active: 67,
+      away: 13,
+      busy: 8,
+    },
+  },
+  country: {
+    place: {
+      state: {
+        Area: "USA",
+      },
+      name: {
+        of: {
+          the: {
+            game: {
+              is: "GTA 6",
+            },
+          },
+        },
+      },
+    },
+  },
+};
+
+const nestedObjectFunction = (nestedObject) => {
+  let newFlatObject = {};
+
+  for (let x in nestedObject) {
+    if (typeof nestedObject[x] === "object") {
+      const data = nestedObjectFunction(nestedObject[x]);
+      newFlatObject = { ...newFlatObject, ...data };
+    } else {
+      newFlatObject[x] = nestedObject[x];
+    }
+  }
+
+  return newFlatObject;
+};
+
+const result = nestedObjectFunction(nestedObject);
+
+// OR
+
+const nestedObjectFunction = (nestedObject, newFlatObject = {}) => {
+  for (let x in nestedObject) {
+    if (typeof nestedObject[x] === "object") {
+      nestedObjectFunction(nestedObject[x], newFlatObject);
+    } else {
+      newFlatObject[x] = nestedObject[x];
+    }
+  }
+
+  return newFlatObject;
+};
+
+const result = nestedObjectFunction(nestedObject);
+
+console.log(result, "result");
+
+//  Result
+// {
+//   Area: "USA";
+//   active: 67;
+//   away: 13;
+//   busy: 8;
+//   date: "December 31, 2016";
+//   id: 28802695164;
+//   is: "GTA 6";
+//   online: 80;
+//   totalUsers: 99;
+// }
 ```
