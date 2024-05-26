@@ -1062,7 +1062,7 @@ console.log(data,'result')
  */
 ```
 
-### 28. Create a function which will accepts two arrays arr1 and arr2. The function should return true .if every value in arr1 has its corresponding value squared in array2. The frequency of values must be same.
+### 28. Create a function which will accepts two arrays arr1 and arr2. The function should return true .if every value in arr1 has its corresponding value in array2. The frequency of values must be same.
 
 ```ts
 //     Method 1.  By sorting items in ascending order and comparing by JSON.stringify(); If items are not sorted then stringify will give false.
@@ -1275,7 +1275,7 @@ const count = countInArray(arr, (e) => typeof e === "number");
 console.log(count);
 ```
 
-### 31. Compare To objects deepEqual .
+### 31. Compare Two objects to deepEqual .
 
 ```ts
 let value = { a: 1 };
@@ -1936,4 +1936,61 @@ console.log(result, "result");
 //   online: 80;
 //   totalUsers: 99;
 // }
+```
+
+### Remove Only Object from an array.
+
+```ts
+const filterObjects = (arr) => {
+  const newArray = [];
+
+  for (let x of arr) {
+    if (typeof x !== "object") {
+      newArray.push(x);
+    }
+    if (x === null) {
+      newArray.push(x);
+    }
+  }
+  return newArray;
+};
+
+let arr = [123, "Prashant Yadav", "India", null, undefined, { abc: "xyz" }, { pqr: "stu" }];
+
+console.log(filterObjects(arr));
+//[123, 'Prashant Yadav', 'India', null, undefined]
+```
+
+### Remove object from an array whose key:value pair matches.
+
+```ts
+let arr = [123, "Prashant Yadav", "India", null, { abc: "xyz" }, { pqr: "stu" }];
+
+const filterObjects = (arr, key, value) => {
+  const newArray = [];
+
+  for (let x of arr) {
+    if (x && x.hasOwnProperty(key) && x[key] === value) {
+      continue;
+    } else {
+      newArray.push(x);
+    }
+  }
+  return newArray;
+};
+
+//    Method 2. By Using filter method
+
+const filterObjects = (arr, key, value) => {
+  return arr.filter((item) => {
+    if (item && item.hasOwnProperty(key) && item[key] === value) {
+      return false;
+    }
+    return true;
+  });
+};
+
+console.log(filterObjects(arr, "pqr", "stu"));
+
+//[123, 'Prashant Yadav', 'India', null, {'abc': 'xyz'}]
 ```
