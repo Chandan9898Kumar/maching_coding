@@ -196,3 +196,23 @@ const timer1 = setTimeout(() => {
 
 console.log("stop");
 ```
+
+### 7. What is the OutPut
+
+```ts
+var value = 2;
+
+function outer() {
+  console.log(value, "outer");
+
+  function inner() {
+    console.log(value, "inner");
+  }
+
+  inner();
+
+  var value = 5;
+}
+
+outer();
+```
