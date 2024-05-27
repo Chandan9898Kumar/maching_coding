@@ -1938,7 +1938,70 @@ console.log(result, "result");
 // }
 ```
 
-### Remove Only Object from an array.
+### 47. Deep flatten object.
+
+```ts
+const flatten = (obj, prefix) => {
+  //store the result
+  let output = {};
+
+  //iterate the object
+  for (let k in obj) {
+    let val = obj[k];
+
+    //new key
+    const newKey = prefix ? prefix + "." + k : k;
+
+    //array and object both are object in js
+    if (typeof val === "object") {
+      // if it is array
+      if (Array.isArray(val)) {
+        //use rest & spread together to convert array to object
+        const { ...arrToObj } = val;
+        const newObj = flatten(arrToObj, newKey);
+        output = { ...output, ...newObj };
+      }
+      //if it is object
+      else {
+        const newObj = flatten(val, newKey);
+        output = { ...output, ...newObj };
+      }
+    }
+    // normal value
+    else {
+      output = { ...output, [newKey]: val };
+    }
+  }
+
+  return output;
+};
+
+const nested = {
+  A: "12",
+  B: 23,
+  C: {
+    P: 23,
+    O: {
+      L: 56,
+    },
+    Q: [1, 2],
+  },
+};
+
+console.log(flatten(nested));
+
+// Output:
+// {
+//   "A": "12"
+//   "B": 23,
+//   "C.O.L": 56,
+//   "C.P": 23,
+//   "C.Q.0": 1,
+//   "C.Q.1": 2,
+// }
+```
+
+### 48. Remove Only Object from an array.
 
 ```ts
 const filterObjects = (arr) => {
@@ -1961,7 +2024,7 @@ console.log(filterObjects(arr));
 //[123, 'Prashant Yadav', 'India', null, undefined]
 ```
 
-### Remove object from an array whose key:value pair matches.
+### 49. Remove object from an array whose key:value pair matches.
 
 ```ts
 let arr = [123, "Prashant Yadav", "India", null, { abc: "xyz" }, { pqr: "stu" }];
@@ -1993,4 +2056,34 @@ const filterObjects = (arr, key, value) => {
 console.log(filterObjects(arr, "pqr", "stu"));
 
 //[123, 'Prashant Yadav', 'India', null, {'abc': 'xyz'}]
+```
+
+### 50. How to merge objects in javascript
+
+```ts
+
+let obj1 = {
+  name: 'prashant',
+  age: 23,
+}
+
+let obj2 = {
+  qualification: 'BSC CS',
+  loves: 'Javascript'
+}
+
+- 1.  Using ... spread operator
+// spread operators copies all the properties of the objects into another object.
+
+let merge = {...obj1, ...obj2};
+
+console.log(merge);
+
+- 2. Using Object.assign() method
+// Object.assign(target, source1, soure2, ...) method copies all the enumerable own property of source object to target object and returns the target object.
+let merge = Object.assign({}, obj1, obj2);;
+
+console.log(merge);
+
+- 3. Using custom function to merge objects : We can  create custom function to merge two or more objects.
 ```
