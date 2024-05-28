@@ -216,3 +216,40 @@ function outer() {
 
 outer();
 ```
+
+### 8. what is the output
+
+```ts
+var name = "Yomesh";
+
+function print(name) {
+  console.log(name);
+  var name = "Ajay";
+  console.log(name);
+}
+print(name);
+
+- NOTE :  We are capturing the variable in function arguments.
+// OUTPUT:
+1. "Yomesh"
+2.  "Ajay"
+
+
+
+//            B.
+
+var name = "Yomesh";
+
+function print() {
+  console.log(name);
+  var name = "Ajay";
+  console.log(name);
+}
+print();
+
+
+- NOTE : Here we did not pass variable inside function arguments, so value will not be retained and hence due to hoisting it will show undefined.
+// OUTPUT :
+1. undefined
+2. "Ajay"
+```
