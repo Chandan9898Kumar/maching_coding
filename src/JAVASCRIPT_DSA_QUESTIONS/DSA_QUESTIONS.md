@@ -2083,7 +2083,115 @@ console.log(merge);
 // Object.assign(target, source1, soure2, ...) method copies all the enumerable own property of source object to target object and returns the target object.
 let merge = Object.assign({}, obj1, obj2);;
 
-console.log(merge);
+
 
 - 3. Using custom function to merge objects : We can  create custom function to merge two or more objects.
+
+const merge=(...rest)=>{
+
+ const mergedObject= rest.reduce((acc,curr)=>{
+   for(let x in curr){
+     acc[x] = curr[x]
+   }
+   return acc
+ },{})
+
+
+ return mergedObject
+}
+
+
+let merged = merge(obj1, obj2);
+console.log(merge);
+```
+
+### 51. Create a Flat version of a nested Object | Breadcrumbs Computation.
+
+- Suppose, you are given a nested object from the backend and you need to create a flat version of the object that can be used for breadcrumbs.
+
+```ts
+const data = {
+  name: "Devtools Tech",
+  channel: {
+    youtube: {
+      link: "bit.ly/devtools-yt",
+      name: "Devtools Tech",
+      subscribe: "true",
+    },
+    platform: {
+      link: "devtools.tech",
+      resources: {
+        pages: ["/questions", "/resources"],
+      },
+    },
+  },
+};
+
+const transform = (object, prefixKey, sufixKey) => {
+  let newObject = {};
+  let prefix = prefixKey;
+
+  for (let x in object) {
+    let value = object[x];
+    let newKey = sufixKey ? sufixKey + "_" + x : prefix + "_" + x;
+
+    if (typeof value === "object") {
+      if (Array.isArray(value)) {
+        newObject = { ...newObject, [newKey]: value };
+      } else {
+        let flattedObject = transform(value, prefix, newKey);
+        newObject = { ...newObject, ...flattedObject };
+      }
+    } else {
+      newObject[newKey] = value;
+    }
+
+    //                   OR
+
+    // const isObject = typeof value === "object" && !Array.isArray(value);
+    // if (isObject) {
+    //   let flattedObject = transform(value, prefix, newKey);
+    //   newObject = { ...newObject, ...flattedObject };
+    // } else {
+    //   newObject[newKey] = value;
+    // }
+  }
+
+  return newObject;
+};
+
+const output = transform(data, "data");
+
+//                                                      OR
+
+function transform(input, prefix, response = {}) {
+  const keys = Object.keys(input);
+
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    const currentValue = input[key];
+    const isObject = typeof currentValue === "object" && !Array.isArray(currentValue);
+
+    if (isObject) {
+      transform(currentValue, `${prefix}_${key}`, response);
+    } else {
+      response[`${prefix}_${key}`] = currentValue;
+    }
+  }
+
+  return response;
+}
+
+console.log(output);
+
+/**  Output :
+  {
+    data_name: 'Devtools Tech',
+    data_channel_youtube_link: 'bit.ly/devtools-yt',
+    data_channel_youtube_name: 'Devtools Tech',
+    data_channel_youtube_subscribe: 'true',
+    data_channel_platform_link: 'devtools.tech',
+    data_channel_platform_resources_pages: [ '/questions', '/resources' ]
+  }
+**/
 ```
