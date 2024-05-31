@@ -2261,3 +2261,29 @@ console.log(result, "result");
 
 //  O/P  :   'www.abc.com/search?name=john&id=007&place=USA'
 ```
+
+### 54. find if arrayOne 's items are lowercase version of arrayTwo items. put it in an object
+
+```ts
+const arrayOne = ["pancakes", "bacon", "juice", "eggs", "toast"];
+const arrayTwo = ["PANCAKES", "BACON", "juice", "EGGS", "toast"];
+
+function lowerCaseVersion(itemOne, itemTwo) {
+  const lowerCasePresent = {};
+  const lowerCaseNotPresent = {};
+
+  for (let x of itemOne) {
+    if (itemTwo.includes(x.toUpperCase())) {
+      lowerCasePresent[x] = x.toUpperCase();
+    } else {
+      lowerCaseNotPresent[x] = x;
+    }
+  }
+
+  return { lowerCasePresent, lowerCaseNotPresent };
+}
+
+const result = lowerCaseVersion(arrayOne, arrayTwo);
+
+console.log(result, "result");
+```
