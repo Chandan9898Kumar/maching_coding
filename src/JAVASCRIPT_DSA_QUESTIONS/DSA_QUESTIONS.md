@@ -2085,9 +2085,9 @@ let merge = Object.assign({}, obj1, obj2);;
 
 
 
-- 3. Using custom function to merge objects : We can  create custom function to merge two or more objects.
+- 3. Using custom function to merge objects in a single object: We can  create custom function to merge two or more objects.
 
-const merge=(...rest)=>{
+const merged=(...rest)=>{
 
  const mergedObject= rest.reduce((acc,curr)=>{
    for(let x in curr){
@@ -2101,7 +2101,21 @@ const merge=(...rest)=>{
 }
 
 
-let merged = merge(obj1, obj2);
+let merge = merged(obj1, obj2);
+
+
+// - 4. we can do this bt using forEach method as well.
+const merged=(...rest)=>{
+     let mergedObject ={}
+
+     rest.forEach((item)=>{
+       mergedObject={...mergedObject,...item}
+     })
+ return mergedObject
+}
+
+
+let merge = merged(obj1, obj2);
 console.log(merge);
 ```
 
@@ -2194,4 +2208,56 @@ console.log(output);
     data_channel_platform_resources_pages: [ '/questions', '/resources' ]
   }
 **/
+```
+
+### 52. capitalize first letter of each word and rest letters in smaller case.
+
+```ts
+const name = "sHaIK sALmaN";
+
+function capitalize(givenName) {
+  const splitName = givenName.split(" ").map((item) => item.charAt(0).toUpperCase() + item.slice(1).toLowerCase());
+
+  return splitName;
+}
+
+const result = capitalize(name);
+//  o/p : Shaik Salman
+```
+
+### 53. convert the url into query param by using object : 'www.abc.com/search' into 'www.abc.com/search?name=john&id=007&place=USA'
+
+```ts
+const urls = "www.abc.com/search";
+
+const obj = { name: "john", id: 71, place: "USA" };
+
+function queryParam(urls, obj) {
+  const keys = Object.keys(obj);
+  let newUrl = urls + "?";
+  let keyLength = keys.length;
+  for (let x = 0; x < keyLength; x++) {
+    x === keyLength - 1 ? (newUrl = newUrl + keys[x] + "=" + obj[keys[x]]) : (newUrl = newUrl + keys[x] + "=" + obj[keys[x]] + "&");
+  }
+  return newUrl;
+}
+
+//    OR We can do by this as well
+
+function queryParam(urls, obj) {
+  let queryString = "";
+
+  Object.keys(obj).forEach((item, index) => {
+    let query = `${item}=${obj[item]}`;
+
+    queryString = index === 0 ? queryString + "?" + query : queryString + "&" + query;
+  });
+
+  return urls + queryString;
+}
+
+const result = queryParam(urls, obj);
+console.log(result, "result");
+
+//  O/P  :   'www.abc.com/search?name=john&id=007&place=USA'
 ```
