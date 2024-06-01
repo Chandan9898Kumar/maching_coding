@@ -2323,3 +2323,56 @@ const result = chunk(arr, k);
 // 5.  when k is 5 : [[1, 2, 3, 4, 5]]
 console.log(result, "result");
 ```
+
+### 56. write a function to give this output : Given a string "abcd", the desired output is "Aa-Bbb-Cccc-Ddddd".
+
+```ts
+const stringValue = "abcde";
+
+function changeString(stringValue) {
+  const splitString = stringValue.split("");
+  let len = splitString.length;
+  let newStringValue = "";
+
+  function combineStrings(value, limit) {
+    let combinedValue = "";
+    for (let x = 0; x < limit; x++) {
+      combinedValue = combinedValue + value;
+    }
+    return combinedValue.charAt(0).toUpperCase() + combinedValue.slice(1);
+  }
+
+  for (let x = 0; x < len; x++) {
+    let result = combineStrings(splitString[x], x + 2);
+    newStringValue = x === 0 ? newStringValue + result : newStringValue + "-" + result;
+  }
+
+  return newStringValue;
+}
+
+const result = changeString(stringValue);
+
+//  OR instead of calling two for loop, we simply call one for loop and use repeat method.
+
+//                                                         NOTE :
+// The repeat() method of String values constructs and returns a new string which contains the specified number of copies of this string, concatenated together.
+
+function changeString(stringValue) {
+  const splitString = stringValue.split("");
+  let len = splitString.length;
+  let newStringValue = "";
+
+  for (let x = 0; x < len; x++) {
+    let repeatedWord = splitString[x].repeat(x + 2);
+    let modifiedWord = repeatedWord.charAt(0).toUpperCase() + repeatedWord.slice(1);
+
+    newStringValue = x === 0 ? newStringValue + modifiedWord : newStringValue + "-" + modifiedWord;
+  }
+
+  return newStringValue;
+}
+
+const result = changeString(stringValue);
+
+console.log(result, "result");
+```
