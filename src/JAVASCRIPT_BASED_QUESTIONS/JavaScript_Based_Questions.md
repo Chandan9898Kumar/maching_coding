@@ -315,3 +315,78 @@ console.log(4);
 
 //  O/P : 3,2,4,1
 ```
+
+### 11. write a function which satisfy the logic
+
+<!--
+count() // 1
+count() // 2
+count() // 3
+count.reset()
+count() //1
+count() // 2
+count() // 3
+-->
+
+```ts
+//  A closure is a function having access to the parent scope, even after the parent function has closed.
+
+//  Method 1. with the help of closure we can get it.
+function add() {
+  let counter = 0;
+  function countValue() {
+    counter += 1;
+    return counter;
+  }
+
+  //  NOTE: We know that everything in js is an object, so we created a reset function on  countValue function in its property,
+  countValue.reset = function () {
+    counter = 0;
+  };
+
+  return countValue;
+}
+
+const count = add();
+
+console.log(count());
+console.log(count());
+console.log(count());
+count.reset();
+
+console.log(count());
+console.log(count());
+console.log(count());
+
+//   By using IIFE to form closure
+
+const count = (function () {
+  let value = 0;
+
+  function inner() {
+    value++;
+    return value;
+  }
+
+  inner.reset = function () {
+    value = 0;
+  };
+
+  return inner;
+})();
+
+console.log(count());
+console.log(count());
+console.log(count());
+count.reset();
+
+console.log(count());
+console.log(count());
+console.log(count());
+
+// The variable 'count' is assigned to the return value of a self-invoking function.
+// The self-invoking function only runs once. It sets the counter to zero (0), and returns a function expression.
+// This way add becomes a function. The "wonderful" part is that it can access the counter in the parent scope.
+// This is called a JavaScript closure. It makes it possible for a function to have "private" variables.
+// The counter is protected by the scope of the anonymous function, and can only be changed using the count function.
+```

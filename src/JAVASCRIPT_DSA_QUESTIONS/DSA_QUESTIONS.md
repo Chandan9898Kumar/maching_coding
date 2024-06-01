@@ -2287,3 +2287,39 @@ const result = lowerCaseVersion(arrayOne, arrayTwo);
 
 console.log(result, "result");
 ```
+
+### 55. write a function to give chunk of item in an array based on K value
+
+```ts
+const arr = [1, 2, 3, 4, 5];
+const k = 1;
+
+function chunk(array, k) {
+  let len = array.length;
+
+  const chunkData = [];
+
+  let initialValue = 0;
+  let nextValue = k;
+  for (let x = 0; x < len; x++) {
+    if (array.slice(initialValue, nextValue).length === 0) {
+      break;
+    }
+    chunkData.push(array.slice(initialValue, nextValue));
+    initialValue = nextValue;
+    nextValue = nextValue + k;
+  }
+
+  return chunkData;
+}
+
+const result = chunk(arr, k);
+
+// O/P:
+// 1 . when k is 1 :  [[1], [2], [3], [4], [5]]
+// 2.  when k is 2  : [[1, 2], [3, 4], [5]]
+// 3.  when k is 3  : [[1, 2, 3], [4, 5]]
+// 4.  when k is 4  : [[1, 2, 3, 4], [5]]
+// 5.  when k is 5 : [[1, 2, 3, 4, 5]]
+console.log(result, "result");
+```
