@@ -253,3 +253,65 @@ print();
 1. undefined
 2. "Ajay"
 ```
+
+### 9. what is the output
+
+```ts
+async function check() {
+  await Promise.resolve(console.log(1));
+  console.log(2);
+}
+
+console.log(3);
+check();
+console.log(4);
+
+//  O/P  3,1,4,2
+
+//  Explanation :
+
+//   js starts executing the code synchronously so,
+//  first console.log(3) will be printed.
+//  next code will move on to check function ,now this is a asynchronous function which executes its statement synchronously up-to the await statement.
+//  so when it reaches the await statement promise.resolve function is called  since argument provided to this function is a function call itself with console.log(1)
+//  so this console function is also executed and return undefined (console does not return anything) so this undefined is passed to the promise.resolve function
+//  top level code up-to await is now executed synchronously but the below which comes after the await will run asynchronously(consider this as a .then(()=>))
+//  now however this promise resolved immediately js first completes the synchronous task first and moves on to next synchronous code which is console.log(4)
+// now all  of these synchronous task has finished executing and then it moves back to execute asynchronous task so this means that after
+// running console.log(4)  the final console.log(2) statement will be executed.
+
+//  Note : the asynchronous code is handled by the micro-task queue and it is executed by the event loop only after the call stack is empty.
+```
+
+### 10. what is the output
+
+<!--  Check above explanation -->
+
+```ts
+async function check() {
+  await setTimeout(() => {
+    console.log(1);
+  }, 100);
+  console.log(2);
+}
+
+console.log(3);
+check();
+console.log(4);
+
+// O/P :  3,4,2,1
+
+//   Next  below code console.log(2) will not works as async because no await is there as given at above example.
+async function check() {
+  setTimeout(() => {
+    console.log(1);
+  }, 100);
+  console.log(2);
+}
+
+console.log(3);
+check();
+console.log(4);
+
+//  O/P : 3,2,4,1
+```
