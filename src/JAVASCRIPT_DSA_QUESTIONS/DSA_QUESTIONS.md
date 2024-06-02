@@ -2423,6 +2423,37 @@ function convert(skillsArray) {
   return newObject.sort((a, b) => b.count - a.count); // sorting in descending order based on count
 }
 const result = convert(skillsArray);
-
 console.log(result, "result");
+
+//               By Using reduce method
+function groupBySkill(array) {
+  let newObject = array.reduce((result, { skill, user }) => {
+    if (!result[skill]) {
+      return { ...result, [skill]: { skill, user: [user], count: 1 } };
+    }
+    const obj = result[skill];
+    return { ...result, [skill]: { ...obj, user: obj.user.concat(user), count: obj.count + 1 } };
+  }, {});
+
+  return Object.values(newObject);
+}
+console.log(groupBySkill(skillsArray));
+
+//              By using reduce amd filter method
+function groupBySkill(array) {
+  return array
+    .reduce((result, { skill, user }) => {
+      const skillExists = result.filter((res) => res.skill === skill).length;
+
+      if (!result.length || !skillExists) {
+        return result.concat({ skill, user: [user], count: 1 });
+      }
+      return result.map((res) => {
+        return skill === res.skill ? { ...res, user: res.user.concat(user), count: res.count + 1 } : res;
+      });
+    }, [])
+    .sort((a, b) => (a.count < b.count ? 1 : -1));
+}
+
+console.log(groupBySkill(skillsArray));
 ```
