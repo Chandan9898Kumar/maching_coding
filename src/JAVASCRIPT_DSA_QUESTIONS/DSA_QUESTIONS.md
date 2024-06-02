@@ -2376,3 +2376,53 @@ const result = changeString(stringValue);
 
 console.log(result, "result");
 ```
+
+### 57. Find the solution of following query.
+
+```ts
+// Suppose you have input like:
+
+var skillsArray = [
+  { skill: "css", user: "Bill" },
+  { skill: "javascript", user: "Chad" },
+  { skill: "javascript", user: "Bill" },
+  { skill: "css", user: "Sue" },
+  { skill: "javascript", user: "Sue" },
+  { skill: "html", user: "Sue" },
+];
+
+// Answer >>>>>>>>>>              Convert it into result of the following form:
+// [
+//   { skill: 'javascript', user: [ 'Chad', 'Bill', 'Sue' ], count: 3 },
+//   { skill: 'css', user: [ 'Sue', 'Bill' ], count: 2 },
+//   { skill: 'html', user: [ 'Sue' ], count: 1 }
+// ]
+
+function convert(skillsArray) {
+  const groupedValue = skillsArray.reduce((acc, curr) => {
+    acc[curr.skill] = acc[curr.skill] ? [...acc[curr.skill], curr] : [curr];
+    return acc;
+  }, {});
+
+  let newObject = [];
+
+  for (let x in groupedValue) {
+    let object = groupedValue[x].reduce((acc, curr) => {
+      if (acc["skill"]) {
+        acc = { ...acc, user: [...acc["user"], curr.user], count: acc["user"].length + 1 };
+      } else {
+        acc = { skill: curr.skill, user: [curr.user], count: curr.user ? 1 : 0 };
+      }
+
+      return acc;
+    }, {});
+
+    newObject.push(object);
+  }
+
+  return newObject.sort((a, b) => b.count - a.count); // sorting in descending order based on count
+}
+const result = convert(skillsArray);
+
+console.log(result, "result");
+```
