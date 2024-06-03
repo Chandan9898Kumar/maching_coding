@@ -2550,3 +2550,25 @@ function infiniteCurryingWithVariableArg(func) {
 const fn2 = infiniteCurryingWithVariableArg((a, b) => a + b);
 console.log(fn2(7, 2)(7, 8)(9, 7)());
 ```
+
+### 60. build a hierarchical object tree.each node can only have one parent and can have any number of children.
+
+A visualization of an example tree we can work with is as follows :
+
+<p align="center">
+  <img src="https://medium.com/hackernoon/you-might-not-need-that-recursive-function-in-javascript-275651522185" width="100%"/>
+</p>
+
+```ts
+const flat = [
+  { id: 1, parentId: 3 },
+  { id: 3, parentId: 8 },
+  { id: 4, parentId: 6 },
+  { id: 6, parentId: 3 },
+  { id: 7, parentId: 6 },
+  { id: 8, parentId: null },
+  { id: 10, parentId: 8 },
+  { id: 13, parentId: 14 },
+  { id: 14, parentId: 10 },
+];
+```
