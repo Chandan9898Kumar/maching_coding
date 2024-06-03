@@ -2556,7 +2556,7 @@ console.log(fn2(7, 2)(7, 8)(9, 7)());
 A visualization of an example tree we can work with is as follows :
 
 <p align="center">
-  <img src="https://medium.com/hackernoon/you-might-not-need-that-recursive-function-in-javascript-275651522185" width="100%"/>
+  <img src="../Assests/Tree_structure.png.webp" width="100%"/>
 </p>
 
 ```ts
