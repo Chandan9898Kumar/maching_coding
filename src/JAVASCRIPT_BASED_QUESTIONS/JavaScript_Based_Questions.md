@@ -358,7 +358,7 @@ console.log(count());
 console.log(count());
 console.log(count());
 
-//   By using IIFE to form closure
+//                                                      By using IIFE to form closure
 
 const count = (function () {
   let value = 0;
@@ -389,4 +389,63 @@ console.log(count());
 // This way add becomes a function. The "wonderful" part is that it can access the counter in the parent scope.
 // This is called a JavaScript closure. It makes it possible for a function to have "private" variables.
 // The counter is protected by the scope of the anonymous function, and can only be changed using the count function.
+```
+
+### 12. what is the output
+
+```ts
+// <!--  1. -->
+function counter() {
+  let count = 0;
+
+  return function call() {
+    count++;
+    return count;
+  };
+}
+
+const callBack = counter();
+console.log(callBack());
+console.log(callBack());
+console.log(callBack());
+
+//    2.
+function counter() {
+  let count = 0;
+
+  return function call() {
+    return count++;
+  };
+}
+
+const callBack = counter();
+
+console.log(callBack());
+console.log(callBack());
+console.log(callBack());
+
+
+
+//  NOTE :The increment (++) operator increments (adds one to) its operand and returns the value before or after the increment,depending on where the operator is placed.
+// 1. If used postfix, with operator after operand (for example, x++), the increment operator increments and returns the value before incrementing.
+
+- Postfix increment
+Example :
+let x = 3;
+const y = x++;
+// x is 4; y is 3
+
+let x2 = 3n;
+const y2 = x2++;
+// x2 is 4n; y2 is 3n
+
+// 2. If used prefix, with operator before operand (for example, ++x), the increment operator increments and returns the value after incrementing.
+- Prefix increment
+let x = 3;
+const y = ++x;
+// x is 4; y is 4
+
+let x2 = 3n;
+const y2 = ++x2;
+// x2 is 4n; y2 is 4n
 ```
