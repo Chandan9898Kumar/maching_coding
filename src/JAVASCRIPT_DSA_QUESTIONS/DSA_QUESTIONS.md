@@ -2650,6 +2650,35 @@ console.log(result,'result')
 
 
 
+//  4Th Way
+
+// There is an efficient solution if you use a map-lookup. If the parents always come before their children you can merge the two for-loops. It supports multiple roots. It gives an error on dangling branches, but can be modified to ignore them. It doesn't require a 3rd-party library. It's, as far as I can tell, the fastest solution.
+
+function list_to_tree(list) {
+  var map = {}, node, roots = [], i;
+
+  for (i = 0; i < list.length; i++) {
+    map[list[i].id] = i; // initialize the map
+    list[i].children = []; // initialize the children
+  }
+
+  //   after initializing
+  for (i = 0; i < list.length; i++) {
+    node = list[i];
+    if (node.parentId) {
+      // if you have dangling branches check that map[node.parentId] exists
+      list[map[node.parentId]].children.push(node);
+    } else {
+      roots.push(node);
+    }
+  }
+  return roots;
+}
+
+
+console.log(list_to_tree(flatArray));
+
+
 - The Logic
 
 We can simply iterate through the array and assign each object to the children array of its parent object. This may not make intuitive sense, but consider this logic:
