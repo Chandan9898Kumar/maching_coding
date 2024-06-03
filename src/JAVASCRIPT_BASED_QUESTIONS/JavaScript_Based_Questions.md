@@ -449,3 +449,25 @@ let x2 = 3n;
 const y2 = ++x2;
 // x2 is 4n; y2 is 4n
 ```
+
+### Write a script to fetch top 3 results from Google search. Search this in google engine : last element of string java and get top 3 results.
+
+```ts
+function search() {
+  let items = document.querySelectorAll(".yuRUbf a");
+
+  let array = [];
+
+  for (let x of items) {
+    let links = x.getAttribute("href");
+
+    array.push(links);
+  }
+
+  return array.slice(0, 3);
+}
+
+const result = search();
+
+console.log(result);
+```
