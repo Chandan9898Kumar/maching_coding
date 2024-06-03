@@ -2560,7 +2560,7 @@ A visualization of an example tree we can work with is as follows :
 </p>
 
 ```ts
-const flat = [
+const flatArray = [
   { id: 1, parentId: 3 },
   { id: 3, parentId: 8 },
   { id: 4, parentId: 6 },
@@ -2571,4 +2571,74 @@ const flat = [
   { id: 13, parentId: 14 },
   { id: 14, parentId: 10 },
 ];
+
+//  NOTE: Here we are directly manipulating the flatArray by using forEach.
+flatArray.forEach((f) => {
+  //  Here we are first adding child property to each item and assigning values to it.
+  f.children = flatArray.filter((g) => g.parentId === f.id);
+});
+
+//  Here we are getting the parent node only (Node which does not have any parent).
+var resultArray = flatArray.filter((f) => f.parentId == null);
+console.log(resultArray);
+
+//                                  Method 2
+// Create root for top-level node(s)
+const root = [];
+
+flatArray.forEach((node) => {
+  // No parentId means top level
+  if (!node.parentId) return root.push(node);
+
+  // Insert node as child of parent in flatArray array
+  const parentIndex = flatArray.findIndex((el) => el.id === node.parentId);
+  if (!flatArray[parentIndex].children) {
+    return (flatArray[parentIndex].children = [node]);
+  }
+
+  flatArray[parentIndex].children.push(node);
+});
+
+console.log(root);
+
+
+
+//                                             optimization  way of method 2, above example :
+
+The findIndex function we use each time through the loop isn’t a big deal for the small example tree, but this could actually get expensive if we’re working with a large tree. Let’s create an object to cache found parent locations.
+
+// Create root for top-level node(s)
+const root = [];
+// Cache found parent index
+const map = {};
+
+flat.forEach(node => {
+  // No parentId means top level
+  if (!node.parentId) return root.push(node);
+
+  // Insert node as child of parent in flat array
+  let parentIndex = map[node.parentId];
+  if (typeof parentIndex !== "number") {
+    parentIndex = flat.findIndex(el => el.id === node.parentId);
+    map[node.parentId] = parentIndex;
+  }
+
+  if (!flat[parentIndex].children) {
+    return flat[parentIndex].children = [node];
+  }
+
+  flat[parentIndex].children.push(node);
+});
+
+console.log(root);
+
+
+- The Logic
+
+We can simply iterate through the array and assign each object to the children array of its parent object. This may not make intuitive sense, but consider this logic:
+
+1. Object 3 is assigned to the children array of object 8
+2. Object 6 is assigned to the children array of object 3
+3. The Object 3 that was assigned to the children array of object 8 is really just a reference to Object 3 in memory… meaning its children array will have the Object 6 reference.
+4. This logic extends to the entire array, meaning we just need to go through the array once to build out our tree!
 ```
