@@ -1808,7 +1808,22 @@ function add(a) {
 }
 
 const result = add(4)(5)(7)(9)();
+console.log(result, "result");
 
+//                                                    Type 2. when more than one arguments are passed.
+function curr(...a) {
+  return function inner(...b) {
+    if (b.length > 0) {
+      let sumA = a.reduce((acc, curr) => acc + curr, 0);
+      let sumB = b.reduce((acc, curr) => acc + curr, 0);
+      return curr(sumA + sumB);
+    } else {
+      return Number(a);
+    }
+  };
+}
+
+const result = curr(7, 2)(7, 8)(9, 7)();
 console.log(result, "result");
 ```
 
@@ -2456,4 +2471,82 @@ function groupBySkill(array) {
 }
 
 console.log(groupBySkill(skillsArray));
+```
+
+### 58. implement infiniteCurrying with single arguments
+
+```ts
+function infiniteCurrying(func) {
+  function recursiveCurry(...args) {
+    return function (a) {
+      if (!a) {
+        return args.reduce((result, value) => result + value, 0);
+      }
+      return recursiveCurry(...args, a);
+    };
+  }
+
+  return recursiveCurry();
+}
+
+const fn = infiniteCurrying();
+console.log(fn(7)(8)(9)(6)());
+
+//                           OR by using call method and a function passed as an arguments
+function infiniteCurrying(func) {
+  function recursiveCurry(...args) {
+    return function (a) {
+      if (!a) {
+        return args.reduce((result, value) => {
+          return func.call(func, result, value);
+        });
+      }
+      return recursiveCurry(...args, a);
+    };
+  }
+  return recursiveCurry();
+}
+const fn = infiniteCurrying((a, b) => a + b);
+console.log(fn(7)(8)(9)());
+```
+
+### 59. implement infiniteCurrying with multiple arguments.
+
+```ts
+//  1.                               By using reduce method.
+function infiniteCurryingWithVariableArg() {
+  function recursiveCurry(...args) {
+    return function (...a) {
+      if (!a.length) {
+        return args.reduce((result, value) => {
+          return args.reduce((result, value) => result + value, 0);
+        });
+      }
+      return recursiveCurry(...args, ...a);
+    };
+  }
+
+  return recursiveCurry();
+}
+
+const fn = infiniteCurryingWithVariableArg();
+console.log(fn(7, 2)(7, 8)(9, 7)());
+
+// 2.                                 OR by using call method and a function passed as an arguments.
+function infiniteCurryingWithVariableArg(func) {
+  function recursiveCurry(...args) {
+    return function (...a) {
+      if (!a.length) {
+        return args.reduce((result, value) => {
+          return func.call(func, result, value);
+        });
+      }
+      return recursiveCurry(...args, ...a);
+    };
+  }
+  return recursiveCurry();
+}
+
+const fn2 = infiniteCurryingWithVariableArg((a, b) => a + b);
+console.log(fn2(7, 2)(7, 8)(9, 7)());
 ```
