@@ -2633,6 +2633,23 @@ flat.forEach(node => {
 console.log(root);
 
 
+//   3rd  Way
+const createDataTree = dataset => {
+  const hashTable = Object.create(null);
+  dataset.forEach(aData => hashTable[aData.id] = {...aData, childNodes: []});
+  const dataTree = [];
+  dataset.forEach(aData => {
+    if(aData.parentId) hashTable[aData.parentId].childNodes.push(hashTable[aData.id])
+    else dataTree.push(hashTable[aData.id])
+  });
+  return dataTree;
+};
+
+const result = createDataTree(flatArray)
+console.log(result,'result')
+
+
+
 - The Logic
 
 We can simply iterate through the array and assign each object to the children array of its parent object. This may not make intuitive sense, but consider this logic:
