@@ -27,3 +27,22 @@ But the problem is, JavaScript environments only understand … Well, JavaScript
 Enter _drumrolls_ — Transpilers. They read CoffeeScript, TypeScript, and ES2015, and spit out JavaScript guaranteed to work anywhere.
 
 A common example of a transpiler is Babel. It is used to convert ES6+ code into backward-compatible versions of Javascript.
+
+### Using Pre-Commit and Pre-Push Git Hooks in a React Project.
+
+- Husky
+  husky, which claims to be “git hooks made easy.” (Accurate!). Since it’s only necessary in the dev environment, only install it as a dev dependency.
+  `Install` : npm install husky --save-dev
+
+We actually end up needing one additional dev dependency called `cross-env`, which will allow us to `configure a CI environment variable` in whatever environment we’re currently in.
+
+`Install` : npm install cross-env --save-dev
+
+Finally, let’s make some modifications to our package.json file to accomplish a few things:
+
+1. Reconfigure jest tests to be run in Continuous Integration mode (otherwise, running npm test will hang)
+2. Add a linting command (we didn’t have to install eslint separately as it bootstraps with create-react-app)
+3. Configure our husky hooks to first lint and then test
+
+- Outcome
+  Now, whenever you try to commit or push your code, you will be prevented from doing so if linting or testing fails.
