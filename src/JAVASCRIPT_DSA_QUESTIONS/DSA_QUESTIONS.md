@@ -2770,4 +2770,21 @@ function toLowerCase(string) {
   return resultString;
 }
 console.log(toLowerCase("JAVASCRIPT IS AWESOME!"));
+
+// ---------------------------- toSnakeCase -------------------------
+const toSnakeCase = (value) => {
+  return value.toLowerCase().split(" ").join("_");
+};
+console.log(toSnakeCase("JAVASCRIPT IS AWESOME!"));
+
+// ---------------------------- toStartCase -------------------------
+const toStartCase = (value) => {
+  return value
+    .toUpperCase()
+    .split(" ")
+    .map((item) => item.charAt(0) + item.slice(1).toLowerCase())
+    .join(" ");
+};
+
+console.log(toStartCase("javascript is awesome!"));
 ```
