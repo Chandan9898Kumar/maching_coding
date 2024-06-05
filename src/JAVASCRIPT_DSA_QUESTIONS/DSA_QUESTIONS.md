@@ -2688,3 +2688,86 @@ We can simply iterate through the array and assign each object to the children a
 3. The Object 3 that was assigned to the children array of object 8 is really just a reference to Object 3 in memory… meaning its children array will have the Object 6 reference.
 4. This logic extends to the entire array, meaning we just need to go through the array once to build out our tree!
 ```
+
+### 61. Reverse Strings
+
+```ts
+-1. Reverse String.
+
+1. Soulution.
+const str = "JavaScript is awesome"
+
+function reverseString(str){
+  let reverse=''
+  for(let x of str){
+    reverse = x+reverse
+  }
+  return reverse
+}
+const result = reverseString(str)
+
+//          OR
+function reverseString(str){
+  let reverse=''
+  let len = str.length-1
+  for(let x=len;x>=0;x--){
+    reverse = reverse+str[x]
+  }
+  return reverse
+}
+
+const result = reverseString(str)
+console.log(result)
+
+```
+
+### 62. String Casing
+
+```ts
+// ---------------------------- capitalize -------------------------
+
+function capitalize(string) {
+  return string ? string.charAt(0).toUpperCase() + string.slice(1) : string;
+}
+console.log(capitalize("javascript is awesome!"));
+
+// ---------------------------- toUpperCase -------------------------
+const toUpperCase = (value) => {
+  return typeof value === "string" ? value.toUpperCase() : value;
+};
+//                                 OR
+function toUpperCase(string) {
+  let resultString = "";
+  for (let char of string) {
+    const charCode = char.charCodeAt();
+    console.log(charCode, "charCode");
+    if (97 <= charCode && charCode <= 122) {
+      resultString += String.fromCharCode(charCode - 32);
+    } else {
+      resultString += char;
+    }
+  }
+  return resultString;
+}
+console.log(toUpperCase("javascript is awesome!"));
+
+// ---------------------------- toLowerCase -------------------------
+
+const toLowerCase = (value) => {
+  return typeof value === "string" ? value.toLowerCase() : value;
+};
+//                            OR
+function toLowerCase(string) {
+  let resultString = "";
+  for (let char of string) {
+    const charCode = char.charCodeAt();
+    if (65 <= charCode && charCode <= 90) {
+      resultString += String.fromCharCode(charCode + 32);
+    } else {
+      resultString += char;
+    }
+  }
+  return resultString;
+}
+console.log(toLowerCase("JAVASCRIPT IS AWESOME!"));
+```

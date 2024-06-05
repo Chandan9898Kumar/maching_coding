@@ -536,3 +536,30 @@ Example: A `Library` class is associated with `Book` class where the library con
 Example: A `PaymentProcessor` class depends on an `IPaymentGateway` interface instead of concrete implementations like `Paypal` or `Stripe`.
 
 ```
+
+### 16. fetch retry function typescript
+
+```ts
+export async function fetchRetry(url: string, delay: number, tries: number, callback: () => void, handleError?: (error: any) => void) {
+  async function onError(err: any) {
+    const triesLeft = tries - 1;
+    if (!triesLeft) {
+      handleError?.(err);
+      return;
+    }
+    await wait(delay);
+    return fetchRetry(url, delay, triesLeft, callback, handleError);
+  }
+  try {
+    const response = await fetchPolyfill(api(url));
+    const result: { canRoute: boolean } = await response.json();
+    if (result.canRoute) {
+      callback();
+    } else {
+      onError("Contact not created in Hubspot CRM");
+    }
+  } catch (error) {
+    onError(error);
+  }
+}
+```
