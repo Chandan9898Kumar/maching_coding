@@ -693,3 +693,35 @@ class LocalStorage {
 
 const localStorage = new LocalStorage();
 ```
+
+### 18. How To Reverse And Add A Number Until You Get A Palindrome? and return how many count it took to find palindrome.
+
+```ts
+let value = 37; // 2 count
+let value2 = 7325; // 5 count
+let value = 78; // 4 count
+
+function reverse(value, itValue = 0) {
+  let iteration = itValue;
+  let revNumber = Number([...String(value)].reverse().join(""));
+  let totalSum = String(Number(value) + Number(revNumber));
+
+  let palindrome = [...totalSum].reverse().join("");
+
+  if (palindrome === totalSum) {
+    iteration = iteration + 1;
+    return `${iteration} ${totalSum}`;
+  } else {
+    iteration++;
+    let data = reverse(totalSum, iteration).split(" ");
+    iteration = Number(data[0]);
+    totalSum = Number(data[1]);
+  }
+
+  return `${iteration} ${totalSum}`;
+}
+
+const result = reverse(value);
+
+console.log(result, "result");
+```
