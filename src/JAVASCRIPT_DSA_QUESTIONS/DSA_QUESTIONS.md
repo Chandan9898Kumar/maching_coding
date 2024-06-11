@@ -3048,4 +3048,50 @@ str.split(".").reduce(function (r, a) {
 }, obj);
 
 console.log(obj, "obj");
+
+//                                                For understanding use this,
+let d = {};
+let obj = d;
+
+//  Here we are passing the reference of {a:{}} to obj
+let t = (obj["a"] = {});
+console.log(t, "t", d);
+obj = t;
+
+//  obj.game='hh'
+//  so now after passing reference of object {a:{}} to obj
+//  which means obj is now {a:{}}, if we do some changes likes this
+//  obj.game='gta' then output will come like =  a:{game:'gta'}
+
+console.log(obj, "obj", d);
+
+//  Now here as obj is {a:{}} (object),if we add anything to obj
+//  then it means we are adding to {a:{}}. so if do like  obj['b']={} then
+//  it means we are adding b:{} inside {a:{}}.it will look like =  { a:{ b:{} } }
+let ta = (obj["b"] = {});
+console.log(ta, "ta", d);
+//  and now here again we passing the reference of  { a:{ b:{} } } to obj.
+//  so if we add anything then it will add inside b:{} which is inside {a:{}}.
+//  and it is something like
+// obj['a']={}
+// obj['a']['b']={}
+// obj['a']['b']['c']={}}
+// so on. Remember a:{} is an object that's why are able to add b inside it. its value has to be an object.
+
+obj = ta;
+console.log(obj, "obj", d);
+
+
+- Below Is An Example.
+let d={}
+let obj=d
+
+obj = obj['a']= (obj['a'] || {} )
+console.log(obj,'obj 11111111111111',d)
+
+obj = obj['b']= (obj['b'] || {} )
+console.log(obj,'obj 2222222222222',d)
+
+obj = obj['c']= (obj['c'] || {} )
+console.log(obj,'obj 33333333333333333',d)
 ```
