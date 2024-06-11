@@ -3036,4 +3036,16 @@ function createObject(...pathes) {
 
 // Some tests
 console.log(createObject("a.b.c.d.e"));
+
+//                                      Method 3.
+
+var str = "a.b.c.d.e",
+  obj = {};
+
+str.split(".").reduce(function (r, a) {
+  r[a] = r[a] || {};
+  return r[a];
+}, obj);
+
+console.log(obj, "obj");
 ```
