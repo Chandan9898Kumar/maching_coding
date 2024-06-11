@@ -2014,6 +2014,31 @@ console.log(flatten(nested));
 //   "C.Q.0": 1,
 //   "C.Q.1": 2,
 // }
+
+//                               OR
+
+const nest = (objects, prefix) => {
+  let newObject = {};
+
+  for (let key in objects) {
+    let value = objects[key];
+    let newKey = prefix ? prefix + "." + key : key;
+
+    if (typeof value === "object") {
+      let data = nest(value, newKey);
+
+      newObject = { ...newObject, ...data };
+    } else {
+      newObject = { ...newObject, [newKey]: value };
+    }
+  }
+
+  return newObject;
+};
+
+const result = nest(nested);
+
+console.log(result, "restult");
 ```
 
 ### 48. Remove Only Object from an array.
@@ -2188,8 +2213,6 @@ const transform = (object, prefixKey, sufixKey) => {
 
   return newObject;
 };
-
-
 
 //                                                      OR
 
@@ -2817,6 +2840,151 @@ function reverse(value, itValue = 0) {
 }
 
 const result = reverse(value);
+
+console.log(result, "result");
+```
+
+### 64. Implement a function to read a field inside a nested object.In this question, you need to implement a function read that takes two parameters:
+
+- read(collection, property)
+
+1. collection: The top level parent object in which we need to find the field.
+2. property: The path of the field we need to find/read.
+3. Expected Output: field value if field exists else undefined.
+
+```ts
+const collection = {
+  a: {
+    b: {
+      c: {
+        d: {
+          e: 2,
+        },
+      },
+    },
+  },
+};
+
+//                         Method.1 By first deep flatting the object.
+
+function read(objects, stringValue) {
+  const flatNestedObject = (objects, prefix) => {
+    let newObject = {};
+
+    for (let key in objects) {
+      let value = objects[key];
+      let newKey = prefix ? prefix + "." + key : key;
+
+      if (typeof value === "object") {
+        let flatData = flatNestedObject(value, newKey);
+
+        newObject = { ...newObject, ...flatData };
+      } else {
+        newObject = { ...newObject, [newKey]: value };
+      }
+    }
+
+    return newObject;
+  };
+
+  const nestedObject = flatNestedObject(objects);
+
+  return nestedObject[stringValue];
+}
+
+// should return 2
+let result = read(collection, "a.b.c.d.e");
+
+// should return undefined
+let result = read(collection, "a.b.c.f");
+
+console.log(result, "result >>>>>>");
+
+//     Method 2.  By using built-in reduce method.
+
+function read(collection, property) {
+  return property.split(".").reduce((acc, current) => {
+    return acc ? acc[current] : undefined;
+  }, collection);
+}
+
+// should return 2
+let result = read(collection, "a.b.c.d.e");
+
+// should return undefined
+let result = read(collection, "a.b.c.f");
+
+console.log(result, "result >>>>>>");
+
+//                            Method 3. By using for loop.  One possible implementation could be:
+
+function read(collection, property) {
+  const isCollectionInvalid = !collection || typeof collection !== "object";
+  const isPropertyInvalid = !property || !property.trim().length || typeof property !== "string";
+
+  if (isCollectionInvalid || isPropertyInvalid) {
+    return undefined;
+  }
+
+  // cleaning the property and splitting it
+  let path = property.replaceAll("[", ".");
+
+  path = path.replaceAll("]", ".");
+  path = path.split(".").filter(Boolean);
+
+  let i;
+  let currentKey;
+  let currentItem = collection;
+
+  for (i = 0; i < path.length; i++) {
+    currentKey = path[i];
+
+    // escape condition
+    // if the currentKey doesn't exists in the currentItem
+    // then return undefined
+    if (!Object.prototype.hasOwnProperty.call(currentItem, currentKey)) {
+      currentItem = undefined;
+      break;
+    }
+
+    // updating currentItem
+    currentItem = currentItem[currentKey];
+  }
+
+  // return the value
+  return currentItem;
+}
+
+let result = read(collection, "a.b.c.d.e");
+
+console.log(result, "result");
+
+//                                                     New
+
+function read(collection, property) {
+  const isCollectionInvalid = !collection || typeof collection !== "object";
+  const isPropertyInvalid = !property || !property.trim().length || typeof property !== "string";
+
+  if (isCollectionInvalid || isPropertyInvalid) {
+    return undefined;
+  }
+  let path = property.split(".").filter(Boolean);
+
+  for (let key of path) {
+    let currentItem = collection[key];
+
+    if (currentItem) {
+      //  Changing the existing object.
+      collection = currentItem;
+    } else {
+      return undefined;
+    }
+  }
+
+  return collection;
+}
+
+let result = read(collection, "a.b.c.d.e");
 
 console.log(result, "result");
 ```
