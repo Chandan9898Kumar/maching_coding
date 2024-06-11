@@ -2988,3 +2988,52 @@ let result = read(collection, "a.b.c.d.e");
 
 console.log(result, "result");
 ```
+
+### 65. convert this string "a.b.c.d.e" into object of tree.
+
+```ts
+// const output = {
+//   a: {
+//     b: {
+//       c: {
+//         d: {
+//           e: 2
+//         }
+//       }
+//     }
+//   }
+// }
+
+//                       Method 1.
+
+const keys = "a.b.c.d.e";
+const firsName = 2;
+var tempObject = {};
+var container = tempObject;
+keys.split(".").forEach((k, i, values) => {
+  container = container[k] = i == values.length - 1 ? firsName : {};
+});
+console.log(tempObject, "container");
+
+//                                         Method 2.
+// const output = {
+//   a: {
+//     b: {
+//       c: {
+//         d: {
+//           e: {}
+//         }
+//       }
+//     }
+//   }
+// }
+function createObject(...pathes) {
+  return pathes.reduce(function (obj, path) {
+    path.split(".").reduce((obj, key) => (obj[key] = obj[key] || {}), obj);
+    return obj;
+  }, {});
+}
+
+// Some tests
+console.log(createObject("a.b.c.d.e"));
+```
