@@ -3095,3 +3095,61 @@ console.log(obj,'obj 2222222222222',d)
 obj = obj['c']= (obj['c'] || {} )
 console.log(obj,'obj 33333333333333333',d)
 ```
+
+### 66. Zipping two or more arrays refers to combining their elements into a single array of arrays.
+
+```ts
+function zipArrray(...arrays) {
+  let zipped = [];
+
+  const maxLength = Math.max(...arrays.map((x) => x.length));
+  const arraysLength = arrays.length;
+
+  for (let x = 0; x < maxLength; x++) {
+    let newArray = [];
+
+    for (let y = 0; y < arraysLength; y++) {
+      newArray.push(arrays[y][x]);
+    }
+
+    zipped.push(newArray);
+  }
+
+  return zipped;
+}
+
+const result = zipArrray(["a", "b"], [1, 2], [true, "false"]); // OutPut :  [['a', 1, true], ['b', 2, false]]
+const result2 = zipArrray(["a"], [1, 2], [true, false]); // OutPut :  [['a', 1, true], [undefined, 2, false]]
+
+//                                   By 2nd Method.
+const zip = (...arrays) => {
+  const maxLength = Math.max(...arrays.map((x) => x.length));
+  return Array.from({ length: maxLength }).map((_, i) => {
+    return Array.from({ length: arrays.length }, (_, k) => arrays[k][i]);
+  });
+};
+
+zip(["a", "b"], [1, 2], [true, false]); // [['a', 1, true], ['b', 2, false]]
+zip(["a"], [1, 2], [true, false]); // [['a', 1, true], [undefined, 2, false]]
+
+//                                   By Using Reduce Method.
+function zipArrray(...arrays) {
+  const maxLength = Math.max(...arrays.map((x) => x.length));
+
+  const zipped = Array(maxLength)
+    .fill(1)
+    .reduce((acc, curr, index) => {
+      acc.push(
+        arrays.reduce((accumulator, current) => {
+          accumulator.push(current[index]);
+          return accumulator;
+        }, [])
+      );
+
+      return acc;
+    }, []);
+  return zipped;
+}
+
+const result = zipArrray(["a", "b"], [1, 2, 3], [true, "false"]);
+```
