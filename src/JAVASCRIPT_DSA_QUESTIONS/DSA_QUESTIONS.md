@@ -3153,3 +3153,81 @@ function zipArrray(...arrays) {
 
 const result = zipArrray(["a", "b"], [1, 2, 3], [true, "false"]);
 ```
+
+### 67. UnZipping two or more arrays. It is just reverse of above question.
+
+```ts
+const zipped = [
+  ["a", 1, true],
+  ["b", 2, "false"],
+]; // O/P : [["a", "b"], [1, 2], [true, "false"]]
+
+const zippedTwo = [
+  ["a", 1, true],
+  ["b", 2, 3, 5],
+]; // O/P : [["a", "b"], [1, 2], [true, 3], [undefined, 5]]
+
+- Using For Loop
+function unZippedArray(zipped) {
+  const maxLength = Math.max(...zipped.map((x) => x.length));
+  let zippedLength = zipped.length;
+  let UnZipped = [];
+
+  for (let x = 0; x < maxLength; x++) {
+    let newArray = [];
+
+    for (let y = 0; y < zippedLength; y++) {
+      newArray.push(zipped[y][x]);
+    }
+
+    UnZipped.push(newArray);
+  }
+
+  return UnZipped;
+}
+
+const result = unZippedArray(zippedTwo);
+console.log(result, "result");
+
+- By Using Reduce Method.
+
+function unZippedArray(zipped) {
+  const maxLength = Math.max(...zipped.map((x) => x.length));
+
+  const zippedArray = Array(maxLength)
+    .fill(1)
+    .reduce((acc, curr, index) => {
+      const array = zipped.reduce((accumulator, current) => {
+        accumulator.push(current[index]);
+        return accumulator;
+      }, []);
+
+      acc.push(array);
+      return acc;
+    }, []);
+
+  return zippedArray;
+}
+
+const result = unZippedArray(zipped);
+console.log(result, "result");
+
+- By 3rd Way
+
+const unzip = (arr) =>
+  arr.reduce(
+    (acc, val) => (val.forEach((v, i) => acc[i].push(v)), acc),
+    Array.from({
+      length: Math.max(...arr.map((x) => x.length)),
+    }).map((x) => [])
+  );
+
+const result = unzip([
+  ["a", 1, true],
+  ["b", 2, false],
+]); // [['a', 'b'], [1, 2], [true, false]]
+const resultTwo = unzip([
+  ["a", 1, true],
+  ["b", 2],
+]); // [['a', 'b'], [1, 2], [true]]
+```
