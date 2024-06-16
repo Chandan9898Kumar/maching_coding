@@ -3231,3 +3231,79 @@ const resultTwo = unzip([
   ["b", 2],
 ]); // [['a', 'b'], [1, 2], [true]]
 ```
+
+### 68. Zip array into an object.
+
+```ts
+let array1 = ["a", "b", "c"];
+let array2 = [1, 2];
+
+let data1 = ["a", "b"];
+let data2 = [1, 2, 3];
+
+//    Method 1. Buy using for loop.
+function zippingObject(...array) {
+  let zippObject = {};
+
+  const maxLength = Math.max(...array.map((x) => x.length));
+  let arrayLength = array.length;
+  for (let x = 0; x < maxLength; x++) {
+    for (let y = 1; y < arrayLength; y++) {
+      zippObject[array[0][x]] = array[y][x];
+    }
+  }
+
+  return zippObject;
+}
+
+const result = zippingObject(array1, array2); // O/P : {a: 1, b: 2, c: undefined}
+console.log(result, "resultresult");
+
+//                                                Method 2. By using Reduce method.
+function zippingObject(...array) {
+  const maxLength = Math.max(...array.map((x) => x.length));
+  let arrayLength = array.length;
+  const zipped = Array(maxLength)
+    .fill(1)
+    .reduce((acc, curr, index) => {
+      for (let y = 1; y < arrayLength; y++) {
+        acc[array[0][index]] = array[y][index];
+      }
+      return acc;
+    }, {});
+
+  return zipped;
+}
+
+const result = zippingObject(data1, data2); // O/P : {a: 1, b: 2,undefined:3}
+console.log(result, "resultresult");
+
+//                               3RD Way . paasing
+
+const zipObject = (props, values) => props.reduce((obj, prop, index) => ((obj[prop] = values[index]), obj), {});
+
+zipObject(["a", "b", "c"], [1, 2]); // {a: 1, b: 2, c: undefined}
+zipObject(["a", "b"], [1, 2, 3]); // {a: 1, b: 2}
+```
+
+### 69. Unzip object into array. Reverse of above example.
+
+```ts
+let object1 = { a: 1, b: 2, c: 3 }; // O/P :  [['a', 'b', 'c'], [1, 2, 3]]
+
+let object2 = { a: 1, b: 2 }; //  O/P : [['a', 'b'], [1, 2]]
+
+//                     1. Way
+function unzipObject(object) {
+  let keys = Object.keys(object);
+  let values = Object.values(object);
+
+  return [keys, values];
+}
+console.log(unzipObject(object1));
+
+//                     2. Way
+const unzipObject = (obj) => [Object.keys(obj), Object.values(obj)];
+
+console.log(unzipObject(object2));
+```
