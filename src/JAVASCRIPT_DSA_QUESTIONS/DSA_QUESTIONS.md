@@ -3353,9 +3353,30 @@ function multiply(num) {
 
 console.log(multiply(n))
 
+//                                          ==========================================
+
+- 4. Reverse a String
+
+A. function reverseString(str){
+    if(str.length===1){
+      return str
+    }
+  return str[str.length-1] + reverseString(str.slice(0,str.length-1))
+}
+
+const result = reverseString('hello')
+console.log(result,'result')
+
+B.
+function reverseString(str) {
+  if (str === "") {
+    return "";
+  } else return reverseString(str.substr(1)) + str.charAt(0);
+}
+console.log(reverseString("hello"));
 
 //                                          ====================================
-- 4. Create an array, using recurrsion.
+- 5. Create an array, using recurrsion.
 let startIndex = 0;
 let endIndex = 5;
 function recurssion(start, end) {
