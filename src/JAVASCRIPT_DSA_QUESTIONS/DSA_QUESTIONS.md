@@ -3307,3 +3307,79 @@ const unzipObject = (obj) => [Object.keys(obj), Object.values(obj)];
 
 console.log(unzipObject(object2));
 ```
+
+### 70. Recurssion
+
+```ts
+- 1. Using Recurrsion, show o/p
+
+function goToLunch(person) {
+  if (person === 5) return true;
+
+  return goToLunch(person + 1);
+}
+
+console.log("outcome:", goToLunch(1));
+
+//                                           ================================
+
+
+- 2. Multiply by using recurssion.
+
+function multiply(arr) {
+  console.log(arr);
+  if (arr.length <= 0) {
+    return 1;
+  } else return arr[arr.length - 1] * multiply(arr.slice(0, arr.length - 1));
+}
+
+console.log(multiply([1, 2, 3, 4]));
+
+//                                           ==================================
+
+
+- 3.  Factorial of n
+
+let n = 5
+// Output: 120
+function multiply(num) {
+
+  if(num===1){
+    return 1
+  }else{
+    return num* multiply(num-1)
+  }
+}
+
+console.log(multiply(n))
+
+
+//                                          ====================================
+- 4. Create an array, using recurrsion.
+let startIndex = 0;
+let endIndex = 5;
+function recurssion(start, end) {
+  if (start > end) {
+    return [];
+  } else {
+    let number = recurssion(start, end - 1);
+    number.push(end);
+    return number;
+  }
+}
+
+const result = recurssion(startIndex, endIndex);
+console.log(result, "result");
+
+- Explanation :
+
+Order in which each function called.
+// 1. rangeOfNumbers(0,5) => [1,2,3,4,5]  >6
+// 2. rangeOfNumbers(0,4) => [1,2,3,4]    >5
+// 3. rangeOfNumbers(0,3) => [1,2,3]      >4
+// 4. rangeOfNumbers(0,2) => [1,2]        >3
+// 5. rangeOfNumbers(0,1) => [1]          >2.
+// 6. rangeOfNumbers(0,0) => [0]          >1.  return order ^
+
+Now till 6 function called, after that function called in reverse order to return.
+```
