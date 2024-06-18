@@ -3311,6 +3311,31 @@ console.log(unzipObject(object2));
 ### 70. Recurssion
 
 ```ts
+- Basic
+function Piyush() {
+  return Rehana();
+}
+
+function Rehana() {
+  return Vadant();
+}
+
+function Vadant() {
+  return Chirag();
+}
+
+function Chirag() {
+  return Ajay();
+}
+
+function Ajay() {
+  // base case
+  return true;
+}
+
+console.log(Piyush());
+
+
 - 1. Using Recurrsion, show o/p
 
 function goToLunch(person) {
