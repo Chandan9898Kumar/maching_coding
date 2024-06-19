@@ -3400,8 +3400,33 @@ function reverseString(str) {
 }
 console.log(reverseString("hello"));
 
+- 5.  Given an integer x, return true if x is a palindrome, and false otherwise.
+
+A.
+function palindrome(str,newStr='',static=str){
+    if(str.length===0){
+      return newStr===static
+    }
+  return palindrome(str.slice(0,str.length-1),newStr+str[str.length-1],static)
+}
+const result = palindrome('malayalam')
+console.log(result,'result')
+
+B.
+function isPalindrome(str) {
+  const len = str.length;
+  if (len <= 1){
+   return true
+  };
+  if (str[0] !== str[len - 1]){
+    return false
+  }
+  return isPalindrome(str.slice(1, -1));
+}
+console.log(isPalindrome("malayalam"));
+
 //                                          ====================================
-- 5. Create an array, using recurrsion.
+- 6. Create an array, using recurrsion.
 let startIndex = 0;
 let endIndex = 5;
 function recurssion(start, end) {
