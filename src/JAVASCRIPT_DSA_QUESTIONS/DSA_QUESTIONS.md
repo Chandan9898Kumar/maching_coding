@@ -3454,3 +3454,101 @@ Order in which each function called.
 
 Now till 6 function called, after that function called in reverse order to return.
 ```
+
+### 71. Get All the name of tree object in an array.
+
+```ts
+//  Use Recurssion
+const tree = {
+  name: "John",
+  children: [
+    {
+      name: "Sohn",
+      children: [],
+    },
+    {
+      name: "Kohn",
+      children: [
+        {
+          name: "Rohn",
+          children: [],
+        },
+        {
+          name: "Pohn",
+          children: [
+            {
+              name: "Michael",
+              children: [],
+            },
+            {
+              name: "Cena",
+              children: [{ name: "Japan", children: [] }],
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
+
+function childrenName(obj) {
+  let newObje = [];
+
+  for (let child in obj) {
+    if (Array.isArray(obj[child]) && obj[child].length !== 0) {
+      for (let childs of obj[child]) {
+        if (childs.children.length === 0) {
+          newObje.push(childs.name);
+        } else {
+          let data = childrenName(childs);
+
+          newObje.push(...data);
+        }
+      }
+    } else {
+      newObje.push(obj["name"]);
+    }
+  }
+
+  return newObje;
+}
+
+const result = childrenName(tree);
+
+console.log(result, "result");
+```
+
+### 72. Print all the childrens of John
+
+```ts
+//  Using Recurssion.
+
+function printChildrenRecursive(t) {
+  if (t.children.length === 0) {
+    return;
+  }
+  t.children.forEach((child) => {
+    console.log(child.name);
+    printChildrenRecursive(child);
+  });
+}
+
+const tree = {
+  name: "John",
+  children: [
+    {
+      name: "Jim",
+      children: [],
+    },
+    {
+      name: "Zoe",
+      children: [
+        { name: "Kyle", children: [] },
+        { name: "Sophia", children: [] },
+      ],
+    },
+  ],
+};
+
+printChildrenRecursive(tree);
+```
