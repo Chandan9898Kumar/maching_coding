@@ -693,3 +693,31 @@ class LocalStorage {
 
 const localStorage = new LocalStorage();
 ```
+
+### 18. design ui which shows concentric circles based on given number of times.
+
+```ts
+export default function App() {
+  const NUM = 5;
+  return (
+    <div className="App">
+      <Circles n={NUM} />
+    </div>
+  );
+}
+
+const Circles = ({ n }) => {
+  const size = `${n * 100}px`;
+  const styles = {
+    width: size,
+    height: size,
+    border: "1px solid gray",
+    borderRadius: "50%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
+  return <div style={styles}>{n > 1 ? <Circles n={n - 1} /> : null}</div>;
+};
+```
