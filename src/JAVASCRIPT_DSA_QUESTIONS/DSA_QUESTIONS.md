@@ -2812,7 +2812,7 @@ const toStartCase = (value) => {
 console.log(toStartCase("javascript is awesome!"));
 ```
 
-### 63. How To Reverse And Add A Number Until You Get A Palindrome? and return how many count it took to find palindrome.
+### 63. Take number from the user, reverse it and add it to itself. If the sum is not a palindrome then repeat the procedure until you get a palindrome. and return its count
 
 ```ts
 let value = 37; // 2 count
@@ -2840,8 +2840,16 @@ function reverse(value, itValue = 0) {
 }
 
 const result = reverse(value);
-
 console.log(result, "result");
+
+- For example, If 7325 is input number, then
+1. 7325 (Input Number) + 5237 (Reverse Of Input Number) = 12562
+2. 12562 + 26521 = 39083
+3. 39083 + 38093 = 77176
+4. 77176 + 67177 = 144353
+5. 144353 + 353441 = 497794 (Palindrome)
+
+In this particular case, we got a palindrome (497794) after 5th addition. This method gives palindrome in few steps for almost all of the integers.
 ```
 
 ### 64. Implement a function to read a field inside a nested object.In this question, you need to implement a function read that takes two parameters:
