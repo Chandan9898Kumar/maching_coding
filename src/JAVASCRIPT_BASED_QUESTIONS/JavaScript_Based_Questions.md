@@ -694,7 +694,84 @@ class LocalStorage {
 const localStorage = new LocalStorage();
 ```
 
-### 18. design ui which shows concentric circles based on given number of times.
+### 18. LocalStorage with expiry
+
+`Points:`
+
+1. Extend the local storage to accept an expiry time and expire the entry after that time.
+
+- To implement this we will override the existing local storage method.
+
+While adding the entry we will accept the expiry date in milliseconds (30 days by default). Set the expiry date to time from the current date along with the value and store it in the original local storage.
+
+Likewise, while getting the value for the given key, check if there is a value associated with the key, if it exists and is not expired then return the value, else remove the entry and return null.
+
+```ts
+window.myLocalStorage = {
+  getItem(key) {
+    // get the parsed value of the given key
+    let result = JSON.parse(window.localStorage.getItem(key));
+
+    // if the key has value
+    if (result) {
+      // if the entry is expired
+      // remove the entry and return null
+      if (result.expireTime <= Date.now()) {
+        window.localStorage.removeItem(key);
+        return null;
+      }
+
+      // else return the value
+      return result.data;
+    }
+
+    // if the key does not have value
+    return null;
+  },
+
+  // add an entry
+  // default expiry is 30 days in milliseconds
+  setItem(key, value, maxAge = 30 * 60 * 60 * 1000) {
+    // store the value as object
+    // along with expiry date
+    let result = {
+      data: value,
+    };
+
+    if (maxAge) {
+      // set the expiry
+      // from the current date
+      result.expireTime = Date.now() + maxAge;
+    }
+
+    // stringify the result
+    // and the data in original storage
+    window.localStorage.setItem(key, JSON.stringify(result));
+  },
+
+  // remove the entry with the given key
+  removeItem(key) {
+    window.localStorage.removeItem(key);
+  },
+
+  // clear the storage
+  clear() {
+    window.localStorage.clear();
+  },
+};
+
+`Input:`;
+myLocalStorage.setItem("foo", "bar", 1000);
+
+setTimeout(() => {
+  console.log(myLocalStorage.getItem("foo"));
+}, 1500);
+
+`Output:`;
+// null
+```
+
+### 19. design ui which shows concentric circles based on given number of times.
 
 ```ts
 export default function App() {
