@@ -798,3 +798,37 @@ const Circles = ({ n }) => {
   return <div style={styles}>{n > 1 ? <Circles n={n - 1} /> : null}</div>;
 };
 ```
+
+### 20. Fetch not throwing error on 4XX in JavaScript.
+
+1. Fetch in JavaScript helps you to make the network call and fetch the data from the server.
+
+2. It is easy to use and abstracts the traditional XMLHttpRequest object and helps to do better to Ajax calls.
+
+```ts
+`This is how we make requests using fetch,`
+async function networkCall(){
+  try{
+    const response = await fetch('https://learnersbucket.com/dummy');
+    return response.json();
+  }catch(e){
+    console.error(e);
+  }
+}
+
+- The weird thing about above example is that  fetch does not throw an error when the HTTP network returns status 4XX or 5XX. To fix this, we can use a workaround and manually throw an error when the network status is not OK or 200.
+
+`Solution :`
+async function networkCall(){
+  try{
+    const response = await fetch('https://learnersbucket.com/dummy');
+    if(!response.ok){
+       // Throw an error if not 200
+       throw new Error('Did not received 200 in response');
+    }
+    return response.json();
+  }catch(e){
+    console.error(e);
+  }
+}
+```
