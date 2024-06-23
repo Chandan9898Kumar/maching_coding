@@ -3316,154 +3316,7 @@ const unzipObject = (obj) => [Object.keys(obj), Object.values(obj)];
 console.log(unzipObject(object2));
 ```
 
-### 70. Recurssion
-
-```ts
-- Basic
-function Piyush() {
-  return Rehana();
-}
-
-function Rehana() {
-  return Vadant();
-}
-
-function Vadant() {
-  return Chirag();
-}
-
-function Chirag() {
-  return Ajay();
-}
-
-function Ajay() {
-  // base case
-  return true;
-}
-
-console.log(Piyush());
-
-
-- 1. Using Recurrsion, show o/p
-
-function goToLunch(person) {
-  if (person === 5) return true;
-
-  return goToLunch(person + 1);
-}
-
-console.log("outcome:", goToLunch(1));
-
-//                                           ================================
-
-
-- 2. Multiply by using recurssion.
-
-function multiply(arr) {
-  console.log(arr);
-  if (arr.length <= 0) {
-    return 1;
-  } else return arr[arr.length - 1] * multiply(arr.slice(0, arr.length - 1));
-}
-
-console.log(multiply([1, 2, 3, 4]));
-
-//                                           ==================================
-
-
-- 3.  Factorial of n
-
-let n = 5
-// Output: 120
-function multiply(num) {
-
-  if(num===1){
-    return 1
-  }else{
-    return num* multiply(num-1)
-  }
-}
-
-console.log(multiply(n))
-
-//                                          ==========================================
-
-- 4. Reverse a String
-
-A. function reverseString(str){
-    if(str.length===1){
-      return str
-    }
-  return str[str.length-1] + reverseString(str.slice(0,str.length-1))
-}
-
-const result = reverseString('hello')
-console.log(result,'result')
-
-B.
-function reverseString(str) {
-  if (str === "") {
-    return "";
-  } else return reverseString(str.substr(1)) + str.charAt(0);
-}
-console.log(reverseString("hello"));
-
-- 5.  Given an integer x, return true if x is a palindrome, and false otherwise.
-
-A.
-function palindrome(str,newStr='',static=str){
-    if(str.length===0){
-      return newStr===static
-    }
-  return palindrome(str.slice(0,str.length-1),newStr+str[str.length-1],static)
-}
-const result = palindrome('malayalam')
-console.log(result,'result')
-
-B.
-function isPalindrome(str) {
-  const len = str.length;
-  if (len <= 1){
-   return true
-  };
-  if (str[0] !== str[len - 1]){
-    return false
-  }
-  return isPalindrome(str.slice(1, -1));
-}
-console.log(isPalindrome("malayalam"));
-
-//                                          ====================================
-- 6. Create an array, using recurrsion.
-let startIndex = 0;
-let endIndex = 5;
-function recurssion(start, end) {
-  if (start > end) {
-    return [];
-  } else {
-    let number = recurssion(start, end - 1);
-    number.push(end);
-    return number;
-  }
-}
-
-const result = recurssion(startIndex, endIndex);
-console.log(result, "result");
-
-- Explanation :
-
-Order in which each function called.
-// 1. rangeOfNumbers(0,5) => [1,2,3,4,5]  >6
-// 2. rangeOfNumbers(0,4) => [1,2,3,4]    >5
-// 3. rangeOfNumbers(0,3) => [1,2,3]      >4
-// 4. rangeOfNumbers(0,2) => [1,2]        >3
-// 5. rangeOfNumbers(0,1) => [1]          >2.
-// 6. rangeOfNumbers(0,0) => [0]          >1.  return order ^
-
-Now till 6 function called, after that function called in reverse order to return.
-```
-
-### 71. Get All the name of tree object in an array.
+### 70. Get All the name of tree object in an array.
 
 ```ts
 //  Use Recurssion
@@ -3526,10 +3379,10 @@ const result = childrenName(tree);
 console.log(result, "result");
 ```
 
-### 72. Print all the childrens of John
+### 71. Print all the childrens of John
 
 ```ts
-//  Using Recurssion.
+//                         Using Recurssion.
 
 function printChildrenRecursive(t) {
   if (t.children.length === 0) {
