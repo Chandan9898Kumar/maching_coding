@@ -3413,3 +3413,97 @@ const tree = {
 
 printChildrenRecursive(tree);
 ```
+
+### 72. Write a function to get the sum of all salaries.
+
+```ts
+let company = {
+  sales: [
+    {
+      name: "John",
+      salary: 1000,
+    },
+    {
+      name: "Alice",
+      salary: 1600,
+    },
+  ],
+
+  development: {
+    sites: [
+      {
+        name: "Peter",
+        salary: 2000,
+      },
+      {
+        name: "Alex",
+        salary: 1800,
+      },
+    ],
+
+    internals: [
+      {
+        name: "Jack",
+        salary: 1300,
+      },
+    ],
+  },
+};
+
+1 - Way by using total variable inside function
+  function sumOfAllSalaries(companies) {
+    let total = 0;
+
+    for (let x in companies) {
+      if (Array.isArray(companies[x])) {
+        for (let y of companies[x]) {
+          total = total + y.salary;
+        }
+      } else {
+        let data = sumOfAllSalaries(companies[x]);
+        total = total + data;
+      }
+    }
+
+    return total;
+  };
+
+let result = sumOfAllSalaries(company);
+console.log(result, "result");
+
+- 2.  by putting total as paramter in function.
+
+function sumOfAllSalaries(companies,total=0){
+  for(let x in companies){
+    if(Array.isArray(companies[x])){
+      for(let y of companies[x]){
+        total = total+y.salary
+      }
+    }else{
+     return sumOfAllSalaries(companies[x],total)
+    }
+  }
+  return total
+
+}
+
+let resultTwo = sumOfAllSalaries(company)
+console.log(resultTwo,'resultTwo')
+
+- 3 By using Reduce method.
+
+// The function to do the job
+function sumSalaries(department) {
+  if (Array.isArray(department)) { // case (1)
+    return department.reduce((prev, current) => prev + current.salary, 0); // sum the array
+  } else { // case (2)
+    let sum = 0;
+    for (let subdep of Object.values(department)) {
+      sum += sumSalaries(subdep); // recursively call for subdepartments, sum the results
+    }
+    return sum;
+  }
+}
+
+console.log(sumSalaries(company)); // 7700
+```
