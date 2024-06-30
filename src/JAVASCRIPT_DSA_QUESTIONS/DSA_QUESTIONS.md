@@ -3507,3 +3507,46 @@ function sumSalaries(department) {
 
 console.log(sumSalaries(company)); // 7700
 ```
+
+### 73. Find The Right Product.
+
+```ts
+//  We are finding right product of every element. Ex:  right product of 1 is [2,3,4,5] which is 120
+const arr = [1, 2, 3, 4, 5];
+
+//  O/P :  [120, 60, 20, 5, 1]
+
+const findRightProduct = (arrays = []) => {
+  let product = [];
+
+  arrays.forEach((item, index, arr) => {
+    product.push(index < arr.length - 1 ? arr.slice(index + 1).reduce((acc, curr) => acc * curr) : 1);
+  });
+
+  return product;
+};
+
+const result = findRightProduct(arr);
+console.log(result, "result >>>>");
+
+//   Method 2 . By Using For Loop.
+
+const findRightProduct = (arrays = []) => {
+  let product = 1;
+  let length = arrays.length;
+  let res = new Array(length);
+
+  res[length - 1] = 1;
+
+  for (let i = length - 2; i >= 0; i--) {
+    product = product * arr[i + 1];
+
+    res[i] = product;
+  }
+  return res;
+};
+
+const result = findRightProduct(arr);
+
+console.log(result, "result >>>>");
+```
