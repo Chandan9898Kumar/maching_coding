@@ -1,4 +1,4 @@
-### Recursion  Questions
+### Recursion Questions
 
 - Basic
 
@@ -147,6 +147,54 @@ Order in which each function called.
 // 6. rangeOfNumbers(0,0) => [0] >1. return order ^
 
 Now till 6 function called, after that function called in reverse order to return.
+```
+
+### Fibonacci Number
+
+Fibonacci Series -> 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233...
+F(0) = 0, F(1) = 1
+F(n) = F(n - 1) + F(n - 2), for n > 1
+
+`Input`: n = 3 ----->>>>> `Output`: 2
+
+```ts
+
+- Using Recursion
+
+function Fibonacci(n) {
+  if (n <= 1) {
+    return n;
+  }
+
+  return Fibonacci(n - 1) + Fibonacci(n - 2);
+}
+console.log(Fibonacci(5));
+
+- Using For Loop.
+
+A.
+function FibonacciLoop(n) {
+  let arr = [0, 1];
+  for (let i = 2; i <= n; i++) {
+    arr.push(arr[i - 2] + arr[i - 1]);
+  }
+  return arr[n];
+};
+console.log(FibonacciLoop(3))
+
+.B
+function Fibonacci(n){
+ let array=[0,1]
+ let length= n- array.length
+  if(n<=1){
+    return array[n]
+  }
+ for(let x=0;x<= length;x++){
+   array.push(array[x]+array[x+1])
+ }
+  return array[n]
+}
+console.log(Fibonacci(3))
 ```
 
 # Recursion and stack
