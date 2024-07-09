@@ -2924,7 +2924,38 @@ let result = read(collection, "a.b.c.f");
 
 console.log(result, "result >>>>>>");
 
-//                            Method 3. By using for loop.  One possible implementation could be:
+//              Method 3. By using for loop.  One possible implementation could be:
+
+function read(collection, property) {
+  const isCollectionInvalid = !collection || typeof collection !== "object";
+  const isPropertyInvalid = !property || !property.trim().length || typeof property !== "string";
+
+  if (isCollectionInvalid || isPropertyInvalid) {
+    return undefined;
+  }
+  let path = property.split(".").filter(Boolean);
+
+  for (let key of path) {
+    let currentItem = collection[key];
+
+    if (currentItem) {
+      //  Changing the existing object.
+      collection = currentItem;
+    } else {
+      return undefined;
+    }
+  }
+
+  return collection;
+}
+
+let result = read(collection, "a.b.c.d.e");
+
+console.log(result, "result");
+
+//   OR
+//  This approach is very good as compared to all above solution, because if user give input = "a.b.c.d.[e]" then above approaches will throw error or undefined
+//  But this below solution handled all those solution.
 
 function read(collection, property) {
   const isCollectionInvalid = !collection || typeof collection !== "object";
@@ -2964,37 +2995,11 @@ function read(collection, property) {
 }
 
 let result = read(collection, "a.b.c.d.e");
+let result2 = read(collection, "a.b.c.d.[e]");
+let result3 = read(collection, "a.[b].c.[d].[e]");
 
-console.log(result, "result");
-
-//                                                     New
-
-function read(collection, property) {
-  const isCollectionInvalid = !collection || typeof collection !== "object";
-  const isPropertyInvalid = !property || !property.trim().length || typeof property !== "string";
-
-  if (isCollectionInvalid || isPropertyInvalid) {
-    return undefined;
-  }
-  let path = property.split(".").filter(Boolean);
-
-  for (let key of path) {
-    let currentItem = collection[key];
-
-    if (currentItem) {
-      //  Changing the existing object.
-      collection = currentItem;
-    } else {
-      return undefined;
-    }
-  }
-
-  return collection;
-}
-
-let result = read(collection, "a.b.c.d.e");
-
-console.log(result, "result");
+console.log(result, result2, result3);
+//  O/P : 2
 ```
 
 ### 65. convert this string "a.b.c.d.e" into object of tree.
