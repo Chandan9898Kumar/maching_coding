@@ -3550,3 +3550,60 @@ const result = findRightProduct(arr);
 
 console.log(result, "result >>>>");
 ```
+
+### 74. Get object value from string path
+
+- Implement a method in Javascript that will take an object and a string or array of strings as a path and return the value at that path. If nothing is found return undefined.
+  `We can implement this method using the following steps.`
+
+1. Check the type of path, if it is an array of strings, concatenate it and form a string.
+2. Traverse the string and get the actual values from it ignoring the special characters like [, ], and ..
+3. Once we have the exact path, deeply traverse the input nested object to find the value.
+
+```ts
+const obj = {
+  a: {
+    b: {
+      c: [1, 2, 3],
+    },
+  },
+};
+
+const get = (obj, path) => {
+  // if path is not a string or array of string
+  if (path === "" || path.length == 0) return undefined;
+
+  // if path is an array, concatenate it and form a string
+  // to handle a single case of string
+  if (Array.isArray(path)) path = path.join(".");
+
+  // filter out the brackets and dot
+  let exactPath = [];
+  for (let i = 0; i < path.length; i++) {
+    if (path[i] !== "[" && path[i] !== "]" && path[i] !== ".") {
+      exactPath.push(path[i]);
+    }
+  }
+
+  // get the value of the path in the sequence
+  const value = exactPath.reduce((source, path) => source[path], obj);
+
+  // if not found return undefined
+  return value ? value : undefined;
+};
+
+console.log(get(obj, "a.b.c"));
+console.log(get(obj, "a.b.c.0"));
+console.log(get(obj, "a.b.c[1]"));
+console.log(get(obj, ["a", "b", "c", "2"]));
+console.log(get(obj, "a.b.c[3]"));
+console.log(get(obj, "a.c"));
+
+// Output:
+// A. [1,2,3]
+// B. 1
+// C. 2
+// D. 3
+// E. undefined
+// F. 'undefined'
+```
