@@ -3612,3 +3612,50 @@ console.log(get(obj, "a.c"));
 // E. undefined
 // F. 'undefined'
 ```
+
+### 75. Write a function printList(list) that outputs list items in an array.
+
+```ts
+let list = {
+  value: 1,
+  next: {
+    value: 2,
+    next: {
+      value: 3,
+      next: {
+        value: 4,
+        next: null,
+      },
+    },
+  },
+};
+
+function printList(list) {
+  //  Note: here we have assign the reference of list object to temp, so any changes in temp will reflect in list as well.
+  //  but inside while loop we are assigning new objects to temp so now list object will not reflect any changes, As it losed its refernce.
+  let tmp = list;
+
+  while (tmp) {
+    alert(tmp.value);
+    tmp = tmp.next;
+  }
+}
+printList(list);
+
+//   Using Recursion
+function printList(list) {
+  let arr = [];
+  for (let x in list) {
+    if (typeof list[x] === "object") {
+      let objectValue = printList(list[x]);
+      arr.push(...objectValue);
+    } else {
+      arr.push(list[x]);
+    }
+  }
+
+  return arr;
+}
+
+console.log(printList(list));
+```
