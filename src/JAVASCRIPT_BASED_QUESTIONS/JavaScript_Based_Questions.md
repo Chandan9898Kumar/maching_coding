@@ -832,3 +832,236 @@ async function networkCall(){
   }
 }
 ```
+
+### 21. Implement ClearAllInterval in JavaScript
+
+- Points To Notice.
+
+1. JavaScript has a timer function setInterval which repeatedly executes a function after a specified amount of time. Each setInterval method returns a unique id which can be used to cancel or clear the interval using clearInterval.
+
+2. It is a common interview question where we are asked to implement a method clearAllInterval which will clear all the running setInterval’s.
+
+3. Similarly, as we have implemented the clearAllTimeout method, the same logic can be used to implement the clearAllInterval.
+
+4. First, to clear all the intervals at once, we need to store all of them so that they can be cleared one by one using the clearInterval method.
+
+5. Thus we can define a global variable intervalIds that will store the ids of the setIntervals and override the existing setInterval function to push the ids in this global variable.
+
+```ts
+//to store all the interval ids
+window.intervalIds = [];
+
+//original interval function
+const originalIntervalFn = window.setInterval;
+
+//overriding the original
+window.setInterval = function (fn, delay) {
+  const id = originalIntervalFn(fn, delay);
+  //storing the id of each interval
+  intervalIds.push(id);
+  return id;
+};
+
+//clear all interval
+window.clearAllInterval = function () {
+  while (intervalIds.length) {
+    clearInterval(intervalIds.pop());
+  }
+};
+
+//  Execution:
+
+let timer = setInterval(() => {
+  console.log("Hello");
+}, 2000);
+
+let timer2 = setInterval(() => {
+  console.log("Hello2");
+}, 5000);
+
+clearAllInterval(); // It will stop all setIntervals But if you want to stop single interval then pass the timer inside clearAllInterval(timer) and set while loop accordingly.
+
+let timer3 = setInterval(() => {
+  console.log("Hello3");
+}, 1000);
+
+// Output:
+("Hello3"); // after every ~1 sec
+
+//  Note: top two setInterval method  will not execute because we have called clearAllInterval but below setInterval will work and o/p : Hello3
+
+
+- If you notice, here we have added a global variable intervalIds which we are using to store the ids of each setInterval and later to cancel all of them. Using the global variable is bad practice as it can be overridden.
+
+1. One thing you could do over here is to wrap these inside a closure or higher-order function or an Object to keep it restricted.
+
+2. This way we won’t be interfering with existing methods and can still get our work done.
+
+
+const MY_TIMERS = {
+    intervalIds : [],//global interval id's arrays
+    //create a MY_TIMERS's interval
+    setInterval : function(fn,delay){
+        let id = setInterval(fn,delay);
+        this.intervalIds.push(id);
+        return id;
+    },
+    //MY_TIMERS's clearAllTimeout
+    clearAllInterval : function(){
+        while(this.intervalIds.length){
+          clearInterval(this.intervalIds.pop());
+        }
+    }
+};
+
+//  Execution:
+MY_TIMERS.setInterval(() => {
+  console.log("Hello");
+}, 2000);
+
+MY_TIMERS.setInterval(() => {
+  console.log("Hello2");
+}, 500);
+
+MY_TIMERS.clearAllInterval();
+
+MY_TIMERS.setInterval(() => {
+  console.log("Hello3");
+}, 1000);
+
+```
+
+### 22 .Implement clearAllTimeout in JavaScript.
+
+1. ClearAllTimeout clears all the setTimeout which are active.
+
+2. setTimeout is an asynchronous function that executes a function or a piece of code after a specified amount of time.
+
+3. setTimeout method returns a unique Id when it is invoked, which can be used to cancel the timer anytime using the clearTimeout method which is inbuilt.
+
+4. Reading about the problem statement we can understand that all we have to do is to clear all the active timers and the same can be done by clearing all timeoutIds using clearTimeout.
+
+```ts
+//  to clear all the timeoutIds at once, we will need to store them somewhere, let’s say in an array. For which we will override the existing setTimeout method and collect all the timeoutIds in an array.
+window.timeoutIds = [];
+
+// store the original method
+const originalTimeoutFn = window.setTimeout;
+
+//over-writing the original method
+window.setTimeout = function (fn, delay) {
+  const id = originalTimeoutFn(fn, delay);
+  timeoutIds.push(id);
+
+  //return the id so that it can be originally cleared
+  return id;
+};
+
+window.clearAllTimeout = function () {
+  //clear all timeouts
+  while (timeoutIds.length) {
+    clearTimeout(timeoutIds.pop());
+  }
+};
+
+
+//  Execution :
+- If we test this, this runs as expected. It will clear all the timeouts, as setTimeout is an Asynchronous function, meaning that the timer function will not pause execution of other functions in the functions stack, thus clearAllTimeout runs and cancels them before they can be executed.
+
+setTimeout(() => {console.log("hello")}, 2000);
+setTimeout(() => {console.log("hello1")}, 3000);
+
+clearAllTimeout(); // Here it will clear all timeout above it and prevent them from execution.
+
+setTimeout(() => {console.log("hello2")}, 4000);
+setTimeout(() => {console.log("hello3")}, 5000);
+
+
+- OR By Using IIFE
+
+(function(w) {
+
+  const timeoutIds = [];
+
+  // store the original method
+  const originalTimeoutFn = w.setTimeout;
+
+  // override the original setTimeout method with our
+  // custom implementation
+  w.setTimeout = function(fn, delay) {
+    const id = originalTimeoutFn(fn, delay);
+    timeoutIds.push(id);
+    //return the id so that it can be originally cleared
+    return id;
+  }
+  w.clearAllTimeout = function(){
+    //clear all timeouts
+    while(timeoutIds.length){
+
+      clearTimeout(timeoutIds.pop());
+
+    }
+  }
+})(window);
+
+- Case 1 without clearing
+setTimeout(() => {console.log("One")}, 4000);
+setTimeout(() => {console.log("Two")}, 5000);
+setTimeout(() => {console.log("Three")}, 6000);
+setTimeout(() => {console.log("Four")}, 7000);
+
+`O/P :`
+// One
+// Two
+// Three
+// Four
+
+
+- Case 2 with clearing
+setTimeout(() => {console.log("One")}, 4000);
+setTimeout(() => {console.log("Two")}, 5000);
+setTimeout(() => {console.log("Three")}, 6000);
+setTimeout(() => {console.log("Four")}, 7000);
+clearAllTimeout();
+
+`O/P :`
+//  It will print nothing.
+
+- NOTE :
+1. Here we have added a global variable timeoutIds which we are using to store the ids of each setTimeout and later to cancel all of them, using the global variable is bad practice as it can be overridden.
+
+2. One thing you could do over here is to wrap these inside a closure or higher-order function or an Object to keep it restricted.
+
+3. This way we won’t be interfering with existing methods and can still get our work done.
+
+
+`Optimized Way :`
+const MY_TIMERS = {
+    timeoutIds : [],//global timeout id arrays.
+
+    //create a MY_TIMERS's timeout
+    setTimeout : function(fn,delay){
+        let id = setTimeout(fn,delay);
+        this.timeoutIds.push(id);
+        return id;
+    },
+    //MY_TIMERS's clearAllTimeout
+    clearAllTimeout : function(){
+        while(this.timeoutIds.length){
+          clearTimeout(this.timeoutIds.pop());
+        }
+    }
+};
+
+
+const id1 = MY_TIMERS.setTimeout(() => {console.log("hello1")}, 1000);
+console.log(id1);
+
+const id2 = MY_TIMERS.setTimeout(() => {console.log("hello2")}, 2000);
+console.log(id2);
+
+MY_TIMERS.clearAllTimeout();
+
+const id3 = MY_TIMERS.setTimeout(() => {console.log("hello3")}, 3000);
+console.log(id3);
+```
