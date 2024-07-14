@@ -137,7 +137,8 @@ console.log(parse_URL("https://github.com/pubnub/python/search?utf8=%E2%9C%93&q=
 
 2. The <body> node is the sibling of the <head> node because they share the same immediate parent, which is the <html> element.
 
-<!-- How to flatten a deeply nested array?
+<!--
+How to flatten a deeply nested array?
 How to implement Array indexOf method?
 How to implement Array includes method?
 How to implement Array findIndex method?
@@ -1064,4 +1065,233 @@ MY_TIMERS.clearAllTimeout();
 
 const id3 = MY_TIMERS.setTimeout(() => {console.log("hello3")}, 3000);
 console.log(id3);
+```
+
+### 23. Methods for Merging Nested Objects in JavaScript.
+
+```ts
+const obj1 = {
+  name: "gk",
+  Home: {
+    place: "London",
+    country: "Uk",
+    Game: {
+      type: {
+        action: "gta",
+      },
+    },
+  },
+};
+
+const obj2 = {
+  subject: "SST",
+  school: {
+    place: "bangalore",
+    name: "dav",
+  },
+};
+
+
+- 1. Shallow Merge with Spread Operator
+The spread operator (...) is a concise way to merge two objects. While it performs a shallow merge, it's a quick and clean solution for simple cases.
+
+const shallowMergedObj = { ...obj1, ...obj2 };
+console.log(shallowMergedObj)
+
+
+
+- 2. Using Object.assign
+Object.assign is a method for copying the values of all enumerable properties from one or more source objects to a target object, providing a simple way for shallow merging.
+
+const shallowMergedObjAssign = Object.assign({}, obj1, obj2);
+console.log(shallowMergedObjAssign)
+
+- 3.  Using JSON.parse and JSON.stringify
+For JSON-serializable objects, converting them to JSON strings, merging the strings, and then parsing them back can be an interesting approach.
+
+const jsonString1 = JSON.stringify(obj1);
+const jsonString2 = JSON.stringify(obj2);
+const mergedJsonString = JSON.stringify({ ...JSON.parse(jsonString1), ...JSON.parse(jsonString2) });
+
+const deepMergedObjJSON = JSON.parse(mergedJsonString);
+console.log(deepMergedObjJSON)
+
+
+
+- 4. Using a Library — Lodash
+Lodash is a popular utility library with a merge function that handles deep merging efficiently.
+
+const _ = require('lodash');
+
+const lodashMergedObj = _.merge({}, obj1, obj2);
+
+- 5. Using a Library — Deepmerge
+The deepmerge library provides a dedicated utility for deep merging, making the process straightforward.
+
+const deepmerge = require('deepmerge');
+
+const deepMergedObjDeepmerge = deepmerge(obj1, obj2);
+
+
+- 6. Using a Library — Ramda
+Ramda is a functional programming library that includes a mergeDeepRight function for deep merging.
+
+const R = require('ramda');
+const ramdaMergedObj = R.mergeDeepRight(obj1, obj2);
+
+- 7. Using ES6 Spread Operator for Deep Merge
+Leveraging the ES6 spread operator with recursion allows for a concise syntax while achieving a deep merge.
+
+function deepMergeWithSpread(obj1, obj2) {
+  const result = { ...obj1 };
+
+  for (let key in obj2) {
+    if (obj2.hasOwnProperty(key)) {
+      if (obj2[key] instanceof Object && obj1[key] instanceof Object) {
+        result[key] = deepMergeWithSpread(obj1[key], obj2[key]);
+      } else {
+        result[key] = obj2[key];
+      }
+    }
+  }
+
+  return result;
+}
+
+const deepMergedObjSpread = deepMergeWithSpread(obj1, obj2);
+
+
+- 8. Deep Merge with Recursive Function
+For a deep merge, a recursive function can be employed to traverse and merge nested objects at all levels.
+
+function deepMerge(obj1, obj2) {
+  for (let key in obj2) {
+    if (obj2.hasOwnProperty(key)) {
+      if (obj2[key] instanceof Object && obj1[key] instanceof Object) {
+        obj1[key] = deepMerge(obj1[key], obj2[key]);
+      } else {
+        obj1[key] = obj2[key];
+      }
+    }
+  }
+  return obj1;
+}
+
+const deepMergedObj = deepMerge(obj1, obj2);
+```
+
+### 24. What is a deep copy ?
+
+1. A deep copy means actually creating a new array and copying over the values, since whatever happens to it will never affect the original one.
+2. For objects and arrays containing other objects or arrays, copying these objects requires a deep copy. Otherwise, changes made to the nested references will change the data nested in the original object or array.
+3. When JavaScript objects including arrays are deeply nested, the spread operator only copies the first level with a new reference, but the deeper values are still linked together. To solve this problem requires creating a deep copy
+
+- Shallow Copy Example
+
+```ts
+1. Array.from,
+let a = [{x:1,y:2,z:3}];
+let b = Array.from(a);
+b[0].x = 0;
+
+console.log(JSON.stringify(a)); // [{"x":0,"y":2,"z":3}]
+console.log(JSON.stringify(b)); // [{"x":0,"y":2,"z":3}]
+
+2. Object.create,
+let a = [{x: 1,y: 2,z: 3}];
+let b = Array.from(Object.create(a));
+b[0].x = 0;
+
+console.log(JSON.stringify(a)); // [{"x":0,"y":2,"z":3}]
+console.log(JSON.stringify(b)); // [{"x":0,"y":2,"z":3}]
+
+3. Object.assign,
+
+let a = { x: {z:1} , y: 2};
+let b = Object.assign({}, a);
+b.x.z=0
+
+console.log(JSON.stringify(a)); // {"x":{"z":0},"y":2}
+console.log(JSON.stringify(b)); // {"x":{"z":0},"y":2}
+
+```
+
+- For Deep Copy,
+
+1. $.extend is the deep copy solution for nested objects and objects inside array.
+
+2. JSON.parse and JSON.stringify is the best and simple way to Deep copy. The JSON.stringify() method converts a JavaScript value to a JSON string.The JSON.parse() method parses a JSON string, constructing the JavaScript value or object described by the string.
+
+- Deep Copy Example
+
+```ts
+The easiest (but flawed) way to deep copy an object in JavaScript is to first serialize it and then deserialize it back via JSON.stringify and JSON.parse.
+
+Although this approach is acceptable given the input object only contains null, boolean, number, string, you should be aware of the downsides of this approach:
+
+  1.  We can only copy non-symbol-keyed properties whose values are supported by JSON. Unsupported data types are simply ignored.
+  2. JSON.stringify also has other a few surprising behaviors such as converting Date objects to ISO timestamp strings, NaN and Infinity becoming null etc.
+
+
+ - On Object.
+let a = { x:{z:1} , y: 2};
+let b = JSON.parse(JSON.stringify(a));
+b.x.z=0
+
+console.log(JSON.stringify(a)); // {"x":{"z":1},"y":2}
+console.log(JSON.stringify(b)); // {"x":{"z":0},"y":2}
+
+
+- On objects inside array.
+
+//Deep Clone
+let a = [{ x:{z:1} , y: 2}];
+let b = JSON.parse(JSON.stringify(a));
+b[0].x.z=0
+
+console.log(JSON.stringify(a)); //[{"x":{"z":1},"y":2}]
+console.log(JSON.stringify(b)); // [{"x":{"z":0},"y":2}]
+
+- Implementation of Deep Copy, Without using any third party.
+
+A deep clone makes a copy of JavaScript value, leading to a completely new value that has no references pointing back to the properties in the original object (if it's an object). Any changes made to the deep-copied object will not affect the original object.
+
+const obj = {
+   a1: {
+       b1: {
+           c1: "SS"
+       }
+    }
+}
+const deepCopy = (val) => {
+   if (["string", "boolean", "number"].includes(typeof val)) {
+      return val;
+   } else if (Array.isArray(val)) {
+      return val.map(item => deepCopy(item))
+   } else {
+      return Object.keys(val).reduce((acc, key) => {
+        acc[key] = deepCopy(val[key]);
+        return acc;
+     }, {});
+  }
+}
+console.log(deepCopy(obj));
+
+//   Method 2
+
+const  deepClone(value) {
+  if (typeof value !== 'object' || value === null) {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((item) => deepClone(item));
+  }
+
+  return Object.fromEntries(
+    Object.entries(value).map(([key, value]) => [key, deepClone(value)]),
+  );
+}
+
+console.log(deepClone(obj))
 ```
