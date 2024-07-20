@@ -1498,4 +1498,59 @@ b = "#"+b.join("");
 console.log(b,'result')
 
 
+// ===============================================================================================================================================================
+ - NOTE : The toString() method of Number values returns a string representing this number value.
+
+ function hexColor(c) {
+  if (c < 256) {
+    return Math.abs(c).toString(16);
+  }
+  return 0;
+}
+
+console.log(hexColor(233));
+// Expected output: "e9"
+
+console.log(hexColor('11'));
+// Expected output: "b"
+
+`Syntax:`
+1. toString()
+2. toString(radix)
+
+`Parameters`
+1. radix Optional
+An integer in the range 2 through 36 specifying the base to use for representing the number value. Defaults to 10.
+
+`Return value`
+A string representing the specified number value. Scientific notation is used if radix is 10 and the number's magnitude (ignoring sign) is greater than or equal to 1021 or less than 10-6.
+
+`Exceptions`
+1. RangeError
+Thrown if radix is less than 2 or greater than 36.
+
+`TypeError`
+Thrown if this method is invoked on an object that is not a Number.
+
+
+- Examples
+const count = 10;
+console.log(count.toString()); // "10"
+
+console.log((17).toString()); // "17"
+console.log((17.2).toString()); // "17.2"
+
+const x = 6;
+console.log(x.toString(2)); // "110"
+console.log((254).toString(16)); // "fe"
+console.log((-10).toString(2)); // "-1010"
+console.log((-0xff).toString(2)); // "-11111111"
+
+
+- Converting radix of number strings
+If you have a string representing a number in a non-decimal radix, you can use parseInt() and toString() to convert it to a different radix.
+
+`Example:`
+const hex = "CAFEBABE";
+const bin = parseInt(hex, 16).toString(2); // "11001010111111101011101010111110"
 ```
