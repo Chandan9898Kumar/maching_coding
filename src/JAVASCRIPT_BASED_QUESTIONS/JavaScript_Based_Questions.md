@@ -1295,3 +1295,207 @@ const  deepClone(value) {
 
 console.log(deepClone(obj))
 ```
+
+### 25. Convert HEX color to RGB in JavaScript.
+
+`NOTE :`
+
+- Hexadecimal uses 16 unique symbols, representing values as “0 – 9” for values between 0 – 9 and “A – F” or “a – f” for values between “10 – 15”.
+
+- Hexadecimal is a base 16 system numbering system where a Hex code can be any of these 16 digits: 0 1 2 3 4 5 6 7 8 9 A B C D E F
+
+- RGB format is a combination of three colors, red, green, and blue in the range of 0 – 255. A hex color code is the hexadecimal representation of the RGB numbers.
+
+`NOTE :`
+
+- The parseInt() function parses a string argument and returns an integer of the specified radix (the base in mathematical numeral systems).
+
+// Syntax :
+parseInt(string)
+parseInt(string, radix)
+
+- Parameters
+
+1. string
+   A string starting with an integer. Leading whitespace in this argument is ignored.
+
+2. radix Optional
+   An integer between 2 and 36 that represents the radix (the base in mathematical numeral systems) of the string. It is converted to a 32-bit integer; if it's nonzero and outside the range of [2, 36] after conversion, the function will always return NaN. If 0 or not provided, the radix will be inferred based on string's value. Be careful — this does not always default to 10! The description below explains in more detail what happens when radix is not provided.
+
+- Return value
+  An integer parsed from the given string, or NaN when :
+
+1. the radix as a 32-bit integer is smaller than 2 or bigger than 36, or
+2. the first non-whitespace character cannot be converted to a number.
+
+`Examples :`
+console.log(parseInt('123'));
+// 123 (default base-10)
+console.log(parseInt('123', 10));
+// 123 (explicitly specify base-10)
+console.log(parseInt(' 123 '));
+// 123 (whitespace is ignored)
+console.log(parseInt('077'));
+// 77 (leading zeros are ignored)
+console.log(parseInt('1.9'));
+// 1 (decimal part is truncated)
+console.log(parseInt('ff', 16));
+// 255 (lower-case hexadecimal)
+console.log(parseInt('0xFF', 16));
+// 255 (upper-case hexadecimal with "0x" prefix)
+console.log(parseInt('xyz'));
+// NaN (input can't be converted to an integer)
+
+```ts
+const Input = "#ff33ff"
+
+// Output:{
+//   "r": 255,
+//   "g": 51,
+//   "b": 255
+// }
+
+
+`Approach 1. Using slice() method.`
+
+A HEXA color code '#ff33ff' starts with '#' followed by six alpha-numeric characters ff,33,ff, two of them each representing, R, G, & B.
+We can use the slice() to get the two number and then use parseInt() method that accepts a radix value and convert the string to number.
+
+
+// Example :
+const hex2rgb = (hex) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+
+    // return {r, g, b}
+    return { r, g, b };
+}
+
+console.log(hex2rgb("#ff33ff"));
+
+- In case we are given a short form of Hexa code like #f3f, we will have to convert it to the original form.
+
+const fullHex = (hex) => {
+  let r = hex.slice(1,2);
+  let g = hex.slice(2,3);
+  let b = hex.slice(3,4);
+
+  r = parseInt(r+r, 16);
+  g = parseInt(g+g, 16);
+  b = parseInt(b+b, 16);
+
+  // return {r, g, b}
+  return { r, g, b };
+}
+
+//convert hex to rgb
+const hex2rgb = (hex) => {
+    if(hex.length === 4){
+      return fullHex(hex);
+    }
+
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+
+    // return {r, g, b}
+    return { r, g, b };
+}
+
+console.log(hex2rgb("#f3f"));
+```
+
+### 26 .Convert RGB color to HEX in JavaScript.
+
+```ts
+
+- All the input parameters are mandatory so let us first take case of the error condition
+const isInvalid = (value) => {
+  return Boolean(value === null || value === undefined || typeof value !== "number");
+};
+
+
+- Every input parameter is an integer, let us create a function to convert them to strings using toString method with a base of 16.
+
+The each Hex code should be at-least of length 2. Let us extend our function to handle this case so that RGB values like 0 results in 00. We would be using padStart method for this. The padStart method takes the total length of the string and another string that needs to appended to the start of the original string i.e. '0'.padStart(3, '1') becomes 110.
+
+function convertToString(value) {
+  //  The RGB values are in the range 0-255. Let us handle if the values provided are outside this range.
+
+  if (value > 255) {
+    return "FF";
+  } else if (value < 0) {
+    return "00";
+  }
+
+  return value.toString(16).padStart(2, "0").toUpperCase();
+}
+
+function rgbToHex(r, g, b) {
+  "use strict";
+
+  const isRedValueInvalid = isInvalid(r);
+  const isGreenValueInvalid = isInvalid(g);
+  const isBlueValueInvalid = isInvalid(b);
+
+  if (isRedValueInvalid || isGreenValueInvalid || isBlueValueInvalid) {
+    throw new TypeError("Invalid input parameters");
+  }
+
+  return "#" + convertToString(r) + convertToString(g) + convertToString(b);
+}
+
+
+- Our function rgbToHex takes three input parameters, namely, r, g, and b where each parameter defines the intensity of a color as an integer between 0 and 255.
+
+rgbToHex(255, 255, 255);
+// -> Should return #FFFFFF
+
+rgbToHex(0, 0, 0);
+// -> Should return #000000
+
+rgbToHex(186, 218, 85);
+// -> Should return #BADA55
+
+rgbToHex(256, 255, 255);
+// -> Should return #FFFFFF
+
+
+-  OR
+
+function rgb(...arrays){
+    let hex ='#'
+
+  for(let x of arrays){
+
+    hex = hex + x.toString(16)
+  }
+  return hex
+}
+
+let result = rgb(29,55,25)
+console.log(result,'result')
+
+
+
+//                Second Way
+
+var a = "rgb(255,255,255)".split("(")[1].split(")")[0];
+// Then split it into separate numbers:
+
+a = a.split(",");
+// Convert the single numbers to hex
+
+var b = a.map(function(x){             //For each array element
+    x = parseInt(x).toString(16);      //Convert to a base16 string
+    return (x.length==1) ? "#" : x;  //Add # if we get only one character
+})
+// And glue it back together:
+
+b = "#"+b.join("");
+
+console.log(b,'result')
+
+
+```
