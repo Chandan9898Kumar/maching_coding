@@ -3659,3 +3659,123 @@ function printList(list) {
 
 console.log(printList(list));
 ```
+
+### 76. Have the function ArithGeo(arr) take the array of numbers \*
+
+- stored in arr and return the string "Arithmetic" if the \*
+- sequence follows an arithmetic pattern or return "Geometric" \*
+- if it follows a geometric pattern. If the sequence doesn't \*
+- follow either pattern return -1. An arithmetic sequence is \*
+- one where the difference between each of the numbers is \*
+- consistent, where as in a geometric sequence, each term after\*
+- the first is multiplied by some constant or common ratio. \*
+- Arithmetic example: [2, 4, 6, 8] and \*
+- Geometric example: [2, 6, 18, 54]. Negative numbers may be \*
+- entered as parameters, 0 will not be entered, and no array \*
+- will contain all the same elements. \*
+
+```ts
+const Input1 = [5, 10, 15];
+// Output 1: Arithmetic
+
+const Input2 = [2, 4, 16, 24];
+// Output 2: -1
+
+const Input3 = [2, 4, 6, 8];
+//  Output 3: "Arithmetic"
+
+const Input4 = [2, 6, 18, 54];
+//  Output 4: "Geometric"
+
+const array = [2, 4, 16, 24];
+
+const ArithGeo = (array) => {
+  let Arithmetic = array[1] - array[0];
+  let Geometric = array[1] / array[0];
+
+  let lengthOfArray = array.length;
+  for (let x = 2; x < lengthOfArray; x++) {
+    if (array[x] - array[x - 1] !== Arithmetic) {
+      Arithmetic = 0;
+    }
+
+    if (array[x] / array[x - 1] !== Geometric) {
+      Geometric = 0;
+    }
+  }
+
+  if (Geometric) {
+    return "Geometric";
+  } else if (Arithmetic) {
+    return "Arithmetic";
+  } else {
+    return -1;
+  }
+};
+
+const result1 = ArithGeo(Input1);
+const result2 = ArithGeo(Input2);
+const result3 = ArithGeo(Input3);
+const result4 = ArithGeo(Input4);
+```
+
+### 77. Have the function StringChanges(str) take the str parameter \*
+
+- being passed, which will be a string containing letters from \*
+- the alphabet, and return a new string based on the following \*
+- rules. Whenever a capital M is encountered, duplicate the \*
+- previous character (then remove the M), and whenever a \*
+- capital N is encountered remove the next character from the \*
+- string (then remove the N). All other characters in the \*
+- string will be lowercase letters. \*
+- For example: "abcNdgM" should return "abcgg". \*
+- The final string will never be empty. \*
+
+```ts
+
+
+const Input1 "MrtyNNgMM"
+// - Output 1: rtyggg
+-
+const  Input2 ="oMoMkkNrrN"
+// - Output 2: ooookkr
+
+const Input3 = "abcNdgM"
+// - Output 3 : "abcgg"
+
+
+function StringChanges(string) {
+    let splitCharacters = string.split("");
+    for(let i=0; i<splitCharacters.length; i++){
+
+        if(splitCharacters[i] === "N") {
+            splitCharacters.splice(i, 2);
+            i = i - 2;
+        }else if(splitCharacters[i] === "M") {
+
+            if(i === 0) {
+                splitCharacters.splice(i, 1)
+                i--
+            }else {
+                let j = i;
+
+                //  NOTE : WE can use this while loop to handle more edge cases but for the time being we can also go without while loop.
+
+                // while(splitCharacters[j-1] === 'M'){
+                //    j--;
+                //    if(j<=0){
+                //      continue;
+                //    }
+                // }
+                
+                 splitCharacters[i] = splitCharacters[j-1]
+            }
+        }
+    }
+
+    return splitCharacters.join("");
+}
+
+console.log(StringChanges(Input1);
+console.log(StringChanges(Input2);
+```
