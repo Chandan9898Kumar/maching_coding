@@ -50,7 +50,7 @@ And then attach it to a DOM node:
 observer.observe(targetNode, config);
 
 - targetNode
-This is the element on which the observer will keep watch when any changes are detected.
+This is the element on which the observer will keep watch when any changes are detected. It is the root of the subtree of nodes to monitor for changes.
 ```
 
 `config` is an object with boolean options "what kind of changes to react on":
@@ -439,4 +439,178 @@ const observer = new MutationObserver(callback);
 
 // Start observing the target node for configured mutations
 observer.observe(div_section, config);
+```
+
+- NOTE :
+
+let config = {
+childList: true,
+attributes: true,
+characterData: false,
+subtree: false,
+attributeFilter: ['attr1', 'attr2'],
+attributeOldValue: false,
+characterDataOldValue: false
+};
+
+You don’t need to use all the options. However, to make the MutationObserver works, at least one of childList, attributes, or characterData needs to be set to true, otherwise the observer() method will throw an error.
+
+### 3. Example
+
+```js
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MutationObserver Demo: ChildList</title>
+</head>
+<body>
+    <ul id="language">
+        <li>HTML</li>
+        <li>CSS</li>
+        <li>JavaScript</li>
+        <li>TypeScript</li>
+    </ul>
+
+    <button id="btnStart">Start Observing</button>
+    <button id="btnStop">Stop Observing</button>
+    <button id="btnAdd">Add</button>
+    <button id="btnRemove">Remove the Last Child</button>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
+
+//  Inside app.js.
+
+(function () {
+    // selecting the list
+    let list = document.querySelector('#language');
+
+    // selecting the buttons
+    let btnAdd = document.querySelector('#btnAdd');
+    let btnRemove = document.querySelector('#btnRemove');
+    let btnStart = document.querySelector('#btnStart');
+
+    // disable the stop button
+    let btnStop = document.querySelector('#btnStop');
+    btnStop.disabled = true;
+
+    function log(mutations) {
+        for (let mutation of mutations) {
+            if (mutation.type === 'childList') {
+                console.log(mutation);
+            }
+        }
+    }
+
+    let observer = new MutationObserver(log);
+
+
+// 1. Start observing the DOM changes to the child nodes of the list element when the Start Observing button is clicked by calling the observe() method with the childList of the options object is set to true:
+    btnStart.addEventListener('click', function () {
+        observer.observe(list, {
+            childList: true
+        });
+
+        btnStart.disabled = true;
+        btnStop.disabled = false;
+    });
+
+    //  4. Finally, stop observing DOM changes when the Stop Observing button is clicked by calling the disconnect() method of the MutationObserver object:
+    btnStop.addEventListener('click', function () {
+        observer.disconnect();
+
+        // Set the button state
+        btnStart.disabled = false;
+        btnStop.disabled = true;
+    });
+
+    // 2.  add a new list item when the add button is clicked:
+    let counter = 1;
+    btnAdd.addEventListener('click', function () {
+        // create a new item element
+        let item = document.createElement('li');
+        item.textContent = `Item ${counter++}`;
+
+        // append it to the child nodes of list
+        list.appendChild(item);
+    });
+
+    //  3. remove the last child of the list when the Remove button is clicked:
+    btnRemove.addEventListener('click', function () {
+        list.lastElementChild ?
+            list.removeChild(list.lastElementChild) :
+            console.log('No more child node to remove');
+    });
+
+})();
+
+
+```
+
+### NOTES :
+
+- Observing for changes to attributes.
+
+1. To observe for changes to attributes, you use the following attributes property of the options object:
+
+```js
+let options = {
+  attributes: true,
+};
+```
+
+If you want to observe the changes to one or more specific attributes while ignoring the others, you can use the attributeFilter property:
+
+```js
+let options = {
+  attributes: true,
+  attributeFilter: ["class", "style"],
+};
+```
+
+In this example, the MutationObserver will invoke the callback each time the class or style attribute changes.
+
+- Observing for changes to a subtree
+
+2. To monitor the target node and its subtree of nodes, you set the subtree property of the options object to true:
+
+```js
+let options = {
+  subtree: true,
+};
+```
+
+- Observing for changes to character data
+
+3. To monitor the node for changes to its textual contents, you set the characterData property of the options object to true:
+
+```js
+let options = {
+  characterData: true,
+};
+```
+
+- Accessing old values
+
+4. To access the old values of attributes, you set the attributeOldValue property of the options object to true:
+
+```js
+let options = {
+  attributes: true,
+  attributeOldValue: true,
+};
+```
+
+Similarly, you can access the old value of character data by setting the characterDataOldValue property of the options object to true:
+
+```js
+let options = {
+  characterData: true,
+  subtree: true,
+  characterDataOldValue: true,
+};
 ```
