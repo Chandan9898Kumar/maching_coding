@@ -302,3 +302,141 @@ The mere fact that a DOM node is observed doesn't prevent the garbage collection
 We can use it to track changes introduced by other parts of our code, as well as to integrate with third-party scripts.
 
 `MutationObserver` can track any changes. The config "what to observe" options are used for optimizations, not to spend resources on unneeded callback invocations.
+
+### 1. Example To use it In JavaScript.
+
+When someone mouses over our div element, we will get a console.log message that it has been moused over.
+
+```js
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sample</title>
+    </head>
+    <body>
+        <h1>Sample</h1>
+
+        <section id="div_section">
+
+        </section>
+
+        <script type="text/javascript">
+            const div_section = document.querySelector('#div_section');
+
+            const observer = new MutationObserver((mutationsList, observer) => {
+                for(const mutation of mutationsList) {
+                    if (mutation.type === 'childList') {
+                        console.log('A child node has been added or removed.');
+                        const nodes = mutation.addedNodes;
+                        nodes.forEach(node => {
+                            node.addEventListener('mouseover', eventMouseOver);
+                        });
+                    }
+                }
+            });
+
+            observer.observe(div_section, {
+                attributes: false,
+                childList: true,
+                subtree: false }
+            );
+
+            function eventMouseOver(event) {
+                console.log('This element was just moused over');
+            }
+
+            (function (){
+                const section = document.querySelector('#div_section');
+                let my_div_element = document.createElement('div');
+                my_div_element.className = 'div_element';
+                my_div_element.textContent = `My content goes here`;
+                section.appendChild(my_div_element);
+            })();
+        </script>
+    </body>
+</html>
+```
+
+### 2. Example To use it In JavaScript when user click.
+
+```js
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sample</title>
+    </head>
+    <body>
+        <h1>Sample</h1>
+
+        <div id="div_section">
+
+        </div>
+
+       <script type="text/javascript">
+           const div_section = document.querySelector('#div_section');
+
+            const observer = new MutationObserver((mutationsList, observer) => {
+
+                for(const mutation of mutationsList) {
+                    if (mutation.type === 'childList') {
+                        const nodes = mutation.addedNodes;
+                        nodes.forEach(node => {
+                            node.addEventListener('click', eventMouseClick);
+                        });
+                    }
+                }
+            });
+
+           //  Call the observe function by passing the node you want to watch with configuration options
+            observer.observe(div_section, {
+                attributes: true,
+                childList: true,
+                subtree: true }
+            );
+
+            function eventMouseClick(event) {
+                console.log('This element was just moused over',event);
+            }
+
+            (function (){
+                const section = document.querySelector('#div_section');
+                let my_div_element = document.createElement('button');
+                my_div_element.id = 'div_element';
+                my_div_element.textContent = `Add`;
+                section.appendChild(my_div_element);
+            })();
+        </script>
+    </body>
+</html>
+
+
+- WE can use this way  as well
+
+
+// Options for the observer (which mutations to observe)
+const config = { attributes: true, childList: true, subtree: true };
+
+// Callback function to execute when mutations are observed
+const callback = (mutationList, observer) => {
+   for(const mutation of mutationsList) {
+    if (mutation.type === 'childList') {
+        const nodes = mutation.addedNodes;
+        nodes.forEach(node => {
+            node.addEventListener('click', eventMouseClick);
+        });
+    }
+}
+};
+
+// Create an observer instance linked to the callback function
+const observer = new MutationObserver(callback);
+
+// Start observing the target node for configured mutations
+observer.observe(div_section, config);
+```
