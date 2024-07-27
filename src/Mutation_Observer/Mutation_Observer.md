@@ -442,16 +442,17 @@ observer.observe(div_section, config);
 ```
 
 - NOTE :
-
+```js
 let config = {
-childList: true,
-attributes: true,
-characterData: false,
-subtree: false,
-attributeFilter: ['attr1', 'attr2'],
-attributeOldValue: false,
-characterDataOldValue: false
+  childList: true,
+  attributes: true,
+  characterData: false,
+  subtree: false,
+  attributeFilter: ["attr1", "attr2"],
+  attributeOldValue: false,
+  characterDataOldValue: false,
 };
+```
 
 You don’t need to use all the options. However, to make the MutationObserver works, at least one of childList, attributes, or characterData needs to be set to true, otherwise the observer() method will throw an error.
 
