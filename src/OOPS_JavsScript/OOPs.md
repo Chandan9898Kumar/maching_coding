@@ -15,7 +15,11 @@ Objects inherit from other objects through their prototypes. Each object has a p
 Example: The below code example demonstrates Inheritance and method overriding in JavaScript :
 
 ```js
+
 1. Example
+
+In this example,the Dog class inherits properties and methods from the Animal class. The Object.create() method is used to create a new object that inherits from the Animal.prototype object, and the constructor property is reset to the Dog class.
+
 function Animal(name) {
   this.name = name;
 }
@@ -310,14 +314,18 @@ Encapsulation can be achieved using two techniques: Encapsulation in javascript 
 1. Using Closures
 2. Using Classes
 
-A. Using Closures.
+- 1. Using Closures.
 
 In JavaScript, closures are functions that have access to variables in their outer lexical environment, even after the outer function has returned. Private variables and methods can be created using closures.
 
-- Example:
-  In this example, we have created a BankAccount object using a closure. The object has three private variables: \_accountNumber, \_accountHolderName, and \_balance. These variables are only accessible within the BankAccount function and cannot be accessed from outside. The showAccountDetails function is a private method that displays the account details. The deposit and withdrawal methods are public methods that can be accessed from outside the object. When these methods are called, they update the \_balance variable and call the showAccountDetails function to display the updated account details.
+`JavaScript uses closures to implement encapsulation, which allows developers to create private variables and methods that cannot be accessed from outside the object.`
+
+`Example:`
+In this example, we have created a BankAccount object using a closure. The object has three private variables: \_accountNumber, \_accountHolderName, and \_balance. These variables are only accessible within the BankAccount function and cannot be accessed from outside. The showAccountDetails function is a private method that displays the account details. The deposit and withdrawal methods are public methods that can be accessed from outside the object. When these methods are called, they update the \_balance variable and call the showAccountDetails function to display the updated account details.
 
 ```js
+
+1. Example
 function BankAccount(accountNumber, accountHolderName, balance) {
   let _accountNumber = accountNumber;
   let _accountHolderName = accountHolderName;
@@ -362,13 +370,35 @@ myBankAccount.withdraw(2000); // Output: Insufficient Balance
 // Account Holder Name: John Doe
 // Balance: 1500
 // Insufficient Balance
+
+2. Example
+
+function Person(name, age) {
+    let privateAge = age;
+    this.name = name;
+
+    this.getAge = function() {
+      console.log(this,'this',privateAge)
+        return privateAge;
+    }
+}
+
+let person = new Person("John", 30);
+console.log(person.name); // "John"
+console.log(person.privateAge); // undefined
+console.log(person.getAge()); // 30
+
+- NOTE :
+In this example, the privateAge variable is defined inside the constructor function and can only be accessed using the getAge method. This means that the internal state of the object is hidden from other objects and code, providing a level of protection and security.
+
+Access modifiers such as private, public and protected are not natively supported in javascript, but it can be implemented using closures as well. In addition, other libraries and frameworks such as TypeScript provide a way to use access modifiers.
 ```
 
-2. Using Classes
-   ES6 introduced the class syntax in JavaScript, which allows us to define classes and objects in a more structured way. Classes can be used to achieve encapsulation in JavaScript.
+- 2. Using Classes
+     ES6 introduced the class syntax in JavaScript, which allows us to define classes and objects in a more structured way. Classes can be used to achieve encapsulation in JavaScript.
 
-- Example:
-  In this example, we have created a BankAccount class using the class keyword. The class has three private variables: \_accountNumber, \_accountHolderName, and \_balance. These variables are prefixed with an underscore to indicate that they are private variables. The showAccountDetails method is a public method that displays the account details. The deposit and withdrawal methods are also public methods that can be accessed from outside the object. When these methods are called, they update the \_balance variable and call the showAccountDetails method to display the updated account details.
+`Example:`
+In this example, we have created a BankAccount class using the class keyword. The class has three private variables: \_accountNumber, \_accountHolderName, and \_balance. These variables are prefixed with an underscore to indicate that they are private variables. The showAccountDetails method is a public method that displays the account details. The deposit and withdrawal methods are also public methods that can be accessed from outside the object. When these methods are called, they update the \_balance variable and call the showAccountDetails method to display the updated account details.
 
 ```js
 class BankAccount {
@@ -470,8 +500,131 @@ class Student {
 
 ```
 
-### Benefits of encapsulation in JavaScript:
+- Benefits of encapsulation in JavaScript:
 
 1. Data Security: Encapsulation helps in protecting the data by preventing direct access to private variables. This ensures that the data is not modified inappropriately.
 2. Code Reusability: Encapsulation makes it easier to reuse code since objects are self-contained and can be used in different parts of the application.
 3. Maintenance: Encapsulation makes it easier to maintain the code since objects are independent of each other and changes made to one object do not affect the others.
+
+### Abstraction.
+
+`DEFINITION :` Abstraction is a fundamental concept in object-oriented programming (OOP) that refers to the practice of hiding the implementation details of an object and exposing only the essential features to the user. In JavaScript, abstraction is achieved by using abstract classes and interfaces or with the help of Abstract Classes and Abstract Methods..
+`OR`
+An abstract class is a class that cannot be instantiated and is meant to be used as a base class for other classes. Abstract classes typically contain one or more abstract methods, which are methods that have a signature but no implementation. These methods must be implemented by the derived classes.
+
+JavaScript does not support abstract classes natively, but you can achieve similar functionality by using a combination of function constructors and prototypes.
+
+`NOTE : `
+
+- Before we proceed to understand the Abstraction. We need to understand the `Abstract class` and `Abstract method.` So, let's get started with Abstract Method…
+
+1. `Abstract Method:` A type of method that is only declared and has no implementation or “function body” is known as the Abstract method. The abstract method must be declared inside the Abstract Class. Where its definition can be added in its subclass.
+
+2. `Abstract Class:` Abstract class is a type of class for which we can not create the instance and must contain at least one abstract method inside it.
+
+`Example One:`
+
+```js
+// Abstract Class
+class Person {
+  constructor(name) {
+    this.name = name;
+
+    //  Can't be instantiated
+    if (this.constructor === Person) {
+      throw new Error("You can'not create an instance for abstract class ");
+    }
+  }
+  // Abstract Method
+  info() {
+    throw new Error("Added abstract Method has no implementation");
+  }
+}
+
+`Looking at the above example, we can outline the need for abstraction.`
+
+1. We cannot instantiate the Abstract class which means this class can only be used by inheritance.
+
+2. The Abstract method definition can be given in its subclass.
+
+3. Extracting the unnecessary information and keeping it inside the Abstraction class, means it ignores the implementation details and only shows the functionality to the user.
+
+4. If we have to create a Person kind of object, we don’t have to bother about the properties of the Person. Its already given in abstract class, you just have to inherit in your class and use it.
+
+
+`Now Full Implementation`
+
+// Abstract Class
+class Person {
+  constructor(name) {
+    this.name = name;
+    this.className= '10 A'
+
+    //  Can't be instantiated
+    if (this.constructor === Person) {
+      throw new Error("You can'not create an instance for abstract class");
+    }
+  }
+  // Abstract Method
+  info() {
+    throw new Error("Added abstract Method has no implementation");
+  }
+}
+
+//  Creating a subclass using Person Class
+
+class Teacher extends Person{
+  //  definition inside subclass
+  info(){
+    console.log('Teacher name is',this.name)
+  }
+}
+
+//  instantiating subclass after inheriting the props.
+const John  = new Teacher('John')
+console.log(john)
+
+const myPerson = new Person() // O/P :  You can'not create an instance for abstract class
+
+- Explanation :
+
+the Person class is an abstract class that cannot be instantiated and contains an abstract method info() which throws an error when called. The Teacher class inherits from the Person class and implements the info() method providing a specific implementation.
+```
+
+`Example Two :` Abstraction can also be implemented purely with ES5.
+
+```js
+function Shape(Ide) {
+
+  this.country='Uk',
+  this.game='GTA 6',
+  this.IDE = Ide
+
+  if (this.constructor === Shape) {
+    throw new Error("Cannot instantiate abstract class Shape");
+  }
+  this.draw = function () {
+    throw new Error("Cannot call abstract method draw from Shape");
+  };
+}
+
+function Circle() {
+  Shape.call(this,'vs-code');
+  this.draw = function () {
+    console.log("Drawing a Circle");
+  };
+}
+Circle.prototype = Object.create(Shape.prototype);
+Circle.prototype.constructor = Circle;
+
+let circle = new Circle();
+console.log(circle,'circle')
+
+circle.draw(); // "Drawing a Circle"
+
+let shape = new Shape(); // Error: Cannot instantiate abstract class Shape
+
+1. In this example, the Shape class is an abstract class that cannot be instantiated and contains an abstract method draw() which throws an error when called. The Circle class inherits from the Shape class and implements the draw() method providing a specific implementation.
+
+2. Interfaces are another way to achieve abstraction in JavaScript, although it's not a native feature of javascript. Some libraries like TypeScript provide interfaces. An interface defines a set of methods that a class must implement but does not provide an implementation for those methods. This allows developers to ensure that a class has the required methods without specifying how those methods should be implemented.
+```
