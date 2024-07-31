@@ -300,3 +300,178 @@ result: {id: 'abc', Book: 'SST', Data: '100GB'}
 
 //  NOTE : In constructor function it itself return this. so no need to explicitly return this.
 ```
+
+### Encapsulation in JavaScript.
+
+Encapsulation is a fundamental concept in object-oriented programming that refers to the practice of hiding the internal details of an object and exposing only the necessary information to the outside world. Or encapsulation is the bundling of data with the methods that operate on that data.
+
+Encapsulation can be achieved using two techniques: Encapsulation in javascript is achieved using closures or using private fields in Class.
+
+1. Using Closures
+2. Using Classes
+
+A. Using Closures.
+
+In JavaScript, closures are functions that have access to variables in their outer lexical environment, even after the outer function has returned. Private variables and methods can be created using closures.
+
+- Example:
+  In this example, we have created a BankAccount object using a closure. The object has three private variables: \_accountNumber, \_accountHolderName, and \_balance. These variables are only accessible within the BankAccount function and cannot be accessed from outside. The showAccountDetails function is a private method that displays the account details. The deposit and withdrawal methods are public methods that can be accessed from outside the object. When these methods are called, they update the \_balance variable and call the showAccountDetails function to display the updated account details.
+
+```js
+function BankAccount(accountNumber, accountHolderName, balance) {
+  let _accountNumber = accountNumber;
+  let _accountHolderName = accountHolderName;
+  let _balance = balance;
+
+  function showAccountDetails() {
+    console.log(`Account Number: ${_accountNumber}`);
+    console.log(`Account Holder Name: ${_accountHolderName}`);
+    console.log(`Balance: ${_balance}`);
+  }
+
+  function deposit(amount) {
+    _balance += amount;
+    showAccountDetails();
+  }
+
+  function withdraw(amount) {
+    if (_balance >= amount) {
+      _balance -= amount;
+      showAccountDetails();
+    } else {
+      console.log("Insufficient Balance");
+    }
+  }
+
+  return {
+    deposit: deposit,
+    withdraw: withdraw,
+  };
+}
+
+let myBankAccount = BankAccount("123456", "John Doe", 1000);
+
+myBankAccount.deposit(500);
+// Output: Account Number: 123456 Account Holder Name:
+//John Doe Balance: 1500
+
+myBankAccount.withdraw(2000); // Output: Insufficient Balance
+
+// O/P :
+// Account Number: 123456
+// Account Holder Name: John Doe
+// Balance: 1500
+// Insufficient Balance
+```
+
+2. Using Classes
+   ES6 introduced the class syntax in JavaScript, which allows us to define classes and objects in a more structured way. Classes can be used to achieve encapsulation in JavaScript.
+
+- Example:
+  In this example, we have created a BankAccount class using the class keyword. The class has three private variables: \_accountNumber, \_accountHolderName, and \_balance. These variables are prefixed with an underscore to indicate that they are private variables. The showAccountDetails method is a public method that displays the account details. The deposit and withdrawal methods are also public methods that can be accessed from outside the object. When these methods are called, they update the \_balance variable and call the showAccountDetails method to display the updated account details.
+
+```js
+class BankAccount {
+  constructor(accountNumber, accountHolderName, balance) {
+    this._accountNumber = accountNumber;
+    this._accountHolderName = accountHolderName;
+    this._balance = balance;
+  }
+
+  showAccountDetails() {
+    console.log(`Account Number: ${this._accountNumber}`);
+    console.log(`Account Holder Name: ${this._accountHolderName}`);
+    console.log(`Balance: ${this._balance}`);
+  }
+
+  deposit(amount) {
+    this._balance += amount;
+    this.showAccountDetails();
+  }
+
+  withdraw(amount) {
+    if (this._balance >= amount) {
+      this._balance -= amount;
+      this.showAccountDetails();
+    } else {
+      console.log("Insufficient Balance");
+    }
+  }
+}
+
+let myBankAccount = new BankAccount("123456", "John Doe", 1000);
+myBankAccount.deposit(500);
+// Output: Account Number: 123456 Account Holder Name:
+// John Doe Balance: 150
+
+- NOTE :
+This appears to be a standard solution, but if you examine it carefully, you are able to access the properties of this object directly.
+1. _accountHolderName:"John Doe"
+2. _accountNumber:"123456"
+3. _balance:1500
+
+
+- This is because, unlike most other languages, data hiding is not inherent to the classes in javascript. This means that by default, properties can be accessed and modified from the outer world.
+
+- You should note that properties declared within an object/class are not the same as variables in javascript. You can see this difference in the way object properties are defined (without any var/let/const keyword)
+
+- If we start using variables instead of properties, we might just be able to achieve Encapsulation. Since variables are lexically scoped, they are not accessible from outside the scope they are defined in.
+
+### So To Achieve Encapsulation :
+
+- Example :
+
+class Student {
+    constructor(id, name, marks){
+        let _id = id;
+        let _name = name;
+        let _marks = marks
+        this.getId = () => _id;
+        this.getName = () => _name;
+        this.getMarks = ()=> _marks;
+        this.setMarks = (marks)=>{
+            _marks = marks
+        }
+    }
+}
+let s = new Student(1,"harsh", 85)
+s.getId() //1
+s.getName() //harsh
+s.setMarks(90)
+s.getMarks() //90
+
+
+NOTE :
+
+Here, we declare the properties within the scope of the constructor instead of defining them as properties at the object level. We then define the constructor and initialise the object properties as variables within the scope of the constructor.
+
+- ES6 also introduced the “get” keyword, which makes using getters easy. When you initialise the object of the student class in the following example, you are able to access the property using {object instance}.name
+
+- Example :
+
+class Student {
+    constructor(id, name, marks){
+       let _id = id;
+       let _name = name;
+       let _marks = marks
+
+       this.getId = () => _id;
+       this.getName = () => _name;
+       this.getMarks = ()=> _marks;
+
+       this.setMarks = (marks)=>{
+            _marks = marks
+        }
+    }
+    get name(){
+        return this.getName();
+    }
+}
+
+```
+
+### Benefits of encapsulation in JavaScript:
+
+1. Data Security: Encapsulation helps in protecting the data by preventing direct access to private variables. This ensures that the data is not modified inappropriately.
+2. Code Reusability: Encapsulation makes it easier to reuse code since objects are self-contained and can be used in different parts of the application.
+3. Maintenance: Encapsulation makes it easier to maintain the code since objects are independent of each other and changes made to one object do not affect the others.
