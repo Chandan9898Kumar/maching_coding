@@ -1088,3 +1088,92 @@ In the above program, the overloading feature is accomplished by using the if/el
 In JavaScript, the arguments object is automatically available inside a function that represents the passed arguments to a function.
 The multiple conditions are addressed to perform actions based on that particular condition.
 ```
+
+### Constructor:
+
+Constructors create instances of a class, which are commonly referred to as objects. The new keyword in JavaScript causes a constructor to be called when an object is declared. A constructor creates an object and sets any object properties if they exist.
+
+### JavaScript Composition:
+
+Composition means to Compose. Everything in JavaScript is treated as an object even functions in JavaScript are treated as a high-class object. Such objects are quite complex in nature to make large complex objects simple, many small objects are composed together. Thus, we can say that composition is the cleaner, reusable and better solution for such large complex objects.
+
+Example :
+
+```js
+
+const Motor = {
+	accelerate(motorspeed, incrementSpeed) {
+	return motorspeed + incrementSpeed;
+	},
+	decelerate(motorspeed, decrementSpeed) {
+	return motorspeed - decrementSpeed;
+	},
+};
+
+const StopMotor = {
+	stop(motorspeed) {
+	this.motorspeed = 0;
+
+	return 0;
+	},
+};
+
+const Brand = {
+	model: "Maxpro",
+};
+
+const Treadmill = function (Design, Motor, StopMotor) {
+	const brand = Object.create(Design);
+	const motor = Object.create(Motor);
+	const stopmotor = Object.create(StopMotor);
+	const props = {
+	motorspeed: 0,
+	model: brand.model,
+	};
+
+	return {
+	set(name, value) {
+		props[name] = value;
+	},
+
+	get(name) {
+		return props[name];
+	},
+
+	log(name) {
+		console.log(`${name}: ${props[name]}`);
+	},
+
+	slowDown() {
+		props.motorspeed = motor.decelerate(props.motorspeed, 5);
+	},
+
+	speedUp() {
+		props.motorspeed = motor.accelerate(props.motorspeed, 10);
+	},
+
+	stop() {
+		props.motorspeed = stopmotor.stop(props.motorspeed);
+	},
+	};
+};
+
+const Treadmill1 = Treadmill(Brand, Motor, StopMotor);
+
+// One can increase & decrease the motorspeed
+// according to their preferences
+Treadmill1.speedUp();
+Treadmill1.log("motorspeed");
+Treadmill1.slowDown();
+Treadmill1.log("motorspeed");
+Treadmill1.stop();
+Treadmill1.log("motorspeed");
+Treadmill1.log("model");
+
+// Let us change the model of Treadmill1 to Powermax
+Treadmill1.set("model", "PowerMax");
+Treadmill1.log("model");
+
+
+- As it can be seen the above code is much cleaner than the one below because here the machine functionality & Features are all separated. So the class can implement functionality suitable as per their requirements.Treadmill1 can implement the functionality of Treadmill when needed. Now, Treadmill1 can increase its motorspeed, decrease its motorspped, and even change its model name as per requirement. When talked about composition, the Inheritance gets assisted automatically.
+```
