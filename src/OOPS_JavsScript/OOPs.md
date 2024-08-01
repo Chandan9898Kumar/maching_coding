@@ -181,6 +181,47 @@ console.log(Automobile.staticMethod());
 console.log(car.staticMethod());
 
 
+
+4. Multiple Inheritance:
+
+`Explanation:`
+Multiple inheritance allows a class to inherit properties and behaviors from more than one superclass. While JavaScript does not support multiple inheritance in the traditional sense, it can be simulated using mixins or object composition techniques.
+
+
+// Mixin for Student-related functionalities
+const StudentMixin = {
+  data:'GST',
+  study() {
+    console.log("Studying...");
+  },
+};
+
+// Mixin for Athlete-related functionalities
+const AthleteMixin = {
+  game:'GTA 6',
+  exercise() {
+    console.log("Exercising...");
+  },
+};
+
+// Class representing a Student Athlete
+class StudentAthlete {
+  constructor(name) {
+    this.name = name;
+  }
+}
+
+// Object composition to simulate multiple inheritance
+Object.assign(StudentAthlete.prototype, StudentMixin, AthleteMixin);
+
+const studentAthlete = new StudentAthlete("Mahdi");
+
+console.log(studentAthlete,'studentAthlete')
+studentAthlete.study(); // Outputs: Studying...
+studentAthlete.exercise(); // Outputs: Exercising...
+
+
+- A scenario where a class StudentAthlete inherits from both Student and Athlete classes, thereby inheriting attributes and methods related to academic performance as well as athletic abilities.
 ```
 
 ### Functional Inheritance
@@ -627,4 +668,262 @@ let shape = new Shape(); // Error: Cannot instantiate abstract class Shape
 1. In this example, the Shape class is an abstract class that cannot be instantiated and contains an abstract method draw() which throws an error when called. The Circle class inherits from the Shape class and implements the draw() method providing a specific implementation.
 
 2. Interfaces are another way to achieve abstraction in JavaScript, although it's not a native feature of javascript. Some libraries like TypeScript provide interfaces. An interface defines a set of methods that a class must implement but does not provide an implementation for those methods. This allows developers to ensure that a class has the required methods without specifying how those methods should be implemented.
+```
+
+### What is Polymorphism?
+
+Polymorphism is one of the core concepts of object-oriented programming languages where poly means many and morphism means transforming one form into another. Polymorphism means the same function with different signatures is called many times. In real life, for example, a boy at the same time may be a student, a class monitor, etc. So a boy can perform different operations at the same time. This is called polymorphism.
+
+- Features of Polymorphism:
+
+1. Programmers can use the same method name repeatedly.
+2. Polymorphism has the effect of reducing the number of functionalities that can be paired together.
+
+- polymorphism is achieved by using `function overloading` and `function overriding`.
+
+1. `Function overloading` refers to the ability of a function to have multiple implementations based on the number and/or types of arguments passed to it. JavaScript does not support function overloading natively, however, you can achieve similar functionality by using the arguments object and checking the number and/or types of arguments passed to the function.
+
+2. `Function overriding` refers to the ability of a subclass to provide a different implementation of a method that is already provided by its superclass. In JavaScript, this can be achieved by reassigning the prototype of the subclass.
+
+Example 1.
+
+```js
+class Shape {
+  constructor(name) {
+    this.name = name;
+  }
+  draw() {
+    console.log(`Drawing a ${this.name}`);
+  }
+}
+
+class Circle extends Shape {
+  draw() {
+    console.log(`Drawing a Circle`);
+  }
+}
+
+class Square extends Shape {
+  draw() {
+    console.log(`Drawing a Square`);
+  }
+}
+
+let shape = new Shape("Shape");
+let circle = new Circle();
+let square = new Square();
+
+shape.draw(); //Drawing a Shape
+circle.draw(); //Drawing a Circle
+square.draw(); //Drawing a Square
+
+
+So, Here we can say that :
+
+Despite invoking the same method draw(), each object (shape, circle, square) exhibits different behavior based on its type. This is polymorphism in action, where the method behaves differently depending on the objects actual class.
+
+In this example, the draw() method is overridden in the subclasses Circle and Square, providing a different implementation of the method that is already provided by the superclass Shape.
+In conclusion, polymorphism is a fundamental concept in OOP that refers to the ability of different objects to respond to the same method call in different ways.
+
+
+
+- Example Two : Polymorphism with Functions and Objects.
+
+It is also possible in JavaScript that we can make functions and objects with polymorphism. In this example, we will make two functions with the same name ‘area’.  We define the area function in class A. In this function, we have two parameters – x and y. Class B is created by extending class A. The area function in class B invoked the area method in class A through super keyword – passing parameters a and b.  To make the area method behave differently in class B, we are going to console log the name of the class inside the method.  This way, it will become clear that the area method will behave differently depending on the object upon which it is called.
+
+class A {
+	area(x, y) {
+		console.log(x * y);
+	}
+}
+class B extends A {
+	area(a, b) {
+		super.area(a, b);
+		console.log('Class B')
+	}
+}
+let ob = new B();
+let output = ob.area(100, 200);
+// 20000
+// Class B
+```
+
+### Types of Polymorphism in JavaScript.
+
+- 1. Ad-hoc Polymorphism:
+
+Ad-hoc polymorphism allows functions to behave differently based on the types or number of arguments passed to them. It is often implemented through method overloading or conditional logic within functions.
+
+```js
+`Example :`Consider a function calculateArea() that calculates the area of different shapes based on the number of arguments provided. If two arguments are passed, it calculates the area of a rectangle. If only one argument is passed, it calculates the area of a circle.
+
+
+function calculateArea(shape, arg1, arg2) {
+  if (shape === "rectangle") {
+    return arg1 * arg2;
+  } else if (shape === "circle") {
+    return Math.PI * Math.pow(arg1, 2);
+  } else {
+    throw new Error("Unsupported shape");
+  }
+}
+
+console.log(calculateArea("rectangle", 5, 3)); // Outputs: 15 (Area of rectangle)
+console.log(calculateArea("circle", 4)); // Outputs: 50.26548245743669 (Area of circle)
+
+
+`In this example:`
+
+1. The calculateArea() function behaves differently based on the value of the shape parameter.
+2. If shape is 'rectangle', the function calculates the area of a rectangle using two arguments (arg1 and arg2).
+3. If shape is 'circle', the function calculates the area of a circle using one argument (arg1).
+
+`Advantages:`
+1. Simplicity: Provides a straightforward way to define multiple behaviors within a single function based on input parameters.
+2. Flexibility: Allows for versatile function usage with different argument combinations, enhancing code adaptability.
+3. Readability: Promotes code readability by encapsulating conditional logic within the function, making it easier to understand and maintain.
+```
+
+- 2. Parametric Polymorphism:
+
+Parametric polymorphism, also known as generic programming, allows functions and classes to operate on values of unspecified types. It is enabled by using type parameters that can be instantiated with various concrete types.
+
+```js
+`Example :`
+// Generic function to return the length of an array or string
+function getLength(input) {
+  return input.length;
+}
+
+console.log(getLength([1, 2, 3])); // Outputs: 3
+console.log(getLength("Hello")); // Outputs: 5
+
+
+`Advantages:`
+1. Reusability: Promotes code reuse by allowing the creation of generic functions and classes that can operate on multiple data types.
+2. Type Safety: Enhances type safety by specifying constraints on type parameters, reducing the risk of runtime errors.
+3. Abstraction: Encourages abstraction by separating algorithmic logic from specific data types, leading to cleaner and more modular code.
+```
+
+- 3. Subtype Polymorphism:
+
+Subtype polymorphism allows objects of different classes to be treated as objects of a common superclass. It is implemented through inheritance and method overriding, where subclasses provide specific implementations for inherited methods.
+
+```js
+`Example :`
+
+// Base class representing a Shape
+class Shape {
+  draw() {
+    console.log("Drawing a shape");
+  }
+}
+
+// Subclass representing a Circle
+class Circle extends Shape {
+  draw() {
+    console.log("Drawing a circle");
+  }
+}
+
+// Subclass representing a Square
+class Square extends Shape {
+  draw() {
+    console.log("Drawing a square");
+  }
+}
+
+// Polymorphic behavior
+const circle = new Circle();
+const square = new Square();
+
+circle.draw(); // Outputs: Drawing a circle
+square.draw(); // Outputs: Drawing a square
+
+
+`Advantages:`
+1. Flexibility: Allows for the creation of a unified interface for diverse objects, enabling seamless interchangeability and flexibility in code design.
+2. Extensibility: Facilitates easy extension of functionality by adding new subclasses with specialized implementations while maintaining compatibility with existing code.
+3. Polymorphic Dispatch: Enables polymorphic dispatch, where the correct method implementation is dynamically chosen at runtime based on the object's actual type, enhancing runtime flexibility and adaptability.
+```
+
+- 4. Dynamic Polymorphism:
+
+`Explanation:`
+
+Dynamic polymorphism refers to the ability of an object to decide at runtime which method implementation to invoke based on its actual type. This is achieved through method overriding in subclass implementations.
+
+```js
+
+Consider a scenario where we have a base class Shape with a method draw(), and subclasses Circle and Square that override the draw() method to provide specific implementations. At runtime, the correct draw() method is dynamically chosen based on the type of shape being drawn.
+
+
+// Base class representing a Shape
+class Shape {
+  draw() {
+    console.log("Drawing a shape");
+  }
+}
+
+// Subclass representing a Circle
+class Circle extends Shape {
+  draw() {
+    console.log("Drawing a circle");
+  }
+}
+
+// Subclass representing a Square
+class Square extends Shape {
+  draw() {
+    console.log("Drawing a square");
+  }
+}
+
+// Dynamic polymorphic behavior
+const shapes = [new Circle(), new Square()];
+
+shapes.forEach((shape) => {
+  shape.draw(); // Outputs: Drawing a circle, Drawing a square
+});
+
+
+Advantages:
+1. Flexibility: Allows for runtime determination of method implementation, enabling adaptable behavior based on object types.
+2. Extensibility: Facilitates adding new subclasses with specialized behavior without modifying existing code, enhancing code maintainability and scalability.
+3. Dynamic Dispatch: Enables polymorphic dispatch, where the appropriate method implementation is selected dynamically at runtime, promoting runtime flexibility and adaptability.
+
+```
+
+- 5. Polymorphism in Functional Programming:
+
+`Explanation:`
+
+While polymorphism is commonly associated with object-oriented programming, it also exists in functional programming paradigms. In functional programming languages like JavaScript, polymorphism can be achieved through higher-order functions, function composition, and parametric polymorphism.
+
+```js
+// Higher-order function to perform an operation on two numbers
+
+function operate(num1, num2, operation) {
+  return operation(num1, num2);
+}
+
+// Functions representing different operations
+function add(a, b) {
+  return a + b;
+}
+
+function multiply(a, b) {
+  return a * b;
+}
+
+console.log(operate(3, 4, add)); // Outputs: 7
+console.log(operate(3, 4, multiply)); // Outputs: 12
+
+
+In functional programming, a higher-order function that takes other functions as arguments exhibits polymorphic behavior by accepting functions with different signatures.
+
+`Advantages:`
+1. Modularity: Polymorphism in functional programming promotes code modularity by separating concerns and encapsulating reusable behavior within functions.
+2. Expressiveness: Enables the creation of concise and expressive programs by abstracting common patterns into higher-order functions and function compositions.
+3. Functional Composition: Facilitates function composition, where smaller, reusable functions are combined to create more complex behaviors, promoting code reuse and readability.
 ```
