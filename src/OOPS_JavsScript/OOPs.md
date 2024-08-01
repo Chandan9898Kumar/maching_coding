@@ -682,6 +682,8 @@ Polymorphism is one of the core concepts of object-oriented programming language
 - polymorphism is achieved by using `function overloading` and `function overriding`.
 
 1. `Function overloading` refers to the ability of a function to have multiple implementations based on the number and/or types of arguments passed to it. JavaScript does not support function overloading natively, however, you can achieve similar functionality by using the arguments object and checking the number and/or types of arguments passed to the function.
+   OR
+`Function overloading` is a feature of object-oriented programming where two or more functions can have the same name but different parameters. When a function name is overloaded with different jobs it is called Function Overloading. In Function Overloading “Function” name should be the same and the arguments should be different.
 
 2. `Function overriding` refers to the ability of a subclass to provide a different implementation of a method that is already provided by its superclass. In JavaScript, this can be achieved by reassigning the prototype of the subclass.
 
