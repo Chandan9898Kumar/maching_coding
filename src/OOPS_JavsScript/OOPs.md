@@ -1177,3 +1177,69 @@ Treadmill1.log("model");
 
 - As it can be seen the above code is much cleaner than the one below because here the machine functionality & Features are all separated. So the class can implement functionality suitable as per their requirements.Treadmill1 can implement the functionality of Treadmill when needed. Now, Treadmill1 can increase its motorspeed, decrease its motorspped, and even change its model name as per requirement. When talked about composition, the Inheritance gets assisted automatically.
 ```
+
+### Explain sub-classes and inheritance in ES6
+
+`Sub-class`: A subclass is a class that is derived from the properties and methods of some other class known as the Parent class for that subclass. A subclass allows us to change or update the properties of the parent class without disturbing it. A subclass can contain properties of the parent class as well as we can define the new properties inside it.
+
+To provide properties of the parent class to a subclass we use inheritance: Inheritance is the way of extending a class by providing it some new properties and values using another class without even disturbing it.
+
+### Interfaces in JavaScript.
+
+An "interface" can refer simply to the methods and properties that an object exposes. This is the context in which JavaScript uses it. In Java, Visual Basic, C#, etc. an interface is a formal definition where you, the developer, define what methods and properties must be implemented in order to be a whatever class you're defining the interface for. So if you define an iWidget interface, any class implementing the iWidget must implement the methods and properties that the iWidget interface specifies.
+
+`NOTE :`
+In JavaScript, there is no built-in concept of interfaces like you might find in languages like Java or C#. However, you can achieve similar functionality by defining and implementing your own interfaces using objects and classes.
+
+`Example:`
+
+```js
+
+To implement an interface, you create a class and ensure that it contains methods with the same names and signatures as specified in the interface. If your class lacks any of the required methods, it won’t satisfy the interface.
+
+
+`Checking for Interface Implementation : `
+
+You can write a function to check if an object or class implements a specific interface. This function can iterate through the method names defined in the interface and verify their presence in the object or class.
+
+Example: This example shows the implementation of a interface in JavaScript.
+
+
+const MyInterface = {
+	method1: function () { },
+	method2: function (param1, param2) { },
+};
+
+class MyClass {
+	method1() {
+		console.log("Method 1 called");
+	}
+
+	method2(param1, param2) {
+		console.log(
+			`Method 2 called with ${param1} and ${param2}`);
+	}
+}
+
+function implementsInterface(obj, interfaceObj) {
+	for (const method in interfaceObj) {
+		if (!(method in obj) ||
+			typeof obj[method] !== "function") {
+			return false;
+		}
+	}
+	return true;
+}
+
+const myObject = new MyClass();
+
+if (implementsInterface(myObject, MyInterface)) {
+	console.log(
+		"myObject implements MyInterface");
+} else {
+	console.log(
+		"myObject does not implement MyInterface");
+}
+
+
+```
