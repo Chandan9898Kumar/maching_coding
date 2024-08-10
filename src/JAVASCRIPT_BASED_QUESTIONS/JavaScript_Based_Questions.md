@@ -1554,3 +1554,231 @@ If you have a string representing a number in a non-decimal radix, you can use p
 const hex = "CAFEBABE";
 const bin = parseInt(hex, 16).toString(2); // "11001010111111101011101010111110"
 ```
+
+### 27. Execute async functions in parallel in JavaScript.
+
+Implement a function in JavaScript that takes a list of async functions as input and a callback function and executes the async tasks in parallel that is all at once and invokes the callback after every task is executed.
+
+```js
+// To create an async task, we have created a function that accepts a callback and runs a setTimeout for a random time and invokes this callback inside the timeout.
+function createAsyncTask() {
+  const value = Math.floor(Math.random() * 10);
+  return function (callback) {
+    setTimeout(() => {
+      callback(value);
+    }, value * 1000);
+  };
+}
+
+function asyncParallel(tasks, callback) {
+  const results = [];
+  let tasksCompleted = 0;
+
+  // run each task
+  tasks.forEach((asyncTask) => {
+    // invoke the async task
+    // it can be a promise as well
+    // for a promise you can chain it with then
+    asyncTask((value) => {
+      // store the output of the task
+      results.push(value);
+
+      // increment the tracker
+      tasksCompleted++;
+
+      // if all tasks are executed
+      // invoke the callback
+      if (tasksCompleted >= tasks.length) {
+        callback(results);
+      }
+    });
+  });
+}
+
+//                      OR
+
+// function asyncParallel(tasks, callback) {
+//   const results = [];
+
+//   let tasksCompleted = 0;
+
+//   const callBackFunction = (value) => {
+
+//     results.push(value);
+//     tasksCompleted++;
+
+//     if (tasksCompleted >= tasks.length) {
+//       callback(results);
+//     }
+//   };
+
+//   tasks.forEach((asyncTask) => {
+
+//     asyncTask(callBackFunction);
+
+//   });
+
+// }
+
+const taskList = [createAsyncTask(), createAsyncTask(), createAsyncTask(), createAsyncTask(), createAsyncTask(), createAsyncTask()];
+
+asyncParallel(taskList, (result) => {
+  console.log("results", result);
+});
+```
+
+`NOTE`: Execute promises in Parallel.
+In the above example, we have seen the async task created through setTimeout, the same can be extended to execute the promises in Parallel.
+
+First thing we will have to do is update the createAsyncTask() test function, this function will now return a promises that will reject if the random value is less than 5, else it will resolve.
+
+```js
+function createAsyncTask() {
+  const value = Math.floor(Math.random() * 10);
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (value < 5) {
+        reject(`Error ${value}`);
+      } else {
+        resolve(value * 1000);
+      }
+    }, value * 1000);
+  });
+}
+
+// After this, we will modify the asyncParallel() function, we will use the same logic, but now will store the outcome of resolved as well as rejected promises in different arrays, and handle them using the then, catch, and finally block.
+
+function asyncParallel(tasks, callback) {
+  // store the result
+  const results = [];
+
+  const errors = [];
+
+  // track the task executed
+  let tasksCompleted = 0;
+
+  // run each task
+  tasks.forEach((asyncTask) => {
+    // invoke the async task
+    // it can be a promise as well
+    // for a promise you can chain it with then
+    asyncTask
+      .then((value) => {
+        // store the output of the task
+        results.push(value);
+      })
+      .catch((error) => {
+        errors.push(error);
+      })
+      .finally(() => {
+        // increment the tracker
+        tasksCompleted++;
+
+        // if all tasks are executed
+        // invoke the callback
+        if (tasksCompleted >= tasks.length) {
+          callback(errors, results);
+        }
+      });
+  });
+}
+
+const taskList = [createAsyncTask(), createAsyncTask(), createAsyncTask(), createAsyncTask(), createAsyncTask(), createAsyncTask()];
+
+asyncParallel(taskList, (error, result) => {
+  console.log("errors", error);
+  console.log("results", result);
+});
+```
+
+### 28. Javascript setInterval method
+
+```js
+
+- 1. Calling predefined function
+ let start = 0;
+
+ let count = (count, message) => {
+   console.log(`${message} is ${count}`);
+ }
+
+ setInterval(function(){
+   count(start++, 'count');
+ }, 1000);
+
+//count is 0
+//count is 1
+//count is 2
+
+
+- 2. Passing params separately
+ let start = 0;
+
+ let count = (count, message) => {
+   console.log(`${message} is ${count}`);
+ }
+
+ setInterval(count, 1000, start++, 'count');
+
+//count is 0
+//count is 0
+//count is 0
+
+`NOTE :`  Here the start is not getting increment because the value is accessed from the global scope. Also this method won’t work in IE9 and less.
+
+
+
+- 3. Handling this with setInterval.
+let increment = {
+  count: 1,
+  start: function(){
+    setInterval(function(){
+      console.log(this.count++);
+    }, 1000)
+  }
+}
+
+increment.start();
+//NaN
+//NaN
+//NaN
+
+Now this inside the setInterval is referring to its context but we want to access the parent’s this. Incrementing the undefined value is resulting in NaN.
+So we assign the parent’s this to another variable and use it.
+
+`Solution :`
+
+1.
+
+let increment = {
+  count: 1,
+  start: function(){
+    //Assign this to a variable that
+    var that = this;
+    setInterval(function(){
+      console.log(that.count++);
+    }, 1000)
+  }
+}
+
+increment.start();
+//1
+//2
+//3
+
+2. with introduction of Arrow Function  => function in ES6 we can handle this easily.
+
+let increment = {
+  count: 1,
+  start: function(){
+    setInterval(() => {
+      console.log(this.count++);
+    }, 1000)
+  }
+}
+
+increment.start();
+//1
+//2
+//3
+```
