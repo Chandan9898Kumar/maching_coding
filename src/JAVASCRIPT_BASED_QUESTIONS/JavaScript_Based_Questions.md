@@ -1782,3 +1782,129 @@ increment.start();
 //2
 //3
 ```
+
+### 29. Retry promises N number of times in JavaScript.
+
+Implement a function in JavaScript that retries promises N number of times with a delay between each call.
+
+We have to create a retry function that Keeps on retrying until the promise resolves with delay and max retries.
+
+```js
+`Delay function`
+We can create a delay function by creating a new promise and resolve it after a given time using setTimeout.
+
+//delay func
+const wait = ms => new Promise((resolve) => {
+  setTimeout(() => resolve(), ms);
+});
+
+
+- 1. By Using async…await.
+When using async-await, we need to wrap the code inside try..catch block to handle the error, thus in the catch block, we can check if the max retries are still left then recursively call the same function or else throw the final error.
+
+
+
+const retryWithDelay = async (
+    fn,
+    retries = 3,
+    interval = 5000,
+    finalErr = 'Retry failed'
+  ) => {
+    try {
+      let result = await fn();
+      return result;
+
+    } catch ({ error, message }) {
+
+      // if no retries left throw error
+      if (retries <= 1) {
+        return Promise.reject(finalErr);
+      }
+
+      //delay the next call, meaning until this wait get resolved the below code will not be executed. below code has to be to wait for this function.
+      await wait(interval);
+
+      //recursively call the same func
+      return retryWithDelay(fn, retries - 1, interval, finalErr);
+    }
+  };
+
+
+- 2. By Using then…catch.
+
+To retry the promise we have to call the same function recursively with reduced max tries, if the promise fails that is in the catch block. Check if there is a number of tries left then recursively call the same function or else reject with the final error.
+
+
+  // const retryWithDelay = (
+  //   operation,
+  //   retries = 3,
+  //   delay = 5000,
+  //   finalErr = 'Retry failed'
+  // ) =>
+  //   new Promise((resolve, reject) => {
+  //     return operation()
+  //       .then((finalResult) => {
+  //         resolve(finalResult);
+  //       })
+  //       .catch((reason) => {
+  //         //if retries are left
+  //         if (retries > 0) {
+  //           //delay the next call
+  //           return (
+  //             wait(delay)
+  //               //recursively call the same function to retry with max retries - 1
+  //               .then(
+  //                 retryWithDelay.bind(
+  //                   null,
+  //                   operation,
+  //                   retries - 1,
+  //                   delay,
+  //                   finalErr
+  //                 )
+  //               )
+  //               .then(resolve)
+  //               .catch(reject)
+  //           );
+  //         }
+
+  //         // throw final error
+  //         return reject(finalErr);
+  //       });
+  //   });
+
+
+  // Test function
+  const getTestFunc = () => {
+    const value = Math.floor(Math.random() * 10);
+    return async function () {
+      try {
+        const response = await fetch(
+          `https://dummyjson.com/users?limit=${value}&skip=0&select=firstName`
+        );
+        const result = await response.json();
+        return result;
+      } catch (error) {
+        throw new Error(error);
+      }
+    };
+  };
+
+  // Test the code
+  const test = async () => {
+    try {
+      let result = await retryWithDelay(getTestFunc(), 3);
+      return result;
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  // Print the result
+  test()
+    .then((result) => {
+      console.log(result, 'result final');
+    })
+    .catch(({ message }) => {
+      console.log('final error >>>>>>>>>>>>>', message);
+    });
+```
