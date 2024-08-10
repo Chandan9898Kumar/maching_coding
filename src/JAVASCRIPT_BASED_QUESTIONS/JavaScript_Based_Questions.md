@@ -1823,6 +1823,8 @@ const retryWithDelay = async (
 
       //delay the next call, meaning until this wait get resolved the below code will not be executed. below code has to be to wait for this function.
       await wait(interval);
+                              //  OR Directly we can put delay like this instead of using await wait():
+      // await new Promise(resolve => setTimeout(resolve, interval));
 
       //recursively call the same func
       return retryWithDelay(fn, retries - 1, interval, finalErr);
@@ -1907,4 +1909,71 @@ To retry the promise we have to call the same function recursively with reduced 
     .catch(({ message }) => {
       console.log('final error >>>>>>>>>>>>>', message);
     });
+```
+
+### NEW Way Of Retry promises N number of times in JavaScript.
+
+```js
+const wait = (ms) =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+
+function fetchDataWithRetry(url, maxRetries) {
+  return new Promise((resolve, reject) => {
+    let retries = 0;
+    const fetchData = async () => {
+      fetch(url)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => resolve(data))
+        .catch((error) => {
+          retries++;
+          if (retries <= maxRetries) {
+            console.log(`Request failed. Retrying (${retries}/${maxRetries})...`);
+            wait(5000).then(() => {
+              fetchData();
+            });
+          } else {
+            reject(new Error(`Failed after ${maxRetries} retries. Error: ${error.message}`));
+          }
+        });
+    };
+
+    fetchData();
+  });
+}
+
+// Usage example:
+//const apiUrl = 'https://jsonplaceholder.typicode.com/posts3';
+const apiUrl = "https://jsonplaceholder.typicode.com/posts";
+console.log("URL-> ", apiUrl);
+const maxRetries = 3;
+
+fetchDataWithRetry(apiUrl, maxRetries)
+  .then((data) => {
+    console.log("Fetched data:", data);
+  })
+  .catch((error) => {
+    console.log("Error:", error.message);
+  });
+
+
+
+  `In the above exercise -`
+
+  1. The "fetchDataWithRetry()" function accepts two parameters: url specifies the API endpoint to fetch data from, and maxRetries indicates the maximum number of retries if the request fails.
+
+  2. Inside the function, a counter retries is initialized to keep track of the number of retries. The core logic is encapsulated in the fetchData() function, which performs the fetch request and handles success and failure cases.
+
+  3. If the request is successful (response.ok), the data is resolved using resolve(data). Otherwise, if the request fails, the function checks if the number of retries is less than or equal to the 'maxRetries'. If so, it logs a retry message and recursively calls "fetchData()" again to retry the request. If the maximum number of retries is reached, it rejects the Promise with an error.
+
+  4. In the usage example, the apiUrl specifies the API endpoint, and 'maxRetries' is set to 3. The function "fetchDataWithRetry()" is called, and the retrieved data or error is logged accordingly.
+
 ```
