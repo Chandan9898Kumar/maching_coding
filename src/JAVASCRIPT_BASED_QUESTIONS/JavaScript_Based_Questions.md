@@ -2065,6 +2065,8 @@ function mapLimit(inputs, limit, iterateeFn, callback) {
     iterateeFn(inputs[index], postCompletionCallback, index);
     index += 1;
   }
+
+//NOTE:Here limit is 2,so in while loop it will take input from index 0 and 1.if it 3 then 0,1,2. and to take rest data we used iterateeFn to take rest index data
 }
 
 mapLimit([1, 2, 3, 4, 5], 2, getUserById, (allResults) => {
