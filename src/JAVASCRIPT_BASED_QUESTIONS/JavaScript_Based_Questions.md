@@ -1977,3 +1977,97 @@ fetchDataWithRetry(apiUrl, maxRetries)
   4. In the usage example, the apiUrl specifies the API endpoint, and 'maxRetries' is set to 3. The function "fetchDataWithRetry()" is called, and the retrieved data or error is logged accordingly.
 
 ```
+
+### 30. How to implement custom map function with limit on number of operations?
+
+In this question, you need to implement a custom mapLimit function that takes 4 arguments
+
+1. inputs: An array of inputs
+2. limit: The maximum number of operations at any given time.
+3. iterateeFn: The async function that should be called with each input to generate the corresponding output. It will have two arguments:
+   A. input: The input being processed
+   B. callback: A function that will be called when the input is finished processing. It will be provided with one argument, the processed output.
+4. callback: A function that should be called with the array of outputs once all inputs have been processed.
+
+`NOTE:` At any given point, your program can make max 2 calls i.e. at any given point your program can process 1, 2 or 2, 3 or so on user ids.
+
+```js
+function getUserById(id, callback) {
+  // simulating async request
+  const randomRequestTime = Math.floor(Math.random() * 100) + 200;
+
+  setTimeout(() => {
+    callback("User" + id);
+  }, randomRequestTime * 10);
+}
+
+function mapLimit(inputs, limit, iterateeFn, callback) {
+  let index = 0;
+  let response = [];
+  let taskCompleted = 0;
+
+  function postCompletionCallback(activeIndex, output) {
+    response[activeIndex] = output; // we are taking index here,so that after performing async behavior it should put data related to its index (Sequence).
+    taskCompleted++;
+
+    if (taskCompleted === inputs.length) {
+      callback(response);
+      return;
+    }
+
+    if (index < inputs.length) {
+      iterateeFn(inputs[index], postCompletionCallback.bind(null, index));
+      index += 1;
+    }
+  }
+
+  while (index < limit) {
+    iterateeFn(inputs[index], postCompletionCallback.bind(null, index));
+    index += 1;
+  }
+}
+
+mapLimit([1, 2, 3, 4, 5], 2, getUserById, (allResults) => {
+  console.log("final result:", allResults);
+});
+
+`OR we Can do like this way :`;
+
+function getUserById(id, callback, activeIndex) {
+  // simulating async request
+  const randomRequestTime = Math.floor(Math.random() * 100) + 200;
+
+  setTimeout(() => {
+    callback("User" + id, activeIndex);
+  }, randomRequestTime);
+}
+
+function mapLimit(inputs, limit, iterateeFn, callback) {
+  let index = 0;
+  const outputs = [];
+
+  function postCompletionCallback(output, activeIndex) {
+    outputs[activeIndex] = output;
+
+    if (outputs.length === inputs.length) {
+      callback(outputs);
+    }
+
+    if (index >= inputs.length) {
+      return;
+    }
+
+    iterateeFn(inputs[index], postCompletionCallback, index);
+    index += 1;
+  }
+
+  while (index < limit) {
+    iterateeFn(inputs[index], postCompletionCallback, index);
+    index += 1;
+  }
+}
+
+mapLimit([1, 2, 3, 4, 5], 2, getUserById, (allResults) => {
+  console.log("output:", allResults);
+});
+```
