@@ -2110,4 +2110,52 @@ function mapLimit(inputs, limit, iterateeFn, callback) {
 mapLimit([1, 2, 3, 4, 5], 2, getUserById, (allResults) => {
   console.log("output:", allResults);
 });
+
+
+- 4. we can solve it by using for loop as well.
+
+function getUserById(id, callback,activeIndex) {
+
+  const randomRequestTime = Math.floor(Math.random() * 100) + 200;
+
+  setTimeout(() => {
+    callback("User" + id,activeIndex)
+  }, randomRequestTime*10);
+}
+
+function mapLimit(inputs, limit, iterateeFn, callback) {
+
+  let index =0
+  let result =[]
+  let totalTaskDone=0
+
+  function postCompletionCallback(output,activeIndex) {
+
+    result[activeIndex]= output
+    totalTaskDone++
+
+    if(totalTaskDone>=inputs.length){
+      callback(result)
+      return
+    }
+
+    if(index>=inputs.length){
+      return
+    }
+    iterateeFn(inputs[index],postCompletionCallback,index)
+    index=index+1
+
+    }
+
+  for(let x=0;x<limit;x++){
+    iterateeFn(inputs[x],postCompletionCallback,x)
+    index=index+1
+  }
+
+}
+
+mapLimit([1,2,3,4,5], 2, getUserById, (allResults) => {
+  console.log('output:', allResults)
+})
+
 ```
