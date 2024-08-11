@@ -2031,7 +2031,7 @@ mapLimit([1, 2, 3, 4, 5], 2, getUserById, (allResults) => {
   console.log("final result:", allResults);
 });
 
-`OR we Can do like this way :`;
+- 2. OR we Can do like this way :;
 
 function getUserById(id, callback, activeIndex) {
   // simulating async request
@@ -2066,7 +2066,45 @@ function mapLimit(inputs, limit, iterateeFn, callback) {
     index += 1;
   }
 
-//NOTE:Here limit is 2,so in while loop it will take input from index 0 and 1.if it 3 then 0,1,2. and to take rest data we used iterateeFn to take rest index data
+  //NOTE:Here limit is 2,so in while loop it will take input from index 0 and 1.if it 3 then 0,1,2. and to take rest data we used iterateeFn to take rest index data
+}
+
+mapLimit([1, 2, 3, 4, 5], 2, getUserById, (allResults) => {
+  console.log("output:", allResults);
+});
+
+- 3. we can do like this as well.
+
+function getUserById(id, callback) {
+  // simulating async request
+  const randomRequestTime = Math.floor(Math.random() * 100) + 200;
+
+  setTimeout(() => {
+    callback("User" + id);
+  }, randomRequestTime);
+}
+
+function mapLimit(inputs, limit, iterateeFn, callback) {
+  // write your solution here
+  const indexedInputs = inputs.map((value, index) => ({ value, index }));
+  const results = [];
+
+  function run(input) {
+    iterateeFn(input.value, (result) => {
+      results[input.index] = result;
+
+      if (indexedInputs.length > 0) {
+        const nextInput = indexedInputs.shift();
+        run(nextInput);
+      }
+
+      if (results.length === inputs.length) {
+        callback(results);
+      }
+    });
+  }
+
+  indexedInputs.splice(0, limit).forEach(run);
 }
 
 mapLimit([1, 2, 3, 4, 5], 2, getUserById, (allResults) => {
