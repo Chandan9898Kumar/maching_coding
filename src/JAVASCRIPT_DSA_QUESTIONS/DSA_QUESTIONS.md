@@ -3767,7 +3767,7 @@ function StringChanges(string) {
                 //      continue;
                 //    }
                 // }
-                
+
                  splitCharacters[i] = splitCharacters[j-1]
             }
         }
@@ -3778,4 +3778,261 @@ function StringChanges(string) {
 
 console.log(StringChanges(Input1);
 console.log(StringChanges(Input2);
+```
+
+### 78. Comparing only arrays (Single and Multi dimensional).
+
+We will create our own custom function which will compare only two different arrays.
+
+In this, we will check
+
+If both the inputs are array or not.
+If the current element is array (muti-dimensional) then recursively check its elements with the corresponding element.
+Else compare both the elements and return the result.
+
+```js
+let a = [1, 2, 3, 4, 4];
+let b = [1, 2, 3, 4, 4];
+
+//  1st method.
+
+function compareArray(a, b) {
+  if (a === undefined || a === null || b === undefined || b === null) {
+    return false;
+  }
+  if (!Array.isArray(a) && !Array.isArray(b)) {
+    console.log(Array.isArray(a), "a");
+    console.log(Array.isArray(b), "b");
+    return false;
+  }
+
+  if (a.length !== b.length) {
+    return false;
+  }
+  let isCondition = a.sort((a, b) => a - b).toString() === b.sort((a, b) => a - b).toString();
+
+  if (isCondition) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+let result = compareArray(a, b);
+
+console.log(result, "result");
+
+// =================================================================================
+
+//            2nd method
+
+let a = [1, 2, [3, 4, 5]];
+let b = [1, 2, [5, 4, 3]];
+
+function compareArray(a, b) {
+  if (a === undefined || a === null || b === undefined || b === null) {
+    return false;
+  }
+  if (!Array.isArray(a) && !Array.isArray(b)) {
+    console.log(Array.isArray(a), "a");
+    console.log(Array.isArray(b), "b");
+    return false;
+  }
+
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  const flatA = a
+    .toString()
+    .split(",")
+    .map((item) => parseInt(item))
+    .sort((a, b) => a - b);
+  const flatB = b
+    .toString()
+    .split(",")
+    .map((item) => parseInt(item))
+    .sort((a, b) => a - b);
+
+  if (flatA.toString() !== flatB.toString()) {
+    return false;
+  }
+
+  return true;
+}
+
+let result = compareArray(a, b);
+
+console.log(result, "result");
+
+// =======================================================================
+
+//            3rd method  using recursion
+
+let a = [1, 2, [3, 4, 5]];
+let b = [1, 2, [5, 4, 3]];
+
+function compareArray(a, b) {
+  if (a === undefined || a === null || b === undefined || b === null) {
+    return false;
+  }
+  if (!Array.isArray(a) && !Array.isArray(b)) {
+    return false;
+  }
+
+  if (a.length !== b.length) {
+    return false;
+  }
+
+  let result;
+
+  for (let x = 0; x < a.length; x++) {
+    if (Array.isArray(a[x] || Array.isArray(b[x]))) {
+      result = compareArray(
+        a[x].sort((a, b) => a - b),
+        b[x].sort((a, b) => a - b)
+      );
+    } else if (a[x] === b[x]) {
+      result = true;
+    } else {
+      result = false;
+    }
+    if (!result) {
+      break;
+    }
+  }
+
+  return result;
+}
+
+let result = compareArray(a, b);
+
+console.log(result, "result");
+
+
+`NOTE:` This method works great if you only have arrays and nested arrays. If it will contain an object or function then it will fail.
+```
+
+- So To Solve This Issue we can use Method :
+
+This is a much more robust way to check if two different arrays or objects are equal or not.
+With this method, we will be comparing more complex arrays. Something like this where an array can have any value possible.
+
+- To perfectly compare an array or object we need to check multiple things.
+
+1. If they are same type (Object or Array).
+2. They have the same number of elements.
+3. Each element is equal to the other element which we are comparing with.
+4. They are of same type (array, object, string, number, function).
+5. They have same value.
+6. If the element itself is an array or object then we need to compare all its items with the items of the corresponding array or object.
+
+```js
+let compare = (current, other) => {
+  // Get the inputs  type
+  let currentType = Object.prototype.toString.call(current);
+
+  // Get the other type
+  let otherType = Object.prototype.toString.call(other);
+
+  //First check if the inputs are either array or object.  If items are not an object or array, return false
+  if (["[object Array]", "[object Object]"].indexOf(currentType) < 0 || ["[object Array]", "[object Object]"].indexOf(otherType) < 0) return false;
+
+  // If one value is of type array and another value is of type object then they are not equal so eliminate them. If the two inputs are not the same type, return false
+  if (currentType !== otherType) return false;
+
+  // Compare the length of the length of the two items
+  let currentLen = currentType === "[object Array]" ? current.length : Object.keys(current).length;
+  let otherLen = otherType === "[object Array]" ? other.length : Object.keys(other).length;
+  if (currentLen !== otherLen) return false;
+
+  //Helper function to check the equality . Check if both inputs are of same type or not.
+  let equal = (item1, item2) => {
+    // Get the object type
+    let itemType = Object.prototype.toString.call(item1);
+
+    // If an object or array, compare recursively
+    if (["[object Array]", "[object Object]"].indexOf(itemType) >= 0) {
+      if (!compare(item1, item2)) return false;
+    } else {
+      // If the two items are not the same type, return false
+      if (itemType !== Object.prototype.toString.call(item2)) return false;
+
+      // If it's a function, convert to a string and compare
+      // Otherwise, just compare
+      if (itemType === "[object Function]") {
+        if (item1.toString() !== item2.toString()) return false;
+      } else {
+        if (item1 !== item2) return false;
+      }
+    }
+  };
+
+  // Compare properties
+  if (currentType === "[object Array]") {
+    for (var i = 0; i < currentLen; i++) {
+      // Compare the item
+      if (equal(current[i], other[i]) === false) return false;
+    }
+  } else {
+    for (var key in current) {
+      if (current.hasOwnProperty(key)) {
+        // Compare the item
+        if (equal(current[key], other[key]) === false) return false;
+      }
+    }
+  }
+
+  //If all tests are passed then
+  return true;
+};
+
+//   Calling
+
+let arr1 = [1, 2, 3, 4, 5];
+let arr2 = [1, 3, 2, 4, 5];
+console.log(compare(arr1, arr2));
+// returns false
+
+let arrObj1 = [
+  1,
+  2,
+  {
+    a: 1,
+    b: 2,
+    c: 3,
+    d: function () {
+      console.log("abcd");
+    },
+  },
+  4,
+  5,
+];
+let arrObj2 = [
+  1,
+  2,
+  {
+    c: 3,
+    b: 2,
+    a: 1,
+    d: function () {
+      console.log("abcd");
+    },
+  },
+  4,
+  5,
+];
+console.log(compare(arrObj1, arrObj2));
+// returns true
+
+let arr4 = [
+  [1, 2],
+  [3, 4, 5],
+];
+let arr3 = [
+  [1, 2],
+  [3, 4, 5],
+];
+console.log(compare(arr4, arr3));
+// returns true
 ```
