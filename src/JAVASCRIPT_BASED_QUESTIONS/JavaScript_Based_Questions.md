@@ -2159,3 +2159,89 @@ mapLimit([1,2,3,4,5], 2, getUserById, (allResults) => {
 })
 
 ```
+
+### 31. Create an array sequence from 1 to N in a single line in JavaScript
+
+```js
+- 1. Using Array.from() function
+const N = 5;
+const arr = Array.from({length: N}, (_, index) => index + 1);
+console.log(arr);
+/*
+    Output: [ 1, 2, 3, 4, 5 ]
+*/
+Or use Array Constructor
+
+const N = 5;
+const arr = Array.from(Array(N), (_, index) => index + 1);
+console.log(arr);
+
+/*
+    Output: [ 1, 2, 3, 4, 5 ]
+*/
+
+Or
+
+const N = 5;
+const arr = Array.from(Array(N+1).keys()).slice(1);
+console.log(arr);
+
+/*
+    Output: [ 1, 2, 3, 4, 5 ]
+*/
+
+
+- 2. Using Spread operator
+const N = 5;
+const arr = [...Array(N+1).keys()].slice(1);
+console.log(arr);
+
+/*
+    Output: [ 1, 2, 3, 4, 5 ]
+*/
+
+or
+
+const N = 5;
+const arr = [...Array(N).keys()].map(x => ++x);
+console.log(arr);
+
+/*
+    Output: [ 1, 2, 3, 4, 5 ]
+*/
+
+or
+
+const N = 5;
+const arr = [...Array(N)].map((_, index) => index + 1);
+console.log(arr);
+
+/*
+    Output: [ 1, 2, 3, 4, 5 ]
+*/
+
+- 3. Using Underscore Library
+var _ = require('underscore');
+
+const N = 5;
+const arr = _.range(1, N+1);
+console.log(arr);
+
+/*
+    Output: [ 1, 2, 3, 4, 5 ]
+*/
+
+- The _.range method is overloaded to generate a range from start (inclusive) to stop (exclusive), incremented (or decremented) by step.
+
+var _ = require('underscore');
+
+const start = 1, end = 10, step = 2;
+const arr = _.range(start, end, step);
+console.log(arr);
+
+/*
+    Output: [ 1, 3, 5, 7, 9 ]
+*/
+
+
+```
