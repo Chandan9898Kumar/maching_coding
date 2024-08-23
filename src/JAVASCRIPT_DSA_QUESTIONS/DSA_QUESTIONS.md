@@ -3869,7 +3869,7 @@ console.log(result, "result");
 
 //            3rd method  using recursion
 
-let a = [1, 2, [3, 4, 5]];
+let a = [2, 1, [3, 4, 5]];
 let b = [1, 2, [5, 4, 3]];
 
 function compareArray(a, b) {
@@ -3905,7 +3905,7 @@ function compareArray(a, b) {
   return result;
 }
 
-let result = compareArray(a, b);
+let result = compareArray(a.sort((a, b) => a - b), b.sort((a, b) => a - b));
 
 console.log(result, "result");
 
