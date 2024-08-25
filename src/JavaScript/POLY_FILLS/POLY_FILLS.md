@@ -45,9 +45,7 @@ console.log(r, t);
 `The above code is a simple polyfill for the call() method. Here context points to the 'details' object and the this keyword points to the calling() function.`;
 ```
 
-
 # The only difference between the call() and apply() methods is that the call() method takes arguments separately but the apply() method takes arguments as an array.
-
 
 - 2. Polyfills for the apply().
 
@@ -61,7 +59,7 @@ function calling(greet, message) {
   return `${greet} ${this.FName} ${this.LNAME} ${message}`;
 }
 
-Function.prototype.myApply = function (context={}, arg = []) {
+Function.prototype.myApply = function (context = {}, arg = []) {
   if (typeof this !== "function") {
     throw new Error(this + "It is not callable");
   }
@@ -84,4 +82,105 @@ Function.prototype.myApply = function (context={}, arg = []) {
 let result = calling.myApply(details, ["hi", "See you Soon."]);
 
 console.log(result, "result");
+```
+
+- 3. Polyfills for the bind().
+
+```js
+const details = {
+  FName: "john",
+  LNAME: "Cena",
+};
+
+function calling(greet, message, status, ...rest) {
+  this.game = "GTA 6";
+  return `${greet} ${this.FName} ${this.LNAME} ${message} and your status is ${status}`;
+}
+
+Function.prototype.myBind = function (context = {}, ...args) {
+  context = context === null || context === undefined ? window : context;
+
+  if (typeof this !== "function") {
+    throw new Error("Not Callable");
+  }
+
+  let symKey = Symbol();
+  context = Object(context);
+
+  context[symKey] = this;
+
+  return function (...vals) {
+    let callbackResult = context[symKey](...args, ...vals);
+    delete context[symKey];
+    return callbackResult;
+  };
+};
+
+const callback1 = calling.myBind(details, "Hey", "Hope to see you soon.");
+let result1 = callback1("Success");
+console.log(result1, "result1");
+
+const callback2 = calling.myBind(details, "Hey There", "Hope to see you soon.");
+let result2 = callback2("Full Success");
+console.log(result2, "result2");
+
+`NOTE :`; // If we don't delete context[symKey] this,then it will be having two keys of same name however Symbol() always give unique values.
+//  we are doing this Just to make object ("details") in its original  state.
+
+
+
+A. `BY Using Call Method :`
+
+Function.prototype.myBind = function (context = {}, ...args) {
+  context = context === null || context === undefined ? window : context;
+
+  if (typeof this !== "function") {
+    throw new Error("Not Callable");
+  }
+
+  let symKey = Symbol();
+  context = Object(context);
+
+  context[symKey] = this;
+
+  return function (...vals) {
+   return context[symKey].call(context,...args, ...vals)
+  };
+};
+
+const callback1 = calling.myBind(details, "Hey", "Hope to see you soon.");
+let result1 = callback1("Success");
+console.log(result1, "result1");
+
+const callback2 = calling.myBind(details, "Hey There", "Hope to see you soon.");
+let result2 = callback2("Full Success");
+console.log(result2, "result2");
+
+B. `BY Using apply Method :`
+
+Function.prototype.myBind = function (context = {}, ...args) {
+  context = context === null || context === undefined ? window : context;
+
+  if (typeof this !== "function") {
+    throw new Error("Not Callable");
+  }
+
+  let symKey = Symbol();
+  context = Object(context);
+
+  context[symKey] = this;
+
+  return function (...vals) {
+   return context[symKey].apply(context,[...args, ...vals])
+  };
+};
+
+const callback1 = calling.myBind(details, "Hey", "Hope to see you soon.");
+let result1 = callback1("Success");
+console.log(result1, "result1");
+
+const callback2 = calling.myBind(details, "Hey There", "Hope to see you soon.");
+let result2 = callback2("Full Success");
+console.log(result2, "result2");
+
 ```
