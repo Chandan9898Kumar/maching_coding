@@ -1,6 +1,6 @@
 ### POLY-FILLS
 
-### 1. Write polyfills for the call(), apply(), and bind() methods in JavaScript.
+### 1. Polyfills for Functions. Write polyfills for the call(), apply(), and bind() methods in JavaScript.
 
 - NOTE : The call(), apply() and bind() methods are used for function borrowing in JavaScript. It means that by using them, we can use the methods of one object on a different object without having to make a copy of that method and maintain it in two separate places.
 
@@ -182,5 +182,15 @@ console.log(result1, "result1");
 const callback2 = calling.myBind(details, "Hey There", "Hope to see you soon.");
 let result2 = callback2("Full Success");
 console.log(result2, "result2");
+
+```
+
+# 2. Polyfills for the Arrays.
+
+1. - Map
+
+
+```js
+
 
 ```
