@@ -272,3 +272,99 @@ const result = persons.myFilter(callback);
 
 console.log(result, "result");
 ```
+
+3. - Reduce
+
+```js
+const persons = [
+  { fName: "john", lName: "Cena", age: 10 },
+  { fName: "Randy", lName: "Orton", age: 20 },
+  { fName: "Brock", lName: "Lesnar", age: 30 },
+  { fName: "Eddy", lName: "Garairo", age: 40 },
+];
+
+
+A. Without passing second arguments in myReduce()
+Array.prototype.myReduce = function (callbackFun, initialValue) {
+  let finalResult;
+
+  let startIndex = 0;
+
+  let length = this.length;
+
+  if (arguments.length <= 1) {
+    finalResult = this[0];
+    startIndex = 1;
+  }
+
+  if (arguments.length >= 2) {
+    finalResult = initialValue;
+  }
+
+  if (!Array.isArray(this)) {
+    throw new Error("It Should Be an Array");
+  }
+
+  if (typeof callbackFun !== "function") {
+    throw new Error("This Should Be A Function.");
+  }
+
+  for (let x = startIndex; x < length; x++) {
+    finalResult = callbackFun(finalResult, this[x], x, this);
+  }
+
+  return finalResult;
+};
+
+const callback = (acc, current, index, arr) => {
+  acc["age"] = acc["age"] + current.age;
+
+  return acc;
+};
+
+let result1 = persons.myReduce(callback);
+
+
+
+B. With passing Second Arguments in myReduce()
+
+Array.prototype.myReduce = function (callbackFun, initialValue) {
+  let finalResult;
+
+  let startIndex = 0;
+
+  let length = this.length;
+
+  if (arguments.length <= 1) {
+    finalResult = this[0];
+    startIndex = 1;
+  }
+
+  if (arguments.length >= 2) {
+    finalResult = initialValue;
+  }
+
+  if (!Array.isArray(this)) {
+    throw new Error("It Should Be an Array");
+  }
+
+  if (typeof callbackFun !== "function") {
+    throw new Error("This Should Be A Function.");
+  }
+
+  for (let x = startIndex; x < length; x++) {
+    finalResult = callbackFun(finalResult, this[x], x, this);
+  }
+
+  return finalResult;
+};
+
+const callback = (acc, current, index, arr) => {
+  acc= acc + current.age;
+
+  return acc;
+};
+
+let result2 = persons.myReduce(callback,0);
+console.log(result1, "result",result2);
+```
