@@ -1,4 +1,8 @@
-### POLY-FILLS
+### POLY-FILLS :A Script that Updates/Adds new function is called polyfill.
+
+- Polyfill is a Browser fallback. Just Supposed we want to implement bind() method, but older browser doesn't support bind() method. There we have to write our own bind() method.
+
+- Polyfill fills the gap between the browsers for JavaScript.
 
 ### 1. Polyfills for Functions. Write polyfills for the call(), apply(), and bind() methods in JavaScript.
 
@@ -189,8 +193,82 @@ console.log(result2, "result2");
 
 1. - Map
 
+```js
+const persons = [
+  { fName: "john", lName: "Cena", age: 10 },
+  { fName: "Randy", lName: "Orton", age: 20 },
+  { fName: "Brock", lName: "Lesnar", age: 30 },
+  { fName: "Eddy", lName: "Garairo", age: 40 },
+];
+
+Array.prototype.myMap = function (callback = () => {}) {
+  let newArray = [];
+  let length = this.length;
+
+  if (!Array.isArray(this)) {
+    throw new Error(this + "This Should be an array.");
+  }
+
+  if (typeof callback !== "function") {
+    throw new Error(callback + "This Should be a function.");
+  }
+
+  for (let x = 0; x < length; x++) {
+    let result = callback(this[x], x, this);
+    newArray.push(result);
+  }
+
+  return newArray;
+};
+
+const callbackFunction = (item, index, array) => {
+  item.age = item.age + 10;
+  return item.age;
+};
+
+const result = persons.myMap(callbackFunction);
+
+console.log(result, "result");
+```
+
+2. - Filter
 
 ```js
+const persons = [
+  { fName: "john", lName: "Cena", age: 10 },
+  { fName: "Randy", lName: "Orton", age: 20 },
+  { fName: "Brock", lName: "Lesnar", age: 30 },
+  { fName: "Eddy", lName: "Garairo", age: 40 },
+];
 
+Array.prototype.myFilter = function (callbackFun) {
+  if (!Array.isArray(this)) {
+    throw new Error("It should be an array.");
+  }
 
+  if (typeof callbackFun !== "function") {
+    throw new Error("It should be a function.");
+  }
+
+  let newArray = [];
+  let length = this.length;
+
+  for (let x = 0; x < length; x++) {
+    if (callbackFun(this[x], x, this)) {
+      newArray.push(callbackFun(this[x], x, this));
+    }
+  }
+
+  return newArray;
+};
+
+const callback = (item, index, arr) => {
+  if (item.age < 40) {
+    return item;
+  }
+};
+
+const result = persons.myFilter(callback);
+
+console.log(result, "result");
 ```
