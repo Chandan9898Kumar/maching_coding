@@ -368,3 +368,45 @@ const callback = (acc, current, index, arr) => {
 let result2 = persons.myReduce(callback,0);
 console.log(result1, "result",result2);
 ```
+
+4. - ForEach
+
+```js
+//  NOTE : forEach method does not return new array it returns undefined, It simply changes the original array.
+const persons = [
+  { fName: "john", lName: "Cena", age: 10 },
+  { fName: "Randy", lName: "Orton", age: 20 },
+  { fName: "Brock", lName: "Lesnar", age: 30 },
+  { fName: "Eddy", lName: "Garairo", age: 40 },
+];
+
+Array.prototype.forEach = null;
+
+Array.prototype.forEach = function (callback = () => {}) {
+  if (!Array.isArray(this)) {
+    throw new Error("Should be an array");
+  }
+
+  if (typeof callback !== "function") {
+    throw new Error("Should be a function");
+  }
+
+  let length = this.length;
+
+  for (let x = 0; x < length; x++) {
+    let result = callback(this[x], x, this);
+    this[x] = result;
+  }
+
+  return undefined;
+};
+
+const callback = (item, index, array) => {
+  item.age = item.age + 10;
+  return item;
+};
+
+const result = persons.forEach(callback);
+
+console.log(persons, "result", result);
+```
