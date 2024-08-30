@@ -410,3 +410,212 @@ const result = persons.forEach(callback);
 
 console.log(persons, "result", result);
 ```
+
+5. - polyfills of some method.
+
+```js
+let arrayObj = [
+  {
+    name: "a",
+    age: 5,
+  },
+  {
+    name: "b",
+    age: 6,
+  },
+  {
+    name: "c",
+    age: 1,
+  },
+  {
+    name: "d",
+    age: 2,
+  },
+];
+
+Array.prototype.some = null;
+Array.prototype.some = function (callback = () => {}) {
+  if (!Array.isArray(this)) {
+    throw new Error("This Should be an array.");
+  }
+
+  if (typeof callback !== "function") {
+    throw new Error("This should be a function");
+  }
+
+  let isFalse = false;
+  let length = this.length;
+
+  for (let x = 0; x < length; x++) {
+    if (callback(this[x], x, this)) {
+      return true;
+    }
+  }
+
+  return isFalse;
+};
+
+const callback = (item, index, array) => {
+  return item.age > 5;
+};
+
+const result = arrayObj.some(callback);
+
+console.log(result, "result >>>>>>>");
+```
+
+6. - polyfills of every method.
+
+```js
+let arrayObj = [
+  {
+    name: "a",
+    age: 5,
+  },
+  {
+    name: "b",
+    age: 6,
+  },
+  {
+    name: "c",
+    age: 1,
+  },
+  {
+    name: "d",
+    age: 2,
+  },
+];
+
+Array.prototype.every = function (callback = () => {}) {
+  if (!Array.isArray(this)) {
+    throw new Error("This should be an array");
+  }
+
+  if (typeof callback !== "function") {
+    throw new Error("This should be a function");
+  }
+
+  let isTrue = true;
+  let length = this.length;
+
+  for (let x = 0; x < length; x++) {
+    if (!callback(this[x], x, this)) {
+      return false;
+    }
+  }
+  return isTrue;
+};
+
+const callback = (item, index, arr) => {
+  return item.age >= 2;
+};
+const result = arrayObj.every(callback);
+console.log(result, "result >>>>");
+```
+
+7. - polyfills of find method.
+
+```js
+let arrayObj = [
+  {
+    name: "a",
+    age: 5,
+  },
+  {
+    name: "b",
+    age: 6,
+  },
+  {
+    name: "c",
+    age: 1,
+  },
+  {
+    name: "d",
+    age: 2,
+  },
+];
+
+Array.prototype.find = null;
+
+Array.prototype.find = function (callback = () => {}) {
+  if (!Array.isArray(this)) {
+    throw new Error("This should be an array");
+  }
+
+  if (typeof callback !== "function") {
+    throw new Error("This should be a function ");
+  }
+
+  let length = this.length;
+
+  for (let x = 0; x < length; x++) {
+    let item = callback(this[x], x, this);
+    if (item) {
+      return item;
+    }
+  }
+
+  return undefined;
+};
+
+const callback = (item, index, arr) => {
+  if (item.age > 1) {
+    return item;
+  }
+};
+
+const result = arrayObj.find(callback);
+
+console.log(result, "result >>>>");
+```
+
+# 3. Create a polyfill method that transforms array values into upper case: Create a polyfill of upperCase for Array items.
+
+```js
+let arrayObj = [
+  {
+    name: "akon",
+    age: 5,
+    place: "united",
+  },
+  {
+    name: "becon",
+    age: 6,
+    place: "kingdom",
+  },
+  {
+    name: "ckon",
+    age: 1,
+    place: "place",
+  },
+  {
+    name: "dkon",
+    age: 2,
+    place: "universe",
+  },
+];
+
+let propertyToUpperCase = "place";
+
+Array.prototype.upperCase = function (propertyToUpperCase = "") {
+  if (!Array.isArray(this)) {
+    throw new Error("This should be an array");
+  }
+
+  let length = this.length;
+
+  const convertUpperCase = (item, propertyToUpperCase) => {
+    return { ...item, [propertyToUpperCase]: item[propertyToUpperCase].toUpperCase() };
+  };
+
+  for (let x = 0; x < length; x++) {
+    this[x] = convertUpperCase(this[x], propertyToUpperCase);
+  }
+
+  return this;
+};
+
+let result = arrayObj.upperCase(propertyToUpperCase);
+
+console.log(result, "result >>>>", arrayObj);
+```
