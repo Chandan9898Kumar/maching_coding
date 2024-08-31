@@ -569,6 +569,73 @@ const result = arrayObj.find(callback);
 console.log(result, "result >>>>");
 ```
 
+8. - polyfills of flat method.
+
+```js
+const myArr = [
+  [1, 2],
+  [3, 4],
+  [5, 6, [7, 8]],
+];
+
+let flatLength = 2;
+
+Array.prototype.flat = null;
+
+Array.prototype.flat = function (depth = 1) {
+  if (!Array.isArray(this)) {
+    throw new Error("It should be an array");
+  }
+
+  let newArray = [];
+
+  function flatArray(array, depth) {
+    for (let x of array) {
+      if (Array.isArray(x) && depth) {
+        flatArray(x, depth - 1);
+      } else {
+        newArray.push(x);
+      }
+    }
+  }
+
+  flatArray(this, depth);
+
+  return newArray;
+};
+
+const result = myArr.flat(flatLength);
+console.log(result, "result >>>>>>>>>>>>>>>>");
+
+//   OR
+
+Array.prototype.flat = function (depth = 1) {
+  if (!Array.isArray(this)) {
+    throw new Error("It should be an array");
+  }
+
+  function flatArray(array, depth) {
+    let newArray = [];
+
+    for (let x of array) {
+      if (Array.isArray(x) && depth) {
+        let flat = flatArray(x, depth - 1);
+        newArray.push(...flat);
+      } else {
+        newArray.push(x);
+      }
+    }
+
+    return newArray;
+  }
+
+  return flatArray(this, depth);
+};
+
+const result = myArr.flat(flatLength);
+console.log(result, "result >>>>>>>>>>>>>>>>");
+```
+
 # 3. Create a polyfill method that transforms array values into upper case: Create a polyfill of upperCase for Array items.
 
 ```js
