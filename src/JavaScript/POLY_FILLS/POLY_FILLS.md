@@ -686,3 +686,120 @@ let result = arrayObj.upperCase(propertyToUpperCase);
 
 console.log(result, "result >>>>", arrayObj);
 ```
+
+# 4. Polyfill of Objects
+
+1. - polyfills of Object.assign method.
+
+It is a method used to copy the values of all enumerable own properties from one or more source objects to a target object. It performs a shallow copy, meaning that nested objects or arrays are copied by reference rather than creating new instances. The target object is returned after the properties have been assigned to it.
+
+```js
+const obj1 = {
+  name1: "obj 1",
+  Car: "Jaguar",
+};
+
+const obj2 = {
+  name2: "obj 2",
+  place: "Japan",
+};
+
+const obj3 = {
+  name3: "obj 3",
+  country: "UK",
+};
+
+// - In this example, we define the Object.assign() polyfill as before, and then we use it to merge three objects: obj1, obj2, and obj3. The resulting object, result, contains all the properties from the three objects, with the properties from obj3 overriding the properties from obj2, and the properties from obj2 overriding the properties from obj1.
+
+// This polyfill checks if Object.myAssign() is not already defined, and if not, it defines it.
+if (!Object.myAssign) {
+  Object.prototype.myAssign = function (target, ...sources) {
+    if (target === null || target === undefined) {
+      throw new TypeError("Cannot convert undefined or null to object");
+    }
+
+    let newTarget = Object(target);
+
+    sources.forEach((sourceItem) => {
+      if (sourceItem !== null && sourceItem !== undefined) {
+        for (const item in sourceItem) {
+          // For each property, it checks if the property is the object's own property using Object.prototype.hasOwnProperty.call(), and if so, it assigns the property to the target object. Finally, it returns the target object.
+
+          if (Object.prototype.hasOwnProperty.call(sourceItem, item)) {
+            newTarget[item] = sourceItem[item];
+          }
+        }
+      }
+    });
+
+    return newTarget;
+  };
+}
+
+let result = Object.myAssign(obj1, obj2, obj3);
+
+console.log(result, "result", obj1);
+```
+
+1. - polyfills of Object.create method.
+
+- The Object.create() static method creates a new object, using an existing object as the prototype of the newly created object.
+
+- It is a method used to create a new object with a specified prototype object and optional properties. The newly created object inherits properties from the prototype object. It allows you to establish a prototype chain, where the created object can access properties and methods from its prototype.
+
+```js
+// - This polyfill checks if the Object.create() method is not already supported by the browser, and if not, it defines a new function that mimics its behavior. The function takes two arguments: proto, which is the prototype object that the new object should inherit from, and properties, which is an optional object that defines the properties of the new object.
+
+const person = {
+  firstName: "John",
+  lastName: "Doe",
+};
+
+
+
+// - The function creates a new function "create" and sets its prototype to the proto object. It then creates a new object called "object" by calling the "create" function with the new keyword. If the properties object is provided, it uses the Object.defineProperties() method to define the properties of the new object.
+
+// Finally, the function returns the new object called "object".
+
+if (!Object.myCreate) {
+
+  Object.prototype.myCreate = function (proto, properties = {}) {
+    if (typeof proto !== "object" && typeof proto !== "function") {
+      throw new TypeError("Object prototype may only be an Object or null");
+    }
+
+    function create() {}
+
+    create.prototype = proto;
+    let object = new create();
+
+    if (properties !== undefined) {
+      //  The Object.defineProperties() static method defines new or modifies existing properties directly on an object, returning the object.
+      Object.defineProperties(object, properties);
+    }
+
+    return object;
+  };
+}
+
+const man = Object.myCreate(person);
+man.game = "GTA 6";
+console.log(man, "man");
+
+//  OR
+
+const obj = Object.myCreate(person, {
+  foo: {
+   value: 'bar',
+   writable: true,
+   enumerable: true,
+   configurable: true
+  }
+});
+
+console.log(obj,'obj',obj.foo)
+
+
+- NOTE : We have used Object.prototype.myCreate, so it will add myCreate method inside prototype, but if we do like this :
+ Object.myCreate then it will add Create method Create method inside Constructor method which is also a correct implementation.
+```
