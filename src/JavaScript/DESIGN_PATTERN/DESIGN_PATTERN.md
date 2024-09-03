@@ -481,7 +481,7 @@ const dog3 = new Dog("Joy", 6);
 const dog4 = new Dog("Spot", 8);
 ```
 
-`Notice here how the constructor contains a name property, and the class itself contains a bark property. When using ES6 classes, all properties that are defined on the class itself, bark in this case, are automatically added to the prototype.`
+`Notice here how the constructor contains a name property, and the class itself contains a bark and wagTail property. When using ES6 classes, all properties that are defined on the class itself, bark and wagTail in this case, are automatically added to the prototype.`
 
 We can see the prototype directly through accessing the prototype property on a constructor, or through the **proto** property on any instance.
 
@@ -619,10 +619,12 @@ The Prototype pattern is handy when copying existing objects is more efficient t
 
 - Shallow vs. Deep Copying 🔄 : Cloning complex objects that have circular references might be very tricky
 - Complex Cloning Hierarchies 📜: Cloning hierarchical structures introduces complexities, particularly with interconnected objects and relationships.
+- Readability: When a class has been extended many times, it can be difficult to know where certain properties come from.
+  For Example, if we have a BorderCollie class that extends all the way to the Animal class, it can be difficult to trace back where certain properties came from.
 
 ## Builder 👷
 
-Builder is a creational design pattern facilitating the step-by-step construction of complex objects. It enables the creation of various object types using a unified construction process, preventing constructor overload. _Use the Builder pattern to get rid of a “telescoping constructor”._
+Builder is a Creational design pattern facilitating the step-by-step construction of complex objects. It enables the creation of various object types using a unified construction process, preventing constructor overload. _Use the Builder pattern to get rid of a “telescoping constructor”._
 
 In simple words:
 
