@@ -176,7 +176,14 @@ export default stateUtilityInstance;
 
 `OR`;
 
-//Singleton
+- In a singleton design pattern, only one object is created for each interface (class or function) and the same object is returned every time when called.
+
+It is really useful in scenarios where only one object is needed to coordinate actions across the system.
+
+For example, notification object, which sends notification across the system.
+
+// We can implement the singleton pattern by creating a closure with a variable that stores the created instance and returns it every time.We can implement the singleton pattern by creating a closure with a variable that stores the created instance and returns it every time.
+
 var Singleton = (function () {
   var instance;
 
