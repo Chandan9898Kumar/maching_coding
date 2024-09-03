@@ -803,3 +803,109 @@ console.log(obj,'obj',obj.foo)
 - NOTE : We have used Object.prototype.myCreate, so it will add myCreate method inside prototype, but if we do like this :
  Object.myCreate then it will add Create method Create method inside Constructor method which is also a correct implementation.
 ```
+
+# 5. Polyfills of Promises.
+
+1. - polyfills of Promise
+
+```js
+function PromiseFunction(executor) {
+  console.log(this);
+  let onResolve,
+    onReject,
+    isFullfilled = false, // for resolve()
+    isRejected = false, // for reject()
+    isCalled = false,
+    value;
+
+  function resolve(val) {
+    console.log(onResolve, "onResolve");
+    // onResolve(val)
+    //  onResolve will come undefined.so to handle this we apply condition there,
+    //   that whether it is a function or not
+
+    // whenever resolve gets called our promise is fullfilled,so- isFullfilled=true,
+    isFullfilled = true;
+    value = val;
+    if (typeof onResolve === "function") {
+      onResolve(val);
+      isCalled = true;
+      // we used isCalled,to check onResolve() function is called
+    }
+  }
+
+  function reject(val) {
+    isRejected = true;
+    value = val;
+    if (typeof onReject === "function") {
+      onReject(val);
+      isCalled = true;
+      // we used isCalled,to check onReject() function is called
+    }
+  }
+
+  this.then = function (callback) {
+    console.log("then");
+    onResolve = callback;
+    // since we have removed setTimeout and directly calling resolve()
+    // which is a synchronous operation,and then () is not executing,so
+    // to call then() after some time,we use condition,so that we can get value
+    // in then() method 's callback function.
+
+    if (isFullfilled && !isCalled) {
+      // first it call resolve function,there it set isFullfilled=true
+      // we put isCalled=true,so that we can know it is synchronous operation
+      isCalled = true;
+      //inside resolve function we set value=val,so that value we are using here.
+      onResolve(value);
+    }
+    return this;
+  };
+
+  this.catch = function (callback) {
+    onReject = callback;
+
+    if (isRejected && !isCalled) {
+      // first it call reject function,there it set isRejected=true
+      // we put isCalled=true,so that we can know it is synchronous operation
+      isCalled = true;
+      //inside reject function we set value=val,so that value we are using here.
+      onReject(value);
+    }
+    return this;
+  };
+
+  try {
+    executor(resolve, reject);
+  } catch (error) {
+    reject(error);
+  }
+}
+
+function execute(resolve, reject) {
+  console.log("inside");
+  resolve(2);
+
+  // we have removed timeout,so it will work as synchronous operation,so
+  // .then() will not be executed,hence it will not go inside then()and onResolve will
+  // not take callback function from then(),onResolve will just a variable there
+
+
+  //   setTimeout(()=>{
+  //     resolve(2)
+  //   },1000)
+
+
+}
+
+const promiseREsult = new PromiseFunction(execute);
+console.log(promiseREsult);
+
+promiseREsult
+  .then((res) => {
+    console.log(res, "res");
+  })
+  .catch((err) => {
+    console.error(err);
+  });
+```
