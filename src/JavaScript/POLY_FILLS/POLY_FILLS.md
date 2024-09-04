@@ -890,12 +890,9 @@ function execute(resolve, reject) {
   // .then() will not be executed,hence it will not go inside then()and onResolve will
   // not take callback function from then(),onResolve will just a variable there
 
-
   //   setTimeout(()=>{
   //     resolve(2)
   //   },1000)
-
-
 }
 
 const promiseREsult = new PromiseFunction(execute);
@@ -907,5 +904,190 @@ promiseREsult
   })
   .catch((err) => {
     console.error(err);
+  });
+```
+
+2. - Polyfill of Promise.all()
+
+` In practice, the Promise.all() is useful to aggregate the results from multiple asynchronous operations.`
+
+ - NOTE : Promise is an object and all() is a function.
+
+```js
+`Method 1. Here we using above promise method which is build from scratch.`;
+
+const p1 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve(10);
+  }, 1 * 1000);
+});
+const p2 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve(20);
+  }, 6 * 1000);
+});
+const p3 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve(30);
+  }, 3 * 1000);
+});
+
+
+function p4() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(40);
+    }, 4 * 1000);
+  });
+}
+
+function p5() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(50);
+    }, 5 * 1000);
+  });
+}
+
+
+function PromiseFunction(executorFunction, arrayOfPromises) {
+  let onResolve,
+    onReject,
+    isFullFilled = false,
+    isRejected = false,
+    isCalled = false,
+    value;
+
+  const resolve = (data) => {
+    isFullFilled = true;
+    value = data;
+
+    if (typeof onResolve === "function") {
+      onResolve(data);
+      isCalled = true;
+    }
+  };
+
+  const reject = (data) => {
+    isRejected = true;
+    value = data;
+
+    if (typeof onReject === "function") {
+      onReject(data);
+      isCalled = true;
+    }
+  };
+
+  this.then = function (callback) {
+    onResolve = callback;
+
+    if (isFullFilled && !isCalled) {
+      onResolve(value);
+      isCalled = false;
+    }
+    return this;
+  };
+
+  this.catch = function (callback) {
+    onReject = callback;
+    if (isRejected && !isCalled) {
+      onReject(value);
+      isCalled = true;
+    }
+    return this;
+  };
+
+  try {
+    executorFunction(resolve, reject, arrayOfPromises);
+  } catch (error) {
+    reject(error);
+  }
+}
+
+// The below code defines a function `executorResolved` that takes three parameters: `resolve`,
+// `reject`, and `arrayOfPromises`. The function iterates over the `arrayOfPromises`, resolving each
+// promise and storing the result in an array. Once all promises have been resolved, the function
+// resolves with the array of results. If any promise is rejected, the function will reject with the
+// error.
+const executorResolved = (resolve, reject, arrayOfPromises) => {
+  let result = [];
+  let pending = arrayOfPromises.length;
+
+  if (!arrayOfPromises.length) {
+    resolve(result);
+  }
+
+  arrayOfPromises.forEach((items, index) => {
+    items
+      .then((response) => {
+        result[index] = response;
+        pending--;
+        if (!pending) {
+          resolve(result);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+// The below code is attempting to create a custom implementation of `Promise.all()` method in
+// JavaScript. It defines a function `PromiseAll` that takes an array of promises as an argument.
+// Inside `PromiseAll`, it creates a new Promise object using a custom `PromiseFunction` constructor
+// with an executor function `executorResolved` and the array of promises passed as an argument.
+
+Promise.PromiseAll = function (arrayOfPromises) {
+  return new PromiseFunction(executorResolved, arrayOfPromises);
+};
+
+Promise.PromiseAll([p1, p2, p3,p4(),p5()])
+  .then((result) => {
+    console.log(result, "result final >>>>>>>>>>>>>>");
+  })
+  .catch((error) => {
+    console.log(error, "error >>>>>>>>>>>>>>>");
+  });
+
+
+
+`Method 2. Here we simply using new Promise() method instead of creating a promise from scratch just like Above`;
+
+Promise.PromiseAll = function (arrayOfPromises) {
+
+  return new Promise((resolve, reject) => {
+    // when promise get resolved then it gives output in an Array.
+    let result = [];
+
+    // now if we pass an empty array,then it should give that array as an output so we used condition
+    let pending = arrayOfPromises.length;
+
+    if (!arrayOfPromises.length) {
+      resolve(result);
+    }
+
+    arrayOfPromises.forEach((items, index) => {
+      items
+        .then((response) => {
+          // data coming from response,after resolved,we are pushing it to
+          // result,so that we can get all resolved promise in an array.
+          result[index] = response;
+          pending--;
+          if (!pending) {
+            resolve(result);
+          }
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
+  });
+};
+
+Promise.PromiseAll([p1, p2, p3,p4(),p5()])
+  .then((result) => {
+    console.log(result, "result >>>>>>>>>>>>>>");
+  })
+  .catch((error) => {
+    console.log(error, "error >>>>>>>>>>>>>>>");
   });
 ```
