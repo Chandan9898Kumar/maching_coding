@@ -911,7 +911,7 @@ promiseREsult
 
 ` In practice, the Promise.all() is useful to aggregate the results from multiple asynchronous operations.`
 
- - NOTE : Promise is an object and all() is a function.
+- NOTE : Promise is an object and all() is a function.
 
 ```js
 `Method 1. Here we using above promise method which is build from scratch.`;
@@ -932,7 +932,6 @@ const p3 = new Promise((resolve, reject) => {
   }, 3 * 1000);
 });
 
-
 function p4() {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -948,7 +947,6 @@ function p5() {
     }, 5 * 1000);
   });
 }
-
 
 function PromiseFunction(executorFunction, arrayOfPromises) {
   let onResolve,
@@ -1040,7 +1038,7 @@ Promise.PromiseAll = function (arrayOfPromises) {
   return new PromiseFunction(executorResolved, arrayOfPromises);
 };
 
-Promise.PromiseAll([p1, p2, p3,p4(),p5()])
+Promise.PromiseAll([p1, p2, p3, p4(), p5()])
   .then((result) => {
     console.log(result, "result final >>>>>>>>>>>>>>");
   })
@@ -1048,12 +1046,9 @@ Promise.PromiseAll([p1, p2, p3,p4(),p5()])
     console.log(error, "error >>>>>>>>>>>>>>>");
   });
 
-
-
 `Method 2. Here we simply using new Promise() method instead of creating a promise from scratch just like Above`;
 
 Promise.PromiseAll = function (arrayOfPromises) {
-
   return new Promise((resolve, reject) => {
     // when promise get resolved then it gives output in an Array.
     let result = [];
@@ -1064,6 +1059,23 @@ Promise.PromiseAll = function (arrayOfPromises) {
     if (!arrayOfPromises.length) {
       resolve(result);
     }
+
+    // arrayOfPromises.forEach((items, ind) => {
+    //   Promise.resolve(items)
+    //     .then((response) => {
+    //       // data coming from response,after resolved,we are pushing it to
+    //       // result,so that we can get all resolved promise in an array.
+    //       result[ind] = response;
+    //       pending--;
+    //       if (pending === 0) {
+    //         resolve(result);
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       reject(err);
+    //     });
+
+    //  OR
 
     arrayOfPromises.forEach((items, index) => {
       items
@@ -1083,7 +1095,7 @@ Promise.PromiseAll = function (arrayOfPromises) {
   });
 };
 
-Promise.PromiseAll([p1, p2, p3,p4(),p5()])
+Promise.PromiseAll([p1, p2, p3, p4(), p5()])
   .then((result) => {
     console.log(result, "result >>>>>>>>>>>>>>");
   })
