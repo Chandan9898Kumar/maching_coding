@@ -1103,3 +1103,268 @@ Promise.PromiseAll([p1, p2, p3, p4(), p5()])
     console.log(error, "error >>>>>>>>>>>>>>>");
   });
 ```
+
+3. - Polyfill of Promise.allSettled()
+
+- ES2020 introduced the Promise.allSettled() method that accepts a list of Promises and returns a new promise that resolves after all the input promises have settled, either resolved or rejected.
+
+- The Promise.allSettled() method accepts an iterable of promises and returns a new promise that resolves when every input promise has settled with an array of objects that describes the result of each promise in the iterable object.
+
+The Promise.allSettled() method returns a promise that resolves to an array of objects that each describes the result of the input promise.
+
+`Each object has two properties: status and value (or reason).`
+
+1. The status can be either fulfilled or rejected.
+2. The value if case the promise is fulfilled or reason) if the promise is rejected.
+
+`NOTE :` It Returns resolve and reject promise together in then method. Here catch method is not being called.
+
+```js
+
+
+const p1 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(10);
+    }, 5 * 1000);
+
+});
+
+const p2 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        reject(20);
+    }, 2 * 1000);
+});
+
+const p3 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(30);
+    }, 12 * 1000);
+
+});
+
+const p4 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        reject(40);
+    }, 7 * 1000);
+});
+
+
+
+
+# Method 1.
+
+Promise.AllSettled = function(arrayOfPromise){
+
+  return new Promise((resolve,reject)=>{
+
+    let newArray = []
+
+    if(Array.isArray(arrayOfPromise) && !arrayOfPromise.length){
+      resolve(newArray)
+    }
+
+    if(!Array.isArray(arrayOfPromise)){
+      throw new Error(`${typeof arrayOfPromise} is not iterable.`)
+    }
+
+    let pendingStatus = arrayOfPromise.length
+
+
+    arrayOfPromise.forEach((promiseItem,index)=>{
+
+      promiseItem.then((response)=>{
+
+         newArray[index] = {status:"fulfilled",value:response}
+         pendingStatus --
+
+         if(!pendingStatus){
+           resolve(newArray)
+         }
+
+
+      }).catch((error)=>{
+        pendingStatus --
+        newArray[index] = {status:"rejected",reason:error}
+         if(!pendingStatus){
+           resolve(newArray)
+         }
+      })
+
+
+    })
+
+  })
+
+}
+
+const promiseOutcome = Promise.AllSettled([p1,p2,p3,p4])
+promiseOutcome.then((result)=>{
+  console.log(result,'result >>>>>>>>>>>>>>>>>>>')
+})
+
+
+## Method 2. Here we have first built promise from scratch then used it for Promise.AllSettled.
+
+
+
+const p1 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+
+        resolve(10);
+    }, 5 * 1000);
+
+});
+
+const p2 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+
+        reject(20);
+    }, 2 * 1000);
+});
+
+const p3 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+
+        resolve(30);
+    }, 12 * 1000);
+
+});
+
+const p4 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+
+        reject(40);
+    }, 7 * 1000);
+});
+
+
+function PromiseNormal(executorFunction,arrayOfPromise){
+
+    let onResolve,
+        onReject,
+        isFullFilled = false,
+        isRejected = false,
+        isCalled = false,
+        value
+
+
+
+      const resolve=(data)=>{
+        isFullFilled = true
+        value = data
+
+        if(typeof onResolve === 'function'){
+          isCalled = true
+          onResolve(data)
+        }
+      }
+
+      const reject =(data)=>{
+        isRejected = true
+        value = data
+
+        if(typeof onReject==='function'){
+          isCalled = true
+          onReject(data)
+        }
+
+      }
+
+
+      this.then=function(callback){
+
+        onResolve = callback
+
+        if(isFullFilled && !isCalled){
+          onResolve(value)
+          isCalled = true
+        }
+
+        return this
+
+      }
+
+
+       this.catch=function(callback){
+         onReject = callback
+         if(isRejected && !isCalled){
+           callback(value)
+           isCalled = true
+         }
+        return this
+      }
+
+      this.finally= function(){
+
+      }
+
+
+
+     try{
+       executorFunction(resolve,reject,arrayOfPromise)
+     }catch(error){
+       reject(error)
+     }
+
+
+
+
+}
+
+const executor=(resolve,reject,arrayOfPromise)=>{
+
+    let newArray = []
+
+    if(Array.isArray(arrayOfPromise) && !arrayOfPromise.length){
+      resolve(newArray)
+    }
+
+    if(!Array.isArray(arrayOfPromise)){
+      throw new Error(`${typeof arrayOfPromise} is not iterable.`)
+    }
+
+    let pendingStatus = arrayOfPromise.length
+
+
+    arrayOfPromise.forEach((promiseItem,index)=>{
+
+      promiseItem.then((response)=>{
+
+         newArray[index] = {status:"fulfilled",value:response}
+         pendingStatus --
+
+         if(!pendingStatus){
+           resolve(newArray)
+         }
+
+
+      }).catch((error)=>{
+        pendingStatus --
+        newArray[index] = {status:"rejected",reason:error}
+         if(!pendingStatus){
+           resolve(newArray)
+         }
+      })
+
+
+    })
+
+
+}
+
+
+
+Promise.AllSettled = function(arrayOfPromise){
+
+  return   new PromiseNormal(executor,arrayOfPromise)
+}
+
+
+const promiseOutcome = Promise.AllSettled([p1,p2,p3,p4])
+
+promiseOutcome.then((result)=>{
+  console.log(result,'result >>>>>>>>>>>>>>>>>>>')
+})
+
+
+```
