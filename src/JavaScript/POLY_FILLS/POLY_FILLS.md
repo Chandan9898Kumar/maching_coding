@@ -1368,3 +1368,213 @@ promiseOutcome.then((result)=>{
 
 
 ```
+
+4. - Polyfill of Promise.any()
+
+The Promise.any() method accepts a list of Promise objects as an iterable object:
+
+`Syntax`
+Promise.any(iterable)
+
+If one of the promises in the iterable object is fulfilled, the Promise.any() returns a single promise that resolves to a value which is the result of the fulfilled promise:
+
+In practice, you use the Promise.any() to return the first fulfilled promise. Once a promise is fulfilled, the Promise.any() method does not wait for other promises to be complete. In other words, the Promise.any() short circuits after a promise is fulfilled.
+
+The Promise.any() return rejected promises when all the promises gets failed. If any of the promise gets resolved, then it will returned the first resolved promise.
+
+```js
+
+const p1 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(10);
+    }, 5 * 1000);
+
+});
+
+const p2 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        reject(20);
+    }, 12 * 1000);
+});
+
+const p3 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(30);
+    }, 3 * 1000);
+
+});
+
+const p4 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        reject(40);
+    }, 7 * 1000);
+});
+
+
+## Method 1.
+
+Promise.PromiseAny= function(arrayOfPromises){
+
+  return new Promise((resolve,reject)=>{
+
+    let newArray = []
+
+     if(!Array.isArray(arrayOfPromises)){
+      throw new Error(`${typeof arrayOfPromises} is not iterable.`)
+    }
+
+
+      if(!arrayOfPromises.length){
+        resolve([])
+      }
+
+      let pendingStatus = arrayOfPromises.length
+
+      arrayOfPromises.forEach((item,index)=>{
+
+        item.then((response)=>{
+          resolve(response)
+        }).catch((error)=>{
+
+          newArray[index] = error
+          pendingStatus --
+
+          if(!pendingStatus){
+            reject(newArray)
+          }
+
+
+        })
+
+      })
+
+  })
+
+}
+
+const promiseResult = Promise.PromiseAny([p1,p2,p3,p4])
+
+promiseResult.then((result)=>{
+  console.log(result,'result >>>>>>>>>>>>>>')
+}).catch((error)=>{
+  console.log(error,'error >>>>>>>>>>>>>')
+})
+
+
+
+## Method 2. Writing promise from scratch first then integrate it on Promise.All()
+
+
+function NormalPromise(executorFunction,arrayOfPromises){
+
+  let onResolve,
+      onReject,
+      isFullFilled = false,
+      isRejected = false,
+      isCalled = false,
+      value
+
+
+
+    const resolve=(data)=>{
+      isFullFilled = true
+      value = data
+
+      //  Here we have to use isCalled condition because resolve function was calling two times and return two promises value .
+      //  As Promise.any() method return first  resolved promise So, resolved method should only run one time when any of the promises gets resolved.
+      if(typeof onResolve ==='function' && !isCalled){
+        onResolve(data)
+        isCalled = true
+      }
+    }
+
+
+    const reject=(data)=>{
+      isRejected = true
+      value = data
+
+      if(typeof onReject ==='function'){
+        onReject(data)
+        isCalled = true
+      }
+
+    }
+
+
+    this.then= function(callback){
+      onResolve = callback
+      if(isFullFilled && !isCalled){
+        callback(value)
+        isCalled = true
+      }
+      return this
+    }
+
+
+    this.catch= function(callback){
+      onReject = callback
+      if(isRejected && !isCalled){
+        callback(value)
+        isCalled = true
+      }
+      return this
+    }
+
+    try{
+      executorFunction(resolve,reject,arrayOfPromises)
+    }catch(error){
+      reject(error)
+    }
+
+}
+
+
+const executor=(resolve,reject,arrayOfPromises)=>{
+
+   let newArray = []
+
+     if(!Array.isArray(arrayOfPromises)){
+      throw new Error(`${typeof arrayOfPromises} is not iterable.`)
+    }
+
+      if(!arrayOfPromises.length){
+        resolve([])
+      }
+
+      let pendingStatus = arrayOfPromises.length
+
+      arrayOfPromises.forEach((item,index)=>{
+
+        item.then((response)=>{
+          resolve(response)
+        }).catch((error)=>{
+
+          newArray[index] = error
+          pendingStatus --
+
+          if(!pendingStatus){
+            reject(newArray)
+          }
+
+
+        })
+      })
+}
+
+
+Promise.PromiseAny= function(arrayOfPromises){
+
+ return new NormalPromise(executor,arrayOfPromises)
+
+}
+
+const promiseResult = Promise.PromiseAny([p1,p2,p3,p4])
+
+promiseResult.then((result)=>{
+  console.log(result,'result >>>>>>>>>>>>>>')
+}).catch((error)=>{
+  console.log(error,'error >>>>>>>>>>>>>')
+})
+
+
+```
