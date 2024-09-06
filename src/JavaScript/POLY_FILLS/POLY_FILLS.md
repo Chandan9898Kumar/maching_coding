@@ -970,7 +970,9 @@ function PromiseFunction(executorFunction, arrayOfPromises) {
     isRejected = true;
     value = data;
 
-    if (typeof onReject === "function") {
+    //  Here we have to use isCalled condition because reject function was calling two times and return two rejected promise values one after other.
+    //  As Promise.all() rejected promise as soon as any the of the promise get rejected and returns the first rejected promise and stop the process.
+    if (typeof onReject === "function" && !isCalled) {
       onReject(data);
       isCalled = true;
     }
