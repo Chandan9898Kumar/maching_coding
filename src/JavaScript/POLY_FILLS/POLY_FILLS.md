@@ -1056,11 +1056,11 @@ Promise.PromiseAll = function (arrayOfPromises) {
     let result = [];
 
     // now if we pass an empty array,then it should give that array as an output so we used condition
-    let pending = arrayOfPromises.length;
-
     if (!arrayOfPromises.length) {
       resolve(result);
     }
+
+    let pending = arrayOfPromises.length;
 
     // arrayOfPromises.forEach((items, ind) => {
     //   Promise.resolve(items)
@@ -1321,10 +1321,6 @@ const executor=(resolve,reject,arrayOfPromise)=>{
       resolve(newArray)
     }
 
-    if(!Array.isArray(arrayOfPromise)){
-      throw new Error(`${typeof arrayOfPromise} is not iterable.`)
-    }
-
     let pendingStatus = arrayOfPromise.length
 
 
@@ -1358,7 +1354,11 @@ const executor=(resolve,reject,arrayOfPromise)=>{
 
 Promise.AllSettled = function(arrayOfPromise){
 
-  return   new PromiseNormal(executor,arrayOfPromise)
+  if(!Array.isArray(arrayOfPromise)){
+      throw new Error(`${typeof arrayOfPromise} is not iterable.`)
+    }
+
+  return  new PromiseNormal(executor,arrayOfPromise)
 }
 
 
@@ -1433,22 +1433,35 @@ Promise.PromiseAny= function(arrayOfPromises){
       let pendingStatus = arrayOfPromises.length
 
       arrayOfPromises.forEach((item,index)=>{
-
         item.then((response)=>{
           resolve(response)
         }).catch((error)=>{
-
           newArray[index] = error
           pendingStatus --
 
           if(!pendingStatus){
             reject(newArray)
           }
-
-
         })
 
       })
+
+      //  Below code is best approach. Because it faster.
+
+      // for(let items=0;items<arrayOfPromises.length;items++){
+      //   arrayOfPromises[items].then((response)=>{
+      //     resolve(response)
+      //     return
+      //   }).catch((error)=>{
+      //     newArray[items] = error
+      //     pendingStatus --
+
+      //     if(!pendingStatus){
+      //       reject(newArray)
+      //     }
+
+      //   })
+      // }
 
   })
 
@@ -1464,7 +1477,7 @@ promiseResult.then((result)=>{
 
 
 
-## Method 2. Writing promise from scratch first then integrate it on Promise.All()
+## Method 2. Writing promise from scratch first then integrate it on Promise.PromiseAny()
 
 
 function NormalPromise(executorFunction,arrayOfPromises){
@@ -1535,10 +1548,6 @@ const executor=(resolve,reject,arrayOfPromises)=>{
 
    let newArray = []
 
-     if(!Array.isArray(arrayOfPromises)){
-      throw new Error(`${typeof arrayOfPromises} is not iterable.`)
-    }
-
       if(!arrayOfPromises.length){
         resolve([])
       }
@@ -1566,6 +1575,10 @@ const executor=(resolve,reject,arrayOfPromises)=>{
 
 Promise.PromiseAny= function(arrayOfPromises){
 
+   if(!Array.isArray(arrayOfPromises)){
+      throw new Error(`${typeof arrayOfPromises} is not iterable.`)
+    }
+
  return new NormalPromise(executor,arrayOfPromises)
 
 }
@@ -1577,6 +1590,203 @@ promiseResult.then((result)=>{
 }).catch((error)=>{
   console.log(error,'error >>>>>>>>>>>>>')
 })
+
+
+```
+
+5. - Polyfill of Promise.race()
+
+The Promise.race() static method accepts a list of promises as an iterable object and returns a new promise that fulfills or rejects as soon as there is one promise that fulfills or rejects, with the value or reason from that promise.
+
+```js
+
+const p1 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        reject(10);
+    }, 5 * 1000);
+
+});
+
+const p2 = new Promise((resolve, reject) => {
+
+    setTimeout(() => {
+        resolve(20);
+    }, 4 * 1000);
+
+});
+
+const p3 = new Promise((resolve, reject) => {
+
+    setTimeout(() => {
+        resolve(30);
+    }, 2 * 1000);
+
+});
+
+const p4 = new Promise((resolve, reject) => {
+    setTimeout(() => {
+        reject(40);
+    }, 1 * 1000);
+});
+
+
+
+## Method 1.
+
+Promise.PromiseRace = function(arrayOfPromises){
+
+  return new Promise((resolve,reject)=>{
+
+
+     if(!Array.isArray(arrayOfPromises)){
+      throw new Error(`${typeof arrayOfPromises} is not iterable.`)
+    }
+
+
+    if(!arrayOfPromises.length){
+        resolve([])
+      }
+
+    let promiseLength = arrayOfPromises.length
+
+    for(let item = 0;item<promiseLength;item++){
+      arrayOfPromises[item].then((response)=>{
+        resolve(response)
+      }).catch((error)=>{
+        reject(error)
+      })
+
+    }
+
+
+  })
+
+
+}
+
+const promiseResult = Promise.PromiseRace([p1,p2,p3,p4])
+
+promiseResult.then((result)=>{
+  console.log(result,'result')
+}).catch((error)=>{
+  console.log(error,'error')
+})
+
+
+## Method 2.  By creating promise from scratch and integrated it in Promise.PromiseRace() method.
+
+function NormalPromise(executorFunction,arrayOfPromises){
+
+  let onResolve,
+      onReject,
+      isFullFilled = false,
+      isRejected = false,
+      isCalled = false,
+      value
+
+
+
+    const resolve=(data)=>{
+      isFullFilled = true
+      value = data
+
+      //  Here we have to use isCalled condition because resolve function was calling two times and return two promises value .
+      //  As Promise.race() method return either first resolved or rejected promise So, resolved method should only run one time when any of the promises gets resolved.
+      if(typeof onResolve ==='function' && !isCalled){
+
+        onResolve(data)
+        isCalled = true
+      }
+    }
+
+
+    const reject=(data)=>{
+      isRejected = true
+      value = data
+
+      //  Here we have to use isCalled condition because resolve function was calling two times and return two promises value .
+      //  As Promise.race() method return either first resolved or rejected promise So, reject method should only run one time when any of the promises gets rejected.
+      if(typeof onReject ==='function' && !isCalled){
+
+        onReject(data)
+        isCalled = true
+      }
+
+    }
+
+
+    this.then= function(callback){
+      onResolve = callback
+
+      if(isFullFilled && !isCalled){
+
+        callback(value)
+        isCalled = true
+      }
+      return this
+    }
+
+
+    this.catch= function(callback){
+      onReject = callback
+
+      if(isRejected && !isCalled){
+        callback(value)
+
+        isCalled = true
+      }
+      return this
+    }
+
+    try{
+      executorFunction(resolve,reject,arrayOfPromises)
+    }catch(error){
+      reject(error)
+    }
+
+}
+
+
+const executor=(resolve,reject,arrayOfPromises)=>{
+
+
+    if(!arrayOfPromises.length){
+        resolve([])
+      }
+
+    let promiseLength = arrayOfPromises.length
+
+    for(let item = 0;item<promiseLength;item++){
+      arrayOfPromises[item].then((response)=>{
+        resolve(response)
+      }).catch((error)=>{
+        reject(error)
+      })
+
+    }
+}
+
+
+Promise.PromiseRace = function(arrayOfPromises){
+
+   if(!Array.isArray(arrayOfPromises)){
+      throw new Error(`${typeof arrayOfPromises} is not iterable.`)
+    }
+
+
+  return new NormalPromise(executor,arrayOfPromises)
+
+}
+
+const promiseResult = Promise.PromiseRace([p1,p2,p3,p4])
+
+
+promiseResult.then((result)=>{
+  console.log(result,'result >>>>>>>')
+}).catch((error)=>{
+  console.error(error,'error >>>>>>>>>>>>>>>>>>')
+})
+
 
 
 ```
