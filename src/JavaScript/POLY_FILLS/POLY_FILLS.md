@@ -1790,3 +1790,227 @@ promiseResult.then((result)=>{
 
 
 ```
+
+## 6. Polyfills of setTimeout() .
+
+```js
+function createSetTimeoutPolyfill() {
+  let intervalId = 1;
+  let intervalMap = {};
+
+  function callSetTimeout(callback, delay = 0, ...args) {
+
+     if (typeof func !== "function") throw new TypeError('"callback" must be a function');
+
+    let id = intervalId++;
+    intervalMap[id] = true;
+
+    let start = Date.now() + delay;
+    function triggerCallback() {
+      if (!intervalMap[id]) {
+        return;
+      }
+
+      if (Date.now() > start) {
+        callback.apply(this, args);
+      } else {
+        requestIdleCallback(triggerCallback);
+      }
+    }
+
+    requestIdleCallback(triggerCallback);
+
+    return id;
+  }
+
+  function clearSetTimeout(id) {
+    delete intervalMap[id];
+  }
+
+  return { callSetTimeout, clearSetTimeout };
+}
+
+const callbackFunction = (response) => {
+  console.log(response, "response");
+};
+
+const delay = 5000;
+
+const data = "Hi, How are you";
+
+const { callSetTimeout, clearSetTimeout } = createSetTimeoutPolyfill();
+
+console.log("start");
+const id = callSetTimeout(callbackFunction, delay, data);
+console.log("stop");
+
+// setTimeout(()=>{
+//   clearSetTimeout(id)
+// },2000)
+
+- NOTE : Above we used requestIdleCallback just to make setTimeout behaves as Asynchronous.
+
+Window: requestIdleCallback() method :
+
+The window.requestIdleCallback() method queues a function to be called during a browsers idle periods. This enables developers to perform background and low priority work on the main event loop, without impacting latency-critical events such as animation and input response. Functions are generally called in first-in-first-out order; however, callbacks which have a timeout specified may be called out-of-order if necessary in order to run them before the timeout elapses.
+You can call requestIdleCallback() within an idle callback function to schedule another callback to take place no sooner than the next pass through the event loop.
+
+Syntax :
+
+`requestIdleCallback(callback)`
+
+`Parameters`
+1. callback
+A reference to a function that should be called in the near future, when the event loop is idle. The callback function is passed an IdleDeadline object describing the amount of time available and whether or not the callback has been run because the timeout period expired.
+
+```
+
+## 7. Polyfills of setInterval() .
+
+```js
+function createSetIntervalPolyfill() {
+  let intervalId = 0;
+  let intervalMap = {};
+
+  function setIntervalPolyfill(func, delay = 0, ...args) {
+    if (typeof func !== "function") throw new TypeError('"callback" must be a function');
+
+    let uniqueId = intervalId++;
+
+    function repeat() {
+      intervalMap[uniqueId] = setTimeout(() => {
+        func.apply(this, args);
+        //  OR
+        // func(...args);
+
+        // terminating condition
+        if (intervalMap[uniqueId]) {
+          repeat();
+        }
+      }, delay);
+    }
+    repeat();
+    return uniqueId;
+  }
+
+  function clearIntervalPolyfill(intervalId) {
+    clearTimeout(intervalMap[intervalId]);
+    delete intervalMap[intervalId];
+  }
+
+  return {
+    setIntervalPolyfill,
+    clearIntervalPolyfill,
+  };
+}
+
+const { setIntervalPolyfill, clearIntervalPolyfill } = createSetIntervalPolyfill();
+
+const intervalId = setIntervalPolyfill(greet, 1000, "Hello Man");
+
+var counter = 0;
+function greet(name) {
+  counter++;
+  console.log(`Hello ${name}`);
+  //  Here when counter is greater than equal to 3 then stop the timer.
+  if (counter >= 3) {
+    clearIntervalPolyfill(intervalId);
+  }
+}
+
+/* 
+setTimeout(()=>{
+  clearIntervalPolyfill(intervalId)
+}, 3000) */
+```
+
+### 8. HERE Below we have used setTimeout polyfill in the setInterval polyfill.
+
+```js
+//   //  Set the Timeout
+
+function createSetTimeoutPolyfill() {
+  let intervalId = 1;
+  let intervalMap = {};
+
+  function callSetTimeout(callback, delay = 0, ...args) {
+    let id = intervalId;
+    intervalMap[intervalId] = true;
+
+    let start = Date.now() + delay;
+    function triggerCallback() {
+      if (!intervalMap[id]) {
+        return;
+      }
+
+      if (Date.now() > start) {
+        callback.apply(this, args);
+      } else {
+        requestIdleCallback(triggerCallback);
+      }
+    }
+
+    requestIdleCallback(triggerCallback);
+
+    return id;
+  }
+
+  function clearSetTimeout(id) {
+    delete intervalMap[id];
+  }
+
+  return { callSetTimeout, clearSetTimeout };
+}
+
+//  Set the interval
+
+function createSetIntervalPolyfill() {
+  let intervalId = 1;
+  let intervalMap = {};
+
+  const { callSetTimeout, clearSetTimeout } = createSetTimeoutPolyfill();
+
+  function setIntervalPolyfill(func, delay = 0, ...args) {
+    if (typeof func !== "function") throw new TypeError('"callback" must be a function');
+
+    let uniqueId = intervalId++;
+
+    function repeat() {
+      let timer = callSetTimeout(() => {
+        func.apply(this, args);
+        if (intervalMap[uniqueId]) {
+          repeat();
+        }
+      }, delay);
+
+      intervalMap[uniqueId] = timer;
+    }
+
+    repeat();
+    return uniqueId;
+  }
+
+  function clearIntervalPolyfill(intervalId) {
+    clearSetTimeout(intervalId);
+    delete intervalMap[intervalId];
+  }
+
+  return {
+    setIntervalPolyfill,
+    clearIntervalPolyfill,
+  };
+}
+
+const { setIntervalPolyfill, clearIntervalPolyfill } = createSetIntervalPolyfill();
+
+const intervalId = setIntervalPolyfill(greet, 5000, "Hello Man");
+
+var counter = 0;
+function greet(name) {
+  counter++;
+  console.log(`Hello ${name}`), intervalId;
+  if (counter >= 3) {
+    clearIntervalPolyfill(intervalId);
+  }
+}
+```
