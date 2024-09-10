@@ -635,6 +635,10 @@ The Prototype pattern is handy when copying existing objects is more efficient t
 
 Builder is a Creational design pattern facilitating the step-by-step construction of complex objects. It enables the creation of various object types using a unified construction process, preventing constructor overload. _Use the Builder pattern to get rid of a “telescoping constructor”._
 
+- OR
+
+The Builder design pattern is a creational design pattern used to construct complex objects by separating the construction process from the actual representation. It’s especially useful when an object requires multiple steps or configurations to be created.
+
 In simple words:
 
 > Builder helps in creating different versions of an object without cluttering the constructor.
@@ -706,6 +710,194 @@ console.log(pizzaWithoutCheese); // Pizza: { name: 'Pepperoni', size: 'Medium', 
 console.log(pizzaWithCheese); // Pizza: { name: 'Hawaiian', size :'Small', isCheese: true}
 ```
 
+- Example without using the Builder Design Pattern
+
+`Let us take an example without using the Builder Design Pattern:`
+
+```js
+class User {
+  constructor(name, age, weight, address, gender) {
+    this.name = name;
+    this.age = age;
+    this.weight = weight;
+    this.address = address;
+    this.gender = gender;
+  }
+  printUser() {
+    return `User: { name: ${this.name}, age: ${this.age}, weight: ${this.weight}, address: ${this.address}, gender: ${this.gender} }`;
+  }
+}
+
+const user = new User("Abhishek", 22, 55, "India", "Male");
+console.log(user.printUser());
+
+- Explanation of the above example:
+
+. The User class is defined with a constructor that takes parameters for the user’s name, age, weight, address, and gender. The constructor initializes the respective attributes.
+. The printUser method generates a formatted string representing the user’s information.
+
+Creating a User Instance:
+
+const user = new User('Abhishek', 22, 55, 'India', 'Male');
+
+. This line creates an instance of the User class by calling the constructor with the specified values for name, age, weight, address, and gender.
+Displaying User Information:
+
+. console.log(user.printUser());
+
+This line calls the printUser method on the user instance, which generates a string containing the user’s information and logs it to the console.
+
+Output:
+. User: { name: Abhishek, age: 22, weight: 55, address: India, gender: Male }
+
+- Before we move to implementing Builder Method we have to analyze what is wrong with this and what issues are solved by implementing builder method, at first we see the above code we realized that this is a correct and easy way to create a new object but we have to provide all information during initialization. If we look closely at the line:
+
+const user = new User(‘Abhishek’ , 22 , 55 , ‘India’ , ‘Male’ );
+
+we see that properties of this user object can be confusing, like sometime we can mistakenly give age instead of weight and weight instead of age . As our code size grows, we will have to look at the class to figure out which properties we have to provide when initializing a user object.
+
+```
+
+- Implementation of the above Example using Builder Design Pattern.
+
+```js
+//Blueprint for creating a new user using User class
+
+
+// Here, a User class is defined with a constructor that takes a name parameter and initializes other user attributes (age, weight, address, gender) to null.
+class User {
+constructor(name) {
+	this.name = name;
+	this.age = null;
+	this.weight = null;
+	this.address = null;
+	this.gender = null;
+}
+
+// These set methods allow you to set the user’s age, weight, address, and gender. They update the corresponding attributes and return the object to enable method chaining.
+
+// Method to set Age of the user
+setAge(age) {
+	this.age = age;
+	return this; // Return the object for method chaining
+	}
+
+// Method to set the Weight of the user
+setWeight(weight) {
+	this.weight = weight;
+	return this; // Return the object for method chaining
+}
+
+// Method to set the Address of the user
+setAddress(address) {
+	this.address = address;
+	return this; // Return the object for method chaining
+}
+// Method to set the gender of user
+setGender(gender) {
+	this.gender = gender;
+	return this; // Return the object for method chaining
+}
+
+
+// The build method is used to finalize user creation. It checks if the name is provided and throws an error if it’s not. It returns the object to allow method chaining.
+
+//Method to finalize the user creation
+build() {
+	if (!this.name) {
+	throw Error('Name is required');
+	}
+	return this; // Return the object for method chaining
+}
+
+// The printUser method generates a string representation of the user’s information.
+printUser() {
+	return `User: { name: ${this.name}, age: ${this.age}, weight: ${this.weight}, address: ${this.address}, gender: ${this.gender} }`;
+}
+}
+// Usage
+const user = new User('Abhishek').setAge(30).setGender('Male').build();
+
+console.log(user.printUser());
+
+
+Note: In build method, we have only checked for name but we can also add more checks.
+
+- Explanation of the above example using Builder Design Pattern:
+
+This creates a new user with the name “Abhishek”, sets the age to 30, and sets the gender to “Male”. Then the build method is called to finalize user creation. Finally, the printUser method is used to print the user’s information to the console.
+
+Output:
+
+User: { name: Abhishek, age: 30, weight: null, address: null, gender: Male }
+```
+
+### Implementation using Function:
+
+- Using Factory function to create a user object .
+
+```js
+function createUser(name) {
+  const user = {
+    name,
+    age: null,
+    weight: null,
+    address: null,
+    gender: null,
+
+    // Method to set the age of the user
+    setAge(age) {
+      this.age = age;
+      return this; // Return the object for method chaining
+    },
+
+    // Method to set the weight of the user
+    setWeight(weight) {
+      this.weight = weight;
+      return this; // Return the object for method chaining
+    },
+
+    // Method to set the address of the user
+    setAddress(address) {
+      this.address = address;
+      return this; // Return the object for method chaining
+    },
+
+    // Method to set the gender of the user
+    setGender(gender) {
+      this.gender = gender;
+      return this; // Return the object for method chaining
+    },
+
+    // Method to finalize the user creation
+    build() {
+      if (!this.name) {
+        throw Error("Name is required"); // Validate required properties
+      }
+      return this; // Return the object for method chaining
+    },
+
+    // Method to display the user information as a string
+    printUser() {
+      return `User: { name: ${this.name}, age: ${this.age}, weight: ${this.weight}, address: ${this.address}, gender: ${this.gender} }`;
+    },
+  };
+
+  return user; // Return the user object
+}
+
+// Usage: Create a user object and set properties
+const user = createUser("Abhishek").setAge(30).setWeight(70).setAddress("India").setGender("Male").build(); // Finalize user creation
+// Here, a factory function "createUser" is used to create and initialize objects. The function takes a name parameter and returns a user object with properties and functions .
+
+console.log(user.printUser()); // Display user information.
+
+. This creates a new user with the name “Abhishek”, sets the age to 30, sets the gender to “Male”, sets the address to India and weight to 70.
+. Then build function is called to finalize user creation.
+. Finally, the printUser function is used to print the user’s information to the console.
+
+```
+
 This TypeScript code implements a simplified Builder pattern for creating pizza objects, allowing customization of attributes like name, size, and the presence of cheese.
 
 ### When to Use Builder Pattern ? ✅
@@ -714,6 +906,12 @@ This TypeScript code implements a simplified Builder pattern for creating pizza 
 - **Step-by-step Object Creation 🔨:** Useful when an object needs to be built in multiple ordered steps.
 - **Immutable Objects 🔄:** Construct immutable objects with many attributes, enhancing object integrity.
 - **Code Clarity 📝:** Enhance code readability, especially when dealing with constructors with numerous parameters.
+- **Complex Object Creation:** Use the Builder pattern when dealing with complex objects that require multiple configurations and parameters for creation.
+- **Object Initialization Flexibility:** When you want to provide flexibility in the order of setting properties and handle optional parameters.
+
+### Where Not to Use the Builder Design Pattern:
+
+- **Simple Objects:** For objects with a small number of properties or minimal configuration requirements, the Builder pattern might introduce unnecessary complexity.
 
 ### Advantages of Builder Pattern 🪄 :
 
@@ -722,9 +920,14 @@ This TypeScript code implements a simplified Builder pattern for creating pizza 
 - **Different Representations 🎨:** Utilizes diverse builders for various object representations without modifying client code.
 - **Increased Object Integrity 🔒:** Ensures object validity at each step, elevating data integrity.
 - **Immutability 🔄:** Returns immutable objects for simplicity, safety, and cleaner code.
+- **Improved Object Creation:** The Builder pattern allows for the step-by-step construction of an object, making the creation process more understandable and manageable.
+- **Flexible Object Construction:** It provides flexibility by allowing different configurations for constructing objects.
+- **Code Readability:** The code using the Builder pattern is often more readable and self-explanatory, as method names in the builder convey the intention of the construction steps.
 
 ### Disadvantages of Builder Pattern 🆘 :
 
+- **Code Overhead:** Implementing the Builder pattern requires creating a separate builder class or methods, which can introduce additional code and complexity.
+- **Not Suitable for Simple Objects:** For simple objects that do not have a significant number of properties or configurations, the Builder pattern may be overly complex.
 - **Increased Complexity 📈📉:** Introduces abstraction layers, potentially complicating code for those unfamiliar with the pattern.
 - **Additional Code 📄:** May result in more code, especially for smaller classes, potentially increasing codebase size.
 - **Runtime Errors 🚫:** Lack of compile-time checks may lead to runtime errors if required fields are not set.
