@@ -2320,3 +2320,90 @@ myEventEmitter.emit("testEvent", "again");
 myEventEmitter.removeListener("testEvent", handleMyEvent);
 myEventEmitter.emit("testEvent", "again");
 ```
+
+### 33. the frequently and commonly used methods available on Math object with coding examples
+
+```js
+
+. abs is used to get the absolute value of the given number
+. floor is used to get the greatest integer smaller than or equal to the given number
+. ceil is used to get the smallest integer greater than or equal to the given number
+. round is used to round the given number to the nearest integer.
+. max is used to get the largest of zero or more numbers
+. min is used to get the smallest of zero or more numbers
+. sqrt is used to calculate the square root of the given number
+. pow is used to calculate the power base on inputs
+. trunc is used to return the integer part of a number by removing any fractional digits (method is present on prototype of Number)
+
+
+- Examples :
+
+Math.abs(-5));                      // 5
+Math.floor(1.6));                   // 1
+Math.ceil(2.4));                    // 3
+Math.round(3.8));                   // 4
+Math.max(-4, 5, 6));                // 6
+Math.min(-7, -2, 3));               // -7
+Math.sqrt(64));                     // 8
+Math.pow(5, 3));                    // 125
+Math.trunc(-6.3));                  // -6
+```
+
+### 34. Write a function which executes only if the number of "arguments" match the number of "parameters" the function is expecting
+
+. When a function is invoked the arguments passed to it are accessible using the default object called "arguments".
+. The number of parameters declared in a function can be obtained by accessing the length property of the function
+
+```js
+function func(a, b, c) {
+  if (func.length === arguments.length) {
+    console.log("Number of arguments passed match the expected arguments");
+  } else {
+    throw new Error("Number of arguments passed do not match the expected arguments");
+  }
+}
+```
+
+### 45. Show how an array in JavaScript can act like a stack and queue.
+
+```js
+. Stack is a 'Last In First Out' data structure can be achieved using push and pop operations
+// To add the value to the stack
+arr.push(value);
+// To remove the value from the stack
+arr.pop();
+
+
+. Queue is a 'First In First Out' data structure can be achieved using push and shift operations
+// To add the value to the queue
+arr.push(value);
+// To remove the value from the queue
+arr.shift();
+```
+
+### 46. Show the execution of 3 asynchronous block of code, one after the other in sequence.
+
+```js
+. The asynchronous block of code can be a function which executes asynchronously
+. The execution of such function can be simulated using setTimeout to with delay and execute different blocks of code inside each
+
+
+function asyncFunc() {
+  console.log("Started asyncFunc1");
+  //Async1 code
+  setTimeout(() => {
+    console.log("Completed asyncFunc1");
+    console.log("Started asyncFunc2");
+    //Async2 code
+    setTimeout(() => {
+      console.log("Completed asyncFunc2");
+      console.log("Started asyncFunc3");
+      //Async3 function code
+      setTimeout(() => {
+        console.log("Completed asyncFunc3");
+      }, 1000);
+    }, 2000);
+  }, 3000);
+}
+asyncFunc();
+```
