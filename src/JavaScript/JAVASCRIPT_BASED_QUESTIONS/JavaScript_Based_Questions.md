@@ -2407,3 +2407,87 @@ function asyncFunc() {
 }
 asyncFunc();
 ```
+
+### 47. Create a function which returns a random number in the given range of values both inclusive
+
+. Math.random function returns a floating-point, pseudo-random number between 0 (inclusive) and 1 (exclusive)
+
+```js
+function randomNumberGeneratorInRange(rangeStart, rangeEnd) {
+  return rangeStart + Math.round(Math.random() * (rangeEnd - rangeStart));
+}
+
+randomNumberGeneratorInRange(10, 50); // 12
+
+`Notes`
+Usage of Math.round depends on the logic used to accomplish the requirement
+```
+
+### 48. Write a function which can convert the time input given in 12 hours format to 24 hours format.
+
+. The check for 'AM' and 'PM' can be verified using endsWith String method
+. An extra 0 would be needed if the hours have single digit
+. Conversion of string to lowerCase helps in case insensitive comparison
+
+```js
+function convertTo24HrsFormat(timeText) {
+  var timeTextLower = timeText.toLowerCase();
+  let [hours, mins] = timeTextLower.split(":");
+
+  // 12 o clock is the special case to be handled both for AM and PM
+  if (timeTextLower.endsWith("am")) hours = hours == 12 ? "0" : hours;
+  else if (timeTextLower.endsWith("pm")) hours = hours == 12 ? hours : String(+hours + 12);
+
+  return hours.padStart(2, 0) + ":" + mins.slice(0, -2).padStart(2, 0);
+}
+
+// Example
+convertTo24HrsFormat("12:10AM"); // 00:10
+convertTo24HrsFormat("5:00AM"); // 05:00
+convertTo24HrsFormat("12:33PM"); // 12:33
+convertTo24HrsFormat("01:59PM"); // 13:59
+convertTo24HrsFormat("11:8PM"); // 23:08
+convertTo24HrsFormat("10:02PM"); // 22:02
+```
+
+### 49. Write a function which accepts a string argument and returns the count of characters between the first and last character 'X'
+
+. indexOf and lastIndexOf are the methods on String which returns the position of the given string in the input string from start and end respectively
+. If the match is not found, these methods return -1
+
+```js
+function getTheGapX(str) {
+  if (!str.includes("X")) {
+    return -1;
+  }
+
+  const firstIndex = str.indexOf("X");
+  const lastIndex = str.lastIndexOf("X");
+  return firstIndex === lastIndex ? -1 : lastIndex - firstIndex;
+}
+
+// Example
+getTheGapX("XeroX"); // 4
+getTheGapX("Xamarin"); // -1       (If there is only single character 'X')
+getTheGapX("JavaScript"); // -1       (If there is no character 'X')
+getTheGapX("F(X) !== G(X) !== F(X)"); // 18
+```
+
+### 50. Write a function which accepts two valid dates and returns the difference between them as number of days.
+
+. The difference between 2 dates in JavaScript will give the time difference in milliseconds
+. Time difference can be converted in to days by dividing the 24Hrs time in milliseconds
+
+```js
+const DAY_IN_MILLISECONDS = 1000 * 60 * 60 * 24;
+
+function getDaysBetweenDates(dateText1, dateText2) {
+  const date1 = new Date(dateText1);
+  const date2 = new Date(dateText2);
+  const diffTime = Math.abs(date2 - date1);
+  const diffDays = Math.ceil(diffTime / DAY_IN_MILLISECONDS);
+  return diffDays;
+}
+
+getDaysBetweenDates("10/15/2020", "12/1/2020"); // 47
+```
