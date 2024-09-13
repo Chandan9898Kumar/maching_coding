@@ -2491,3 +2491,164 @@ function getDaysBetweenDates(dateText1, dateText2) {
 
 getDaysBetweenDates("10/15/2020", "12/1/2020"); // 47
 ```
+
+### 51. Design a function with toggle functionality for given list of inputs where toggle function accepts list of values to be toggled upon.
+
+. Toggle functionality can be obtained by returning the next value cyclically on each call to the function
+. The toggle function will return another function which maintains the closure over the values with which it was initialized
+
+```js
+function toggle(...values) {
+  let state = -1;
+  const length = values.length;
+  return function () {
+    state = (state + 1) % length;
+    return values[state];
+  };
+}
+
+// Example
+var hello = toggle("hello");
+var onOff = toggle("on", "off");
+var speed = toggle("slow", "medium", "fast");
+
+hello(); // "hello"
+hello(); // "hello"
+
+onOff(); // "on"
+onOff(); // "off"
+onOff(); // "on"
+
+speed(); // "slow"
+speed(); // "medium"
+speed(); // "fast"
+speed(); // "slow"
+```
+
+### 52. Create a range function which returns an array for the provided inputs as start and end.
+
+. Range functionality can be obtained by returning the an array from start to end both inclusive
+. In case if 2nd argument is not passed, function will return another function which calls itself with once both the values are obtained
+
+```js
+function range(start, end) {
+  if (end === undefined) {
+    return function (end) {
+      return range(start, end);
+    };
+  }
+
+  const arr = [];
+  for (let i = start; i <= end; i++) {
+    arr.push(i);
+  }
+  return arr;
+}
+
+// Example
+range(3, 6); // [3, 4, 5, 6]
+range(3)(5); // [3, 4, 5]
+range(3)(0); // []
+```
+
+### 53. Create a single function which can perform sum(a, b, c), sum(a, b)(c), sum(a)(b, c) and sum(a)(b)(c) and returns sum of a, b and c.
+
+. Sum functionality can be obtained by returning the sum when all the arguments are present
+. The cases when only 1 or 2 arguments are passed need to be managed and handled
+
+```js
+function sum(a, b, c) {
+  if (a !== undefined && b !== undefined && c !== undefined) {
+    return a + b + c;
+  }
+  if (a !== undefined && b !== undefined) {
+    return function (c) {
+      return sum(a, b, c);
+    };
+  }
+  return function (b, c) {
+    if (b !== undefined && c !== undefined) {
+      return sum(a, b, c);
+    }
+    return function (c) {
+      return sum(a, b, c);
+    };
+  };
+}
+
+// Example
+sum(2)(4)(6); // 12
+sum(3, 2)(5); // 10
+sum(4)(-10, -6); // -12
+sum(6, -3, 1); // 4
+```
+
+### 54. Create an interface for a function such that whenever a function is triggered the system should log the time. Do not modify the function code
+
+. Function call can be handled using Proxy in JavaScript
+. apply keyword in proxy can be used to achieve the functionality without modifying the existing function code
+
+```js
+function generateSecretObject(key, value) {
+  return { [key]: value };
+}
+
+generateSecretObject = new Proxy(generateSecretObject, {
+  apply(target, context, args) {
+    console.log(`${target.name} function is accessed at ${new Date()}`);
+    return target.apply(context, args);
+  },
+});
+
+// driver code
+const user = {
+  username: "0001",
+  generateSecretObject,
+};
+generateSecretObject("username", "Password"); // "generateSecretObject function is accessed at {time}"
+
+
+`NOTE :`
+
+This technique is helpful in logging or managing the data being passed to & returned from function without modifying the actual function code especially when function is a part of library or framework
+```
+
+### 55. Create an interface exposing subscribe and publish functionality, which allows publishing data which in turn invokes all the subscribers with the data.
+
+. A simple module with publish and subscribe function can be exposed to achieve such functionality
+. List of subscribers can be maintained in an array and can be invoked in loop on each publish
+
+```js
+function pubSub() {
+  const subscribers = [];
+
+  function publish(data) {
+    subscribers.forEach((subscriber) => subscriber(data));
+  }
+
+  function subscribe(fn) {
+    subscribers.push(fn);
+  }
+
+  return {
+    publish,
+    subscribe,
+  };
+}
+
+// driver code
+const pubSubObj = pubSub();
+pubSubObj.subscribe((data) => {
+  console.log("Subscriber 1: " + data);
+});
+pubSubObj.subscribe((data) => {
+  console.log("Subscriber 2: " + data);
+});
+
+// all subscribers will be called with the data on publish
+pubSubObj.publish("Value is 10");
+
+
+`NOTE :`
+This is a well known JavaScript pattern called as Publish/Subscribe Pattern
+```
