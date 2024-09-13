@@ -1493,9 +1493,20 @@ Structural design patterns are a type of design pattern that deal with object co
 
 ## Adapter 🔌
 
-The Adapter Design Pattern is a software design pattern that allows the interface of an existing class to be used from another interface. It's often used to make existing classes work with others without modifying their source code. The Adapter Pattern is especially useful when the classes that need to communicate with each other do not have compatible interfaces.
+The Adapter Design Pattern is a structural design pattern that allows the interface of an existing class to be used from another interface. It's often used to make existing classes work with others without modifying their source code. The Adapter Pattern is especially useful when the classes that need to communicate with each other do not have compatible interfaces.
 
+OR
+
+The adapter is a structural JavaScript design patterns that allows objects or classes with incompatible interfaces to collaborate. It matches interfaces of different classes or objects; therefore, they can work together despite incompatible interfaces. It is also referred to as the Wrapper pattern.
 In simple words:
+
+OR
+
+Adapter Pattern in JavaScript is a structural design pattern that allows you to make one interface or object work with another that has a different interface. It acts as a bridge, enabling the compatibility of two systems that would not naturally work together.
+
+`A real-world analogy would be trying to connect a projector to a laptop. The projector might have a VGA plug, and the laptop might have an HDMI plug. So we require an adapter that can make these two unrelated interfaces compatible.`
+
+- This pattern will include a class that will be responsible for joining the incompatible interfaces/functionalities.
 
 > Adapter allows objects with incompatible interfaces to collaborate.
 
@@ -1545,23 +1556,200 @@ adapter.makeSound(); // Output: Quack, quack!
 adapter.move(); // Output: I'm flying!
 ```
 
+## Example: 2
+
+The below code shows an online flight ticket pricing calculation system. There is an old interface that performs pricing calculations in one way. There is a new, improved interface with additional features like user identification and improvised calculations.
+
+An adapter class is introduced, which allows the client program to continue working without any API changes by matching the old interface with the new one.
+
+```js
+// old interface
+function TicketPrice() {
+  this.request = function (start, end, overweightLuggage) {
+    // price calculation code...
+    return "$150.34";
+  };
+}
+
+// new interface
+function NewTicketPrice() {
+  this.login = function (credentials) {
+    /* process credentials */
+  };
+  this.setStart = function (start) {
+    /* set start point */
+  };
+  this.setDestination = function (destination) {
+    /* set destination */
+  };
+  this.calculate = function (overweightLuggage) {
+    //price calculation code...
+    return "$120.20";
+  };
+}
+
+// adapter interface
+function TicketAdapter(credentials) {
+  var pricing = new NewTicketPrice();
+
+  pricing.login(credentials);
+
+  return {
+    request: function (start, end, overweightLuggage) {
+      pricing.setStart(start);
+      pricing.setDestination(end);
+      return pricing.calculate(overweightLuggage);
+    },
+  };
+}
+
+var pricing = new TicketPrice();
+var credentials = { token: "30a8-6ee1" };
+var adapter = new TicketAdapter(credentials);
+
+// original ticket pricing and interface
+var price = pricing.request("Bern", "London", 20);
+console.log("Old price: " + price);
+
+// new ticket pricing with adapted interface
+price = adapter.request("Bern", "London", 20);
+console.log("New price: " + price);
+```
+
+### Example 3
+
+Think about your electronic devices, like charging cables. You have an old charger (let’s call it “Old Plug”) with a big, round shape, and your new device (let’s call it “New Jack”) has a small, rectangular port.Now, you buy an adapter (Adapter in this case is a physical object, but it helps explain the concept). This adapter has a big round end that fits your old charger and a small rectangular end that fits your new device.
+
+`In this example:`
+. Your old charger represents one system with its own way of doing things.
+. Your new device represents another system with its own way of doing things.
+. The adapter (the physical object) acts as the bridge between them, making the old charger work with the new device.
+
+`In JavaScript, the Adapter Pattern works similarly. It allows one piece of code to work with another piece of code, even if they have different interfaces, just like your adapter makes your old charger work with your new device.`
+
+```js
+// Existing system with an incompatible interface
+class OldSystem {
+  specificMethod() {
+    console.log("Old system specific method");
+  }
+}
+
+// Target interface that the client code expects
+class TargetInterface {
+  requiredMethod() {}
+}
+
+// Adapter class that adapts OldSystem to TargetInterface
+class Adapter extends TargetInterface {
+  constructor(oldSystem) {
+    super();
+    this.oldSystem = oldSystem;
+  }
+
+  requiredMethod() {
+    this.oldSystem.specificMethod();
+  }
+}
+
+// Client code that uses the adapter
+const oldSystem = new OldSystem();
+const adapter = new Adapter(oldSystem);
+
+// Now, you can use the adapter as if it were an instance of TargetInterface
+adapter.requiredMethod();
+
+
+- Explanation of the above code:
+
+Adapter class allows you to use the OldSystem with the interface expected by the client code TargetInterface, and calling adapter.requiredMethod() correctly invokes the specificMethod of the OldSystem. This demonstrates how the Adapter pattern bridges the gap between two incompatible interfaces.
+```
+
+### Example 4
+
+```js
+class OldCalculator {
+  constructor() {
+    this.operations = function(term1, term2, operation) {
+      switch (operation) {
+        case 'add':
+          return term1 + term2;
+        case 'sub':
+          return term1 - term2;
+        default:
+          return NaN;
+      }
+    };
+  }
+}
+
+
+class NewCalculator {
+  constructor() {
+    this.add = function(term1, term2) {
+      return term1 + term2;
+    };
+    this.sub = function(term1, term2) {
+      return term1 - term2;
+    };
+  }
+}
+
+class CalculatorAdapter {
+  constructor() {
+    const newCalculator = new NewCalculator();
+    this.operations = function(term1, term2, operation) {
+      switch (operation) {
+        case 'add':
+          return newCalculator.add(term1, term2);
+        case 'sub':
+          return newCalculator.sub(term1, term2);
+        default:
+          return NaN;
+      }
+    };
+  }
+}
+const oldCalc = new OldCalculator();
+const adaptedCalc = new CalculatorAdapter();
+console.log(oldCalc.operations(3, 2, 'add')); // Output: 5
+console.log(adaptedCalc.operations(3, 2, 'add')); // Output: 5
+
+
+- In the example above, we define two calculator classes: OldCalculator and NewCalculator. The OldCalculator class uses a single method, operations, to perform addition and subtraction. The NewCalculator class, on the other hand, has separate methods for addition and subtraction (add and sub, respectively).
+
+- We create an CalculatorAdapter class that uses the NewCalculator class internally and exposes an operations method, similar to the OldCalculator class. This allows objects that expect the OldCalculator interface to work seamlessly with the NewCalculator class.
+```
+
 ### When To Use Adapter Pattern ? ✅
 
 - **Incompatibility of Interfaces:** Use when different parts can't communicate due to different interfaces.
 - **Alternatives to Multiple Inheritance:** In languages without it, Adapter helps inherit behavior from multiple sources.
 - **Abstracting Volatile Classes:** Shields the app from changes in frequently changing classes.
+- **Database Connectivity:** Adapters can be used to standardize database connections. For example, you can create an adapter to work with different database management systems (e.g., MySQL, PostgreSQL, MongoDB) using a common interface.
+
+- **File Format Conversion:** Adapters can be used to convert data or file formats. For example, you can create adapters to read and write data in different formats like XML, JSON, or CSV.
+
+- **Version Upgrades:** When upgrading libraries or components that have changed their interfaces, adapters can be used to maintain compatibility with existing code until it can be updated.
+
+- **Data Transformation:** Adapters are helpful for data transformation tasks. You can adapt data from one format to another, such as converting between units of measurement, temperature scales, or date formats.
+
+- **Third-Party API Integration:** When integrating with external services or APIs that have different interfaces, adapters can be used to convert the external API calls into a format that matches an application’s interface. This allows seamless integration without changing the application’s code.
 
 ### Advantages of Adapter Pattern 🪄 :
 
 - **Reusability and Flexibility:** Reuse existing code without major changes.
 - **Decoupling:** Reduces dependencies for easier maintenance.
 - **Interoperability:** Enables different parts to work together despite interface mismatches.
+- **Encapsulation:** It promotes encapsulation by isolating the adaptation logic within the Adapter class. This separation of concerns leads to cleaner, more modular, and maintainable code.
+- **Enhanced Security:** Adapters can provide security and access control by controlling how the Adaptee’s methods are accessed and ensuring that only authorized actions are performed.
 
 ### Disadvantages of Adapter Pattern 🆘 :
 
 - **Overuse or Unnecessary Use:** Be cautious to avoid unnecessary complexity.
 - **Performance Overhead:** Involves some indirection; may impact performance in critical systems.
 - **Potential for Confusion:** Clear documentation needed for developers unfamiliar with the codebase.
+- **Overhead in Memory Usage:** Adapters can consume additional memory.
 
 ## Bridge 🌉
 
