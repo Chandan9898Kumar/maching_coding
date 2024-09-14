@@ -2652,3 +2652,187 @@ pubSubObj.publish("Value is 10");
 `NOTE :`
 This is a well known JavaScript pattern called as Publish/Subscribe Pattern
 ```
+
+### 56. Display all the keys and values of a nested object.
+
+. typeof operator on value gives the type of value
+. Recursive solution can be used to iterate over all the nested objects
+
+```js
+let nestedObject = {
+  id: 28802695164,
+  date: "December 31, 2016",
+  data: {
+    totalUsers: 99,
+    online: 80,
+    onlineStatus: {
+      active: 67,
+      away: 13,
+      busy: 8,
+    },
+  },
+};
+
+function keyValuePrinter(obj) {
+  for (let key in obj) {
+    if (typeof obj[key] !== "object") {
+      console.log("[" + key + " : " + obj[key] + "]");
+    } else {
+      keyValuePrinter(obj[key]);
+    }
+  }
+}
+
+keyValuePrinter(nestedObject);
+```
+
+### 57. Write a program which can empty a given object.
+
+. Object can be emptied by removing all the keys present on it.
+. Alternatively, a new object can be created and the prototype of the new object can be set as prototype of old object.
+
+```js
+for (let key in obj) {
+  if (obj.hasOwnProperty(key)) {
+    delete obj[key];
+  }
+}
+
+OR;
+
+const newObj = {};
+Object.setPrototypeOf(newObj, obj);
+```
+
+### 58. Create an object with a property 'marks' which cannot be set to a value less than 0.
+
+. getter and setter on the properties of object can be used to control the read and write behavior
+
+```js
+const obj = { marks: 0 };
+
+Object.defineProperty(obj, "marks", {
+  set(value) {
+    if (value < 0) throw new Error("Marks cant be less than zero");
+    marks = value;
+  },
+  get() {
+    return marks;
+  },
+});
+
+
+OR
+
+. This solution shown directly defines getter and setter for property marks, hence uses another variable to store the data
+
+const obj = {
+  _marks: 0,
+
+  set marks(value) {
+    if (value < 0) throw new Error("Marks cant be less than zero");
+    this._marks = value;
+  },
+
+  get marks() {
+    return this._marks;
+  },
+};
+```
+
+### 59. Stringify an object by excluding the 'password' property
+
+. JSON.stringify is the method which can be used for stringification of an object or any other value
+. It accepts 2nd argument which can be a function or array.
+
+```js
+// Example
+const obj = {
+  id: 1,
+  username: "John",
+  password: "secret",
+  email: "john@email.com",
+};
+
+1. JSON.stringify(obj, (key, value) => (key === "password" ? undefined : value)); // {"id":1,"username":"John","email":"john@email.com"}
+
+2. JSON.stringify(obj, ["id", "username", "email"]); // {"id":1,"username":"John","email":"john@email.com"}
+```
+
+### 60. Write a program to make all the properties of an object read only but allow the addition of new properties.
+
+- The exisiting properties of the object can be made read only with set keyword using Proxy.
+
+```js
+const readOnlyObj = new Proxy(obj, {
+  get: function (target, key) {
+    return target[key];
+  },
+
+  set: function () {
+    if (target.hasOwnProperty(key)) {
+      throw new Error("Object properties are read only");
+    }
+    target[key] = value;
+  },
+});
+
+NOTE :
+
+If condition takes care whether the property is new or existing to handle the read only scenario.
+```
+
+### 60. Design a utility on an array of objects where the access can be made to the object using index (as usual) and also from primary key of the object.
+
+. The access to the index happens for arrays by default and the Proxy can be setup to enable the fetching of object using primary key (any other key can also be coded)
+
+```js
+const employees = [
+  { name: "John", id: "1" },
+  { name: "Jane", id: "2" },
+  { name: "Pai", id: "0" },
+];
+
+const flexEmployees = new Proxy(employees, {
+  get(target, handler) {
+    if (handler in target) {
+      return target[handler];
+    } else if (typeof handler === "string") {
+      return target.find((obj) => obj.name === handler);
+    } else {
+      return undefined;
+    }
+  },
+});
+
+// Example
+
+flexEmployees[0]; // { name: 'John', id: '1' }
+flexEmployees["Pai"]; // { name: 'Pai', id: '0' }
+flexEmployees["doe"]; // undefined
+```
+
+### 61. Provide an object on which a value can be set to nested property even if it does not exist.
+
+. The nested object can be accessed only if all the nested properties are defined on the object
+. A proxy can designed to create such nested object properties on demand whenever such non existent property is requested and attempted to set with value
+. get trap of proxy can be used to create the objects dynamically and set the value.
+
+```js
+function ProxyObject(obj) {
+  return new Proxy(obj, {
+    get: (target, property) => {
+      if (!(property in target)) {
+        target[property] = new ProxyObject({});
+      }
+      return target[property];
+    },
+  });
+}
+
+// driver code
+const obj = new ProxyObject({});
+obj.x.y.z = "nested value";
+
+obj.x.y.z; // nested value
+```

@@ -710,7 +710,9 @@ console.log(pizzaWithoutCheese); // Pizza: { name: 'Pepperoni', size: 'Medium', 
 console.log(pizzaWithCheese); // Pizza: { name: 'Hawaiian', size :'Small', isCheese: true}
 ```
 
-- Example without using the Builder Design Pattern
+This TypeScript code implements a simplified Builder pattern for creating pizza objects, allowing customization of attributes like name, size, and the presence of cheese.
+
+- New Example without using the Builder Design Pattern
 
 `Let us take an example without using the Builder Design Pattern:`
 
@@ -897,8 +899,6 @@ console.log(user.printUser()); // Display user information.
 . Finally, the printUser function is used to print the user’s information to the console.
 
 ```
-
-This TypeScript code implements a simplified Builder pattern for creating pizza objects, allowing customization of attributes like name, size, and the presence of cheese.
 
 ### When to Use Builder Pattern ? ✅
 
