@@ -1751,6 +1751,12 @@ console.log(adaptedCalc.operations(3, 2, 'add')); // Output: 5
 - **Potential for Confusion:** Clear documentation needed for developers unfamiliar with the codebase.
 - **Overhead in Memory Usage:** Adapters can consume additional memory.
 
+
+### NOTE :
+
+At first sight, the "Bridge pattern" looks a lot like the "Adapter pattern" in that a class is used to convert one kind of interface to another. However, the intent of the Adapter pattern is to make one or more classes' interfaces look the same as that of a particular class. The Bridge pattern is designed to separate a class's interface from its implementation so you can vary or replace the implementation without changing the client code.
+
+
 ## Bridge 🌉
 
 The Bridge pattern is a structural design pattern that lets you split a large class or a set of closely related classes into two separate hierarchies—abstraction and implementation—which can be developed independently of each other. It offers a way to separate a system’s "abstractions" from its "implementations".
