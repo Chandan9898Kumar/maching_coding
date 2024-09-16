@@ -1751,11 +1751,9 @@ console.log(adaptedCalc.operations(3, 2, 'add')); // Output: 5
 - **Potential for Confusion:** Clear documentation needed for developers unfamiliar with the codebase.
 - **Overhead in Memory Usage:** Adapters can consume additional memory.
 
-
 ### NOTE :
 
 At first sight, the "Bridge pattern" looks a lot like the "Adapter pattern" in that a class is used to convert one kind of interface to another. However, the intent of the Adapter pattern is to make one or more classes' interfaces look the same as that of a particular class. The Bridge pattern is designed to separate a class's interface from its implementation so you can vary or replace the implementation without changing the client code.
-
 
 ## Bridge 🌉
 
@@ -2037,7 +2035,7 @@ console.log(abstraction2.operation()); // Output: RefinedAbstraction with Concre
 
 - **Hide Implementation Details:** Expose only necessary client methods for cleaner code.
 - **Implementation-Specific Behavior:** Enable different platform implementations without altering client code.
-- Prevent Monolithic Designs:\*\* Promote modularity to avoid widespread implications of changes.
+- **Prevent Monolithic Designs:** Promote modularity to avoid widespread implications of changes.
 
 ### Advantages of Bridge Pattern 🪄 :
 
@@ -2054,6 +2052,10 @@ console.log(abstraction2.operation()); // Output: RefinedAbstraction with Concre
 ## Composite 🌴
 
 The Composite pattern is a structural design pattern that lets you compose objects into tree-like structures and then work with these structures as if they were individual objects.
+
+`Example :`
+
+There a number of somewhat common examples of the Composite pattern. If you’ve ever used a PC, you’ve more than likely seen a frequently used implementation of this pattern: the file structure. Consider every disk/drive and folder to be a composite object and every file to be a leaf. When you try to delete a folder, it’ll not only delete that folder, but also every other folder and file contained within it. 
 
 In simple words:
 
@@ -2159,11 +2161,208 @@ manager.addEmployee(designer);
 console.log(manager); // { name : "Michael", salary: 25000, employees: [ { name: "John Doe", salary: 12000 } ...] }
 ```
 
+- Modern JS frameworks like React and Vue use the composite pattern to build user interfaces. The entire view is divided into components. Each component can contain multiple components. This method is preferred because of the ease of development and scalability compared to fewer monolithic objects. The composite pattern reduces the complexity of a system by allowing you to work with small objects and build them up into larger ones.
+
+- Example: 2
+
+A file-folder(directory) structure is explained in the below code. Here a directory can have two types of entities, a file or another directory, which can contain files or directories and so on.
+We have two classes – File and Directory. We can add or remove files in the Directory and also getFileName, and the display will list all file names inside the directory.
+
+```js
+function File(name) {
+  this.name = name;
+}
+
+File.prototype.display = function () {
+  console.log(this.name);
+};
+
+function Directory(name) {
+  this.name = name;
+  this.files = [];
+}
+
+Directory.prototype.add = function (file) {
+  this.files.push(file);
+};
+
+Directory.prototype.remove = function (file) {
+  for (let i = 0, length = this.files.length; i < length; i++) {
+    if (this.files[i] === file) {
+      this.files.splice(i, 1);
+      return true;
+    }
+  }
+
+  return false;
+};
+
+Directory.prototype.getFileName = function (index) {
+  return this.files[index].name;
+};
+
+Directory.prototype.display = function () {
+  console.log(this.name);
+  for (let i = 0, length = this.files.length; i < length; i++) {
+    console.log("   ", this.getFileName(i));
+  }
+};
+
+directoryOne = new Directory("Directory One");
+directoryTwo = new Directory("Directory Two");
+directoryThree = new Directory("Directory Three");
+
+fileOne = new File("File One");
+fileTwo = new File("File Two");
+fileThree = new File("File Three");
+
+directoryOne.add(fileOne);
+directoryOne.add(fileTwo);
+
+directoryTwo.add(fileOne);
+
+directoryThree.add(fileOne);
+directoryThree.add(fileTwo);
+directoryThree.add(fileThree);
+
+directoryOne.display();
+directoryTwo.display();
+directoryThree.display();
+
+/*
+Directory One
+    File One
+    File Two
+Directory Two
+    File One
+Directory Three
+    File One
+    File Two
+    File Three
+*/
+```
+
+### Components of the Composite Design Pattern.
+
+- The components of the Composite Design Pattern include:
+
+1. Component: The `Component` is an Abstract class (or sometimes Interface) that defines all the methods or common operations for both Leaf and Composite classes.
+2. Leaf: The Leaf is a class that extends or implements the Component to provide the implementation for the declared methods in it. The Leaf class represents the individual components that do not have any child classes or nodes in the hierarchy.
+3. Composite: The Composite is a class that represents the composite nodes that can hold leaf nodes. It implements the Component interface and provides methods to add, remove, and manipulate child components.
+4. Client: The client manipulates the objects in the composition through the component interface.
+
+Note: JavaScript doesn’t support Interfaces directly. An alterative could be create a class and modify accordingly.
+
+### Implementation of the Composite Design Pattern in JavaScript
+
+. Let us follow the below steps to implement a ‘File System’ using Composite Design Pattern.
+
+```js
+
+- Step 1: Create a Component class
+
+class Component {
+print() {
+	throw new Error('Override this method');
+}
+
+size() {
+	throw new Error('Override this method');
+}
+}
+
+- Explanation:
+
+. This class `Component` represents the class that declares the method definitions that can be provided with accurate implementations. In this Component class, I declared two methods namely `print` and `size` whose implementation is hidden and will be override by subclasses. These methods are assumed to be commonly shared with each individual part in the whole hierarchy.
+
+
+- Step 2: Create the Leaf class
+
+
+class File extends Component {
+constructor(name, size, location) {
+	super();
+	this.name = name;
+	this.size = size;
+	this.location = location
+}
+
+print() {
+	console.log(`The File with the name ${this.name} whose size is ${this.size} KB, present is ${this.location}`);
+}
+
+size() {
+	return this.size;
+}
+}
+
+
+- Explanation:
+
+. I have created the `File` class which represent individual component in the File System. This class extends the `Component` class and initializes a constructor with three parameters namely `name`, `size`, `location`. The methods `print` and `size` are overrided and accurately defined in this File class. The purpose of print method is to print the details of name, size and location of the file and the purpose of the size function is to return the size of the file.
+
+
+
+- Step 3: Create the Composite class
+
+class Folder extends Component {
+constructor(name) {
+	super();
+	this.name = name;
+	this.files= [];
+}
+
+add(file) {
+	this.files.push(file);
+}
+
+delete(file) {
+	const idx = this.children.indexOf(file);
+	if (index !== -1) {
+	this.files.splice(idx, 1);
+	}
+}
+
+print() {
+	console.log(`Folder: ${this.name}`);
+	this.files.forEach((file) => {
+	file.print();
+	});
+}
+}
+
+
+- Explanation:
+
+. The Folder class represents the `Composite` class whose purpose is to hold the leaf classes and define methods to `add`, `delete` and manipulate the hierarchy. I have defined constructor which initializes the name of the folder/directory and an array to hold the files of that folder. Followed by that, I have defined two methods names `add` and `delete` whose purpose is to add the file to the part-whole hierarchy and delete the file from the hierarchy respectively. The method `print` is also overrided to provide the specific implementation for the folder.
+
+
+- Step 4: Instance creation and usage. Final
+
+const file = new File('document.txt', 10, 'c:/users/downloads');
+const folder = new Folder('users');
+folder.add(file);
+
+const root = new Folder('Root');
+root.add(folder);
+
+console.log('File system structure:');
+root.print();
+
+
+- Explanation:
+
+In this step, I am creating instance for the File class as file along with the values of name, size and location. I have created a instance for the Folder class with the name ‘users’ and added the file to the folder using the add method. I have also created a instance called root which represents the root directory of the filesystem which holds all the directories of the system and finally used print method to display the overall File system structure.
+```
+
+`NOTE :` All nodes in the Composite pattern share a common set of properties and methods which supports individual objects as well as object collections. This common interface greatly facilitates the design and construction of recursive algorithms that iterate over each object in the Composite collection. 
+
 ### When To Use Composite Pattern ? ✅
 
 - **Tree-like Object Structure:** Useful when objects form a tree-like pattern, such as organizational structures in companies.
 - **Part-Whole Hierarchies:** Natural choice for part-whole hierarchies, treating parts and wholes the same way.
 - **Uniform Treatment by Clients:** Clients treat all objects uniformly within the composite structure, simplifying client code.
+- **Nested Components:** When you have components that can contain other components (e.g., a form containing input fields), the Composite Pattern helps manage the structure.
 
 ### Advantages of Composite Pattern 🪄 :
 
