@@ -2891,3 +2891,76 @@ let array = new Proxy(arr, {
   },
 });
 ```
+
+### 66. Write a code to eliminate duplicate objects in an array where each object has an 'id' property which can be used to identify the object and the duplicate object with lower rank to be removed.
+
+```js
+// Example
+const arr = [
+  {
+    id: 1,
+    name: "emp1",
+    rank: 4,
+  },
+  {
+    id: 2,
+    name: "emp2",
+    rank: 1,
+  },
+  {
+    id: 2,
+    name: "emp2",
+    rank: 2, // this is a duplicate object (id = 2) and has lower rank
+  },
+  {
+    id: 3,
+    name: "emp3",
+    rank: 3,
+  },
+];
+
+
+
+- METHOD 1.
+
+. The duplicate objects cannot be removed using Set as the 2 objects with same structure and data have different references
+. Map can be used to have 'id' as the key and object as value
+. If 'id' is already present in the array, object with the higher rank can be retained.
+
+
+const map = new Map();
+
+arr.forEach((obj) => {
+  if (map.has(obj.id)) {
+    if (obj.rank < map.get(obj.id).rank) {
+      map.set(obj.id, obj);
+    }
+  } else {
+    map.set(obj.id, obj);
+  }
+});
+
+distinctArr = [...map.values()];
+
+
+METHOD 2.
+
+
+let newArray = [...arr].sort((a,b)=>{
+  if(a.id!==b.id){
+    return 1
+  }else{
+    return a.rank > b.rank ? 1 : -1
+  }
+})
+
+
+
+function removeDuplicate(){
+  let arrays = newArray.filter((item,index,array)=>index === array.findIndex((indexItem)=>indexItem.id===item.id))
+  return arrays
+}
+
+console.log(removeDuplicate(),'removeDuplicate()')
+
+```
