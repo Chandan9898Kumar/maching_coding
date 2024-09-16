@@ -2963,4 +2963,52 @@ function removeDuplicate(){
 
 console.log(removeDuplicate(),'removeDuplicate()')
 
+
+
+METHOD 3.
+
+`Using keys as Index:`
+
+. A temporary array is created that stores the objects of the original array using one of its keys as the index.
+. Any of the object properties can be used as a key. The key is extracted from the object and used as the index of the new temporary array.
+. The object is then assigned to this index.
+. This approach will remove the duplicate objects as only one of each object of the original array will get assigned to the same index.
+
+
+function removeDuplicates() {
+
+    // Create an array of objects
+    books = [
+        { title: "C++", author: "Bjarne" },
+        { title: "Java", author: "James" },
+        { title: "Python", author: "Guido" },
+        { title: "Java", author: "James" },
+    ];
+
+    // Declare a new array
+    let newArray = [];
+
+    // Declare an empty object
+    let uniqueObject = {};
+
+    // Loop for the array elements
+    for (let i in books) {
+
+        // Extract the title
+        objTitle = books[i]['title'];
+
+        // Use the title as the index
+        // If Object keys are same then it will overwrite the existing key with the new key.
+        uniqueObject[objTitle] = books[i];
+    }
+
+    // Loop to push unique object into array
+    for (i in uniqueObject) {
+        newArray.push(uniqueObject[i]);
+    }
+
+    // Display the unique objects
+    console.log(newArray);
+}
+removeDuplicates();
 ```
