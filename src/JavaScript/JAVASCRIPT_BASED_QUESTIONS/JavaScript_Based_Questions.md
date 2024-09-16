@@ -2836,3 +2836,58 @@ obj.x.y.z = "nested value";
 
 obj.x.y.z; // nested value
 ```
+
+### 62. Extract the list of all the elements from the list of numbers given in 2 arrays.
+
+- The union array will be the result if all the elements from the 2 arrays are picked
+
+```js
+const set1 = new Set(arr1);
+const set2 = new Set(arr2);
+const distinctArr = [...set1, ...set2];
+```
+
+### 63. Get the list of all distinct elements which are present in both list of numbers.
+
+- The intersection array will be the result if the common elements from the 2 arrays are picked.
+
+```js
+Method .1.
+const intersectionArr = arr1.filter((value) => arr2.includes(value));
+const distinctIntersectionArr = [...new Set(intersectionArr)];
+
+Method .2.
+const set1 = new Set(arr1);
+const set2 = new Set(arr2);
+const distinctIntersectionArr = [...set1].filter((value) => set2.has(value));
+```
+
+### 64. Extract list of elements present only in the first list given.
+
+- The only present elements of 1st list will be the result when all the elements of 1st list not present in the 2nd are chosen.
+
+```js
+const set1 = new Set(arr1);
+const set2 = new Set(arr2);
+const intersectionArr = [...set1].filter((value) => !set2.has(value));
+
+`Notes`
+
+Elements of 2nd list only can be obtained by checking for all the elements of lis 2 which are not present in list1
+```
+
+### 65. Create a Proxy object through which the array can be accessed as usual but also allow to access the values through negative indices.
+
+```js
+. get trap of proxy can be used to map the negative index to the valid array position
+
+let arr = [10, 20, 30];
+
+
+let array = new Proxy(arr, {
+  get(target, handler) {
+    if (handler < 0) return target[target.length + Number(handler)];
+    else return target[handler];
+  },
+});
+```
