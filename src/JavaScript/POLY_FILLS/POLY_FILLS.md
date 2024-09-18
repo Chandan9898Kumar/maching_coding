@@ -2014,3 +2014,89 @@ function greet(name) {
   }
 }
 ```
+
+### 9. Write a utility which prints numbers starting from an initial value and increment in steps which can be started and stopped by the user, any number of times
+
+1. The functionality to start and stop can be exposed from a function which internally takes care of incrementing and displaying data
+2. setInterval can be used to achieve the task and handle the start & stop of data display
+
+```js
+function timer(init = 0, step = 1) {
+  var intervalId;
+  var count = init;
+
+  function startTimer() {
+    if (!intervalId) {
+      intervalId = setInterval(() => {
+        console.log(count);
+        count += step;
+      }, 1000);
+    }
+  }
+
+  function stopTimer() {
+    clearInterval(intervalId);
+    intervalId = null;
+  }
+
+  return {
+    startTimer,
+    stopTimer,
+  };
+}
+
+// driver code
+const timerObj = timer(100, 10);
+timerObj.startTimer();
+setTimeout(() => {
+  timerObj.stopTimer();
+}, 5000);
+```
+
+### 10. Execute an array of asynchronous functions one after the other in sequence using callbacks.
+
+1. The asynchronous function can be simulated using setTimeout which executes the callback
+2. The array of functions execution can be managed by having a function which takes care of execution of all the async functions
+3. Asynchronous functions need not be aware of the function to be executed and will take a callback as argument and execute it after completion
+
+```js
+function asyncFunc1(callback) {
+  console.log("Started asyncFunc1");
+  setTimeout(() => {
+    console.log("Completed asyncFunc1");
+    callback();
+  }, 3000);
+}
+
+function asyncFunc2(callback) {
+  console.log("Started asyncFunc2");
+  setTimeout(() => {
+    console.log("Completed asyncFunc2");
+    callback();
+  }, 2000);
+}
+
+function asyncFunc3(callback) {
+  console.log("Started asyncFunc3");
+  setTimeout(() => {
+    console.log("Completed asyncFunc3");
+    callback();
+  }, 1000);
+}
+
+function callbackManager(asyncFuncs) {
+  function nextFuncExecutor() {
+    const nextAsyncFunc = asyncFuncs.shift();
+    if (nextAsyncFunc && typeof nextAsyncFunc === "function") {
+      nextAsyncFunc(nextFuncExecutor);
+    }
+  }
+  nextFuncExecutor();
+}
+
+// driver code
+callbackManager([asyncFunc1, asyncFunc2, asyncFunc3]);
+
+
+//  It wil work in a sequence.
+```
