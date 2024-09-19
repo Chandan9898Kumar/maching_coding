@@ -3125,3 +3125,207 @@ asyncFunc();
 2. The execution of such function can be simulated using setTimeout to with delay and execute different blocks of code inside each
 
 ```
+
+### 69. Implement a function to find the closest ancestor with the provided selector (Element.closest() method)
+
+- The closest() method traverses the Element and its parents (heading toward the document root) until it finds a node that matches the provided selector string. Will return itself or the matching ancestor. If no such element exists, it returns null.
+
+```js
+Element.prototype.closest = function (selector) {
+  var el = this;
+  while (el) {
+    if (el.matches(selector)) {
+      return el;
+    }
+    el = el.parentElement;
+  }
+  return null;
+};
+
+
+## Description
+
+. The closest() method searches up the DOM tree for elements which matches a specified CSS selector.
+
+. The closest() method starts at the element itself, then the ancestor (parent, grandparent, ...) until a match is found.
+
+. The closest() method returns null() if no match is found.
+```
+
+### 70 . Write a function to find the corresponding node in two identical DOM trees.
+
+- Given two same DOM tree A, B, and an Element a in A, find the corresponding Element b in B. By corresponding, we mean a and b have the same relative position to their DOM tree root.
+
+```js
+const A = document.createElement("div");
+A.innerHTML = `
+<div>
+<div>
+  <div>
+    <div id="node1"></div>
+  </div>
+  <div>
+  </div>
+  <div>
+    <div>
+      <p id="node2"></p>
+    </div>
+  </div>
+<div>
+</div>`;
+
+const B = A.cloneNode(true);
+const node1 = A.querySelector("#node1");
+const node2 = A.querySelector("#node2");
+const node1Target = B.querySelector("#node1");
+const node2Target = B.querySelector("#node2");
+
+const findCorrespondingNode = (rootA, rootB, target) => {
+  if (rootA === target) return rootB;
+
+  if (rootA.childElementCount) {
+    for (let i = 0; i < rootA.childElementCount; i++) {
+      let result = findCorrespondingNode(rootA.children[i], rootB.children[i], target);
+      if (result) {
+        return result;
+      }
+    }
+  }
+};
+
+findCorrespondingNode(A, B, node1); // node1Target
+findCorrespondingNode(A, B, node2); // node2Target
+```
+
+### 71. Write a function to get depth of a given DOM tree
+
+- A depth of a given DOM tree is the max depth till which DOM nodes are nested
+
+```js
+
+Example 1.
+
+/**
+ * @param {HTMLElement | null} tree
+ * @return {number}
+ */
+function getHeight(root) {
+  if (!root) return 0;
+
+  let maxDepth = 0;
+
+  const helper = (current, depth = 1) => {
+    if (current.hasChildNodes()) {
+      for (let child of current.children) {
+        helper(child, depth + 1);
+      }
+    }
+    maxDepth = Math.max(maxDepth, depth);
+  };
+
+  helper(root);
+  return maxDepth;
+}
+
+
+
+### Example 2.
+
+`Problem Description :`
+
+1. Height of a tree is the maximum depth from root node. Empty root node have a height of 0.
+2. If given DOM tree, can you create a function to get the height of it?
+3. For the DOM tree below, we have a height of 4.
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, World!</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+     <div>
+  <div>
+    <p>
+      <button>Hello</button>
+    </p>
+  </div>
+  <p>
+    <span>World!</span>
+  </p>
+</div>
+      <script src="script.js"></script>
+  </body>
+</html>
+
+
+- Solution :
+
+//  Recursive Solution with DFS
+
+/**
+ * @param {HTMLElement | null} tree
+ * @return {number}
+ */
+function getHeight(tree) {
+  if (tree === null) {
+    return 0;
+  }
+
+  let maxHeight = 0;
+  // Use .children instead of .childNodes to ignore TextNodes.
+  for (const child of tree.children) {
+    maxHeight = Math.max(maxHeight, getHeight(child));
+  }
+
+  return maxHeight + 1;
+}
+
+const result = getHeight(document.body.firstElementChild);
+```
+
+### 72. Implement a function to get the root node of a given DOM fragment (document.getRootNode() method).
+
+- Root node is the topmost parent node of any given DOM fragment.
+
+```js
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, World!</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+     <div>
+  <div>
+    <p>
+      <button>Hello</button>
+    </p>
+  </div>
+  <p>
+    <span>World!</span>
+  </p>
+</div>
+      <script src="script.js"></script>
+  </body>
+</html>
+
+
+/**
+ * @param {HTMLElement | null} tree
+ * @return {HTMLElement | null}
+ */
+function getRootNode(tree) {
+  if (!tree) return null;
+
+  while (tree.parentElement) {
+    tree = tree.parentElement;
+  }
+
+  return tree;
+}
+
+const rootNode = getRootNode(document.querySelector('span'))
+```
