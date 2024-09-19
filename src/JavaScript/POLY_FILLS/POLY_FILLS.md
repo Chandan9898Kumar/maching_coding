@@ -2014,3 +2014,141 @@ function greet(name) {
   }
 }
 ```
+
+### 9. Deferred Promises in JavaScript .
+
+1. A Deferred Promise acts as a bridge between the promise and its eventual resolution. It allows you to control when a promise is resolved or rejected, giving you greater flexibility in handling asynchronous operations.
+
+2. This pattern is particularly useful when you need to coordinate multiple asynchronous tasks or when the resolution of a promise depends on external factors. By using deferred promises, you can separate the logic of producing a value from the promise itself, leading to cleaner and more maintainable code.
+
+`Key Points:`
+
+1. Promise vs. Deferred: A promise represents a value that may not be available yet, while a deferred object allows you to manage that promise’s resolution or rejection explicitly.
+
+2. Use Cases: This pattern is particularly useful in complex applications where you need to coordinate multiple asynchronous tasks or manage their outcomes more effectively.
+
+3. Built-in Support: With the ECMAScript 2024 Promise.withResolvers(), implementing this pattern will become even simpler, reducing boilerplate code and improving readability.
+
+- Promise.withResolvers()
+
+A. The Promise.withResolvers() static method returns an object containing a new Promise object and two functions to resolve or reject it, corresponding to the two parameters passed to the executor of the Promise() constructor.
+
+Syntax :
+
+Promise.withResolvers()
+
+Return value
+A plain object containing the following properties:
+
+1. `promise`
+   A Promise object.
+
+2. `resolve`
+   A function that resolves the promise. For its semantics, see the Promise() constructor reference.
+
+3. `reject`
+   A function that rejects the promise. For its semantics, see the Promise() constructor reference.
+
+### Description
+
+Promise.withResolvers() is exactly equivalent to the following code:
+
+```js
+let resolve, reject;
+const promise = new Promise((res, rej) => {
+  resolve = res;
+  reject = rej;
+});
+```
+
+`NOTE :  We’ll be implementing this pattern from scratch instead of using Promise.withResolvers()`
+
+- Demystifying this pattern with a real life example:
+
+Let’s assume we are building a game using JavaScript where the outcomes are influenced by multiple, unpredictable events such as win or loose.
+
+Suppose we want to create a promise which resolves when we click on the button.
+
+`Traditional Approach:`
+Typically, we might set up an event listener inside a promise executor.
+
+```js
+<button id="win-button">Win</button>
+<button id="loose-button">Loose</button>
+<script>
+    function winButtonClickHandler() {
+        return new Promise((resolve) => {
+            document
+            .getElementById("win-button")
+            .addEventListener("click", () => {
+                resolve("You won! 🎉");
+            });
+        });
+    }
+    function looseButtonClickHandler() {
+        return new Promise((_resolve, reject) => {
+            document
+            .getElementById("loose-button")
+            .addEventListener("click", () => {
+                reject("You loose 😔");
+            });
+        });
+    }
+    winButtonClickHandler().then((message) => {
+        alert(message);
+    });
+    looseButtonClickHandler().catch((message) => {
+        alert(message);
+    });
+</script>
+
+
+- This traditional approach encapsulates the promise creation and event handling logic within a single function. This can be restrictive if multiple conditions or different parts of your code need to resolve or reject the promise.
+```
+
+### New Approach using Deferred Promise:
+
+```js
+# Interface for creating Deferred Promise:
+
+
+const createDeferredExecution = () => {
+    let resolve, reject;
+    const promise = new Promise((res,rej) => {
+        resolve = res;
+        reject = rej;
+    });
+    return {
+        promise,
+        resolve,
+        reject
+    }
+};
+
+## Now Using it in code.
+
+<button id="win-button">Win</button>
+<button id="loose-button">Loose</button>
+<script>
+    const { promise, resolve, reject } = createDeferredExecution();
+
+    document.getElementById("win-button").addEventListener("click", () => {
+        resolve("You won! 🎉");
+    });
+    document.getElementById("loose-button").addEventListener("click", () => {
+        reject("You loose 😔");
+    });
+
+    promise
+        .then((message) => alert(message))
+        .catch((message) => alert(message));
+</script>
+
+
+
+### Why deferred approach is optimal ?
+1. Decoupling Event Handling: It allows separate definition of resolution mechanisms from the event monitoring, improving code organization and management of complex conditions.
+2. Reusable Logic: The resolve and reject functions can be reused across different game scenarios, enabling flexible handling of various outcomes like winning or losing.
+3. Simplified State Management: It makes managing asynchronous state transitions cleaner by separating the transitions from the handling logic.
+
+```

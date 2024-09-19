@@ -3329,3 +3329,221 @@ function getRootNode(tree) {
 
 const rootNode = getRootNode(document.querySelector('span'))
 ```
+
+### 73. Implement a function to get unique tag names in a given DOM tree
+
+```js
+
+- index.html
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, World!</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+      <h1 class="title">Hello World! </h1>
+      <p id="currentTime"></p>
+
+      <div>
+        <p>
+          <h1>
+            <h2>
+              <h3>
+                <h4>
+                  <h5>
+                    <h6></h6>
+                  </h5>
+                </h4>
+              </h3>
+            </h2>
+          </h1>
+        </p>
+      </div>
+      <script src="script.js"></script>
+  </body>
+</html>
+
+
+- script.js
+
+const rootElement = document.body
+
+
+
+/**
+ * @param {HTMLElement | null} tree
+ * @return {Array}
+ */
+function getUniqueTags(root, result = new Set()) {
+  if (!root) return [];
+
+  if (!result.has(root.tagName)) {
+    result.add(root.tagName);
+  }
+
+  if (root.hasChildNodes()) {
+    for (let child of root.children) {
+      getUniqueTags(child, result);
+    }
+  }
+
+  return [...result];
+}
+
+let result = getUniqueTags(rootElement)
+console.log(result,'result')
+```
+
+### 74. Implement a function to get elements by tag name (document.getElementsByTagName() method).
+
+1. The getElementsByTagName method of Document interface returns an HTMLCollection of elements with the given tag name.
+2. For example, document.getElementsByTagName('div') returns a collection of all div elements in the document.
+
+```js
+
+- index.html
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, World!</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+      <h1 class="title">Hello World! </h1>
+      <p id="currentTime"></p>
+
+      <div>
+        <p>
+          <h1>
+            1st h1 tag
+            <h2>
+              <h3>
+                <h4>
+                  <h5>
+                    <h6>
+                      <h1>
+                        2nd h1 tag
+                        <h1>3rd H1 Tag</h1>
+                      </h1>
+                    </h6>
+                  </h5>
+                </h4>
+              </h3>
+            </h2>
+          </h1>
+        </p>
+      </div>
+      <script src="script.js"></script>
+  </body>
+</html>
+
+
+- script.js
+
+
+const rootElement = document.body
+
+/**
+ * @param {HTMLElement | null} tree
+ * @return {Array}
+ */
+function getElementsByTagName(root, tagName) {
+  if (!root) return [];
+
+  let result = [];
+
+  if (root.tagName.toLowerCase() === tagName.toLowerCase()) {
+    result.push(root);
+  }
+
+  if (root.hasChildNodes()) {
+    for (let child of root.children) {
+      result = result.concat(getElementsByTagName(child, tagName));
+    }
+  }
+
+  return result;
+}
+
+let result = getElementsByTagName(rootElement,'h1')
+
+console.log(result,'result')
+```
+
+### 75. Implement a function to check if a given DOM tree has duplicate IDs
+
+1. In a given DOM tree, the id on each node has be unique
+2. Although HTML is very forgiving, but we should avoid duplicate identifiers
+
+```js
+- index.html
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, World!</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+      <h1 class="title">Hello World! </h1>
+      <p id="currentTime"></p>
+
+      <div>
+        <p>
+          <h1 id="h1tags">
+            1st h1 tag
+            <h2>
+              <h3 id="currentTimes">
+                <h4>
+                  <h5>
+                    <h6>
+                      <h1>
+                        2nd h1 tag
+                        <h1 id="h1tag">3rd H1 Tag</h1>
+                      </h1>
+                    </h6>
+                  </h5>
+                </h4>
+              </h3>
+            </h2>
+          </h1>
+        </p>
+      </div>
+      <script src="script.js"></script>
+  </body>
+</html>
+
+
+- script.js
+
+const rootElement = document.body
+
+
+/**
+ * @param {HTMLElement | null} tree
+ * @return {Boolean}
+ */
+function hasDuplicateId(tree, idSet = new Set()) {
+  if (!tree) return false;
+
+  if (idSet.has(tree.id)) return true;
+
+  tree.id && idSet.add(tree.id);
+
+  if (tree.hasChildNodes()) {
+    for (let child of tree.children) {
+      const result = hasDuplicateId(child, idSet);
+      if (result) return true;
+    }
+  }
+
+  return false;
+}
+
+const result = hasDuplicateId(rootElement)
+
+console.log(result,'result')
+```
