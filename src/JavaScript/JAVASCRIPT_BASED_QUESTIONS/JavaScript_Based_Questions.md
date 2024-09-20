@@ -3890,4 +3890,64 @@ callbackManager([asyncFunc1(),asyncFunc2(),asyncFunc3(),asyncFunc4(),asyncFunc5(
 
 
 
+### METHOD 2. IN A MORE SIMPLIFIED WAY:
+
+
+function asyncFunction(value,delay) {
+ return new Promise((resolve,reject)=>{
+    setTimeout(() => {
+    resolve(value);
+  }, delay);
+ })
+}
+
+
+const p1 = asyncFunction(1,6000)
+const p2 = asyncFunction(2,5000)
+const p3= asyncFunction(3,4000)
+const p4 = asyncFunction(4,3000)
+const p5 = asyncFunction(5,2000)
+const p6= asyncFunction(6,1000)
+
+let batch = 2
+
+const wait =(delay)=>{
+  return new Promise((resolve)=>{
+    setTimeout(()=>{
+      resolve()
+    },delay)
+  })
+}
+
+
+ function callbackManager(asyncFunctions,batch){
+
+  let length = asyncFunctions.length
+  let count = 0
+
+  const executor=()=>{
+
+   let callback = asyncFunctions.slice(count,count+batch)
+   asyncFunctions.splice(count,count+batch)
+
+   if(!!callback.length){
+
+      Promise.all(callback).then(async(response)=>{
+        console.log(response,'response >>>>>>>>>')
+      if(!!response.length){
+        await wait(5000)
+        executor()
+      }
+    }).catch((error)=>{
+      console.log(error,'error')
+    })
+   }
+
+  }
+
+  executor()
+}
+
+callbackManager([p1,p2,p3,p4,p5,p6],batch)
+
 ```
