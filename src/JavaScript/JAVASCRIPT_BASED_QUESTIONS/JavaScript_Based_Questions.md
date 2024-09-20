@@ -1620,11 +1620,58 @@ function asyncParallel(tasks, callback) {
 
 // }
 
-const taskList = [createAsyncTask(), createAsyncTask(), createAsyncTask(), createAsyncTask(), createAsyncTask(), createAsyncTask()];
+const taskList = [createAsyncTask(1), createAsyncTask(2), createAsyncTask(3), createAsyncTask(4), createAsyncTask(5), createAsyncTask(6)];
 
 asyncParallel(taskList, (result) => {
   console.log("results", result);
 });
+
+
+- NOTE : In above example data is not getting stored in a sequence. To store Data in sequence we need take index and store data to matched index in an array.
+
+### Example to store async function data in a sequence.
+
+function createAsyncTask(data) {
+  const value = Math.floor(Math.random() * 10);
+  return function (callback,index) {
+    setTimeout(() => {
+      callback(data,index);
+    }, value * 1000);
+  };
+}
+
+function asyncParallel(tasks, callback) {
+  const results = [];
+
+  let tasksCompleted = 0;
+
+  const callBackFunction = (value,index) => {
+
+    results[index] = value
+    tasksCompleted++;
+
+    if (tasksCompleted >= tasks.length) {
+      callback(results);
+    }
+  };
+
+  tasks.forEach((asyncTask,index) => {
+
+    asyncTask(callBackFunction,index);
+
+  });
+
+}
+
+
+
+const taskList = [createAsyncTask(1), createAsyncTask(2), createAsyncTask(3), createAsyncTask(4), createAsyncTask(5), createAsyncTask(6)];
+
+asyncParallel(taskList, (result) => {
+  console.log("results", result);
+});
+
+
 ```
 
 `NOTE`: Execute promises in Parallel.
@@ -3051,82 +3098,7 @@ setTimeout(() => {
 }, 5000);
 ```
 
-### 68. Execute an array of asynchronous functions one after the other in sequence using callbacks.
-
-1. The asynchronous function can be simulated using setTimeout which executes the callback
-2. The array of functions execution can be managed by having a function which takes care of execution of all the async functions
-3. Asynchronous functions need not be aware of the function to be executed and will take a callback as argument and execute it after completion
-
-```js
-
-//  METHOD : 1
-function asyncFunc1(callback) {
-  console.log("Started asyncFunc1");
-  setTimeout(() => {
-    console.log("Completed asyncFunc1");
-    callback();
-  }, 3000);
-}
-
-function asyncFunc2(callback) {
-  console.log("Started asyncFunc2");
-  setTimeout(() => {
-    console.log("Completed asyncFunc2");
-    callback();
-  }, 2000);
-}
-
-function asyncFunc3(callback) {
-  console.log("Started asyncFunc3");
-  setTimeout(() => {
-    console.log("Completed asyncFunc3");
-    callback();
-  }, 1000);
-}
-
-function callbackManager(asyncFuncs) {
-  function nextFuncExecutor() {
-    const nextAsyncFunc = asyncFuncs.shift();
-    if (nextAsyncFunc && typeof nextAsyncFunc === "function") {
-      nextAsyncFunc(nextFuncExecutor);
-    }
-  }
-  nextFuncExecutor();
-}
-
-// driver code
-callbackManager([asyncFunc1, asyncFunc2, asyncFunc3]);
-
-//  It wil work in a sequence.
-
-
-// METHOD 2:  ABOVE CODE IS BETTER THAN BELOW CODE.
-function asyncFunc() {
-  console.log("Started asyncFunc1");
-  //Async1 code
-  setTimeout(() => {
-    console.log("Completed asyncFunc1");
-    console.log("Started asyncFunc2");
-    //Async2 code
-    setTimeout(() => {
-      console.log("Completed asyncFunc2");
-      console.log("Started asyncFunc3");
-      //Async3 function code
-      setTimeout(() => {
-        console.log("Completed asyncFunc3");
-      }, 1000);
-    }, 2000);
-  }, 3000);
-}
-asyncFunc();
-
-
-1. The asynchronous block of code can be a function which executes asynchronously
-2. The execution of such function can be simulated using setTimeout to with delay and execute different blocks of code inside each
-
-```
-
-### 69. Implement a function to find the closest ancestor with the provided selector (Element.closest() method)
+### 68. Implement a function to find the closest ancestor with the provided selector (Element.closest() method)
 
 - The closest() method traverses the Element and its parents (heading toward the document root) until it finds a node that matches the provided selector string. Will return itself or the matching ancestor. If no such element exists, it returns null.
 
@@ -3152,7 +3124,7 @@ Element.prototype.closest = function (selector) {
 . The closest() method returns null() if no match is found.
 ```
 
-### 70 . Write a function to find the corresponding node in two identical DOM trees.
+### 69 . Write a function to find the corresponding node in two identical DOM trees.
 
 - Given two same DOM tree A, B, and an Element a in A, find the corresponding Element b in B. By corresponding, we mean a and b have the same relative position to their DOM tree root.
 
@@ -3197,7 +3169,7 @@ findCorrespondingNode(A, B, node1); // node1Target
 findCorrespondingNode(A, B, node2); // node2Target
 ```
 
-### 71. Write a function to get depth of a given DOM tree
+### 70. Write a function to get depth of a given DOM tree
 
 - A depth of a given DOM tree is the max depth till which DOM nodes are nested
 
@@ -3285,7 +3257,7 @@ function getHeight(tree) {
 const result = getHeight(document.body.firstElementChild);
 ```
 
-### 72. Implement a function to get the root node of a given DOM fragment (document.getRootNode() method).
+### 71. Implement a function to get the root node of a given DOM fragment (document.getRootNode() method).
 
 - Root node is the topmost parent node of any given DOM fragment.
 
@@ -3330,7 +3302,7 @@ function getRootNode(tree) {
 const rootNode = getRootNode(document.querySelector('span'))
 ```
 
-### 73. Implement a function to get unique tag names in a given DOM tree
+### 72. Implement a function to get unique tag names in a given DOM tree
 
 ```js
 
@@ -3396,7 +3368,7 @@ let result = getUniqueTags(rootElement)
 console.log(result,'result')
 ```
 
-### 74. Implement a function to get elements by tag name (document.getElementsByTagName() method).
+### 73. Implement a function to get elements by tag name (document.getElementsByTagName() method).
 
 1. The getElementsByTagName method of Document interface returns an HTMLCollection of elements with the given tag name.
 2. For example, document.getElementsByTagName('div') returns a collection of all div elements in the document.
@@ -3473,7 +3445,7 @@ let result = getElementsByTagName(rootElement,'h1')
 console.log(result,'result')
 ```
 
-### 75. Implement a function to check if a given DOM tree has duplicate IDs
+### 74. Implement a function to check if a given DOM tree has duplicate IDs
 
 1. In a given DOM tree, the id on each node has be unique
 2. Although HTML is very forgiving, but we should avoid duplicate identifiers
@@ -3546,4 +3518,376 @@ function hasDuplicateId(tree, idSet = new Set()) {
 const result = hasDuplicateId(rootElement)
 
 console.log(result,'result')
+```
+
+### 75. Execute an array of asynchronous functions one after the other in sequence using callbacks.
+
+1. The asynchronous function can be simulated using setTimeout which executes the callback
+2. The array of functions execution can be managed by having a function which takes care of execution of all the async functions
+3. Asynchronous functions need not be aware of the function to be executed and will take a callback as argument and execute it after completion
+
+```js
+
+//  METHOD : 1
+function asyncFunc1(callback) {
+  console.log("Started asyncFunc1");
+  setTimeout(() => {
+    console.log("Completed asyncFunc1");
+    callback();
+  }, 3000);
+}
+
+function asyncFunc2(callback) {
+  console.log("Started asyncFunc2");
+  setTimeout(() => {
+    console.log("Completed asyncFunc2");
+    callback();
+  }, 2000);
+}
+
+function asyncFunc3(callback) {
+  console.log("Started asyncFunc3");
+  setTimeout(() => {
+    console.log("Completed asyncFunc3");
+    callback();
+  }, 1000);
+}
+
+function callbackManager(asyncFuncs) {
+  function nextFuncExecutor() {
+    const nextAsyncFunc = asyncFuncs.shift();
+    if (nextAsyncFunc && typeof nextAsyncFunc === "function") {
+      nextAsyncFunc(nextFuncExecutor);
+    }
+  }
+  nextFuncExecutor();
+}
+
+// driver code
+callbackManager([asyncFunc1, asyncFunc2, asyncFunc3]);
+
+//  It wil work in a sequence.
+
+
+// METHOD 2:  ABOVE CODE IS BETTER THAN BELOW CODE.
+function asyncFunc() {
+  console.log("Started asyncFunc1");
+  //Async1 code
+  setTimeout(() => {
+    console.log("Completed asyncFunc1");
+    console.log("Started asyncFunc2");
+    //Async2 code
+    setTimeout(() => {
+      console.log("Completed asyncFunc2");
+      console.log("Started asyncFunc3");
+      //Async3 function code
+      setTimeout(() => {
+        console.log("Completed asyncFunc3");
+      }, 1000);
+    }, 2000);
+  }, 3000);
+}
+asyncFunc();
+
+
+1. The asynchronous block of code can be a function which executes asynchronously
+2. The execution of such function can be simulated using setTimeout to with delay and execute different blocks of code inside each
+
+```
+
+### 76. Execute the given list of asynchronous functions in parallel and return the results as an array to the callback
+
+```js
+
+
+function asyncFunc1(callback) {
+  setTimeout(() => {
+    callback(1);
+  }, 3000);
+}
+
+function asyncFunc2(callback) {
+  setTimeout(() => {
+    callback(2);
+  }, 2000);
+}
+
+function asyncFunc3(callback) {
+  setTimeout(() => {
+    callback(3);
+  }, 6000);
+}
+
+function asyncFunc4(callback) {
+  setTimeout(() => {
+    callback(4);
+  }, 4000);
+}
+
+function asyncFunc5(callback) {
+  setTimeout(() => {
+    callback(5);
+  }, 1000);
+}
+
+function asyncFunc6(callback) {
+  setTimeout(() => {
+    callback(6);
+  }, 7000);
+}
+
+
+
+### METHOD 1:
+
+function getValue(result) {
+  console.log(result, "result");
+}
+
+function callbackManager(asyncFunctions, callback) {
+  let output = [];
+
+  function asyncExecutor(value) {
+    if (value) {
+      output.push(value);
+    }
+
+    let asyncfunc = asyncFunctions.shift();
+
+    if (asyncfunc && typeof asyncfunc === "function") {
+      asyncfunc(asyncExecutor);
+    } else {
+      callback(output);
+    }
+  }
+
+  asyncExecutor();
+}
+
+callbackManager([asyncFunc1, asyncFunc2, asyncFunc3, asyncFunc4, asyncFunc5, asyncFunc6],getValue);
+
+
+### METHOD 2:
+
+
+function finalResult(data){
+
+console.log(data,'data')
+
+}
+
+function callbackManager(asyncFunctions,finalResultFunction){
+
+  let resultCounter = 0;
+  let length = asyncFunctions.length
+  const resultArr = new Array(length);
+
+  asyncFunctions.forEach((item,index)=>{
+
+//  NOTE : Here we have used callback function directly inside item function so, it is able to access index.
+    item((value)=>{
+      resultArr[index] = value
+      resultCounter++
+
+      if(resultCounter>=length){
+        finalResultFunction(resultArr)
+      }
+    })
+
+  })
+}
+
+callbackManager([asyncFunc1,asyncFunc2,asyncFunc3,asyncFunc4,asyncFunc5,asyncFunc6],finalResult)
+
+
+- OR If we want to use callback separately instead of using it inside item function then we have pass index like below :
+
+
+function asyncFunc1(callback,index) {
+  setTimeout(() => {
+    callback(1,index);
+  }, 3000);
+}
+
+function asyncFunc2(callback,index) {
+
+  setTimeout(() => {
+
+    callback(2,index);
+  }, 2000);
+}
+
+function asyncFunc3(callback,index) {
+
+  setTimeout(() => {
+
+    callback(3,index);
+  }, 6000);
+}
+
+
+
+function asyncFunc4(callback,index) {
+
+  setTimeout(() => {
+
+    callback(4,index);
+  }, 1000);
+}
+
+
+function asyncFunc5(callback,index) {
+
+  setTimeout(() => {
+
+    callback(5,index);
+  }, 5000);
+}
+
+
+
+function asyncFunc6(callback,index) {
+
+  setTimeout(() => {
+
+    callback(6,index);
+  }, 7000);
+}
+
+
+function finalResult(data){
+
+console.log(data,'data')
+
+}
+
+function callbackManager(asyncFunctions,finalResultFunction){
+
+  let data=[]
+  let counter = 0
+
+  const callback=(value,index)=>{
+    data[index] = value
+    counter++
+
+    if(counter>=asyncFunctions.length){
+      finalResult(data)
+    }
+  }
+
+  asyncFunctions.forEach((item,index)=>{
+
+    item(callback,index)
+
+  })
+
+}
+
+callbackManager([asyncFunc1,asyncFunc2,asyncFunc3,asyncFunc4,asyncFunc5,asyncFunc6],finalResult)
+
+```
+
+### 78. YOU HAVE AN ARRAY OF ASYNC FUNCTIONS ( OR PROMISES ). YOU NEED TO EXECUTE THEM IN BATCHES WHERE EACH BATCH RUNS IN PARALLEL BUT BATCHES THEMSELVES ARE PROCEED IN SERIES.
+
+```JS
+
+
+
+function asyncFunc1(callback) {
+ return new Promise((resolve,reject)=>{
+    setTimeout(() => {
+    resolve(1);
+  }, 7000);
+ })
+}
+
+function asyncFunc2(callback) {
+   return new Promise((resolve,reject)=>{
+    setTimeout(() => {
+    resolve(2);
+  }, 5000);
+ })
+}
+
+function asyncFunc3(callback) {
+  return new Promise((resolve,reject)=>{
+    setTimeout(() => {
+    resolve(3);
+  }, 3000);
+ })
+}
+
+function asyncFunc4(callback) {
+  return new Promise((resolve,reject)=>{
+    setTimeout(() => {
+    resolve(4);
+  }, 2000);
+ })
+}
+
+function asyncFunc5(callback) {
+  return new Promise((resolve,reject)=>{
+    setTimeout(() => {
+    resolve(5);
+  }, 1000);
+ })
+}
+
+function asyncFunc6(callback) {
+   return new Promise((resolve,reject)=>{
+    setTimeout(() => {
+    resolve(6);
+  }, 800);
+ })
+}
+
+
+
+let batch = 2
+
+
+### METHOD 1.
+
+const wait =(delay)=>{
+  return new Promise((resolve)=>{
+    setTimeout(()=>{
+      resolve()
+    },delay)
+  })
+}
+
+
+ function callbackManager(asyncFunctions,batch){
+
+  let length = asyncFunctions.length
+  let count = 0
+
+  const executor=()=>{
+
+   let callback = asyncFunctions.slice(count,count+batch)
+   asyncFunctions.splice(count,count+batch)
+
+   if(!!callback.length){
+
+      Promise.all(callback).then(async(response)=>{
+        console.log(response,'response >>>>>>>>>')
+      if(!!response.length){
+        await wait(5000)
+        executor()
+      }
+    }).catch((error)=>{
+      console.log(error,'error')
+    })
+   }
+
+  }
+
+
+  executor()
+}
+
+callbackManager([asyncFunc1(),asyncFunc2(),asyncFunc3(),asyncFunc4(),asyncFunc5(),asyncFunc6()],batch)
+
+
+
 ```
