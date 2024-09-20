@@ -3793,7 +3793,7 @@ callbackManager([asyncFunc1,asyncFunc2,asyncFunc3,asyncFunc4,asyncFunc5,asyncFun
 
 
 
-function asyncFunc1(callback) {
+function asyncFunc1() {
  return new Promise((resolve,reject)=>{
     setTimeout(() => {
     resolve(1);
@@ -3801,7 +3801,7 @@ function asyncFunc1(callback) {
  })
 }
 
-function asyncFunc2(callback) {
+function asyncFunc2() {
    return new Promise((resolve,reject)=>{
     setTimeout(() => {
     resolve(2);
@@ -3809,7 +3809,7 @@ function asyncFunc2(callback) {
  })
 }
 
-function asyncFunc3(callback) {
+function asyncFunc3() {
   return new Promise((resolve,reject)=>{
     setTimeout(() => {
     resolve(3);
@@ -3817,7 +3817,7 @@ function asyncFunc3(callback) {
  })
 }
 
-function asyncFunc4(callback) {
+function asyncFunc4() {
   return new Promise((resolve,reject)=>{
     setTimeout(() => {
     resolve(4);
@@ -3825,7 +3825,7 @@ function asyncFunc4(callback) {
  })
 }
 
-function asyncFunc5(callback) {
+function asyncFunc5() {
   return new Promise((resolve,reject)=>{
     setTimeout(() => {
     resolve(5);
@@ -3833,7 +3833,7 @@ function asyncFunc5(callback) {
  })
 }
 
-function asyncFunc6(callback) {
+function asyncFunc6() {
    return new Promise((resolve,reject)=>{
     setTimeout(() => {
     resolve(6);
