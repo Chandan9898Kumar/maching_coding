@@ -3951,3 +3951,227 @@ const wait =(delay)=>{
 callbackManager([p1,p2,p3,p4,p5,p6],batch)
 
 ```
+
+### 79. Execute 3 asynchronous functions one after the other in sequence using async await.
+
+- Async function with await for each promise can be used to execute in sequence.
+
+```js
+function asyncFunction(value, delay) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value);
+    }, delay);
+  });
+}
+
+const asyncFunc1 = asyncFunction(1, 3000);
+const asyncFunc2 = asyncFunction(2, 2000);
+const asyncFunc3 = asyncFunction(3, 1000);
+
+async function executor() {
+  try {
+    let r1 = await asyncFunc1;
+    let r2 = await asyncFunc2;
+    let r3 = await asyncFunc3;
+    console.log(r1, r2, r3);
+  } catch (error) {
+    console.log(error, "error");
+  }
+}
+
+executor();
+```
+
+### 80. Execute 3 asynchronous functions one after the other in sequence using promise chaining .
+
+- Promise chaining syntax
+
+```js
+
+### Sometimes, you have multiple asynchronous tasks you want to execute in sequence. In addition, you need to pass the result of the previous step to the next one. In this case, you can use the following syntax:
+
+step1()
+    .then(result => step2(result))
+    .then(result => step3(result))
+    ...
+
+### If you need to pass the result of the previous task to the next one without passing the result, you use this syntax:
+
+step1()
+    .then(step2)
+    .then(step3)
+    ...
+
+
+```
+
+- EXAMPLE :
+
+```js
+### EXAMPLE 1.
+
+function asyncFunction1(value,delay) {
+ return new Promise((resolve,reject)=>{
+    setTimeout(() => {
+    resolve(value);
+  }, delay);
+ })
+}
+
+function asyncFunction2({value,delay}) {
+ return new Promise((resolve,reject)=>{
+    setTimeout(() => {
+    resolve(value);
+  }, delay);
+ })
+}
+
+
+function asyncFunction3({value,delay}) {
+ return new Promise((resolve,reject)=>{
+    setTimeout(() => {
+    resolve(value);
+  }, delay);
+ })
+}
+
+
+
+asyncFunction1(1,3000).then(
+    (result1) => {
+      console.log("Async1 success",result1);
+      return {value:2,delay:2000}
+    },
+    () => {
+      console.log("Async1 failure");
+    }
+  )
+  .then(asyncFunction2)
+  .then(
+    (result2) => {
+      console.log("Async2 success",result2);
+      return {value:3,delay:1000}
+    },
+    () => {
+      console.log("Async2 failure");
+    }
+  )
+  .then(asyncFunction3)
+  .then(
+    (result3) => {
+      console.log("Async3 success",result3);
+    },
+    () => {
+      console.log("Async3 failure");
+    }
+  );
+
+### EXAMPLE 2.
+
+### Suppose that you want to perform the following asynchronous operations in sequence:
+
+. First, get the user from the database.
+. Second, get the services of the selected user.
+. Third, calculate the service cost from the user’s services.
+
+
+function getUser(userId) {
+    return new Promise((resolve, reject) => {
+        console.log('Get the user from the database.');
+        setTimeout(() => {
+            resolve({
+                userId: userId,
+                username: 'admin'
+            });
+        }, 1000);
+    })
+}
+
+function getServices(user) {
+    return new Promise((resolve, reject) => {
+        console.log(`Get the services of ${user.username} from the API.`);
+        setTimeout(() => {
+            resolve(['Email', 'VPN', 'CDN']);
+        }, 3 * 1000);
+    });
+}
+
+function getServiceCost(services) {
+    return new Promise((resolve, reject) => {
+        console.log(`Calculate the service cost of ${services}.`);
+        setTimeout(() => {
+            resolve(services.length * 100);
+        }, 2 * 1000);
+    });
+}
+
+
+getUser(100)
+    .then(getServices)
+    .then(getServiceCost)
+    .then(console.log);
+```
+
+### 81. Execute 3 asynchronous functions one after the other in sequence using async await and do not terminate on failure.
+
+```js
+function getUser(userId) {
+  return new Promise((resolve, reject) => {
+    console.log("Get the user from the database.");
+    setTimeout(() => {
+      resolve({
+        userId: userId,
+        username: "admin",
+      });
+    }, 1000);
+  });
+}
+
+function getServices(user) {
+  return new Promise((resolve, reject) => {
+    console.log(`Get the services of ${user.username} from the API.`);
+    setTimeout(() => {
+      resolve(["Email", "VPN", "CDN"]);
+    }, 3 * 1000);
+  });
+}
+
+function getServiceCost(services) {
+  return new Promise((resolve, reject) => {
+    console.log(`Calculate the service cost of ${services}.`);
+    setTimeout(() => {
+      resolve(services.length * 100);
+    }, 2 * 1000);
+  });
+}
+
+(async function executor() {
+  let user, services, cost;
+  try {
+    user = await getUser(100);
+    console.log("Async1 success", user);
+  } catch (error) {
+    console.log("Async1 failure", error);
+  }
+  try {
+    services = await getServices(user || 10);
+    console.log("Async2 success", services);
+  } catch (error) {
+    console.log("Async2 failure", error);
+  }
+  try {
+    cost = await getServiceCost(services || ["vpn", "lan", "wan"]);
+    console.log("Async3 success", cost);
+  } catch (error) {
+    console.log("Async3 failure", error);
+  }
+  console.log("All succeeded", cost);
+})();
+
+
+
+. Unlike promises, try-catch block can be used on async functions
+. catch block for each asynchronous function can be used to catch errors and continue with next execution which will not propagate failures.
+
+```
