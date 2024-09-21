@@ -2055,7 +2055,7 @@ The Composite pattern is a structural design pattern that lets you compose objec
 
 `Example :`
 
-There a number of somewhat common examples of the Composite pattern. If you’ve ever used a PC, you’ve more than likely seen a frequently used implementation of this pattern: the file structure. Consider every disk/drive and folder to be a composite object and every file to be a leaf. When you try to delete a folder, it’ll not only delete that folder, but also every other folder and file contained within it. 
+There a number of somewhat common examples of the Composite pattern. If you’ve ever used a PC, you’ve more than likely seen a frequently used implementation of this pattern: the file structure. Consider every disk/drive and folder to be a composite object and every file to be a leaf. When you try to delete a folder, it’ll not only delete that folder, but also every other folder and file contained within it.
 
 In simple words:
 
@@ -2355,7 +2355,7 @@ root.print();
 In this step, I am creating instance for the File class as file along with the values of name, size and location. I have created a instance for the Folder class with the name ‘users’ and added the file to the folder using the add method. I have also created a instance called root which represents the root directory of the filesystem which holds all the directories of the system and finally used print method to display the overall File system structure.
 ```
 
-`NOTE :` All nodes in the Composite pattern share a common set of properties and methods which supports individual objects as well as object collections. This common interface greatly facilitates the design and construction of recursive algorithms that iterate over each object in the Composite collection. 
+`NOTE :` All nodes in the Composite pattern share a common set of properties and methods which supports individual objects as well as object collections. This common interface greatly facilitates the design and construction of recursive algorithms that iterate over each object in the Composite collection.
 
 ### When To Use Composite Pattern ? ✅
 
@@ -2441,6 +2441,220 @@ console.log("Coffee with Milk Cost: $" + coffeeWithMilk.cost()); // Coffee with 
 console.log("Description: " + coffeeWithMilk.description()); // Description: Simple coffee, with milk
 ```
 
+- Decorators are a structural JavaScript design patterns that aims to promote code reuse. This pattern allows behavior to be added to an individual object dynamically, without affecting the behavior of other objects from the same class. Decorators can also provide a flexible alternative to sub-classing for extending functionality.
+
+Since JavaScript allows us to add methods and properties to objects dynamically, implementing this JavaScript design patterns is a very straight-forward process.
+
+`EXAMPLE :2 Using Object`
+
+```js
+// A vehicle constructor
+function Vehicle(vehicleType) {
+  // some sane defaults
+  this.vehicleType = vehicleType || "car";
+  this.model = "default";
+  this.license = "00000-000";
+}
+
+// Test instance for a basic vehicle
+var testInstance = new Vehicle("car");
+console.log(testInstance);
+
+// Outputs:
+// vehicle: car, model:default, license: 00000-000
+
+// Lets create a new instance of vehicle, to be decorated
+var truck = new Vehicle("truck");
+
+// New functionality we're decorating vehicle with
+truck.setModel = function (modelName) {
+  this.model = modelName;
+};
+
+truck.setColor = function (color) {
+  this.color = color;
+};
+
+// Test the value setters and value assignment works correctly
+truck.setModel("CAT");
+truck.setColor("blue");
+
+console.log(truck);
+
+// Outputs:
+// vehicle:truck, model:CAT, color: blue
+
+// Demonstrate "vehicle" is still unaltered . This A vehicle constructor is still unchanged. It still contains vehicleType ,model, license. No new properties.
+var secondInstance = new Vehicle("car");
+console.log(secondInstance);
+
+// Outputs:
+// vehicle: car, model:default, license: 00000-000
+
+- NOTE : So, here A vehicle constructor is reusable code, we are using it to create N-number of new instances without making any change in A vehicle constructor function.
+```
+
+### Key Components of the Decorator Design Pattern in JavaScript
+
+- 1. Component Interface: This is an abstract class or interface that defines the common interface for both the concrete components and decorators. It specifies the operations that can be performed on the objects.
+- 2. Concrete Component: These are the basic objects or classes that implement the Component interface. They are the objects to which we want to add new behavior or responsibilities.
+- 3. Decorator: This is an abstract class that also implements the Component interface and has a reference to a Component object. Decorators are responsible for adding new behaviors to the wrapped Component object.
+- 4. Concrete Decorator: These are the concrete classes that extend the Decorator class. They add specific behaviors or responsibilities to the Component. Each Concrete Decorator can add one or more behaviors to the Component.
+
+`Example of Decorator Design Pattern in JavaScript:3 Using classes`
+
+1. Imagine you are developing a web application where users can create and customize their profiles. Each user has basic information such as name, email, and profile picture, but they can also choose to add optional features such as a bio, social media links, or a profile theme. You want to implement a system that allows users to dynamically customize their profiles with these optional features while keeping the codebase clean and maintainable.
+
+2. The Decorator Design Pattern is ideal for this scenario because it allows you to add optional features to individual profile objects dynamically without modifying the core profile class. This promotes code reusability, flexibility, and maintainability, as new features can be easily added or removed without affecting the existing code.
+
+```js
+
+- 1. Component Interface (Profile):
+// This is the base component interface representing a user profile.
+// It contains basic properties such as name, email, and profile picture, along with a display() method to print profile information.
+
+// Profile interface representing the base component
+class Profile {
+  constructor(name, email, profilePicture) {
+    this.name = name;
+    this.email = email;
+    this.profilePicture = profilePicture;
+  }
+
+  display() {
+    console.log(`Name: ${this.name}`);
+    console.log(`Email: ${this.email}`);
+    console.log(`Profile Picture: ${this.profilePicture}`);
+  }
+}
+
+
+- 2. Concrete Component (BasicProfile):
+// BasicProfile is a concrete subclass of Profile.
+// It inherits properties and methods from the base Profile class and does not contain any additional features.
+
+// Concrete component representing basic profile without any additional features
+class BasicProfile extends Profile {
+  constructor(name, email, profilePicture) {
+    super(name, email, profilePicture);
+  }
+}
+
+
+
+- 3. Decorator (ProfileDecorator):
+// ProfileDecorator is an abstract decorator class implementing the Profile interface.
+// It maintains a reference to the decorated Profile object and delegates method calls to it.
+
+
+// Decorator class implementing the Profile interface
+class ProfileDecorator extends Profile {
+  constructor(profile) {
+    super(profile.name, profile.email, profile.profilePicture);
+    this.profile = profile;
+  }
+
+  display() {
+    this.profile.display();
+  }
+}
+
+
+- 4. Concrete Decorators (BioDecorator, SocialMediaDecorator):
+// BioDecorator and SocialMediaDecorator are concrete decorators extending ProfileDecorator.
+// They add additional features (bio, social media links) to the profile and override the display() method to include the new features.
+
+// Concrete decorator adding a bio to the profile
+class BioDecorator extends ProfileDecorator {
+  constructor(profile, bio) {
+    super(profile);
+    this.bio = bio;
+  }
+
+  display() {
+    super.display();
+    console.log(`Bio: ${this.bio}`);
+  }
+}
+
+// Concrete decorator adding social media links to the profile
+class SocialMediaDecorator extends ProfileDecorator {
+  constructor(profile, socialMediaLinks) {
+    super(profile);
+    this.socialMediaLinks = socialMediaLinks;
+  }
+
+  display() {
+    super.display();
+    console.log(`Social Media Links: ${this.socialMediaLinks}`);
+  }
+}
+
+// Usage
+let basicProfile = new BasicProfile("John Doe", "john@example.com", "profile.jpg");
+basicProfile.display();
+
+let profileWithBio = new BioDecorator(basicProfile, "I'm a software engineer.");
+profileWithBio.display();
+
+let profileWithSocialMedia = new SocialMediaDecorator(basicProfile, "@johndoe");
+profileWithSocialMedia.display();
+```
+
+`EXAMPLE 4`
+
+- In JavaScript, the Decorator Pattern can be implemented using classes and object composition.
+
+```js
+class Coffee {
+  cost() {
+    return 5; // Base cost of a regular coffee
+  }
+}
+
+// Now, you want to add decorators to your coffee to customize it with additional options, such as milk and sugar:
+
+class MilkDecorator {
+  constructor(coffee) {
+    this.coffee = coffee;
+  }
+
+  cost() {
+    return this.coffee.cost() + 2; // Adding the cost of milk
+  }
+}
+
+class SugarDecorator {
+  constructor(coffee) {
+    this.coffee = coffee;
+  }
+
+  cost() {
+    return this.coffee.cost() + 1; // Adding the cost of sugar
+  }
+}
+
+
+// You can then create decorated coffee instances like this :
+
+const regularCoffee = new Coffee();
+const coffeeWithMilk = new MilkDecorator(regularCoffee);
+const coffeeWithMilkAndSugar = new SugarDecorator(coffeeWithMilk);
+
+console.log(regularCoffee.cost()); // Output: 5
+console.log(coffeeWithMilk.cost()); // Output: 7
+console.log(coffeeWithMilkAndSugar.cost()); // Output: 8
+
+
+- In this example, we have the Coffee class representing a base coffee. The MilkDecorator and SugarDecorator classes are decorators that wrap a coffee object and add the cost of milk and sugar, respectively, to the base cost.
+```
+
+### Characteristics of the Decorator Pattern in JavaScript
+
+1. This pattern promotes flexibility and extensibility in software systems by allowing developers to compose objects with different combinations of functionalities at runtime.
+2. It adheres to the open/closed principle, as new decorators can be added without modifying existing code, making it a powerful tool for building modular and customizable software components.
+3. The Decorator Pattern is commonly used in scenarios where a variety of optional features or behaviors need to be added to objects in a flexible and reusable manner, such as in text formatting, graphical user interfaces, or customization of products like coffee or ice cream.
+
 ### When To Use Decorator Pattern ? ✅
 
 - **Add Responsibilities Dynamically:** When adding responsibilities to objects without affecting others, such as adding formatting options to a text editor.
@@ -2449,15 +2663,19 @@ console.log("Description: " + coffeeWithMilk.description()); // Description: Sim
 
 ### Advantages of Decorator Pattern 🪄 :
 
-- **Flexible Alternative to Subclassing 🔄:** Adds new behaviors to objects without affecting other objects of the same class.
+- **Flexible Alternative to SubClassing 🔄:** Adds new behaviors to objects without affecting other objects of the same class.
 - **Runtime Addition and Removal 🕰️:** Decorators can be added to and removed from an object dynamically at runtime.
 - **Code Reuse and Reduction 🔄:** Encapsulates specific features in decorator classes, promoting code reuse and reducing redundancy.
+- **Clear Code Structure:** The Decorator pattern promotes a clear and structured design, making it easier for developers to understand how different features and responsibilities are added to objects.
 
 ### Disadvantages of Decorator Pattern 🆘 :
 
 - **Many Small Objects 🧩:** Can lead to situations with many small objects, complicating the design and debugging.
 - **Difficult Removal of Specific Wrapper 🔄:** It's challenging to remove a specific wrapper from the wrappers stack.
 - **Complex Initial Configuration 🤯:** Initial configuration code of layers might look ugly in complex systems with many decorators.
+- **Increased Number of Classes:** When using the Decorator pattern, you often end up with a large number of small, specialized decorator classes. This can lead to a proliferation of classes in your codebase, which may increase maintenance overhead.
+
+- **Order of Decoration:** The order in which decorators are applied can affect the final behavior of the object. If decorators are not applied in the correct order, it can lead to unexpected results. Managing the order of decorators can be challenging, especially in complex scenarios.
 
 ## Facade 🏰
 
