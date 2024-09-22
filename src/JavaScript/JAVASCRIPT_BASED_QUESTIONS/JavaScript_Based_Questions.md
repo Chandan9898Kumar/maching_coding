@@ -4176,7 +4176,92 @@ function getServiceCost(services) {
 
 ```
 
-### 82. PERFORM ASYNCHRONOUS FUNCTIONS IN PARALLEL AND STORE RESULT IN A SEQUENTIAL ORDER ( ORDER IN WHICH THE FUNCTIONS ARE CALLED) USING PROMISE.ALL AND MAP METHOD AND FOR LOOP.
+### 82. Perform async function in sequence using for loop. sequentially resolve a bunch of promises in order, one after the other.
+
+- We can achieve the result with the help of async/await.
+
+```js
+function asyncFunction1(value = 1, delay = 8000) {
+  console.log(value, "value >>>>>>>>>>>>>>", delay);
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value);
+    }, delay);
+  });
+}
+
+//  NOTE: Below wil work in stackblitz tool, but if you use other tool like js-bin, code-chef, scaler editor then it will not work.
+//  it will throw : [TimeLimitExceeded] Your code took more than 1 second(s) to complete.(HERE we have given time like 8,5 and 2 seconds).
+
+1. EXAMPLE:
+
+let files = [asyncFunction1(1, 8000), asyncFunction1(2, 5000), asyncFunction1(3, 2000)];
+
+const main = async () => {
+  let finalResult = []
+  console.log("Before For Each Loop");
+
+  for (let i = 0; i < files.length; i++) {
+    console.log(i, "i >>>>>>>>>>>>>>>>>>>>>>>>>");
+    const result = await files[i];
+    finalResult[i] = result
+    console.log(result, "result");
+  }
+
+  console.log("After For Each Loop");
+  return finalResult
+};
+
+let result = main()
+result.then((response)=>{
+    console.log(response,'response')
+})
+
+
+-  BUT If we give time like 0 second then it will work:
+
+2. EXAMPLE :
+
+let files = [asyncFunction1(1, 0), asyncFunction1(2, 0), asyncFunction1(3, 0)];
+
+const main = async () => {
+  let finalResult = []
+  console.log("Before For Each Loop");
+
+  for (let i = 0; i < files.length; i++) {
+    console.log(i, "i >>>>>>>>>>>>>>>>>>>>>>>>>");
+    const result = await files[i];
+    finalResult[i] = result
+    console.log(result, "result");
+  }
+
+  console.log("After For Each Loop");
+
+  return Promise.resolve(finalResult)  // same as return finalResult
+};
+
+let result = main()
+result.then((response)=>{
+    console.log(response,'response')
+}).catch((error)=>{
+  console.log(error)
+})
+
+
+
+### NOTE :
+
+1. This behavior works with most loops (like while and for-of loops)
+2. But it won't work with loops that require a callback. Examples of such loops that require a fallback include forEach, map, filter, and reduce.
+```
+
+- TO See Explanation Click on the following link :
+
+### Link To JavaScript async and await in loops Documentation.
+
+[JavaScript async and await in loops](https://www.freecodecamp.org/news/javascript-async-and-await-in-loops-30ecc5fb3939/)
+
+### 83. PERFORM ASYNCHRONOUS FUNCTIONS IN PARALLEL AND STORE RESULT IN A SEQUENTIAL ORDER ( ORDER IN WHICH THE ASYNC FUNCTIONS ARE CALLED) USING PROMISE.ALL AND MAP METHOD AND FOR LOOP.
 
 ```JS
 
@@ -4277,88 +4362,3 @@ finalResult.then((result)=>{
 // won't help to achieve the result
 
 ```
-
-### 83. Perform async function in sequence using for loop.
-
-- We can achieve the result with the help of async/await.
-
-```js
-function asyncFunction1(value = 1, delay = 8000) {
-  console.log(value, "value >>>>>>>>>>>>>>", delay);
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(value);
-    }, delay);
-  });
-}
-
-//  NOTE: Below wil work in stackblitz tool, but if you use other tool like js-bin, code-chef, scaler editor then it will not work.
-//  it will throw : [TimeLimitExceeded] Your code took more than 1 second(s) to complete.(HERE we have given time like 8,5 and 2 seconds).
-
-1. EXAMPLE:
-
-let files = [asyncFunction1(1, 8000), asyncFunction1(2, 5000), asyncFunction1(3, 2000)];
-
-const main = async () => {
-  let finalResult = []
-  console.log("Before For Each Loop");
-
-  for (let i = 0; i < files.length; i++) {
-    console.log(i, "i >>>>>>>>>>>>>>>>>>>>>>>>>");
-    const result = await files[i];
-    finalResult[i] = result
-    console.log(result, "result");
-  }
-
-  console.log("After For Each Loop");
-  return finalResult
-};
-
-let result = main()
-result.then((response)=>{
-    console.log(response,'response')
-})
-
-
--  BUT If we give time like 0 second then it will work:
-
-2. EXAMPLE :
-
-let files = [asyncFunction1(1, 0), asyncFunction1(2, 0), asyncFunction1(3, 0)];
-
-const main = async () => {
-  let finalResult = []
-  console.log("Before For Each Loop");
-
-  for (let i = 0; i < files.length; i++) {
-    console.log(i, "i >>>>>>>>>>>>>>>>>>>>>>>>>");
-    const result = await files[i];
-    finalResult[i] = result
-    console.log(result, "result");
-  }
-
-  console.log("After For Each Loop");
-
-  return Promise.resolve(finalResult)  // same as return finalResult
-};
-
-let result = main()
-result.then((response)=>{
-    console.log(response,'response')
-}).catch((error)=>{
-  console.log(error)
-})
-
-
-
-### NOTE :
-
-1. This behavior works with most loops (like while and for-of loops)
-2. But it won't work with loops that require a callback. Examples of such loops that require a fallback include forEach, map, filter, and reduce.
-```
-
-- TO See Explanation Click on the following link :
-
-### Link To JavaScript async and await in loops Documentation.
-
-[JavaScript async and await in loops](https://www.freecodecamp.org/news/javascript-async-and-await-in-loops-30ecc5fb3939/)
