@@ -4253,6 +4253,7 @@ result.then((response)=>{
 
 1. This behavior works with most loops (like while and for-of loops)
 2. But it won't work with loops that require a callback. Examples of such loops that require a fallback include forEach, map, filter, and reduce.
+So, sequentially resolve a bunch of promises in order, one after the other is not not possible in forEach, map, filter (loops that require a callback)
 ```
 
 - TO See Explanation Click on the following link :
