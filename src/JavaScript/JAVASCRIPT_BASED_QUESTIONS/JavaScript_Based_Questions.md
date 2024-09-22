@@ -4325,4 +4325,4 @@ result.then((response)=>{
 
 ### Link To JavaScript async and await in loops Documentation.
 
-[![JavaScript async and await in loops](https://www.freecodecamp.org/news/javascript-async-and-await-in-loops-30ecc5fb3939/)]
+[[JavaScript async and await in loops](https://www.freecodecamp.org/news/javascript-async-and-await-in-loops-30ecc5fb3939/)]
