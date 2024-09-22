@@ -4196,6 +4196,9 @@ let files= [asyncFunction1(1,8000),asyncFunction1(2,5000),asyncFunction1(3,2000)
 
 async function printFiles () {
 
+// If you use await in a map, map will always return an array of promise. This is because asynchronous functions always return promises.
+// Since map always return promises (if you use await), you have to wait for the array of promises to get resolved. You can do this with await Promise.all(arrayOfPromises).
+
    let result = await Promise.all(files.map(async (file) => {
     const contents = await file
     console.log(contents,'contents') // called : 3,2,1
@@ -4203,6 +4206,25 @@ async function printFiles () {
   }))
 
 console.log(result,'result')
+
+return result
+}
+
+### OR : Above and below have implementation, below we are just calling  Promise.all() separately.
+
+async function printFiles () {
+
+// If you use await in a map, map will always return an array of promise. This is because asynchronous functions always return promises.
+// Since map always return promises (if you use await), you have to wait for the array of promises to get resolved. You can do this with await Promise.all(arrayOfPromises).
+
+   let promises = files.map(async (file) => {
+    const contents = await file
+    console.log(contents,'contents') // called : 3,2,1
+    return contents
+  })
+
+   let finalResult = await Promise.all(promises)
+   console.log(result,'result')
 
 return result
 }
