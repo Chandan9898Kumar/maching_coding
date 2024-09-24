@@ -4252,12 +4252,90 @@ result.then((response)=>{
 ### NOTE :
 
 1. This behavior works with most loops (like while and for-of loops)
-2. But it won't work with loops that require a callback. Examples of such loops that require a fallback include forEach, map, filter, and reduce.
+2. But it wont work with loops that require a callback. Examples of such loops that require a fallback include forEach, map, filter, and reduce.
 3. So, sequentially resolve a bunch of promises in order, one after the other is not not possible in forEach, map, filter (loops that require a callback).
 But we can achieve this by using reduce method.
+
+
+### Reduce Method Example:
+
+  function asyncFunction1(value = 1, delay = 6000) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(value);
+      }, delay);
+    });
+  }
+
+  function asyncFunction2(value = 2, delay = 3000) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(value);
+      }, delay);
+    });
+  }
+
+  function asyncFunction3(value = 3, delay = 1000) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(value);
+      }, delay);
+    });
+  }
+
+const asyncFuncArr = [asyncFunction1, asyncFunction2, asyncFunction3];
+
+let arr =asyncFuncArr.reduce((acc, asyncFn) => {
+
+  let accResult =  acc.then((response) => {
+
+   let data = asyncFn().then((result)=>{
+     console.log(result,'result >>>>>>>>>>')
+     return result
+   })
+
+   return data
+
+  });
+
+  return accResult
+
+}, Promise.resolve());
+
+arr.then((result)=>{
+  console.log(result,'result')
+})
+
+
+### Explanation.
+
+- Each time our callback fires, we return a promise that resolves to another promise. And while reduce() doesn’t wait for any resolution to take place, the advantage it does provide is the ability to pass something back into the same callback after each run, a feature unique to reduce(). As a result, we’re able build a chain of promises that resolve into more promises, making everything nice and sequential:
+
+new Promise( (resolve, reject) => {
+  // Promise #1
+  resolve();
+}).then( (result) => {
+  // Promise #2
+  return result;
+}).then( (result) => {
+  // Promise #3
+  return result;
+}); // ... and so on!
+
+
+- All of this should also reveal why we can’t just return a single, new promise each iteration. Because the loop runs synchronously, each promise will be fired immediately, instead of waiting for those created before it.
+
+- Since all we’re returning in our callback is a chained promise, that’s all we get when the loop is finished: a promise. After that, we can handle it however we want, even long after reduce() has run its course.
+
+
+- We found that the reason reduce() works for us is because we’re able to return something right back to our same callback (namely, a promise), which we can then build upon by having it resolve into another promise. With all of these other methods like map,filter,forEach, however, we just can’t pass an argument to our callback that was returned from our callback. Instead, each of those callback arguments are predetermined, making it impossible for us to leverage them for something like sequential promise resolution.
 ```
 
-- TO See Explanation Click on the following link :
+- For More Information about how it works in reduce method, Check out:
+
+[Why Using reduce() to Sequentially Resolve Promises Works](https://css-tricks.com/why-using-reduce-to-sequentially-resolve-promises-works/)
+
+- TO See Explanation of async and await in loops, Click on the following link :
 
 ### Link To JavaScript async and await in loops Documentation.
 
