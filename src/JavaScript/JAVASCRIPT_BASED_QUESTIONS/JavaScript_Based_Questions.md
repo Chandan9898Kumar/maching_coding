@@ -3595,7 +3595,7 @@ asyncFunc();
 
 ```
 
-### 76. Execute the given list of asynchronous functions in parallel and return the results as an array to the callback
+### 76. Execute the given list of asynchronous functions in parallel and return the results in a sequence as an array to the callback.
 
 ```js
 
@@ -3784,6 +3784,96 @@ function callbackManager(asyncFunctions,finalResultFunction){
 }
 
 callbackManager([asyncFunc1,asyncFunc2,asyncFunc3,asyncFunc4,asyncFunc5,asyncFunc6],finalResult)
+
+
+### Example with using promise.
+
+function asyncFunc1(value) {
+  return new Promise((resolve,reject)=>{
+
+    setTimeout(()=>{
+      resolve(value)
+    },6000)
+  })
+}
+
+function asyncFunc2(value) {
+
+   return new Promise((resolve,reject)=>{
+
+    setTimeout(()=>{
+      resolve(value)
+    },4000)
+  })
+}
+
+function asyncFunc3(value) {
+
+ return new Promise((resolve,reject)=>{
+
+    setTimeout(()=>{
+      resolve(value)
+    },5000)
+  })
+}
+
+function asyncFunc4(value) {
+
+ return new Promise((resolve,reject)=>{
+
+    setTimeout(()=>{
+      resolve(value)
+    },7000)
+  })
+}
+
+function asyncFunc5(value) {
+ return new Promise((resolve,reject)=>{
+
+    setTimeout(()=>{
+      resolve(value)
+    },2000)
+  })
+}
+
+function asyncFunc6(value) {
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      resolve(value)
+    },1000)
+  })
+}
+
+
+ function callbackManager(asyncFunctions, callback) {
+
+   return new Promise((resolve,reject)=>{
+     let output = [];
+    let count =1
+     async function asyncExecutor() {
+    let asyncfunc = asyncFunctions.shift();
+
+    if (asyncfunc && typeof asyncfunc === "function") {
+      let response = await asyncfunc(count)
+      output.push(response)
+      count++
+      asyncExecutor()
+    } else {
+      return resolve(output)
+    }
+  }
+
+  asyncExecutor();
+   })
+
+}
+
+let result = callbackManager([asyncFunc1, asyncFunc2, asyncFunc3, asyncFunc4, asyncFunc5, asyncFunc6]);
+
+result.then((response)=>{
+  console.log(response,'response')
+})
+
 
 ```
 
@@ -4285,7 +4375,9 @@ But we can achieve this by using reduce method.
 
 const asyncFuncArr = [asyncFunction1, asyncFunction2, asyncFunction3];
 
-let arr =asyncFuncArr.reduce((acc, asyncFn) => {
+
+###   TYPE : 1
+let arr = asyncFuncArr.reduce((acc, asyncFn) => {
 
   let accResult =  acc.then((response) => {
 
@@ -4301,6 +4393,36 @@ let arr =asyncFuncArr.reduce((acc, asyncFn) => {
   return accResult
 
 }, Promise.resolve());
+
+
+
+### TYPE : 2
+let arr = asyncFuncArr.reduce((acc, asyncFn) => {
+  return acc.then((response) => {
+   return  asyncFn().then((result)=>{
+     console.log(result,'result >>>>>>>>>>')
+     return result
+   })
+  });
+
+}, Promise.resolve());
+
+
+### TYPE : 3
+
+let arr = asyncFuncArr.reduce(async (acc, asyncFn) => {
+   await acc
+   return asyncFn().then((result)=>{
+     console.log(result,'result')
+     return result
+   })
+}, Promise.resolve());
+
+arr.then((result)=>{
+  console.log(result,'result')
+})
+
+- Final Result :
 
 arr.then((result)=>{
   console.log(result,'result')
@@ -4375,7 +4497,7 @@ console.log(result,'result')
 return result
 }
 
-### OR : Above and below have implementation, below we are just calling  Promise.all() separately.
+### OR : Above and below have same implementation, below we are just calling  Promise.all() separately.
 
 async function printFiles () {
 
