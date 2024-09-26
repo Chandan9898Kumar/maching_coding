@@ -4418,9 +4418,6 @@ let arr = asyncFuncArr.reduce(async (acc, asyncFn) => {
    })
 }, Promise.resolve());
 
-arr.then((result)=>{
-  console.log(result,'result')
-})
 
 - Final Result :
 
@@ -4562,5 +4559,86 @@ finalResult.then((result)=>{
 
 //  HERE we are using for loop inside  new promise method, then only it will work and put result in a sequence, Simply using for loop inside a function without new promise
 // won't help to achieve the result
+
+```
+
+### 84. Example Function sequential piping and with promises.
+
+- The pipe function takes a sequence of functions and returns a new function. When the new function is called with an argument, the sequence of functions are called in order, which each one receiving the return value of the previous function.
+
+```js
+const pipe =(...functions) =>(initialValue) => functions.reduce((acc, fn) => fn(acc), initialValue);
+
+// Building blocks to use for composition
+const double = (x) => 2 * x;
+const triple = (x) => 3 * x;
+const quadruple = (x) => 4 * x;
+
+// Composed functions for multiplication of specific values
+const multiply6 = pipe(double, triple);
+const multiply9 = pipe(triple, triple);
+const multiply16 = pipe(quadruple, quadruple);
+const multiply24 = pipe(double, triple, quadruple);
+
+// Usage
+multiply6(6); // 36
+multiply9(9); // 81
+multiply16(16); // 256
+multiply24(10); // 240
+
+
+
+###  Running promises in sequence
+- Promise sequencing is essentially function piping demonstrated in the previous section, except done asynchronously.
+
+// Compare this with pipe: fn(acc) is changed to acc.then(fn),
+// and initialValue is ensured to be a promise
+const asyncPipe =(...functions) =>(initialValue) =>{
+
+ return functions.reduce((acc, fn) => {
+  let response =  acc.then((res)=>{
+   return fn(res)
+  })
+  return response
+ }, Promise.resolve(initialValue))
+
+}
+
+# OR Below
+
+// const asyncPipe =(...functions) =>(initialValue) => functions.reduce(async (acc, fn) => fn(await acc), initialValue);
+
+
+
+// Building blocks to use for composition
+const p1 = async (a) => {
+ console.log(a,'a1')
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      resolve(a*5)
+    },1000)
+  })
+};
+const p2 = (a) =>{
+    console.log(a,'a2')
+  return new Promise((resolve,reject)=>{
+    setTimeout(()=>{
+      resolve(a*2)
+    },4000)
+  })
+}
+
+// The composed functions can also return non-promises, because the values are
+// all eventually wrapped in promises
+const f3 = (a) => {
+  console.log(a,'a3')
+  return a * 3
+}
+const p4 = async (a) => {
+  console.log(a,'a4')
+  return a * 4
+}
+
+asyncPipe(p1, p2, f3, p4)(10).then(console.log)
 
 ```
