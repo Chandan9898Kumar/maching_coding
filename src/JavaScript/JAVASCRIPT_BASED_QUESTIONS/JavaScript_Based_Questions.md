@@ -4642,3 +4642,23 @@ const p4 = async (a) => {
 asyncPipe(p1, p2, f3, p4)(10).then(console.log)
 
 ```
+
+### 85. Write a function to truncate a string to a certain number of letters.
+
+1. Text can be truncated by fetching the substring from start till the count of characters
+2. substr methods of String can be used to fetch the part of the string.
+
+```js
+function truncateString(str, charCount) {
+  if (str.length > charCount) {
+    return str.substr(0, charCount - 3) + "...";
+  } else {
+    return str;
+  }
+}
+
+// Example
+truncateString("JavaScript", 7); // "Java..."
+truncateString("JS is fun", 10); // "JS is fun"
+truncateString("JS is funny", 10); // "JS is f..."
+```
