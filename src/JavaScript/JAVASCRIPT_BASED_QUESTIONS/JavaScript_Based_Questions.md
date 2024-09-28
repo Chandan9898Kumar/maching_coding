@@ -4662,3 +4662,82 @@ truncateString("JavaScript", 7); // "Java..."
 truncateString("JS is fun", 10); // "JS is fun"
 truncateString("JS is funny", 10); // "JS is f..."
 ```
+
+### 85. O/P
+
+```js
+var show = 1;
+
+console.log(show, "show top"); // 1
+
+function show() {
+  console.log("show");
+}
+
+console.log(show, "show bottom"); // 1
+show() // show is not a function
+
+### Note that in JavaScript, functions are "hoisted" to the top of their scope, which means that the function show() is moved to the top of the script.
+
+- Hoisting is the default behavior of javascript where all the variable and function declarations are moved on top.
+- This means that irrespective of where the variables and functions are declared, they are moved on top of the scope. The scope can be both local and global.
+
+```
+
+### Explain Implicit Type Coercion in javascript.
+
+- Implicit type coercion in javascript is the automatic conversion of value from one data type to another. It takes place when the operands of an expression are of different data types.
+
+```js
+1. String coercion
+String coercion takes place while using the ‘ + ‘ operator. When a number is added to a string, the number type is always converted to the string type.
+
+### Example 1:
+
+var x = 3;
+var y = "3";
+x + y // Returns "33"
+
+
+### Example 2:
+
+var x = 24;
+var y = "Hello";
+x + y   // Returns "24Hello";
+
+
+
+### Note - ‘ + ‘ operator when used to add two numbers, outputs a number. The same ‘ + ‘ operator when used to add two strings, outputs the concatenated string:
+
+var name = "Vivek";
+var surname = " Bisht";
+name + surname     // Returns "Vivek Bisht"
+
+
+- When JavaScript sees that the operands of the expression x + y are of different types ( one being a number type and the other being a string type ), it converts the number type to the string type and then performs the operation. Since after conversion, both the variables are of string type, the ‘ + ‘ operator outputs the concatenated string “33” in the first example and “24Hello” in the second example.
+
+
+### Note - Type coercion also takes place when using the ‘ - ‘ operator, but the difference while using ‘ - ‘ operator is that, a string is converted to a number and then subtraction takes place.
+
+### EXAMPLE 3:
+var x = 3;
+Var y = "3";
+x - y    //Returns 0 since the variable y (string type) is converted to a number type
+
+
+### Example 4:
+
+function func1(){
+  setTimeout(()=>{
+    console.log(x); // 2
+    console.log(y); // 12
+  },3000);
+
+  var x = 2;
+  let y = 12;
+}
+func1();
+
+Explanation:
+- Outputs 2 and 12. Since, even though let variables are not hoisted, due to the async nature of javascript, the complete function code runs before the setTimeout function. Therefore, it has access to both x and y.
+```
