@@ -4684,7 +4684,7 @@ show() // show is not a function
 
 ```
 
-### Explain Implicit Type Coercion in javascript.
+### 86. Explain Implicit Type Coercion in javascript.
 
 - Implicit type coercion in javascript is the automatic conversion of value from one data type to another. It takes place when the operands of an expression are of different data types.
 
@@ -4740,4 +4740,94 @@ func1();
 
 Explanation:
 - Outputs 2 and 12. Since, even though let variables are not hoisted, due to the async nature of javascript, the complete function code runs before the setTimeout function. Therefore, it has access to both x and y.
+```
+
+### 87. What gets logged?
+
+```js
+setTimeout(() => console.log(1));
+Promise.resolve().then(() => console.log(2));
+Promise.resolve().then(() => setTimeout(() => console.log(3)));
+new Promise(() => console.log(4));
+setTimeout(() => console.log(5));
+
+### Explanation :
+
+The order of logging in this scenario is determined by the event loop and the way JavaScript handles asynchronous operations. Here's a breakdown of what happens:
+
+1. setTimeout(() => console.log(1)): This schedules a timer to log 1 to the console after a delay of 0 milliseconds. However, due to the way the event loop works, this will not be executed immediately.
+
+2. Promise.resolve().then(() => console.log(2)): This creates a resolved promise and schedules a callback to log 2 to the console. Since promises are handled in the microtask queue, which has higher priority than the macrotask queue (where timeouts are handled), this will be executed before the first setTimeout.
+
+3. Promise.resolve().then(() => setTimeout(() => console.log(3))): This creates another resolved promise and schedules a callback to set a timeout to log 3 to the console. The promise callback will be executed immediately after the previous one, but the timeout will be scheduled for later execution.
+
+4. new Promise(() => console.log(4)): This creates a new promise and executes the provided callback immediately, logging 4 to the console. Note that this is not a resolved promise, so it doesn't schedule a callback in the microtask queue.
+
+5. setTimeout(() => console.log(5)): This schedules another timer to log 5 to the console.
+
+The order of execution and result are as follows:
+
+4 (logged immediately by the promise constructor)
+2 (logged by the first promise callback)
+1 (logged by the first timeout)
+5 (logged by the second timeout)
+3 (logged by the timeout scheduled by the second promise callback)
+```
+
+### 88. What gets logged?
+
+```js
+setTimeout(() => console.log(1));
+
+(async () => {
+  console.log(2);
+  await Promise.resolve();
+  console.log(3);
+})();
+
+Promise.resolve().then(() => Promise.resolve().then(() => console.log(4)));
+
+// O/P : 2,3,4,1
+
+### Explanation :
+
+1. The setTimeout function schedules a callback to be executed after a certain delay (in this case, 0ms). The callback is added to the macrotask queue.
+2. The immediately invoked function expression (IIFE) is executed, logging 2 to the console.
+3. The await keyword inside the IIFE creates a microtask that resolves the Promise.resolve() promise. When the promise is resolved, the execution is paused, and the microtask is added to the microtask queue.
+4. The Promise.resolve().then() chain creates another microtask that resolves the promise and logs 4 to the console. This microtask is also added to the microtask queue.
+5. The event loop checks the microtask queue and executes the microtask created by the await keyword, logging 3 to the console.
+6. The event loop then checks the macrotask queue and executes the callback scheduled by setTimeout, logging 1 to the console.
+
+### The order of execution is:
+
+1. IIFE (logs 2)
+2. Microtask queue (logs 3)
+3. Microtask queue (logs 4)
+4. Macrotask queue (logs 1)
+
+- Note that the order of execution can vary depending on the specific JavaScript engine and its implementation of the event loop. However, in most modern browsers and Node.js, the order will be as described above. 😊
+```
+
+### 89. What gets logged?
+
+```js
+const objA = {
+  type: "A",
+  foo() {
+    console.log(this.type, "<<<<<< this >>>>>>", this);
+  },
+};
+
+const objB = {
+  type: "B",
+  foo: objA.foo,
+  bar: () => objA.foo(),
+  baz() {
+    objA.foo();
+  },
+};
+
+objB.foo();
+objB.bar();
+objB.baz();
 ```
