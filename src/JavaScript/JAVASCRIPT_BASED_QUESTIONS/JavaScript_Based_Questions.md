@@ -4831,3 +4831,217 @@ objB.foo();
 objB.bar();
 objB.baz();
 ```
+
+### 90. Implement a throttler that executes an array of tasks. When the throttler is passed a number, only executes that number of the tasks and passes the other tasks into a queue.
+
+- Example 1: In JavaScript
+
+```js
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, World!</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+      <h1 class="title">Throttle an array of tasks</h1>
+      <button id="btn">Add Throttle</button>
+      <script>
+        const throttleButton = document.querySelector('#btn')
+          let array = [1, 2, 3, 4, 5, 6, 7, 8];
+          let numberToThrottle = 2;
+
+   const throttle = (arrays, number, callback) => {
+    let flag = true;
+
+    return function () {
+      if (flag) {
+
+       let argument = arrays.splice(0, number);
+        callback.call(this, argument);
+        flag = false;
+        setTimeout(() => {
+          flag = true;
+        }, 1000);
+      }
+    };
+  };
+
+  const callbackFunction = (value) => {
+    console.log(value, 'value');
+  };
+
+throttleButton.addEventListener('click',throttle(array,numberToThrottle,callbackFunction))
+      </script>
+  </body>
+</html>
+
+
+### Output:
+// [object Array] (2)
+[1,2] // 1st call
+
+// [object Array] (2)
+[3,4] // 2nd call after 2 seconds
+
+// [object Array] (2)
+[5,6] // 3rd call after 2 seconds
+
+// [object Array] (2)
+[7,8] // 4th call after 2 seconds
+
+// [object Array] (2)
+[1,2] // 5th call after 2 seconds
+
+// [object Array] (2)
+[3,4] // 6th call after 2 seconds
+
+```
+
+- Example 2: In JavaScript.
+
+```js
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello, World!</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+      <h1 class="title">Throttle an array of tasks</h1>
+      <button id="btn">Add Throttle</button>
+      <script>
+        const throttleButton = document.querySelector('#btn')
+          const throttle = (task, count = task.length, callback, delay = 1000) => {
+  // track the throttle
+  let lastFunc;
+  let lastRan;
+
+  // track the task
+  let queue = [];
+
+  return function() {
+    // store the context to pass it to the callback function
+    const context = this;
+    const args = arguments;
+
+    // if the throttle is executed the first time
+    // run it immediately
+    if (!lastRan) {
+      // copy all the tasks to the queue
+      queue = [...queue, ...task];
+
+      // get the amount of task to run
+      const execute = queue.splice(0, count);
+
+      // pass those tasks to the callback
+      callback(execute);
+
+      // update the last ran time
+      // to run it after the delay
+      lastRan = Date.now();
+    } else {
+      // clear the timer
+      clearTimeout(lastFunc);
+
+      // start a new timer
+      // run the function after the delay
+      lastFunc = setTimeout(function() {
+        // calc the difference between
+        // the last ran and current time
+        // if it is greater than the delay
+        // invoke it
+        if ((Date.now() - lastRan) >= delay) {
+          // copy all the tasks to the queue
+          queue = [...queue, ...task];
+
+           // get the amount of task to run
+          const execute = queue.splice(0, count);
+
+          // pass those tasks to the callback
+          callback(execute);
+
+          // update the last ran time
+          // to run it after the delay
+          lastRan = Date.now();
+        }
+      }, delay - (Date.now() - lastRan));
+    }
+  }
+};
+
+
+throttleButton.addEventListener('click',  throttle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 2, (task) => {
+  console.log(task);
+}, 2000));
+      </script>
+  </body>
+</html>
+
+
+### Output:
+// [object Array] (2)
+[1,2] // 1st call
+
+// [object Array] (2)
+[3,4] // 2nd call after 2 seconds
+
+// [object Array] (2)
+[5,6] // 3rd call after 2 seconds
+
+// [object Array] (2)
+[7,8] // 4th call after 2 seconds
+
+// [object Array] (2)
+[9,10] // 5th call after 2 seconds
+
+// [object Array] (2)
+[1,2] // 6th call after 2 seconds
+
+
+```
+
+Example 3: In React.
+
+```js
+import React, { useState } from "react";
+import "./style.css";
+
+export default function App() {
+  let array = [1, 2, 3, 4, 5, 6, 7, 8];
+  let numberToThrottle = 2;
+
+  const throttle = (arrays, number, callback) => {
+    let flag = true;
+    let queue = [...arrays];
+    return function () {
+      if (!queue.length) {
+        queue = [...arrays];
+      }
+      if (flag) {
+        let argument = queue.splice(0, number);
+        callback.call(this, argument);
+        flag = false;
+        setTimeout(() => {
+          flag = true;
+        }, 1000);
+      }
+    };
+  };
+
+  const callbackFunction = (value) => {
+    console.log(value, "value");
+  };
+
+  const handleClick = throttle(array, numberToThrottle, callbackFunction);
+
+  return (
+    <div>
+      <h1>Hello StackBlitz!</h1>
+      <p>Start editing to see some magic happen :)</p>
+
+      <button onClick={() => handleClick()}>{"Add"}</button>
+    </div>
+  );
+}
+```
