@@ -5045,3 +5045,67 @@ export default function App() {
   );
 }
 ```
+
+### 91. What is the drawback of declaring methods directly in JavaScript objects?
+
+- One of the drawbacks of declaring methods directly in JavaScript objects is that they are very memory inefficient. When you do that, a new copy of the method is created for each instance of an object. Here's an example:
+
+```js
+var Employee = function (name, company, salary) {
+  this.name = name || "";
+  this.company = company || "";
+  this.salary = salary || 5000;
+
+  // We can create a method like this:
+  this.formatSalary = function () {
+      return "$ " + this.salary;
+  };
+};
+
+// Alternatively we can add the method to Employee's prototype:
+Employee.prototype.formatSalary2 = function() {
+    return "$ " + this.salary;
+}
+
+//creating objects
+var emp1 = new Employee('Yuri Garagin', 'Company 1', 1000000);
+var emp2 = new Employee('Dinesh Gupta', 'Company 2', 1039999);
+var emp3 = new Employee('Erich Fromm', 'Company 3', 1299483);
+
+
+### In this case each instance variable emp1, emp2, emp3 has its own copy of theformatSalary method. However the formatSalary2 will only be added once to Employee.prototype.
+```
+
+### 92. What will be the output of the following code?
+
+```js
+## EXAMPLE 1:
+
+var output = (function(x) {
+  delete x;
+  return x;
+})(0);
+
+console.log(output);
+
+### The code above will output 0 as output. delete operator is used to delete a property from an object. Here x is not an object, it's a local variable. delete operator doesn't affect local variables.
+
+EXAMPLE 2:
+
+var x = 1;
+var output = (function() {
+  delete x;
+  return x;
+})();
+
+console.log(output);
+
+EXAMPLE 3:
+var x = { foo : 1};
+var output = (function() {
+  delete x.foo;
+  return x.foo;
+})();
+
+console.log(output);
+```
