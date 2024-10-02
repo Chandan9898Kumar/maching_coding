@@ -5109,3 +5109,170 @@ var output = (function() {
 
 console.log(output);
 ```
+
+### 93. What will be the output of the following code?
+
+```js
+var Employee = {
+  company: 'xyz'
+}
+var emp1 = Object.create(Employee);
+delete emp1.company
+console.log(emp1.company);
+
+
+
+- The code above will output `xyz` as output. Here `emp1` object got company as **prototype** property. delete operator doesn't delete prototype property.
+emp1 object doesn't have company as its own property. you can test it console.log(emp1.hasOwnProperty('company'));
+ //output : false However, we can delete company property directly from Employee object using delete Employee.company or we can also delete from emp1 object using __proto__ property delete emp1.__proto__.company.
+
+
+###  output of the following code?
+var z = 1, y = z = typeof y;
+console.log(y);
+
+- The code above will print string "undefined" as output. According to associativity rule operator with the same precedence are processed based on their associativity property of operator. Here associativity of the assignment operator is Right to Left so first typeof y will evaluate first which is string "undefined" and assigned to z and then y would be assigned the value of z. The overall sequence will look like that:
+
+var z;
+z = 1;
+var y;
+z = typeof y;
+y = z;
+
+```
+
+### 94. What is the difference between declaring a function in the formats listed below?
+
+```js
+1.
+var foo = function() {
+  // Some code
+}
+
+2.
+function bar () {
+  // Some code
+}
+
+
+### The main difference is that function foo is defined at run-time and is called a function expression, whereas function bar is defined at parse time and is called a function statement. To understand it better, let's take a look at the code below :
+
+A.
+// Run-Time function declaration
+  foo(); // Call foo function here, It will give an error
+  var foo = function() {
+    console.log("Hi I am inside Foo");
+  };
+
+B.
+// Parse-Time function declaration
+bar(); // Call bar function here, It will not give an Error
+function bar() {
+  console.log("Hi I am inside Foo");
+}
+```
+
+### 95. What is the output of the following?
+
+```js
+bar();
+(function abc(){console.log('something')})();
+
+function bar(){console.log('bar got called')};
+
+
+- Since the function is called first and defined during parse time the JS engine will try to find any possible parse time definitions and start the execution loop which will mean function is called first even if the definition is post another function.
+```
+
+### 95. Calculate the length of the associative array
+
+```js
+var counterArray = {
+  A : 3,
+  B : 4
+};
+counterArray["C"] = 1;
+
+### Method 1.
+Object.keys(counterArray).length; // Output 3
+
+### Method 2.
+function getLength(object) {
+  var count = 0;
+  for(key in object) {
+    // hasOwnProperty method check own property of object
+    if(object.hasOwnProperty(key)) count++;
+  }
+  return count;
+}
+
+
+### Method 3.
+Object.getOwnPropertyNames(counterArray).length; // Output 3
+```
+
+### 96. Write a function called deepClone which takes an object and creates a object copy of it.
+
+```js
+
+var personalDetail = {
+	name : 'Nishant',
+	address : {
+	  location: 'xyz',
+	  zip : '123456',
+	  phoneNumber : {
+	    homePhone: 8797912345,
+	    workPhone : 1234509876
+	  }
+	}
+}
+
+function deepClone(object){
+	var newObject = {};
+	for(var key in object){
+		if(typeof object[key] === 'object'  && object[key] !== null ){
+		 newObject[key] = deepClone(object[key]);
+		}else{
+		 newObject[key] = object[key];
+		}
+	}
+	return newObject;
+}
+
+
+var newObject = deepClone(personalDetail);
+
+### Explanation: We have been asked to do deep copy of object so What's basically it's mean ??. Let's understand in this way you have been given an object personalDetail this object contains some property which again a type of object here as you can see address is an object and phoneNumber in side an address is also an object. In simple term personalDetail is nested object(object inside object). So Here deep copy means we have to copy all the property of personalDetail object including nested object.
+
+- So when we do deep clone then we should copy every property (including the nested object).
+```
+
+### 97. What would be the output of the following code?
+
+```js
+
+function User(name) {
+  this.name = name || "JsGeeks";
+}
+
+var person = new User("xyz")["location"] = "USA";
+console.log(person);
+
+
+
+### The output of above code would be "USA". Here new User("xyz") creates a brand new object and created property location on that and USA has been assigned to object property location and that has been referenced by the person.
+
+Let say new User("xyz") created a object called foo. The value "USA" will be assigned to foo["location"], but according to ECMAScript Specification , pt 12.14.4 the assignment will itself return the rightmost value: in our case it's "USA". Then it will be assigned to person.
+
+To better understand what's going on here, try to execute this code in console, line by line:
+
+function User(name) {
+ this.name = name || "JsGeeks";
+}
+
+var person;
+var foo = new User("xyz");
+foo["location"] = "USA";
+// the console will show you that the result of this is "USA"
+
+```
