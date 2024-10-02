@@ -2984,7 +2984,7 @@ music
 4. Books are just a resource, we need to query it ourselves.
 
 ```
-(Facade Example)["https://dev.to/tomekbuszewski/facade-pattern-in-javascript-3on4"]
+[Facade Example](https://dev.to/tomekbuszewski/facade-pattern-in-javascript-3on4)
 
 ### When To Use Facade Pattern ? ✅
 
