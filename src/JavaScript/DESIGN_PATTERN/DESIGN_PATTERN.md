@@ -2679,6 +2679,8 @@ console.log(coffeeWithMilkAndSugar.cost()); // Output: 8
 
 ## Facade 🏰
 
+Facade design pattern is a Structural design pattern that allows users to create a simple interface that hides the complex implementation details of the system making it easier to use.
+
 In simple words:
 
 > It provides a simplified interface to a complex subsystem.
@@ -2743,6 +2745,69 @@ console.log(multimediaFacade.startMovie()); // Playing audio, Playing video, Pro
 console.log(multimediaFacade.stopMovie()); // Stopping multimedia playback
 ```
 
+### Components of the Facade Design Pattern
+
+The components of the Facade design pattern include:
+
+1. Subsystem: The Subsystem is a class or group of classes or interfaces that handles the entire complex logic and implementation.
+2. Facade: The Facade is the class or object that serves as an entry point to the Subsystem’s implementation hiding the complex implementation details.
+3. Client: The Client interacts with the simplified Interface provided by Facade to perform operations without knowing the internal implementation details.
+
+# Example:
+
+```js
+
+
+- Explanation:
+In this step, I have created the Subsystem which contains three different classes namely `SubsystemA`, `SubsystemB` and` SubsystemC` along with the methods which console logs the information about which method they belong to.
+
+
+class SubsystemA {
+method() {
+	console.log('This is a method of Subsystem-A');
+}
+}
+
+class SubsystemB {
+method() {
+	console.log('This is a method of Subsystem-B');
+}
+}
+
+class SubsystemC {
+method() {
+	console.log('This is a method of Subsystem-C');
+}
+}
+
+
+- Explanation:
+In this step, I have created a `Facade` class that contains a constructor that intialies the objects of the three Substystems i.e. `SubsystemA`, `SubsystemB`, `SubsystemC` respectively. The `Facade` class is also responsible for providing a common interface. So, I created a method called `commonInterface` which hides the implementation details of subsystem and serves as a entry point.
+
+
+class Facade {
+constructor() {
+	this.subsystemA = new SubsystemA();
+	this.subsystemB = new SubsystemB();
+	this.subsystemC = new SubsystemC();
+}
+
+commonInterface() {
+	this.subsystemA.method();
+	this.subsystemB.method();
+	this.subsystemC.method();
+}
+}
+
+
+- Explanation:
+In this step, I have created a `facade` object for the Facade class and calling the `commonInterface` method of the `Facade` class. Now, the actual process starts without need of knowing the implementation details.
+
+const facade = new Facade();
+facade.commonInterface();
+
+```
+
 ### When To Use Facade Pattern ? ✅
 
 - **Rampant Dependencies:** Reduces high coupling by providing a unified interface.
@@ -2751,10 +2816,11 @@ console.log(multimediaFacade.stopMovie()); // Stopping multimedia playback
 
 ### Advantages of Facade Pattern 🪄 :
 
-- **Simplified Interface 🛡️:** Shields users from subsystem complexities.
+- **Simplified Interface 🛡️:**The Facade design pattern uses a simplified interface which helps the client to interact with and perform operations without knowing the implementation details..
 - **Reduced Dependencies 🤝:** Minimizes client code dependencies on subsystems.
 - **Decoupling 🔗:** Changes in subsystems minimally impact clients.
 - **Ease of Use 👤:** Abstracts complexities, making subsystems user-friendly.
+- **Abstraction and Encapsulation:** The Facade design pattern abstracts the internal implementation details and Encapsulates the Subsystem’s logic.
 
 ### Disadvantages of Facade Pattern 🆘 :
 
