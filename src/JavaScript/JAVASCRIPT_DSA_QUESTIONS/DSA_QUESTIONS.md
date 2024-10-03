@@ -4036,3 +4036,73 @@ let arr3 = [
 console.log(compare(arr4, arr3));
 // returns true
 ```
+
+### 79. Find the only repetitive element between 1 to N-1
+
+let a = [1, 3, 2, 3, 4]
+
+<!-- Output: 3 -->
+<!-- Explanation: The number 3 is the only repeating element. -->
+
+let b= [1, 5, 1, 2, 3, 4]
+
+<!-- Output: 1 -->
+
+```js
+### METHOD 1. Use two nested loops. The outer loop traverses through all elements and the inner loop check if the element picked by the outer loop appears anywhere else.
+
+//Javascript program to find the only repeating
+// element in an array where elements are
+// from 1 to N-1.
+function findRepeating(arr, N){
+	for (let i = 0; i <N; i++) {
+			for (let j = i + 1; j < N; j++) {
+				if (arr[i] == arr[j])
+					return arr[i];
+			}
+}
+}
+			// Driver code
+let arr= [ 9, 8, 2, 6, 1, 8, 5, 3, 4, 7 ];
+let N = arr.length;
+
+// Function call
+console.log(findRepeating(arr, N));
+// This code is contributed by aarohirai2616.
+
+
+### METHOD 2: Find the only repetitive element using sorting:
+
+//Javascript program to find the only repeating
+// element in an array where elements are
+// from 1 to N-1.
+function findRepeating(arr, N){
+	arr.sort();
+	for (let i = 0; i < N; i++) {
+
+	// compare array element with its index
+		if (arr[i] != i + 1) {
+			return arr[i];
+			}
+		}
+		return -1;
+}
+		// Driver code
+let arr= [ 9, 8, 2, 6, 1, 8, 5, 3, 4, 7 ];
+let N = arr.length;
+
+// Function call
+console.log(findRepeating(arr, N));
+
+// This code is contributed by aarohirai2616.
+
+
+### METHOD 3:
+const result = a.find((item,index,arr)=>{
+
+  return index !== arr.indexOf(item)
+})
+
+console.log(result,'result')
+
+```
