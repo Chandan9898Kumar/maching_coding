@@ -5567,3 +5567,98 @@ linkedin.com
 google.com
 gfg.org
 ```
+
+### Example 4:
+
+```js
+class Node {
+  // Stores the URL of the page
+  constructor(x) {
+    this.data = x;
+    // Pointer to the next page in history
+    this.next = null;
+    // Pointer to the previous page in history
+    this.back = null;
+  }
+}
+
+class Browser {
+  // Pointer to the current
+  // page being viewed
+  constructor(homepage) {
+    this.currentPage = new Node(homepage);
+  }
+
+  // Visit a new page and
+  // update the browsing history
+  visit(url) {
+    const newNode = new Node(url);
+    // Set the back pointer of the
+    // new page to the current page
+    newNode.back = this.currentPage;
+    // Set the next pointer of the
+    // current page to the new page
+    this.currentPage.next = newNode;
+    // Update the current page to the new page
+    this.currentPage = newNode;
+  }
+
+  // Go back a certain number
+  // of steps in history
+  back(steps) {
+    // While there are steps
+    // and a previous page exists
+    while (steps && this.currentPage.back) {
+      // Move to the previous page
+      this.currentPage = this.currentPage.back;
+      // Decrement the steps count
+      steps--;
+    }
+    // Return the URL of the current page
+    return this.currentPage.data;
+  }
+
+  // Go forward a certain number of steps in history
+  forward(steps) {
+    // While there are steps and a next page exists
+    while (steps && this.currentPage.next) {
+      // Move to the next page
+      this.currentPage = this.currentPage.next;
+      // Decrement the steps count
+      steps--;
+    }
+    // Return the URL of the current page
+    return this.currentPage.data;
+  }
+}
+
+// Create a browser with a homepage
+const browser = new Browser("homepage.com");
+const queries = [
+  ["visit", "google.com"], // Visit 'google.com'
+  ["visit", "bing.com"], // Visit 'bing.com'
+  ["back", "1"], // Go back one step
+  ["forward", "1"], // Go forward one step
+];
+
+console.log("Queries:");
+// Loop through each query and execute it
+for (const query of queries) {
+  if (query[0] === "visit") {
+    console.log(`Visited ${query[1]}`);
+
+    // Execute visit query
+    browser.visit(query[1]);
+  } else if (query[0] === "back") {
+    console.log(`Back ${query[1]} steps: `);
+
+    // Execute back query and print the result
+    console.log(browser.back(parseInt(query[1])));
+  } else if (query[0] === "forward") {
+    console.log(`Forward ${query[1]} steps: `);
+
+    // Execute forward query and print the result
+    console.log(browser.forward(parseInt(query[1])));
+  }
+}
+```
