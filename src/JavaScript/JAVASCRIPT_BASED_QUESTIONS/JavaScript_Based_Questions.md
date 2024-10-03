@@ -5372,3 +5372,198 @@ console.log(browserHistory.previous(7));
 console.log(browserHistory,'browserHistory')
 
 ```
+
+### Example 2: Naive Approach [Use Two Stacks] :
+
+We can implement a browser history design by employing two stacks. We need a stack to keep track of the previously visited URLs and another stack to store the current URL on the browser tab.
+
+- The following functionalities should be covered:
+
+1. visit(url) : Visits a URL given as string
+2. forward(steps) : Takes ‘steps’ forward.
+3. back(steps) : Takes ‘steps’ backward.
+
+`Follow the steps mentioned below to implement the idea:`
+
+1. Create two stacks, backStack, and forwardStack.
+   A. A backStack stores the current URL, while a forwardStack keeps track of previously visited URLs.
+2. The constructor BrowserHistory(string homepage) initializes the object with the homepage of the browser. Push the homepage into backStack.
+3. We have a visit() function to visit a URL from the current page:
+   A. While visiting a URL, the forward history gets cleared up. Since there will be nothing beyond the last visited URL. So, pop all the elements from the forwardStack and then push the URL we need to visit in the backSTack.
+4. We have a back() function to move backward in history and return to the current page. The steps represent the number of steps we need to move.
+   A. To move steps back, run a while loop till there is at least one element left in the backStack or we have moved step number of times.
+   B. Push the top of the backStack into the forwardStack and then pop it from the backStack. Return the topmost element from the backStack.
+   C. If we can only return x steps in the history and steps > x, we will return only x steps.
+5. There is a forward() function to move steps forward in history and return the current page.
+   A. To move steps forward, run a while loop for steps numbers of times and till the stack is not empty push the top element of forwardStack into backStack and then pop it from the forwardStack.
+   B.Return the top value of backStack.
+
+```js
+// JavaScript Implementation of the approach
+
+class BrowserHistory {
+  constructor(homepage) {
+    this.backStack = [];
+    this.forwardStack = [];
+
+    // Initialize object with homepage
+    this.backStack.push(homepage);
+  }
+
+  // Visit current URL
+  visit(url) {
+    this.forwardStack = [];
+    this.backStack.push(url);
+  }
+
+  // 'steps' move backward in history and return
+  // current page
+  back(steps) {
+    while (this.backStack.length > 1 && steps-- > 0) {
+      this.forwardStack.push(this.backStack[this.backStack.length - 1]);
+      this.backStack.pop();
+    }
+    return this.backStack[this.backStack.length - 1];
+  }
+
+  // 'steps' move forward and return
+  //current page
+  forward(steps) {
+    while (this.forwardStack.length > 0 && steps-- > 0) {
+      this.backStack.push(this.forwardStack[this.forwardStack.length - 1]);
+      this.forwardStack.pop();
+    }
+    return this.backStack[this.backStack.length - 1];
+  }
+}
+// Driver Code
+
+// Input case
+let homepage = "gfg.org";
+
+// Initialize the object of BrowserHistory
+let obj = new BrowserHistory(homepage);
+
+let url = "google.com";
+obj.visit(url);
+
+url = "facebook.com";
+obj.visit(url);
+
+url = "youtube.com";
+obj.visit(url);
+
+console.log(obj.back(1));
+console.log(obj.back(1));
+console.log(obj.forward(1));
+obj.visit("linkedin.com");
+console.log(obj.forward(2));
+console.log(obj.back(2));
+console.log(obj.back(7));
+
+###
+1. facebook.com
+2. google.com
+3. facebook.com
+4. linkedin.com
+5. google.com
+6. gfg.org
+
+
+### Explanation:
+1. visit(“google.com”) :  We are at google.com
+2. visit(“facebook.com”): Now, we are at facebook.com
+3. visit(“youtube.com”): We are at youtube.com
+4. back(1):  We would land up at facebook.com, if we move one step back.
+5. back(1):  Moving one step back, takes us to google.com
+6. forward(1): Moving a step forward we would be at facebook.com
+7. visit(“linkedin.com”):  We are at linkedin.com
+8. forward(2): We are still at linkedin. since visiting clear the forward history . When we are the current URL, there is no URL to move forward to.
+9. back(2): Moving two steps back, takes us to google.com
+10. back(7):  We need to move 7 steps back, but only 1 url is available. Therefore we would return gfg.org.
+```
+
+### Example 3: Expected Approach [Using a Doubly Linkeded List].
+
+1. First Create a class Node have attributes as a link, Previous (Denoting the previous Node), Next (Denoting Next Node)
+2. Node Made class BrowserHistory have attribute as Node Current where Current denotes the website in which you are currently
+3. The constructor BrowserHistory(string homepage) initializes the object with the homepage of the browser set Current Node as current.link=homepage
+4. We have a visit(String url) function to visit a URL from the current page: when visit(String url) is called it will a made new node have a link as URL and Previous as Current and Next as null then we will change the pointer of Current.next to the new node that we made then just do one thing make new Node as Current Node
+5. For Function forward(int step) we will travel in a forward direction in the list and if attend the end of the string before completing all steps then we return the last link and if all steps are complete then we will return Node.link that travelling
+6. For Function back(int step) we will do similar to forward just that we travel in the opposite direction
+
+```js
+class Node {
+  constructor(link) {
+    this.Previous = null; // Represents the previous link/node in the history.
+    this.Next = null; // Represents the next link/node in the history.
+    this.link = link; // Stores the URL of this node.
+  }
+}
+
+class BrowserHistory {
+  constructor(homepage) {
+    this.Current = new Node(homepage); // Initialize with the homepage as the current node.
+  }
+
+  visit(url) {
+    const urlNode = new Node(url); // Create a new node for the visited URL.
+    urlNode.Previous = this.Current; // Set the previous node to the current node.
+    this.Current.Next = urlNode; // Set the next node for the current node.
+    this.Current = urlNode; // Update the current node to the newly visited URL.
+  }
+
+  back(step) {
+    let temp = this.Current;
+    // Travel 'step' times back if possible.
+    while (temp.Previous && step > 0) {
+      temp = temp.Previous;
+      step--;
+    }
+    // After traveling back, update the current node.
+    this.Current = temp;
+    return this.Current.link;
+  }
+
+  forward(step) {
+    let temp = this.Current;
+    // Travel 'step' times forward if possible.
+    while (temp.Next && step > 0) {
+      temp = temp.Next;
+      step--;
+    }
+    // After traveling forward, update the current node.
+    this.Current = temp;
+    return this.Current.link;
+  }
+}
+
+// Input case
+const homepage = "gfg.org";
+const obj = new BrowserHistory(homepage);
+
+let url = "google.com";
+obj.visit(url);
+
+url = "facebook.com";
+obj.visit(url);
+
+url = "youtube.com";
+obj.visit(url);
+
+console.log(obj.back(1)); // Move back one step.
+console.log(obj.back(1)); // Move back one more step.
+console.log(obj.forward(1)); // Move forward one step.
+obj.visit("linkedin.com"); // Visit a new URL.
+console.log(obj.forward(2)); // Move forward two steps.
+console.log(obj.back(2)); // Move back two steps.
+console.log(obj.back(7)); // Move back seven steps.
+
+### OUTPUT :
+facebook.com
+google.com
+facebook.com
+linkedin.com
+google.com
+gfg.org
+```
