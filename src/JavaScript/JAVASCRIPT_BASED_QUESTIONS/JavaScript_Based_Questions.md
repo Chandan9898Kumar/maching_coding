@@ -5276,3 +5276,99 @@ foo["location"] = "USA";
 // the console will show you that the result of this is "USA"
 
 ```
+
+### 98. Design Browser History
+
+- You have a browser of one tab where you start on the homepage and you can visit another URL, get back in the history number of steps or move forward in the history number of steps. The task is to design a data structure and implement the functionality of visiting a URL starting from the homepage and moving back and forward in the history.
+
+### Example 1: By using basic class methods. it is working fine but not optimized solution.
+
+```js
+### 1.
+
+let defaultUrl = "https://www.ARC018.com";  // it is the parent url.
+
+class BrowserHistory {
+  constructor(urlDefault) {
+    this.history = [urlDefault];
+    this.currentIndex = 0;
+  }
+
+  visit(url) {
+    this.history.push(url);
+    this.currentIndex = this.history.length - 1;
+  }
+
+  previous(step) {
+    if (this.currentIndex - step <= 0) {
+      this.currentIndex = 0;
+      return this.history[0];
+    } else {
+      let previousUrl = this.history[this.currentIndex - step];
+      this.currentIndex -= step;
+      return previousUrl;
+    }
+  }
+
+  forward(step) {
+    if (this.history.length <= this.currentIndex + step) {
+      this.currentIndex = this.history.length - 1;
+      return this.history[this.history.length - 1];
+    } else {
+      let forwardUrl = this.history[this.currentIndex + step];
+      this.currentIndex += step;
+
+      return forwardUrl;
+    }
+  }
+}
+
+const browserHistory = new BrowserHistory(defaultUrl);
+
+### 2. It more optimized than above.
+
+class BrowserHistory {
+  constructor(defaultUrl) {
+   this.history = [defaultUrl];
+   this.currentIndex = 0;
+  }
+
+  visit(url) {
+
+   this.history.push(url);
+   this.currentIndex = this.history.length -1
+  }
+
+  previous(steps) {
+   this.currentIndex = Math.max(this.currentIndex - steps, 0);
+   return this.history[this.currentIndex];
+  }
+
+  forward(steps) {
+   this.currentIndex = Math.min(this.currentIndex + steps, this.history.length - 1);
+   return this.history[this.currentIndex];
+  }
+}
+
+const browserHistory = new BrowserHistory(defaultUrl);
+
+- This implementation uses an array to store the URLs visited and an index to keep track of the current position in the history. The visit method adds a new URL to the history and updates the index. The previous and forward methods update the index and return the URL at the new index.
+
+
+### Calling methods :
+
+
+browserHistory.visit('https://www.google.com');
+browserHistory.visit('https://www.bing.com');
+browserHistory.visit('https://www.duckduckgo.com');
+
+console.log(browserHistory.previous(1));
+console.log(browserHistory.previous(1));
+console.log(browserHistory.forward(1));
+browserHistory.visit('https://www.komoi.com');
+console.log(browserHistory.previous(1));
+console.log(browserHistory.previous(9));
+console.log(browserHistory.previous(7));
+console.log(browserHistory,'browserHistory')
+
+```
