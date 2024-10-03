@@ -5571,6 +5571,14 @@ gfg.org
 ### Example 4:
 
 ```js
+// Node Class: Define a ‘Node” class to represent each page in the browsing history, linked by pointers to the previous and next pages.
+
+// 1.‘data’ stores the URL or identifier of the webpage.
+// 2.‘next’ stores the pointer to the next page in the browsing history.
+// 3. ‘back’ stores the previous page in the browsing history
+
+// ‘next’ and ‘back’ pointers link each node to its adjacent nodes forming a doubly linked list representing the browsing history and enabling navigation backward and forward in the browsing history.
+
 class Node {
   // Stores the URL of the page
   constructor(x) {
@@ -5581,6 +5589,22 @@ class Node {
     this.back = null;
   }
 }
+
+// Browser Class:
+
+// The Browser Class has to be implemented in such a way that it encapsulates the functionalities of browsing, managing a history of visited URLs and navigating that history.
+
+// Constructor: initialises the `Browser` object with the specified homepage URL and it creates a `Node` representing the homepage and sets it as the `currentPage`.
+
+// `currentPage` is a private member variable initialised when a new ‘Browser’ object is created. Each instance of the `Browser` class will have its own `currentPage` pointer, maintaining its individual browsing history.
+
+// `visit (string url)` adds a new page to the history by creating a new `Node` with the given URL, setting its back pointer to the current page and updating the current page to this node.
+
+// `back (int steps)` navigates backward in the history by the specified number of steps, updating the `currentPage` pointer to the previous node. Returns the URL of the resulting page.
+
+// `forward (int steps)` navigates forward in the history by a specified number of steps, updating the `currentPage` pointer to the next node. Returns the URL of the resulting page.
+
+// This Browser class essentially maintains a linked list structure of visited pages, where each Node represents a page and contains the URL and pointers to the previous and next pages in the history. The Browser methods enable navigation through this history by updating the currentPage pointer accordingly.
 
 class Browser {
   // Pointer to the current
@@ -5661,4 +5685,22 @@ for (const query of queries) {
     console.log(browser.forward(parseInt(query[1])));
   }
 }
+
+
+### Algorithm
+Step 1:Define a Node class to represent each webpage in the browsing history. This class should have data fields for URL, a pointer to the next page, and a pointer to the previous page.
+
+Step 2: Implement the Browser class by Create a private member variable `currentPage` within the constructor to maintain its browser history navigation pointer.
+
+Step 3: Implement the `visit` function by adding a new webpage to the browsing history every time it is called.
+  A. When invoked, this function creates a new Node representing the visited webpage and updates the pointers linking it ahead of the current webpage.
+  B. The browser history now gets extended to this newly visited webpage with the currentPage navigator on it to go forward and backward.
+
+Step 4: Implement the `forward function to facilitate forward traversal in the browsing history.
+  A. This function advances the `currentPage` pointer to the next web page in the sequence.
+  B. Allows users to navigate forward by a specified number of steps within their browsing history object instance.
+
+Step 5: Implement the `backward function` to facilitate backward navigation in the browsing history.
+  A. This function moves the `currentPage` pointer backward to the previous web pages.
+  B.Allows users to move to web pages they visited web pages they had previously visited.
 ```
