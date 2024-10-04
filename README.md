@@ -554,3 +554,121 @@ export function usePageVisibility() {
   return isPageVisible;
 }
 ```
+
+### ### Here Is Full Example long polling with visibilitychange feature. Change Tab and see polling will stop and start when comes back.
+
+```js
+import React, { useState, useEffect, useRef } from "react";
+import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import "./style.css";
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <NavBar />
+      <Routes>
+        <Route exact path="/" element={<HomePage />} />
+        <Route exact path="/contact" element={<ContactPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+const NavBar = () => {
+  return (
+    <>
+      <div>
+        <p>
+          <NavLink to="/">Home</NavLink>
+        </p>
+        <p>
+          <NavLink to="/contact">Contact</NavLink>
+        </p>
+      </div>
+    </>
+  );
+};
+
+const HomePage = () => {
+  let [data, setData] = useState([]);
+  let [isError, setIsError] = useState("");
+  const isPageVisible = usePageVisibility();
+  const timerIdRef = useRef(null);
+  timerIdRef.current = isPageVisible;
+
+  const getApiResponse = () => {
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          let response = await fetch("https://dummyjson.com/products");
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      }, 4000);
+    });
+  };
+
+  const pollingCallback = async () => {
+    // Your polling logic here
+    try {
+      let response = await getApiResponse();
+      console.log(response, "response");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      let result = await response.json();
+      setData(result.products);
+    } catch (error) {
+      setIsError(error);
+    } finally {
+      // Here if we give isPageVisible inside if condition then it will not work, because of closure. it will take initial value not the update value.So Used useRef() instead.
+      if (timerIdRef.current) {
+        pollingCallback();
+      }
+    }
+  };
+
+  useEffect(() => {
+    pollingCallback();
+  }, [isPageVisible]);
+
+  if (isError) {
+    return <p>{isError}</p>;
+  }
+
+  return (
+    <div>
+      <h1>Home Page</h1>
+
+      {data?.map((item, index) => (
+        <li key={item.id + index + Date.now()}>{item.title}</li>
+      ))}
+    </div>
+  );
+};
+
+const ContactPage = () => {
+  return <>This is Contact Page</>;
+};
+
+export function usePageVisibility() {
+  const [isPageVisible, setIsPageVisible] = useState(!document.hidden);
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsPageVisible(!document.hidden);
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  return isPageVisible;
+}
+```
