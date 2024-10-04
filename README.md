@@ -317,7 +317,10 @@ export default function App() {
 }
 ```
 
-### Other Example of Long Polling.
+### Explanation of Sort Polling with visibilitychange feature.
+
+- In this Example when switch our tab to another tab then polling will stop running, because the visibility of page is gone. But when we come back then it will start again.
+- Note : It will work when we Switch tab not on when we switch one react route to another route.
 
 Implementing efficient polling in a React application, where the polling starts when users actively view a page and stops when they navigate away or switch tabs, can be challenging. In this blog post, we will explore a solution that effectively handles visibility changes and gracefully stops polling when necessary. We’ll utilize the useEffect hook, handle page visibility changes using the Page Visibility API, and ensure polling starts and stops based on user interaction. Additionally, we will implement a mechanism to stop polling in case of API failures, preventing unnecessary requests. Let’s dive in and discover how to implement this solution in your React application.
 
@@ -413,4 +416,141 @@ export function MyComponent() {
 
 ### The cleanup function returned by the useEffect hook stops the polling by calling stopPolling when the component unmounts. This ensures that we clean up the interval properly to avoid memory leaks.
 
+```
+
+### Here Is Full Example Short polling with visibilitychange feature. Change Tab and see polling will stop and start when comes back.
+
+```js
+import React, { useState, useEffect, useRef } from "react";
+import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import "./style.css";
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <NavBar />
+      <Routes>
+        <Route exact path="/" element={<HomePage />} />
+        <Route exact path="/contact" element={<ContactPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+const NavBar = () => {
+  return (
+    <>
+      <div>
+        <p>
+          <NavLink to="/">Home</NavLink>
+        </p>
+        <p>
+          <NavLink to="/contact">Contact</NavLink>
+        </p>
+      </div>
+    </>
+  );
+};
+
+const HomePage = () => {
+  let [data, setData] = useState([]);
+  let [isError, setIsError] = useState("");
+  const isPageVisible = usePageVisibility();
+  const timerIdRef = useRef(null);
+  const [isPollingEnabled, setIsPollingEnabled] = useState(true);
+
+  const getApiResponse = () => {
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          let response = await fetch("https://dummyjson.com/products");
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          resolve(response);
+        } catch (error) {
+          reject(error);
+        }
+      }, 1000);
+    });
+  };
+  let counter = 0;
+  useEffect(() => {
+    const pollingCallback = async (counter) => {
+      // Your polling logic here
+      try {
+        let response = await getApiResponse();
+        console.log(response, "response >>>", counter);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        let result = await response.json();
+        setData(result.products);
+      } catch (error) {
+        setIsPollingEnabled(false);
+        setIsError(error);
+      }
+    };
+
+    const startPolling = () => {
+      // pollingCallback(); // To immediately start fetching data
+      // Polling every 30 seconds
+
+      timerIdRef.current = setInterval(() => {
+        counter++;
+        console.log("interval >>>>>>>>>>>>>", counter);
+        pollingCallback(counter);
+      }, 3000);
+    };
+
+    const stopPolling = () => {
+      clearInterval(timerIdRef.current);
+    };
+
+    if (isPageVisible && isPollingEnabled) {
+      startPolling();
+    } else {
+      stopPolling();
+    }
+
+    return () => {
+      stopPolling();
+    };
+  }, [isPageVisible, isPollingEnabled]);
+
+  if (isError) {
+    return <p>{isError}</p>;
+  }
+
+  return (
+    <div>
+      <h1>Home Page</h1>
+
+      {data?.map((item, index) => (
+        <li key={item.id + index + Date.now()}>{item.title}</li>
+      ))}
+    </div>
+  );
+};
+
+const ContactPage = () => {
+  return <>This is Contact Page</>;
+};
+
+export function usePageVisibility() {
+  const [isPageVisible, setIsPageVisible] = useState(!document.hidden);
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsPageVisible(!document.hidden);
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
+
+  return isPageVisible;
+}
 ```
