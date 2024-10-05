@@ -672,3 +672,70 @@ export function usePageVisibility() {
   return isPageVisible;
 }
 ```
+
+### React Optimistic Update Feature.
+
+```js
+import React, { useState, useRef } from "react";
+import "./style.css";
+
+export default function App() {
+  return (
+    <div>
+      <h1>Optimistic Data</h1>
+      <p>Start clicking add with and without input values)</p>
+      <OptimisticUpdate />
+    </div>
+  );
+}
+
+const OptimisticUpdate = () => {
+  const [data, setData] = useState("");
+  const [item, setItem] = useState([]);
+  const [error, setError] = useState(null);
+  const ElementFocus = useRef();
+  const getOptimistic = (value) => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (value) {
+          if (isNaN(value)) {
+            resolve(value);
+          } else {
+            reject("Numbers are not valid");
+          }
+        } else {
+          reject("NOT FOUND");
+        }
+      }, 1000);
+    });
+  };
+
+  const handleUpdate = (updatedData) => {
+    setData(updatedData);
+  };
+
+  const handleClick = async () => {
+    setItem([...item, data + " Loading ... "]);
+    setData("");
+    setError("");
+    try {
+      let response = await getOptimistic(data);
+      setItem([...item, response]);
+    } catch (error) {
+      setItem([...item]);
+      setError(error);
+      setData(data);
+      ElementFocus.current.focus();
+    }
+  };
+
+  return (
+    <div>
+      <input ref={ElementFocus} type="text" value={data} onChange={(e) => handleUpdate(e.target.value)} />
+      <button onClick={handleClick}>Add</button>
+      <ul>{!!item.length && item.map((item, index) => <li key={index}>{item}</li>)}</ul>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+    </div>
+  );
+};
+```

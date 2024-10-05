@@ -5704,3 +5704,91 @@ Step 5: Implement the `backward function` to facilitate backward navigation in t
   A. This function moves the `currentPage` pointer backward to the previous web pages.
   B.Allows users to move to web pages they visited web pages they had previously visited.
 ```
+
+### 99. How to check whether a key exist in a JavaScript object or not.
+
+```js
+// Method 1: We can use in operator on objet to check own property or inherited property.
+
+//  in operator also look into inherited property and if it finds then return true.
+
+// Method 2: If we want to test property of object instance not inherited properties then we will use hasOwnProperty method of object instance.
+
+let myObj = {
+  game: "gta",
+};
+
+var person = Object.create(myObj);
+
+person.name = "Vasco";
+person.age = 22;
+
+console.log(person);
+console.log(person.hasOwnProperty("game"));
+console.log("game" in person);
+```
+
+### 100.Sequentially call addTen,SubFive,and mulTwo methods.pass result of addTen to subFive methods and result of subFive methods to MulTwo methods then finally get the output
+
+```js
+const addTen = (num) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(num + 10);
+    }, 6000);
+  });
+};
+
+const subFive = (num) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(num - 5);
+    }, 4000);
+  });
+};
+
+const mulTwo = (num) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(num * 2);
+    }, 2000);
+  });
+};
+
+
+### Method 1: By Using async/await functions.
+
+async function sequenceCall(){
+
+  let add = await addTen(10)
+  let sub = await subFive(add)
+  let mul = await mulTwo(sub)
+  return mul
+}
+let res = sequenceCall()
+res.then((res)=>{
+  console.log(res,'res')
+})
+
+
+### Method 2: By Promise.resolve() in Reduce functions.
+
+async function sequenceCall(arrays) {
+  return arrays.reduce((promiseAccumulator, currentPromise) => {
+    return promiseAccumulator.then((response) => {
+      return currentPromise(response);
+    });
+  }, Promise.resolve(10));
+}
+
+let result = sequenceCall([addTen, subFive, mulTwo]);
+result.then((result) => {
+  console.log(result, "result >>>>>>>>>>>>");
+});
+
+
+//  Note Promise in reduce function working like this :  Its like a chaining function, result of one promise is passed to another promise and so on.
+// promise.then(addTen).then(subFive).then(mulTwo).then((ans)=>{
+// console.log(ans)
+// }).catch((err)=>{console.log(err)});
+```
