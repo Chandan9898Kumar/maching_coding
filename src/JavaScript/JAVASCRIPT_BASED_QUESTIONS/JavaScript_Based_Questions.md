@@ -5792,3 +5792,108 @@ result.then((result) => {
 // console.log(ans)
 // }).catch((err)=>{console.log(err)});
 ```
+
+### 101. What would be the output of following code?
+
+```js
+### 1.
+var objA = {prop1: 42};
+var objB = objA;
+objB = {};
+console.log(objA)
+
+### The output will be {prop1: 42}.
+When we assign objA to objB, the objB variable will point to the same object as the objB variable.
+However, when we reassign objB to an empty object, we simply change where objB variable references to. This doesnt affect where objA variable references to.
+
+
+### 2.
+var arrA = [{prop1: "value of array A!!"},  {someProp: "also value of array A!"}, 3,4,5];
+var arrB = arrA;
+arrB[0].prop1=42;
+console.log(arrA);
+
+### The output will be [{prop1: 42},  {someProp: "also value of array A!"}, 3,4,5].
+Arrays are object in JS, so both variables arrA and arrB point to the same array. Changing arrB[0] is the same as changing arrA[0]
+
+
+### 3.
+var arrA = [{prop1: "value of array A!!"}, {someProp: "also value of array A!"},3,4,5];
+var arrB = arrA.slice();
+arrB[0].prop1=42;
+arrB[3] = 20;
+console.log(arrA,arrB);
+
+### The output will be [{prop1: 42},  {someProp: "also value of array A!"}, 3,4,5].
+The slice function copies all the elements of the array returning the new array. However, it doesnt do deep copying. Instead it does shallow copying.
+In case of our array arr[0] is an object {prop1: "value of array A!!"}. Only the reference to this object will be copied. This effectively means that arrays arrA and arrB share first two elements.
+This is why changing the property of arrB[0] in arrB will also change the arrA[0].
+
+
+### 5.
+(function() {
+	console.log(typeof displayFunc);
+	var displayFunc = function(){
+		console.log("Hi I am inside displayFunc");
+	}
+}());
+
+### 6.
+var employeeId = 'abc123';
+function foo(){
+	employeeId = '123bcd';
+	return;
+}
+foo();
+console.log(employeeId);
+
+### 7.
+var employeeId = 'abc123';
+function foo() {
+	employeeId = '123bcd';
+	return;
+	function employeeId() {}
+}
+foo();
+console.log(employeeId);
+
+### 8.
+var employeeId = 'abc123';
+function foo() {
+	employeeId();
+	return;
+	function employeeId() {
+		console.log(typeof employeeId,'type');
+	}
+}
+foo();
+
+### 9.
+function foo() {
+	employeeId();
+	var product = 'Car';
+	return;
+	function employeeId() {
+		console.log(product);
+	}
+}
+foo();
+
+### In the given code, the function foo is defined, which has its own scope. Inside the foo function, a variable product is declared and assigned the value 'Car'.
+The function employeeId is also defined inside the foo function, and it logs the value of the product variable to the console.
+When the foo function is called, the employeeId function is executed immediately, before the product variable is assigned a value. At this point, the product variable has been declared, but not assigned a value, so its value is undefined.
+Therefore, the console.log(product) statement inside the employeeId function logs undefined to the console.
+The return statement inside the foo function exits the function immediately, so the assignment of the product variable is never executed.
+
+### 10.
+(function foo() {
+	bar();
+	function bar() {
+		abc();
+		console.log(typeof abc,'abc');
+	}
+	function abc() {
+		console.log(typeof bar,'bar');
+	}
+}());
+```
