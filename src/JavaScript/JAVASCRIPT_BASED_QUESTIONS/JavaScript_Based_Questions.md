@@ -5919,3 +5919,34 @@ The return statement inside the foo function exits the function immediately, so 
 	}
 }());
 ```
+
+### 102. Implement Retry function.
+
+```js
+export function wait(delay: number) {
+  return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
+export async function fetchRetry(url: string, delay: number, tries: number, callback: () => void, handleError?: (error: any) => void) {
+  async function onError(err: any) {
+    const triesLeft = tries - 1;
+    if (!triesLeft) {
+      handleError?.(err);
+      return;
+    }
+    await wait(delay);
+    return fetchRetry(url, delay, triesLeft, callback, handleError);
+  }
+  try {
+    const response = await fetchPolyfill(api(url));
+    const result: { canRoute: boolean } = await response.json();
+    if (result.canRoute) {
+      callback();
+    } else {
+      onError("Contact not created in Hubspot CRM");
+    }
+  } catch (error) {
+    onError(error);
+  }
+}
+```
