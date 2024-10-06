@@ -5299,6 +5299,18 @@ class BrowserHistory {
     this.currentIndex = this.history.length - 1;
   }
 
+  // previous(steps){
+  //     if(this.currentIndex - steps <= 0){
+  //       this.currentIndex = 0
+  //       return this.history[this.currentIndex]
+  //     }
+  //     this.currentIndex -= steps
+  //     return this.history[this.currentIndex]
+
+  // }
+
+
+//  OR Below
   previous(step) {
     if (this.currentIndex - step <= 0) {
       this.currentIndex = 0;
@@ -5310,6 +5322,16 @@ class BrowserHistory {
     }
   }
 
+  // forward(steps){
+  //   if(this.currentIndex + steps >=this.history.length){
+  //     this.currentIndex = this.history.length -1
+  //     return  this.history[this.currentIndex]
+  //   }
+  //     this.currentIndex += steps
+  //     return this.history[this.currentIndex]
+  // }
+
+  //  OR Below
   forward(step) {
     if (this.history.length <= this.currentIndex + step) {
       this.currentIndex = this.history.length - 1;
