@@ -1893,6 +1893,19 @@ function createSetIntervalPolyfill() {
     return uniqueId;
   }
 
+  //  NOTE : Here in clearIntervalPolyfill we are clearing the time interval and delete the interval. But this clearTimeout is not working . it is not stopping the timer.
+  // But it works Because we are deleting the intervalMap here and checking if condition in setTimeout. if you comment this delete keyword then you will
+  // see that clearTimeout is not stopping the timer.Ideally timer should be stopped and we don't need if condition in timer and not have to use delete keyword here.
+  // The issue lies in the fact that clearTimeout is not able to stop the setTimeout because the setTimeout is being called recursively in the repeat function. When clearTimeout is called, it only clears the current timeout, but the recursive call to repeat has already been scheduled, so it will still be executed.
+  //  We can use setTimeout like this as well to make this work  and remove this if condition from repeat function above:
+  //  More explanation is given  at bottom of this code :
+
+  //   function clearIntervalPolyfill(intervalId) {
+  //   setTimeout(()=>{
+  //     clearTimeout(intervalMap[intervalId]);
+  //   })
+  // }
+
   function clearIntervalPolyfill(intervalId) {
     clearTimeout(intervalMap[intervalId]);
     delete intervalMap[intervalId];
@@ -1918,10 +1931,60 @@ function greet(name) {
   }
 }
 
-/* 
+/*
 setTimeout(()=>{
   clearIntervalPolyfill(intervalId)
 }, 3000) */
+
+
+### HERE is complete explanation of (above NOTE) why using setTimeout inside clearIntervalPolyfill function works and stop the timer but when removing it ,not working .
+// 1. The reason why using setTimeout inside clearIntervalPolyfill function works and stops the timer, but removing it doesn't work, is due to the way the JavaScript event loop works.
+
+// 2. When you call clearIntervalPolyfill, it doesn't immediately clear the timeout. Instead, it schedules a new task to clear the timeout after a short delay (in this case, 0 milliseconds). This is because setTimeout is an asynchronous function that schedules a task to be executed after a certain delay.
+
+// 3. When you remove the setTimeout call from clearIntervalPolyfill, the clearTimeout call is executed immediately, but it's too late. The recursive call to repeat has already been scheduled, and it will still be executed, even though the interval has been cleared.
+
+// 4. By using setTimeout inside clearIntervalPolyfill, you're essentially scheduling the clearTimeout call to be executed after the current task has finished executing. This ensures that the recursive call to repeat is not scheduled again, and the interval is effectively cleared.
+
+
+### To illustrate this, heres a simplified example:
+
+// - 1. In this example, the repeat function is called recursively every 1 second. When clearIntervalPolyfill is called, it schedules a new task to clear the timeout after a short delay. This ensures that the recursive call to repeat is not scheduled again, and the interval is effectively cleared.
+
+// If you remove the setTimeout call from clearIntervalPolyfill, the clearTimeout call is executed immediately, but its too late. The recursive call to repeat has already been scheduled, and it will still be executed, even though the interval has been cleared.
+
+function repeat() {
+  console.log('Repeat');
+  setTimeout(repeat, 1000);
+}
+
+function clearIntervalPolyfill() {
+  setTimeout(() => {
+   clearTimeout(repeat);
+  });
+}
+
+repeat();
+clearIntervalPolyfill();
+
+
+// - 2. In this case, the clearTimeout call is executed immediately, but it doesn't prevent the recursive call to repeat from being scheduled again. The interval is not effectively cleared.
+let timeoutId;
+
+function repeat() {
+  console.log('Repeat');
+  timeoutId = setTimeout(repeat, 1000);
+}
+
+function clearIntervalPolyfill() {
+  clearTimeout(timeoutId);
+  timeoutId = setTimeout(repeat, 1000); // Try to schedule another timeout with the same ID
+}
+
+repeat();
+clearIntervalPolyfill();
+
+
 ```
 
 ### 8. HERE Below we have used setTimeout polyfill in the setInterval polyfill.
