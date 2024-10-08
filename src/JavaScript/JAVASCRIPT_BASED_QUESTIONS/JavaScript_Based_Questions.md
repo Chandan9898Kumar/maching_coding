@@ -5920,7 +5920,63 @@ The return statement inside the foo function exits the function immediately, so 
 }());
 ```
 
-### 102. Implement Retry function.
+### 102. What would be the output of following code ?
+
+```js
+### 1.
+(function() {
+	'use strict';
+
+	var person = {
+		name: 'John'
+	};
+	person.salary = '10000$';
+	person['country'] = 'USA';
+
+	Object.defineProperty(person, 'phoneNo', {
+		value: '8888888888',
+		enumerable: true
+	})
+
+	console.log(Object.keys(person));
+})();
+
+
+### 2.
+(function() {
+	'use strict';
+
+	var person = {
+		name: 'John'
+	};
+	person.salary = '10000$';
+	person['country'] = 'USA';
+
+	Object.defineProperty(person, 'phoneNo', {
+		value: '8888888888',
+		enumerable: false
+	})
+
+	console.log(Object.keys(person));
+})();
+
+
+### 3.
+(function() {
+	var objA = {
+		foo: 'foo',
+		bar: 'bar'
+	};
+	var objB = {
+		foo: 'foo',
+		bar: 'bar'
+	};
+	console.log(objA == objB);
+	console.log(objA === objB);
+}());
+```
+
+### 103. Implement Retry function.
 
 ```js
 export function wait(delay: number) {
