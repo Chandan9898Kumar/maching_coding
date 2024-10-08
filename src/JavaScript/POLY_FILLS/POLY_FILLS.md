@@ -1799,8 +1799,7 @@ function createSetTimeoutPolyfill() {
   let intervalMap = {};
 
   function callSetTimeout(callback, delay = 0, ...args) {
-
-     if (typeof func !== "function") throw new TypeError('"callback" must be a function');
+     if (typeof callback !== "function") throw new TypeError('"callback" must be a function');
 
     let id = intervalId++;
     intervalMap[id] = true;
@@ -1814,7 +1813,7 @@ function createSetTimeoutPolyfill() {
       if (Date.now() > start) {
         callback.apply(this, args);
       } else {
-        requestIdleCallback(triggerCallback);
+        requestIdleCallback(triggerCallback);  // requestIdleCallback makes triggerCallback function keep getting called. 
       }
     }
 
