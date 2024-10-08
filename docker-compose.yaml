@@ -1,0 +1,65 @@
+#  This is a YAML configuration file for a Docker Compose setup. It defines multiple services that can
+#  be run together using Docker Compose. Each service has its own configuration including container
+#  name, image, ports, environment variables, volumes, and more.
+# version: "3.3"
+
+services:
+  redis:
+    container_name: redis
+    image: redis:6.2-alpine
+    restart: on-failure
+    ports:
+      - '6379:6379'
+
+# command: redis-server
+# networks:
+# - back-tier
+
+rabbitmq:
+  container_name: rabbitmq
+  image: rabbitmq:3.8-management-alpine
+  restart: on-failure
+  ports:
+    # AMQP protocol port
+    - '5672:5672'
+    # HTTP management UI
+    - '15672:15672'
+
+  environment:
+    - RABBITMQ_ERLANG_COOKIE="SWQOKODSQALRPCLNMEQG"
+    - RABBITMQ_DEFAULT_PASS=guest
+    - RABBITMQ_DEFAULT_USER=guest
+
+  volumes:
+    - "./rabbit-data:/var/lib/rabbitmq/mnesia"
+
+# networks:
+# - back-tier
+ml_db:
+  image: postgres:15.1
+  command: postgres -c 'max_connections=500'
+  restart: on-failure
+  container_name: ml_db
+  ports:
+    - '5432:5432'
+  environment:
+    POSTGRES_PASSWORD: dpsdps
+    POSTGRES_USER: dps
+    POSTGRES_DB: dpsdb
+  volumes:
+    #This is required to persist the db data on container restart
+    - ./postgres-data:/var/lib/postgresql/data4
+
+ui:
+  container_name: ui
+  restart: on-failure
+  build:
+    context: ./
+    dockerfile: DockerfileUI
+  volumes:
+    - ./ui:/usr/src/app
+    - '/usr/src/app/node_modules'
+  environment:
+    - CHOKIDAR_USEPOLLING=true
+  ports:
+    - 3000:3000

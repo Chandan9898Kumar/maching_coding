@@ -1,0 +1,43 @@
+###########
+
+# BUILDER #
+
+###########
+
+# pull official base image
+
+FROM node:12.18.3-alpine3.9 as builder
+
+# set work directory
+
+WORKDIR /usr/src/app
+
+# add `/app/node_modules/.bin` to $PATH
+
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+
+# install app dependencies
+
+COPY ./ui/package.json ./
+
+COPY ./ui/.yarnrc ./
+
+COPY ./ui/.npmrc ./
+
+RUN npm install
+
+# RUN npm install react-scripts@3.4.1 -g --silent
+
+EXPOSE 3000
+
+# add react project
+
+COPY ./ui .
+
+# ARG API_SERVER
+
+# ENV REACT_APP_API_SERVER=${API_SERVER}
+
+# start app
+
+CMD ["npm", "start"]
