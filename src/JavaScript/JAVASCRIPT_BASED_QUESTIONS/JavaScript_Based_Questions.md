@@ -5976,7 +5976,75 @@ The return statement inside the foo function exits the function immediately, so 
 }());
 ```
 
-### 103. Implement Retry function.
+### 103. What would be the output of following code ?
+
+```js
+### 1.
+var obj = {
+  message: 'Hello',
+  innerMessage: function () {
+    (function () {
+      console.log(this.message);
+    }());
+  }
+};
+console.log(obj.innerMessage()); // undefined
+
+### NOTE :
+// The O/p showing "undefined" is due to the way JavaScript handles the this keyword in different contexts.
+// In the innerMessage function, this refers to the obj object, so this.message correctly logs 'Hello'.
+// However, when you immediately invoke the inner function using the IIFE (Immediately Invoked Function Expression) syntax (),
+// the this keyword inside that function no longer refers to the obj object. Instead, it refers to the global object
+// (usually the window object in a browser or the global object in a Node.js environment).
+// Since the global object does not have a message property, this.message is undefined, which is why youre seeing undefined logged to the console.
+
+// - To fix this, you can use an arrow function instead of a traditional function expression for the inner function.
+//   Arrow functions inherit the this context from their surrounding scope, so this will still refer to the obj object:
+
+ const obj = {
+  message: 'Hello',
+  innerMessage: function () {
+      (() => {
+       console.log(this.message);
+      })();
+  }
+};
+console.log(obj.innerMessage());
+
+
+//  OR We can do like this :
+var obj = {
+  message: 'Hello',
+  innerMessage: function () {
+  	var self = this;
+    (function () {
+      console.log(self.message);
+    }());
+  }
+};
+console.log(obj.innerMessage());
+
+
+### 2.
+function Person(name, age){
+	this.name = name || "John";
+	this.age = age || 24;
+	this.displayName = function(){
+		console.log(this.name);
+	}
+}
+
+Person.name = "John";
+Person.displayName = function(){
+	console.log(this.name);
+}
+
+var person1 = new Person('John');
+	person1.displayName();
+	Person.displayName();
+```
+
+### 104. Implement Retry function.
 
 ```js
 export function wait(delay: number) {
