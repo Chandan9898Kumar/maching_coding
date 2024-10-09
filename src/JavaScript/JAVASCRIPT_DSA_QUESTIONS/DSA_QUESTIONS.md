@@ -3063,10 +3063,21 @@ str.split(".").reduce(function (r, a) {
 console.log(obj, "obj");
 
 //                                                For understanding use this,
+//  Here we are passing the reference of {a:{}} to obj.
+// we have three variables: d, obj, and t. Let's break down what's happening:
+// let d = {};: An empty object {} is created and assigned to the variable d.
+// let obj = d;: The variable obj is assigned the value of d, which is the empty object {}. This means that obj now points to the same object as d.
+// let t = obj["a"] = {};: This line is where the magic happens.
+// Here's what's happening in this line:
+
+// obj["a"] is trying to access the property a of the object obj. Since obj is an empty object, it doesn't have a property a yet.
+// The assignment obj["a"] = {} creates a new property a on the object obj and assigns it an empty object {} as its value. This is equivalent to doing obj.a = {}.
+// The expression obj["a"] = {} returns the assigned value, which is the empty object {}.
+// The variable t is assigned the result of the expression, which is the empty object {}.
+
 let d = {};
 let obj = d;
 
-//  Here we are passing the reference of {a:{}} to obj
 let t = (obj["a"] = {});
 console.log(t, "t", d);
 obj = t;
