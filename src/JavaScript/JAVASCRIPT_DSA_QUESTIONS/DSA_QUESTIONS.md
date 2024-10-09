@@ -3105,19 +3105,43 @@ console.log(ta, "ta", d);
 obj = ta;
 console.log(obj, "obj", d);
 
-
+###
 - Below Is An Example.
 let d={}
 let obj=d
 
 obj = obj['a']= (obj['a'] || {} )
+//  Note : Here obj will return as empty {} object which is a reference a:{} object and d will return {a:{}}.
 console.log(obj,'obj 11111111111111',d)
+console.log(obj===d.a)// true
+console.log(obj===d)// false
+//  So now if you change like : then d will return {a:{b:{}}} and obj will return {b:{}} because obj was holding the reference of a:{}.
+// so change in a.b={} will reflect in obj as b:{}
+d.a.b={}
+console.log(obj,'<<<<<<d >>>>>',d)
 
+// when you assigned c = c["a"] = {}, you created a new object and assigned it to the property a of c (which was still pointing to the original object d). This created a new reference to the nested object, which is still held by d.
+
+// In other words, d still has a reference to the nested object because it was created as a property of d itself, not because c is still pointing to it. The assignment c = c["a"] only updated the c variable to point to the new object, but didn't change the fact that d still holds a reference to it.
+
+
+###
 obj = obj['b']= (obj['b'] || {} )
 console.log(obj,'obj 2222222222222',d)
+###
 
 obj = obj['c']= (obj['c'] || {} )
 console.log(obj,'obj 33333333333333333',d)
+
+### Exaplanation.
+// 1. let d = {}: Creates an empty object d.
+// 2. let obj = d: Assigns the reference to d to obj. Both d and obj now point to the same empty object.
+// 3. obj = obj['a'] = (obj['a'] || {}): This line is a bit tricky. It's using the OR operator (||) to create a new object if obj['a'] is falsy (i.e., undefined). If obj['a'] is already an object, it will be assigned to itself, effectively doing nothing. The assignment obj = obj['a'] then updates the obj variable to point to the newly created object (or the existing one if it was already there). So, obj now points to the object at d.a.
+// 4. obj = obj['b'] = (obj['b'] || {}): Same logic as above. obj now points to the object at d.a.b.
+// 5. obj = obj['c'] = (obj['c'] || {}): Same logic again. obj now points to the object at d.a.b.c.
+// 6. Finally, when you log obj and d, you'll see that obj points to the innermost object d.a.b.c, while d still points to the original empty object.
+// 7. And obj points to the innermost object d.a.b.c, which is an empty object {}.
+//  So, to summarize: the code creates a nested object structure by assigning new objects to properties of the original object, and the obj variable is updated to point to the innermost object at each step.
 ```
 
 ### 66. Zipping two or more arrays refers to combining their elements into a single array of arrays.
