@@ -4141,3 +4141,95 @@ const result = a.find((item,index,arr)=>{
 console.log(result,'result')
 
 ```
+
+### 80. Function that nests properties of an object based on a given separator.
+
+```js
+
+const obj = {
+ "user.name": "Alice",
+ "user.age": 30,
+ "user.place.state.id":'007',
+ "user.place.state.country":'Germany',
+ "user.place.state.place.game":'GTA 6',
+ "movie.genre.action.name":'John Wick'
+};
+
+const separator = ".";
+
+Expected Output: {user: {name: 'Alice', age: 30, place:{state:{country: 'Germany',id: '007',type:{game:'GTA 6'}}}}, movie:{genre:{action:{name:'John Wick'}}}}
+
+
+### 1. By Assigning property directly to an object.
+
+const nestProperties=(objects,separator)=>{
+  let result = {}
+  for(let key in objects){
+    let value = objects[key]
+    let splittedItems = key.split(separator)
+    let userObject  = result
+
+    for(let item=0;item<splittedItems.length;item++){
+       userObject = userObject[splittedItems[item]] =item>=splittedItems.length-1 ? value : userObject[splittedItems[item]] || {}
+    }
+  }
+
+  return result
+}
+
+const nestedObj = nestProperties(obj, separator);
+console.log(nestedObj,'nestedObj')
+
+
+### 2. By using for loop.
+const nestProperties=(objects,separator)=>{
+  let result = {}
+
+  for(let key in objects){
+    let splittedKeys = key.split(separator)
+    let splittedValues = objects[key]
+    let currentObj = result;
+
+     for (let i = 0; i < splittedKeys.length; i++) {
+        const nestedKey = splittedKeys[i];
+       if(!currentObj[nestedKey]){
+         if(i>=splittedKeys.length-1){
+           currentObj[nestedKey] = splittedValues
+         }else{
+           currentObj[nestedKey] ={}
+         }
+       }
+       currentObj = currentObj[nestedKey]
+     }
+  }
+
+  return result
+}
+const nestedObj = nestProperties(obj, separator);
+console.log(nestedObj,'nestedObj')
+
+
+### 3. By Using forEach loop.
+
+const nestProperties = (objects, separator) => {
+  const result = {};
+
+  Object.keys(objects).forEach(key => {
+   const splittedKeys = key.split(separator);
+   const value = objects[key];
+   let currentObj = result;
+
+   splittedKeys.forEach((nestedKey, index) => {
+    if (!currentObj[nestedKey]) {
+      currentObj[nestedKey] = index === splittedKeys.length - 1 ? value : {};
+    }
+    currentObj = currentObj[nestedKey];
+   });
+  });
+
+  return result;
+};
+const nestedObj = nestProperties(obj, separator);
+console.log(nestedObj,'nestedObj')
+
+```
