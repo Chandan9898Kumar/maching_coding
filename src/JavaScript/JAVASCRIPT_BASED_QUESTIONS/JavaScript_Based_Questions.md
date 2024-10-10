@@ -6074,3 +6074,65 @@ export async function fetchRetry(url: string, delay: number, tries: number, call
   }
 }
 ```
+
+### 105. What would be the output of following code ?
+
+```js
+### 1.
+(function() {
+	var greet = 'Hello World';
+	var toGreet = [].filter.call(greet, function(element, index) {
+		return index > 5;
+	});
+	console.log(toGreet);
+}());
+
+// filter() is a method that creates a new array with all elements that pass the test implemented by the provided function. However, in this case, it's not being called on an array, but rather on the string greet.
+// - call() is a method that calls a function with a given this value and arguments provided individually. In this case, it's being used to call the filter() method on the string greet, rather than on an array.
+// - The callback function passed to filter() takes two arguments: element and index. In the context of a string, element will be each character of the string, and index will be the index of that character in the string.
+
+//  In Simple terms :
+// var greet = 'Hello World';
+// Array.prototype.filter= null
+// Array.prototype.filter=function(){
+//   console.log(this,'this')
+// }
+// const res = [].filter.call(greet)
+
+
+
+### 2.
+(function greetNewCustomer() {
+	console.log('Hello ' + this.name);
+}.bind({
+	name: 'John'
+})());
+
+
+### 3.
+function mul(x){
+	return function(y){
+		return [x*y, function(z){
+			return x*y + z;
+		}];
+	}
+}
+
+console.log(mul(2)(3)[0]);
+console.log(mul(2)(3)[1](4));
+
+
+### 4.
+function mul(x) {
+	return function(y) {
+		return {
+			result: x * y,
+			sum: function(z) {
+				return x * y + z;
+			}
+		};
+	};
+}
+console.log(mul(2)(3).result);
+console.log(mul(2)(3).sum(4));
+```
