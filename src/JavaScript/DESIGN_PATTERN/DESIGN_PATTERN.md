@@ -2984,6 +2984,7 @@ music
 4. Books are just a resource, we need to query it ourselves.
 
 ```
+
 [Facade Example](https://dev.to/tomekbuszewski/facade-pattern-in-javascript-3on4)
 
 ### When To Use Facade Pattern ? ✅
@@ -3008,7 +3009,7 @@ music
 
 ## Flyweight 🪰
 
-The Flyweight design pattern is a structural pattern that aims to minimize memory usage or computational expenses by sharing as much as possible with related objects; it provides a way to use objects in large numbers more efficiently. The pattern achieves this by sharing common portions of the object's state among multiple instances, rather than each instance holding its own copy.
+1. The Flyweight design pattern is a structural pattern that aims to minimize memory usage or computational expenses by sharing as much as possible with related objects; it provides a way to use objects in large numbers more efficiently. The pattern achieves this by sharing common portions of the object's state among multiple instances, rather than each instance holding its own copy.
 
 In simple words:
 
@@ -3084,6 +3085,111 @@ textEditor.applyStyle("Arial", 12, "Black"); // Reusing existing style
 textEditor.printStyles(); // print all styles...
 ```
 
+### Other Definitions.
+
+2. The Flyweight Design Pattern is a structural design pattern used in JavaScript to minimize memory usage by sharing the data as much as possible with the related objects.
+
+`The shared data typically consists of two types of properties:`
+
+1. Intrinsic properties: The properties that do not change over time while shared among related objects are called Intrinsic properties
+2. Extrinsic properties: The properties that are unique to every, object and cannot be shared are called extrinsic properties.
+
+### Example 2. Implementation of Flyweight Design Pattern in JavaScript:
+
+```js
+Step 1: First, we must create a Flyweight object with intrinsic and extrinsic properties.
+// In this step, we created a `FlyweightDP` class which contains the constructor to initialize the `sharedData`(Intrinsic properties) and the `operation` method takes the `uniqueData` (Extrinsic properties) and logs a message combining shared and unique data.
+
+class FlyweightDP {
+constructor(sharedData) {
+	this.sharedData = sharedData;
+}
+operation(uniqueData) {
+	console.log(`Intrinsic Property: ${this.sharedData}, Extrinsic Property: ${uniqueData}`);
+}
+}
+
+
+Step 2: Create a `FlyweightFactory` class which is used to manage and reuse the shared data and properties efficiently.
+
+// In this step, we created a `FlyweightFactory` which contains a constructor to initialize an empty object called `data` to store the instances of `FlyweightDP` class. The `getData` method takes the `sharedData` as a parameter and checks whether a flyweight(object/instance of `FlyweightDP` class) with the given `sharedData` exists in the `data` object or not.
+
+// If it doesn’t exists it create a new flyweight with that `sharedData` and add it to the `data` object and returns the flyweight associated with that `sharedData`. The `getFlyweightsCount` method returns the count of flyweights or instances of `FlyweightDP` class.
+
+class FlyweightFactory {
+constructor() {
+	this.data = {};
+}
+getData(sharedData) {
+	if (!this.data[sharedData]) {
+	this.data[sharedData] = new FlyweightDP(sharedData);
+	}
+	return this.data[sharedData];
+}
+getFlyweightsCount() {
+	return Object.keys(this.data).length;
+}
+}
+
+
+Step 3: Create an object for the `FlyweightFactory` class to understand the working of Flyweight design pattern.
+
+// In this step we created an object called `factory` for the `FlyweightFactory` class and invoked the `getData` method with the parameter ‘A’ which is stored in `flyweight1` and invoked the `operation` method with parameter ‘1’. We invoked the method `getData` with the parameter ‘B’ which is stored in `flyweight2` and invoked `operation` method with parameter ‘2’. We invoked the method `getData` with the parameter ‘A’ again. now it will be not added because it is already present in the object and invoked the operation method with parameter ‘3’.
+
+const factory = new FlyweightFactory();
+const flyweight1 = factory.getData('A');
+flyweight1.operation('1');
+const flyweight2 = factory.getData('B');
+flyweight2.operation('2');
+const flyweight3 = factory.getData('A');
+flyweight3.operation('3');
+console.log(`Number of flyweights created: ${factory.getFlyweightsCount()}`);
+
+```
+
+### Example 3.
+```js
+class Character {
+  constructor(char, font, size) {
+    this.char = char;
+    this.font = font;
+    this.size = size;
+  }
+
+  render() {
+    console.log(`Rendering character "${this.char}" in ${this.font}, size ${this.size}`);
+  }
+}
+
+class CharacterFactory {
+  constructor() {
+    this.characters = {};
+  }
+
+  getCharacter(char, font, size) {
+    const key = `${char}-${font}-${size}`;
+    if (!this.characters[key]) {
+      this.characters[key] = new Character(char, font, size);
+    }
+    return this.characters[key];
+  }
+}
+
+// Usage
+const factory = new CharacterFactory();
+
+const charA1 = factory.getCharacter('A', 'Arial', 12);
+const charA2 = factory.getCharacter('A', 'Arial', 12);
+const charB = factory.getCharacter('B', 'Times New Roman', 14);
+
+charA1.render(); // Output: Rendering character "A" in Arial, size 12
+charA2.render(); // Output: Rendering character "A" in Arial, size 12 (shared instance)
+charB.render();  // Output: Rendering character "B" in Times New Roman, size 14
+
+- In this example, the Character class represents individual characters with intrinsic properties like the character itself, font, and size. The CharacterFactory class ensures that characters with the same intrinsic properties are shared rather than duplicated.
+
+```
+
 ### When To Use Flyweight Pattern ? ✅
 
 - **Large Number of Similar Objects:** Useful when dealing with many similar instances.
@@ -3095,11 +3201,34 @@ textEditor.printStyles(); // print all styles...
 - **Memory Efficiency:** Reduces memory consumption by sharing common state.
 - **Performance Improvement:** Minimizes computational costs by reusing shared portions.
 - **Scalability:** Handles numerous instances without proportional memory increase.
+- **Reduced Redundancy:** The Flyweight design pattern helps to reduce the redundant code by extracting the common state.
 
 ### Disadvantages of Flyweight Pattern 🆘 :
 
 - **Complexity:** Introduces complexity by separating intrinsic and extrinsic states.
 - **Potential Overhead:** Managing shared state might outweigh benefits in simple scenarios.
+- **Dependency on a Factory:** The Flyweight design pattern often relies on a factory for creating flyweight objects, introducing a dependency on this factory.
+
+
+### Considerations
+
+- When using the Flyweight Pattern, consider the following:
+
+1. Identifying Intrinsic State: Carefully identify and separate the intrinsic state from the extrinsic state of objects. Intrinsic state should be shared, while extrinsic state can vary.
+
+2. Thread Safety: If your application is multi-threaded, ensure that the Flyweight objects are thread-safe.
+
+3. Memory vs. Performance: While the Flyweight Pattern reduces memory usage, it can introduce a slight performance overhead due to the need for lookups and shared instances.
+
+### When do we use Flyweight design pattern?
+
+A. In software development, we may rely on the Flyweight pattern when we need to manage a large number of similar objects efficiently, especially when the objects share common intrinsic (immutable) properties that can be shared among multiple instances.
+
+### Can you provide an example of a real-world use case for the Flyweight pattern?
+
+A. In a text editor, characters in a document can be represented using the Flyweight pattern. Fonts, sizes, and styles are shared (intrinsic) properties, while character positions are unique (extrinsic) properties.
+
+B. Caching: The pattern can be used to cache frequently used objects or data to improve performance.
 
 ## Proxy 🔗
 
