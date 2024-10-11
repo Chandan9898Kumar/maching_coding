@@ -6135,4 +6135,75 @@ function mul(x) {
 }
 console.log(mul(2)(3).result);
 console.log(mul(2)(3).sum(4));
+
+### 5. which option is correct.
+const bird = {
+  size: 'small',
+};
+
+const mouse = {
+  name: 'Mickey',
+  small: true,
+};
+
+// A: mouse.bird.size is not valid
+// B: mouse[bird.size] is not valid
+// C: mouse[bird["size"]] is not valid
+
+### 6.
+class Chameleon {
+  static colorChange(newColor) {
+    this.newColor = newColor;
+    return this.newColor;
+  }
+
+  constructor({ newColor = 'green' } = {}) {
+    this.newColor = newColor;
+  }
+}
+
+const freddie = new Chameleon({ newColor: 'purple' });
+console.log(freddie.colorChange('orange'));
+
+// The colorChange function is static. Static methods are designed to live only on the constructor in which they are created,
+// and cannot be passed down to any children or called upon class instances. Since freddie is an instance of class Chameleon,
+// the function cannot be called upon it. A TypeError is thrown.
+
+### 7.
+function Person(firstName, lastName) {
+  this.firstName = firstName;
+  this.lastName = lastName;
+}
+
+const member = new Person('Lydia', 'Hallie');
+Person.getFullName = function() {
+  return `${this.firstName} ${this.lastName}`;
+};
+console.log(member.getFullName());
+
+// In JavaScript, functions are objects, and therefore, the method getFullName gets added to the constructor function object itself. For that reason,
+// we can call Person.getFullName(), but member.getFullName throws a TypeError.
+// If you want a method to be available to all object instances, you have to add it to the prototype property:
+Person.prototype.getFullName = function() {
+  return `${this.firstName} ${this.lastName}`;
+};
+
+### 8.
+function Person(firstName, lastName) {
+  this.firstName = firstName;
+  this.lastName = lastName;
+}
+
+const lydia = new Person('Lydia', 'Hallie');
+const sarah = Person('Sarah', 'Smith');
+
+console.log(lydia);
+console.log(sarah);
+
+### 9.
+
+let number = 0;
+console.log(number++);
+console.log(++number);
+console.log(number);
 ```
