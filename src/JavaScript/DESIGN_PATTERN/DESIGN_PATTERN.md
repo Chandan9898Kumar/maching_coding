@@ -3293,11 +3293,72 @@ internetUser.accessWebsite("example.com"); // Accessing website: example.com
 internetUser.accessWebsite("bad.com"); // Access to bad.com is denied due to content restrictions.
 ```
 
+### Example 2: Example Implementation .
+
+```js
+- 1. Lazy Loading with Proxy :
+
+### Suppose you have a resource-intensive object that you want to load lazily only when its needed. You can use a proxy to achieve lazy loading:
+
+class ExpensiveResource {
+  constructor() {
+    console.log('Creating an expensive resource...');
+  }
+
+  fetchData() {
+    console.log('Fetching data...');
+  }
+}
+
+class LazyResourceProxy {
+  constructor() {
+    this.resource = null;
+  }
+
+  fetchData() {
+    if (!this.resource) {
+      this.resource = new ExpensiveResource();
+    }
+    this.resource.fetchData();
+  }
+}
+
+// Usage
+const lazyResource = new LazyResourceProxy();
+// The actual resource is created and data is fetched only when needed
+lazyResource.fetchData();
+
+// In this example, the LazyResourceProxy acts as a surrogate for the ExpensiveResource, creating the actual resource only when the fetchData method is called for the first time.
+
+- 2. Access Control with Proxy 
+
+### You can also use proxies to control access to objects and their properties:
+const user = {
+  username: 'john_doe',
+  password: 'secret123',
+};
+
+const userProxy = new Proxy(user, {
+  get(target, property) {
+    if (property === 'password') {
+      throw new Error('Access denied to password.');
+    }
+    return target[property];
+  },
+});
+
+console.log(userProxy.username); // Output: 'john_doe'
+console.log(userProxy.password); // Throws an error: 'Access denied to password.'
+
+// In this example, the proxy intercepts the get operation and restricts access to the password property.
+```
+
 ### When To Use Proxy Pattern ? ✅
 
 - **Access Control:** When you need to control access to an object, for example, adding authentication or authorization checks.
 - **Lazy Loading:** To delay the creation and initialization of an object until it's actually needed.
 - **Logging or Monitoring:** To log or monitor the interactions with the real object.
+- **Caching:** Proxies can implement caching mechanisms to improve performance by storing and returning cached data instead of making expensive operations.
 
 ### Advantages of Proxy Pattern 🪄 :
 
