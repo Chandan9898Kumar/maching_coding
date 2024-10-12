@@ -6250,7 +6250,9 @@ A. primitive or object - "non-primitive"
 
 ### 106. JavaScript Proxies
 
-In JavaScript, proxies (proxy object) are used to wrap an object and redefine various operations into the object such as reading, insertion, validation, etc. Proxy allows you to add custom behavior to an object or a function.
+- In JavaScript, proxies (proxy object) are used to wrap an object and redefine various operations into the object such as reading, insertion, validation, etc. Proxy allows you to add custom behavior to an object or a function.
+
+- A Proxy is a built-in object that allows you to create a custom behavior for fundamental operations on another object (called the target object). Proxies enable you to intercept and define custom behavior for operations such as property lookup, assignment, enumeration, function invocation, etc.
 
 Creating a Proxy Object :-
 The syntax of proxy is:
@@ -6425,4 +6427,60 @@ const proxy = new Proxy({}, handler);
 
 proxy.name = "Jack"; // execute this function
 proxy.age = 33; // Can only access name property
+```
+
+4. This example uses Proxy methods to delete properties.
+
+```js
+const courseDetail = {
+  name: "DSA",
+  time: "6 months",
+  status: "Ongoing",
+};
+
+const handler = {
+  get(obj, prop) {
+    return obj[prop] ? obj[prop] : "Not Found";
+  },
+
+  deleteProperty(target, prop) {
+
+    if (prop in target) {
+      delete target[prop];
+      console.log(`Removed: ${prop}`);
+    }
+  },
+};
+
+const pro = new Proxy(courseDetail, handler);
+
+console.log(pro.name, pro);
+delete pro.name;
+console.log(pro.name, pro);
+
+5. Performance Optimization with Virtual Proxy.
+
+- Consider a scenario where we need to load a large dataset. We can use a Virtual Proxy to delay this operation until it’s actually needed:
+
+
+function loadHeavyData(key) {
+  // Load data logic
+  return `Data ${key}`
+}
+
+
+const handler = {
+  get(target, property) {
+    if (!target[property]) {
+      console.log(`Loading ${property}`);
+      target[property] = loadHeavyData(property); // Assume loadHeavyData is a heavy operation
+    }
+    return target[property];
+  }
+}
+
+let heavyDataSet = new Proxy({}, handler);
+
+
+console.log(heavyDataSet.user); // Logs: Loading user
 ```

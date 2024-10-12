@@ -3148,6 +3148,7 @@ console.log(`Number of flyweights created: ${factory.getFlyweightsCount()}`);
 ```
 
 ### Example 3.
+
 ```js
 class Character {
   constructor(char, font, size) {
@@ -3208,7 +3209,6 @@ charB.render();  // Output: Rendering character "B" in Times New Roman, size 14
 - **Complexity:** Introduces complexity by separating intrinsic and extrinsic states.
 - **Potential Overhead:** Managing shared state might outweigh benefits in simple scenarios.
 - **Dependency on a Factory:** The Flyweight design pattern often relies on a factory for creating flyweight objects, introducing a dependency on this factory.
-
 
 ### Considerations
 
@@ -3330,7 +3330,7 @@ lazyResource.fetchData();
 
 // In this example, the LazyResourceProxy acts as a surrogate for the ExpensiveResource, creating the actual resource only when the fetchData method is called for the first time.
 
-- 2. Access Control with Proxy 
+- 2. Access Control with Proxy
 
 ### You can also use proxies to control access to objects and their properties:
 const user = {
@@ -3353,12 +3353,182 @@ console.log(userProxy.password); // Throws an error: 'Access denied to password.
 // In this example, the proxy intercepts the get operation and restricts access to the password property.
 ```
 
+### Example 3.
+
+```js
+// The following code will aid you in getting a gist of Proxy implementation. We have an external API FlightListAPI for accessing Flight Details databases. We will create a proxy FlightListProxy which will act as the interface through which the client can access the API.
+
+// External API
+
+var FlightListAPI = function () {
+  //creation
+};
+
+FlightListAPI.prototype = {
+  getFlight: function () {
+    // get master list of flights
+    console.log("Generating flight List");
+  },
+
+  searchFlight: function (flightDetails) {
+    // search through the flight list based on criteria
+    console.log("Searching for flight");
+  },
+
+  addFlight: function (flightData) {
+    // add a new flight to the database
+    console.log("Adding new flight to DB");
+  },
+};
+
+// creating the proxy
+var FlightListProxy = function () {
+  // getting a reference to the original object
+  this.flightList = new FlightListAPI();
+};
+
+FlightListProxy.prototype = {
+  getFlight: function () {
+    return this.flightList.getFlight();
+  },
+
+  searchFlight: function (flightDetails) {
+    return this.flightList.searchFlight(flightDetails);
+  },
+
+  addFlight: function (flightData) {
+    return this.flightList.addFlight(flightData);
+  },
+};
+
+console.log("----------With Proxy----------");
+const proxy = new FlightListProxy();
+console.log(proxy.getFlight());
+
+// OUTPUT
+
+// ----------With Proxy----------
+// Generating flight List
+```
+
+### Example 4.
+
+`Problem Statement:`
+Imagine a scenario where you have an online document editor application that allows users to view and edit documents. However, accessing and editing certain documents might require permission due to their sensitivity or size. Loading large documents might be slow, and unauthorized access should be prevented. You need a mechanism to control access to these documents and optimize performance by loading them only when necessary.
+
+`How the Proxy Pattern Solves the Problem?`
+The Proxy Method Design Pattern can be applied here to create a proxy for the document object. The proxy will handle access control and lazy loading of the document content. This means that the document will only be loaded when the user has the necessary permissions and when they actually need to view or edit it. The proxy also helps in reducing the load on the system by deferring the document loading until it is absolutely required.
+
+- Below is the code for the approach discussed above:
+
+```js
+// 1. Subject Interface
+// Defines the operations that both the real document and the proxy will implement.
+
+// Subject Interface
+class Document {
+  open() {}
+  edit(content) {}
+}
+
+// 2. Real Subject
+// The actual document object that contains the real content and the methods to interact with it.
+
+// Real Subject
+class RealDocument extends Document {
+  constructor(filename) {
+    super();
+    this.filename = filename;
+    this.content = this.loadFromDisk();
+  }
+
+  loadFromDisk() {
+    console.log(`Loading document from disk: ${this.filename}`);
+    return "Document content..."; // Simulate loading content
+  }
+
+  open() {
+    console.log(`Opening document: ${this.filename}`);
+    return this.content;
+  }
+
+  edit(newContent) {
+    console.log(`Editing document: ${this.filename}`);
+    this.content = newContent;
+  }
+}
+
+// 3. Proxy
+// The proxy object that controls access to the real document. It handles permission checks and lazy loading of the document content.
+
+// Proxy
+class DocumentProxy extends Document {
+  constructor(filename, user) {
+    super();
+    this.filename = filename;
+    this.user = user;
+    this.realDocument = null;
+  }
+
+  checkAccess() {
+    console.log(`Checking access for user: ${this.user}`);
+    return this.user === "admin"; // Example permission check
+  }
+
+  open() {
+    if (this.checkAccess()) {
+      if (!this.realDocument) {
+        this.realDocument = new RealDocument(this.filename);
+      }
+      return this.realDocument.open();
+    } else {
+      console.log("Access Denied: Unauthorized user");
+      return null;
+    }
+  }
+
+  edit(newContent) {
+    if (this.checkAccess()) {
+      if (!this.realDocument) {
+        this.realDocument = new RealDocument(this.filename);
+      }
+      this.realDocument.edit(newContent);
+    } else {
+      console.log("Access Denied: Unauthorized user");
+    }
+  }
+}
+
+// 4. Client
+// The client interacts with the proxy, unaware of whether it is dealing with a proxy or the real document.
+
+// Client
+const user = "admin";
+const docProxy = new DocumentProxy("sample.txt", user);
+
+// Open document
+console.log(docProxy.open());
+
+// Edit document
+docProxy.edit("New content...");
+
+// Open again to see the changes
+console.log(docProxy.open());
+
+### Below is the explanation of the above code:
+
+1. `RealDocument:` Represents the actual document with methods to open and edit the document. The content is loaded from the disk when the document is created.
+2. `DocumentProxy:` Acts as a mediator between the client and the RealDocument. It ensures that only authorized users can access the document and defers the loading of the document until it is necessary.
+3. `Client:` Interacts with the DocumentProxy, which controls access to the RealDocument. The client does not need to worry about the underlying complexities of permission checking or document loading.
+```
+
 ### When To Use Proxy Pattern ? ✅
 
-- **Access Control:** When you need to control access to an object, for example, adding authentication or authorization checks.
-- **Lazy Loading:** To delay the creation and initialization of an object until it's actually needed.
+- **Access Control (Protection Proxy):** When you need to control access to an object, for example, adding authentication or authorization checks.
+- **Lazy Loading (Virtual Proxy):** To delay the creation and initialization of an object until it's actually needed.
 - **Logging or Monitoring:** To log or monitor the interactions with the real object.
 - **Caching:** Proxies can implement caching mechanisms to improve performance by storing and returning cached data instead of making expensive operations.
+- **Remote Proxy:** When the actual object exists in a different address space (e.g., on a different server), the proxy provides a local representative for the remote object, handling communication between the client and the remote object.
 
 ### Advantages of Proxy Pattern 🪄 :
 
