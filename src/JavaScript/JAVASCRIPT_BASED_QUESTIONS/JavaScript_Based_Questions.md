@@ -6206,4 +6206,44 @@ let number = 0;
 console.log(number++);
 console.log(++number);
 console.log(number);
+
+### 10.
+const a = {};
+const b = { key: 'b' };
+const c = { key: 'c' };
+
+a[b] = 123;
+a[c] = 456;
+
+console.log(a[b]);
+
+// ### Object keys are automatically converted into strings. We are trying to set an object as a key to object a, with the value of 123.
+// However, when we stringify an object, it becomes "[object Object]". So what we are saying here, is that a["[object Object]"] = 123. Then, we can try to do the same again. c is another object that we are implicitly stringifying. So then, a["[object Object]"] = 456.
+// Then, we log a[b], which is actually a["[object Object]"]. We just set that to 456, so it returns 456.
+
+### 11. values which are falsy
+a. undefined, b. nullNaN, c. false, d. '' ,e.  (empty string),f.  0, g. -0, h. 0n , i. (BigInt(0))
+
+//  Function constructors, like new Number and new Boolean are truthy. and non-primitive.
+
+### 12.  Everything in JavaScript is either a...
+A. primitive or object - "non-primitive"
+
+### 13.
+(() => {
+  let x, y;
+  try {
+    throw new Error();
+  } catch (x) {
+    (x = 1), (y = 2);
+    console.log(x); // 1
+  }
+  console.log(x); // undefined
+  console.log(y); // 2
+})();
+
+// ### The catch block receives the argument x. This is not the same x as the variable when we pass arguments. This variable x is block-scoped.
+// Later, we set this block-scoped variable equal to 1, and set the value of the variable y. Now, we log the block-scoped variable x, which is equal to 1.
+// Outside of the catch block, x is still undefined, and y is 2. When we want to console.log(x) outside of the catch block, it returns undefined, and y returns 2.
+// primitive types are passed by values and not by references.
 ```
