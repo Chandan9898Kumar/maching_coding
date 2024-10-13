@@ -6572,4 +6572,88 @@ let heavyDataSet = new Proxy({}, handler);
 
 
 console.log(heavyDataSet.user); // Logs: Loading user
+
+
+6.A  if we want to add the validations to the object properties that their types cannot be changed or they should be within a certain range we can add those validations in the proxy.
+
+const person = {
+  name: "prashant",
+  age: 28,
+  gender: "male"
+};
+
+const proxiedPerson = new Proxy(person, {
+  get(obj, prop){
+    if(prop === "gender"){
+      console.log("Gender is a write only property be exposed!");
+    }else{
+      return obj[prop];
+    }
+  },
+  set(obj, prop, value){
+    if(prop === "age"){
+      if(value < 18 || value > 50){
+        console.log("Age value should be between 18 and 50");
+      }else{
+        obj[prop] = value;
+      }
+    }else{
+      obj[prop] = value;
+    }
+  }
+});
+
+console.log(proxiedPerson.gender);
+// "Gender is a write only property be exposed!"
+// undefined
+
+proxiedPerson.age = 17;
+// "Age value should be between 18 and 50"
+
+console.log(proxiedPerson.age);
+// 28
+
+// We have added the restriction to the gender, making it write only, when it is accessed we are showing a message and returning undefined.
+// Similarly, for the age we have added a check that its value should be within a range otherwise we are showing a message and not updating the property’s value.
+
+6. B If you notice in the above example we are using square objects to update and access the object property value in the get() and set() methods.
+While this works fine, proxies are often used with the Reflect which is an inbuilt object that we can use to get and set the property values;
+
+- Using Reflect in Proxy in JavaScript:
+const person = {
+  name: "prashant",
+  age: 28,
+  gender: "male"
+};
+
+const proxiedPerson = new Proxy(person, {
+  get(obj, prop){
+    if(prop === "gender"){
+      console.log("Gender is a write only property be exposed!");
+    }else{
+      return Reflect.get(obj, prop);
+    }
+  },
+  set(obj, prop, value){
+    if(prop === "age"){
+      if(value < 18 || value > 50){
+        console.log("Age value should be between 18 and 50");
+      }else{
+        Reflect.set(obj, prop, value);
+      }
+    }else{
+      Reflect.set(obj, prop, value);
+    }
+  }
+});
+
+console.log(proxiedPerson.gender);
+// "Gender is a write only property be exposed!"
+// undefined
+
+proxiedPerson.age = 17;
+// "Age value should be between 18 and 50"
+
+console.log(proxiedPerson.age);
+// 28
 ```
