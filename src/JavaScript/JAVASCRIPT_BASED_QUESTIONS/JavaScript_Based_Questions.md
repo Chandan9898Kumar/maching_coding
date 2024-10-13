@@ -6246,6 +6246,95 @@ A. primitive or object - "non-primitive"
 // Later, we set this block-scoped variable equal to 1, and set the value of the variable y. Now, we log the block-scoped variable x, which is equal to 1.
 // Outside of the catch block, x is still undefined, and y is 2. When we want to console.log(x) outside of the catch block, it returns undefined, and y returns 2.
 // primitive types are passed by values and not by references.
+
+
+### 14.
+let person = { name: 'Lydia' };
+const members = [person];
+person = null;
+console.log(members);
+// We are only modifying the value of the person variable, and not the first element in the array, since that element has a different (copied) reference to the object. The first element in members still holds its reference to the original object. When we log the members array, the first element still holds the value of the object, which gets logged.
+
+
+### 15.
+function greeting() {
+  throw 'Hello world!';
+}
+
+function sayHi() {
+  try {
+    const data = greeting();
+    console.log('It worked!', data);
+  } catch (e) {
+    console.log('Oh no an error:', e);
+  }
+}
+
+sayHi();
+
+// With the throw statement, we can create custom errors. With this statement, you can throw exceptions. An exception can be a string, a number, a boolean or an object. In this case, our exception is the string 'Hello world!'.
+// With the catch statement, we can specify what to do if an exception is thrown in the try block. An exception is thrown: the string 'Hello world!'. e is now equal to that string, which we log. This results in 'Oh an error: Hello world!'.
+
+### 16.
+function Car() {
+  this.make = 'Lamborghini';
+  return [{ make: 'Maserati' }];
+}
+
+const myCar = new Car();
+console.log(myCar[0].make,myCar);
+
+### 17.
+(() => {
+  let x = (y = 10);
+})();
+
+console.log(typeof x);
+console.log(typeof y);
+
+// When we set y equal to 10, we actually add a property y to the global object (window in the browser, global in Node). In a browser, window.y is now equal to 10.
+
+// Then, we declare a variable x with the value of y, which is 10. Variables declared with the let keyword are block scoped, they are only defined within the block they're declared in; the immediately invoked function expression (IIFE) in this case. When we use the typeof operator, the operand x is not defined: we are trying to access x outside of the block it's declared in. This means that x is not defined. Values who haven't been assigned a value or declared are of type "undefined". console.log(typeof x) returns "undefined".
+
+// However, we created a global variable y when setting y equal to 10. This value is accessible anywhere in our code. y is defined, and holds a value of type "number". console.log(typeof y) returns "number".
+
+//  let x = (y = 10); is actually shorthand for:
+// y = 10;
+// let x = y;
+
+
+### 18.
+// counter.js
+let counter = 10;
+export default counter;
+
+// index.js
+import myCounter from './counter';
+
+myCounter += 1;
+
+console.log(myCounter);
+
+// An imported module is read-only: you cannot modify the imported module. Only the module that exports them can change its value.
+// When we try to increment the value of myCounter, it throws an error: myCounter is read-only and cannot be modified.
+
+
+### 19.
+const name = 'Lydia';
+age = 21;
+
+console.log(delete name);
+console.log(delete age);
+
+// The delete operator returns a boolean value: true on a successful deletion, else it'll return false. However, variables declared with the var, const, or let keywords cannot be deleted using the delete operator.
+// The name variable was declared with a const keyword, so its deletion is not successful: false is returned. When we set age equal to 21, we actually added a property called age to the global object. You can successfully delete properties from objects this way, also the global object, so delete age returns true.
+
+### 20.
+const numbers = [1, 2, 3, 4, 5];
+const [y] = numbers;
+
+console.log(y);
+
 ```
 
 ### 106. JavaScript Proxies
