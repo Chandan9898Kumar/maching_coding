@@ -6335,6 +6335,49 @@ const [y] = numbers;
 
 console.log(y);
 
+### 20.
+
+let num = 10;
+const increaseNumber = () => num++;
+const increasePassedNumber = number => number++;
+const num1 = increaseNumber();
+const num2 = increasePassedNumber(num1);
+console.log(num1,num);
+console.log(num2,num);
+
+// 1. The unary operator ++ first returns the value of the operand, then increments the value of the operand. The value of num1 is 10, since the increaseNumber function first returns the value of num, which is 10, and only increments the value of num afterward.
+// 2. num2 is 10, since we passed num1 to the increasePassedNumber. number is equal to 10(the value of num1). Again, the unary operator ++ first returns the value of the operand, then increments the value of the operand. The value of number is 10, so num2 is equal to 10.
+
+
+### 21.
+
+const value = { number: 10 };
+const multiply = (x = { ...value }) => {
+  console.log((x.number *= 2));
+};
+multiply();
+multiply();
+multiply(value);
+multiply(value);
+
+// 1. In ES6, we can initialize parameters with a default value. The value of the parameter will be the default value, if no other value has been passed to the function, or if the value of the parameter is "undefined". In this case, we spread the properties of the value object into a new object, so x has the default value of { number: 10 }.
+// 2. The default argument is evaluated at call time! Every time we call the function, a new object is created. We invoke the multiply function the first two times without passing a value: x has the default value of { number: 10 }. We then log the multiplied value of that number, which is 20.
+// 3. The third time we invoke multiply, we do pass an argument: the object called value. The *= operator is actually shorthand for x.number = x.number * 2: we modify the value of x.number, and log the multiplied value 20.
+// 4. The fourth time, we pass the value object again. x.number was previously modified to 20, so x.number *= 2 logs 40.
+
+### 22.
+// index.js
+console.log('running index.js');
+import { sum } from './sum.js';
+console.log(sum(1, 2));
+
+// sum.js
+console.log('running sum.js');
+export const sum = (a, b) => a + b;
+
+// 1. With the import keyword, all imported modules are pre-parsed. This means that the imported modules get run first, and the code in the file that imports the module gets executed after.
+
+// 2. This is a difference between require() in CommonJS and import! With require(), you can load dependencies on demand while the code is being run. If we had used require instead of import, running index.js, running sum.js, 3 would have been logged to the console.
 ```
 
 ### 106. JavaScript Proxies
