@@ -4466,3 +4466,243 @@ square.accept(areaCalculatorVisitor); // Area of Square: 16
 
 - **Increased Number of Classes:** Introducing visitor classes may increase the overall number of classes in the system.
 - **Access to Private Members:** Visitors might need access to private members of elements, leading to potential encapsulation violations.
+
+### MVC Pattern.
+
+MVC is an acronym for Model-View-Controller. It is a design pattern for software projects. It is used majorly by Node developers and by C#, Ruby, PHP framework users too. In MVC pattern, application and its development are divided into three interconnected parts. The advantage of this is it helps in focusing on a specific part of the application name, the ways information is presented to and accepted from, the user.
+
+It helps in allowing for efficient code reuse and the parallel development of the application. Even if the project structure might look a little different than an ideal MVC structure, the basic program flow in and out the application remains the same. In this post, the program flow between these components of an application will be shown by creating a demo application.
+
+- The Components of MVC
+  The three interconnected components of MVC are `the Model`, `the View`, and `the Controller`.
+  Let's take a closer look at each of these components.
+
+1. Model
+   Model represents the structure of data, the format and the constraints with which it is stored. It maintains the data of the application. Essentially, it is the database part of the application.
+
+The Model is responsible for managing the application's data and business logic. It interacts with the database or any other data source to perform operations such as inserting, updating, deleting, and retrieving data.
+
+2. View
+   View is what is presented to the user. Views utilize the Model and present data in a form in which the user wants. A user can also be allowed to make changes to the data presented to the user. They consist of static and dynamic pages which are rendered or sent to the user when the user requests them.
+
+The View is responsible for presenting data to the user. It generates the HTML, CSS, and JavaScript that make up the user interface. The View can also receive user input and send it to the Controller for processing.
+
+3. Controller
+   Controller controls the requests of the user and then generates appropriate response which is fed to the viewer. Typically, the user interacts with the View, which in turn generates the appropriate request, this request will be handled by a controller. The controller renders the appropriate view with the model data as a response.
+
+The Controller is responsible for receiving requests from the View, processing them, and updating the Model accordingly. It acts as an intermediary between the Model and the View, ensuring that both components remain decoupled.
+
+`So, to sum it up:`
+A. Model is data part.
+B. View is User Interface part.
+C. Controller is request-response handler.
+
+### Explanation :
+
+- Implementing MVC in Node.js
+
+Implementing MVC in Node.js requires a few steps. Let's take a look at how to set up the environment and create the Model, View, and Controller.
+
+```js
+// 1. Creating a model.
+// you need to create the Model. The Model represents the data and business logic of the application. You can define the Model as a JavaScript class that interacts with the database or any other data source. For example, you can define a User model that represents a user in the application.
+// In this example, we're using Mongoose, a popular object data modeling (ODM) library for Node.js that provides a higher-level API for interacting with MongoDB, a NoSQL database.
+
+// user.js
+const mongoose = require('mongoose');
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+});
+
+module.exports = mongoose.model('User', userSchema);
+
+
+// 2. Creating a view
+
+// Next, you need to create the View. The View represents the presentation layer of the application. You can define the View as a template engine that generates the HTML, CSS, and JavaScript that make up the user interface.
+// In this example, we're using EJS, a popular template engine for Node.js that allows you to embed JavaScript code in HTML templates.
+
+
+// index.ejs
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My App</title>
+  </head>
+  <body>
+    <h1>Welcome to My App</h1>
+    <% if (user) { %>
+      <p>Hello <%= user.name %></p>
+    <% } else { %>
+      <a href="/login">Login</a>
+    <% } %>
+  </body>
+</html>
+
+// 3. Creating a controller
+// you need to create the Controller. The Controller represents the logic of the application. You can define the Controller as a JavaScript module that exports functions that handle requests from the View.
+// In this example, we're using bcrypt, a library for hashing passwords, and jwt, a library for generating JSON Web Tokens (JWTs), a popular way of implementing authentication and authorization in web applications.
+
+
+
+// authController.js
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+
+exports.login = async (req, res) => {
+  const { email, password } = req.body;
+
+  // Find user by email
+  const user = await User.findOne({ email });
+
+  // Check if user exists and password matches
+  if (!user || !bcrypt.compareSync(password, user.password)) {
+    return res.status(401).json({ message: 'Invalid email or password' });
+  }
+
+  // Generate JWT token
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+
+  res.cookie('token', token);
+
+  res.redirect('/');
+};
+
+
+// 4. Routing requests
+// Finally, you need to route requests from the View to the Controller. You can define the routes using Express, the web framework we installed earlier.
+
+// app.js
+
+const express = require('express');
+const authController = require('./controllers/authController');
+
+const app = express();
+
+app.set('view engine', 'ejs');
+
+app.use(express.urlencoded({ extended: true }));
+
+app.get('/', (req, res) => {
+  res.render('index', { user: req.user });
+});
+
+app.post('/login', authController.login);
+
+app.listen(3000, () => {
+  console.log('Server started on http://localhost:3000');
+});
+
+
+// In this example, we're defining a GET route for the home page and a POST route for logging in. We're also using the EJS template engine to render the View.
+```
+
+### Example In JavaScript.
+
+1. 
+```js
+// Model
+function UserModel() {
+  this.data = [];
+  this.addData = function (item) {
+    this.data.push(item);
+  };
+}
+// View
+function UserView(model) {
+  this.render = function () {
+    console.log("Rendered user data:", model.data);
+  };
+}
+// Controller
+function UserController(model, view) {
+  this.addUser = function (user) {
+    model.addData(user);
+    view.render();
+  };
+}
+// Usage
+var userModel = new UserModel();
+var userView = new UserView(userModel);
+var userController = new UserController(userModel, userView);
+userController.addUser("John Doe");
+
+`Explanation:`;
+// The MVC pattern separates concerns in an application. UserModel handles data, UserView renders the data, and UserController manages user interactions, ensuring a clean and organized structure.
+```
+2.
+
+```js
+// Model  
+class TodoModel {  
+  constructor() {  
+   this.todos = [];  
+  }  
+  
+  addTodo(todo) {  
+   this.todos.push(todo);  
+  }  
+  
+  removeTodo(todo) {  
+   this.todos = this.todos.filter(t => t !== todo);  
+  }  
+  
+  getTodos() {  
+   return this.todos;  
+  }  
+}  
+  
+// View  
+class TodoView {  
+  constructor(model) {  
+   this.model = model;  
+  }  
+  
+  render() {  
+   console.log('Todo List:');  
+   this.model.getTodos().forEach(todo => {  
+    console.log(`- ${todo}`);  
+   });  
+  }  
+}  
+  
+// Controller  
+class TodoController {  
+  constructor(model, view) {  
+   this.model = model;  
+   this.view = view;  
+  }  
+  
+  addTodo(todo) {  
+   this.model.addTodo(todo);  
+   this.view.render();  
+  }  
+  
+  removeTodo(todo) {  
+   this.model.removeTodo(todo);  
+   this.view.render();  
+  }  
+}  
+  
+// Usage  
+const model = new TodoModel();  
+const view = new TodoView(model);  
+const controller = new TodoController(model, view);  
+  
+controller.addTodo('Buy milk');  
+controller.addTodo('Walk the dog');  
+controller.removeTodo('Buy milk');
+
+
+In this example, we have three classes: TodoModel, TodoView, and TodoController. The TodoModel class represents the data and business logic of the application, the TodoView class represents the user interface, and the TodoController class handles the interaction between the model and the view.
+
+The TodoModel class has methods for adding, removing, and getting todos. The TodoView class has a method for rendering the todos. The TodoController class has methods for adding and removing todos, and it updates the view after each action.
+
+```
+
+
+### NOTE : Now Days We are Using Express.js, So 
+Since we're building a RESTful API, we don't need a traditional view layer. Instead, we'll use the res.json() method to return JSON data to the client.
