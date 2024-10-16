@@ -5824,9 +5824,9 @@ var objB = objA;
 objB = {};
 console.log(objA)
 
-### The output will be {prop1: 42}.
-When we assign objA to objB, the objB variable will point to the same object as the objB variable.
-However, when we reassign objB to an empty object, we simply change where objB variable references to. This doesnt affect where objA variable references to.
+// ### The output will be {prop1: 42}.
+// When we assign objA to objB, the objB variable will point to the same object as the objB variable.
+// However, when we reassign objB to an empty object, we simply change where objB variable references to. This doesnt affect where objA variable references to.
 
 
 ### 2.
@@ -5835,8 +5835,8 @@ var arrB = arrA;
 arrB[0].prop1=42;
 console.log(arrA);
 
-### The output will be [{prop1: 42},  {someProp: "also value of array A!"}, 3,4,5].
-Arrays are object in JS, so both variables arrA and arrB point to the same array. Changing arrB[0] is the same as changing arrA[0]
+// ### The output will be [{prop1: 42},  {someProp: "also value of array A!"}, 3,4,5].
+// Arrays are object in JS, so both variables arrA and arrB point to the same array. Changing arrB[0] is the same as changing arrA[0]
 
 
 ### 3.
@@ -5846,10 +5846,10 @@ arrB[0].prop1=42;
 arrB[3] = 20;
 console.log(arrA,arrB);
 
-### The output will be [{prop1: 42},  {someProp: "also value of array A!"}, 3,4,5].
-The slice function copies all the elements of the array returning the new array. However, it doesnt do deep copying. Instead it does shallow copying.
-In case of our array arr[0] is an object {prop1: "value of array A!!"}. Only the reference to this object will be copied. This effectively means that arrays arrA and arrB share first two elements.
-This is why changing the property of arrB[0] in arrB will also change the arrA[0].
+// ### The output will be [{prop1: 42},  {someProp: "also value of array A!"}, 3,4,5].
+// The slice function copies all the elements of the array returning the new array. However, it doesnt do deep copying. Instead it does shallow copying.
+// In case of our array arr[0] is an object {prop1: "value of array A!!"}. Only the reference to this object will be copied. This effectively means that arrays arrA and arrB share first two elements.
+// This is why changing the property of arrB[0] in arrB will also change the arrA[0].
 
 
 ### 5.
@@ -5920,63 +5920,9 @@ The return statement inside the foo function exits the function immediately, so 
 }());
 ```
 
+
+
 ### 102. What would be the output of following code ?
-
-```js
-### 1.
-(function() {
-	'use strict';
-
-	var person = {
-		name: 'John'
-	};
-	person.salary = '10000$';
-	person['country'] = 'USA';
-
-	Object.defineProperty(person, 'phoneNo', {
-		value: '8888888888',
-		enumerable: true
-	})
-
-	console.log(Object.keys(person));
-})();
-
-
-### 2.
-(function() {
-	'use strict';
-
-	var person = {
-		name: 'John'
-	};
-	person.salary = '10000$';
-	person['country'] = 'USA';
-
-	Object.defineProperty(person, 'phoneNo', {
-		value: '8888888888',
-		enumerable: false
-	})
-
-	console.log(Object.keys(person));
-})();
-
-
-### 3.
-(function() {
-	var objA = {
-		foo: 'foo',
-		bar: 'bar'
-	};
-	var objB = {
-		foo: 'foo',
-		bar: 'bar'
-	};
-	console.log(objA == objB);
-	console.log(objA === objB);
-}());
-```
-
-### 103. What would be the output of following code ?
 
 ```js
 ### 1.
@@ -6044,7 +5990,7 @@ var person1 = new Person('John');
 	Person.displayName();
 ```
 
-### 104. Implement Retry function.
+### 103. Implement Retry function.
 
 ```js
 export function wait(delay: number) {
@@ -6075,7 +6021,7 @@ export async function fetchRetry(url: string, delay: number, tries: number, call
 }
 ```
 
-### 105. What would be the output of following code ?
+### 104. What would be the output of following code ?
 
 ```js
 ### 1.
@@ -6378,9 +6324,210 @@ export const sum = (a, b) => a + b;
 // 1. With the import keyword, all imported modules are pre-parsed. This means that the imported modules get run first, and the code in the file that imports the module gets executed after.
 
 // 2. This is a difference between require() in CommonJS and import! With require(), you can load dependencies on demand while the code is being run. If we had used require instead of import, running index.js, running sum.js, 3 would have been logged to the console.
+
+
+### 23.
+var status = '😎';
+
+setTimeout(() => {
+  const status = '😍';
+
+  const data = {
+    status: '🥑',
+    getStatus() {
+      return this.status;
+    },
+  };
+
+  console.log(data.getStatus());
+  console.log(data.getStatus.call(this));
+}, 0);
+
+// 1. The value of the this keyword is dependent on where you use it. In a method, like the getStatus method, the this keyword refers to the object that the method belongs to. The method belongs to the data object, so this refers to the data object. When we log this.status, the status property on the data object gets logged, which is "🥑".
+
+// 2. With the call method, we can change the object to which the this keyword refers. In functions, the this keyword refers to the the object that the function belongs to. We declared the setTimeout function on the global object, so within the setTimeout function, the this keyword refers to the global object. On the global object, there is a variable called status with the value of "😎". When logging this.status, "😎" gets logged.
+
+
+### 24.
+const person = {
+  name: 'Lydia',
+  age: 21,
+};
+
+let city = person.city;
+city = 'Amsterdam';
+
+console.log(person);
+
+// We set the variable city equal to the value of the property called city on the person object. There is no property on this object called city, so the variable city has the value of undefined.
+// Note that we are not referencing the person object itself! We simply set the variable city equal to the current value of the city property on the person object.
+// Then, we set city equal to the string "Amsterdam". This doesn't change the person object: there is no reference to that object.
+// When logging the person object, the unmodified object gets returned.
+
+
+
+### 25.
+function checkAge(age) {
+  if (age < 18) {
+    const message = "Sorry, you're too young.";
+  } else {
+    const message = "Yay! You're old enough!";
+  }
+
+  return message;
+}
+
+console.log(checkAge(21));
+// Variables with the const and let keywords are block-scoped. A block is anything between curly brackets ({ }). In this case, the curly brackets of the if/else statements. You cannot reference a variable outside of the block it's declared in, a ReferenceError gets thrown.
+
+
+### 26.
+function sum(num1, num2 = num1) {
+  console.log(num1 + num2);
+}
+
+sum(10);
+
+// You can set a default parameter's value equal to another parameter of the function, as long as they've been defined before the default parameter. We pass the value 10 to the sum function. If the sum function only receives 1 argument, it means that the value for num2 is not passed, and the value of num1 is equal to the passed value 10 in this case. The default value of num2 is the value of num1, which is 10. num1 + num2 returns 20.
+// If you're trying to set a default parameter's value equal to a parameter that is defined after (to the right), the parameter's value hasn't been initialized yet, which will throw an error.
+
+
+### 27.
+// module.js
+export default () => 'Hello world';
+export const name = 'Lydia';
+
+// index.js
+import * as data from './module';
+
+console.log(data);
+
+// 1. With the import * as name syntax, we import all exports from the module.js file into the index.js file as a new object called data is created. In the module.js file, there are two exports: the default export, and a named export. The default export is a function that returns the string "Hello World", and the named export is a variable called name which has the value of the string "Lydia".
+
+// 2. The data object has a default property for the default export, other properties have the names of the named exports and their corresponding values.
+
+
+### 28.
+function giveLydiaPizza() {
+  return 'Here is pizza!';
+}
+
+const giveLydiaChocolate = () =>
+  "Here's chocolate... now go hit the gym already.";
+
+console.log(giveLydiaPizza.prototype);
+console.log(giveLydiaChocolate.prototype);
+
+// Regular functions, such as the giveLydiaPizza function, have a prototype property, which is an object (prototype object) with a constructor property. Arrow functions however, such as the giveLydiaChocolate function, do not have this prototype property. undefined gets returned when trying to access the prototype property using giveLydiaChocolate.prototype.
+
+
+### 29.
+
+class Person {
+  constructor() {
+    this.name = 'Lydia';
+  }
+}
+
+Person = class AnotherPerson {
+  constructor() {
+    this.name = 'Sarah';
+  }
+};
+
+const member = new Person();
+console.log(member.name);
+
+// We can set classes equal to other classes/function constructors. In this case, we set Person equal to AnotherPerson. The name on this constructor is Sarah, so the name property on the new Person instance member is "Sarah".
+
+### 30.
+
+const getList = ([x, ...y]) => [x, y]
+const getUser = user => { name: user.name, age: user.age }
+
+const list = [1, 2, 3, 4]
+const user = { name: "Lydia", age: 21 }
+
+console.log(getList(list))
+console.log(getUser(user))
+
+
+// The getList function receives an array as its argument. Between the parentheses of the getList function, we destructure this array right away. You could see this as:
+
+// [x, ...y] = [1, 2, 3, 4]
+
+// With the rest parameter ...y, we put all "remaining" arguments in an array. The remaining arguments are 2, 3 and 4 in this case. The value of y is an array, containing all the rest parameters. The value of x is equal to 1 in this case, so when we log [x, y], [1, [2, 3, 4]] gets logged.
+
+// The getUser function receives an object. With arrow functions, we don't have to write curly brackets if we just return one value. However, if you want to instantly return an object from an arrow function, you have to write it between parentheses, otherwise everything between the two braces will be interpreted as a block statement. In this case the code between the braces is not a valid JavaScript code, so a SyntaxError gets thrown.
+
+// The following function would have returned an object:
+
+// const getUser = user => ({ name: user.name, age: user.age })
+
+
+### 31.
+
+const output = `${[] && 'Im'}possible! You should${'' && `n't`} see a therapist after so much JavaScript lol`;
+
+// [] is a truthy value. With the && operator, the right-hand value will be returned if the left-hand value is a truthy value. In this case, the left-hand value [] is a truthy value, so "Im' gets returned.
+
+// "" is a falsy value. If the left-hand value is falsy, nothing gets returned. n't doesn't get returned.
+
+
+### 32.
+(function() {
+	'use strict';
+
+	var person = {
+		name: 'John'
+	};
+	person.salary = '10000$';
+	person['country'] = 'USA';
+
+	Object.defineProperty(person, 'phoneNo', {
+		value: '8888888888',
+		enumerable: true
+	})
+
+	console.log(Object.keys(person));
+})();
+
+
+### 33.
+(function() {
+	'use strict';
+
+	var person = {
+		name: 'John'
+	};
+	person.salary = '10000$';
+	person['country'] = 'USA';
+
+	Object.defineProperty(person, 'phoneNo', {
+		value: '8888888888',
+		enumerable: false
+	})
+
+	console.log(Object.keys(person));
+})();
+
+
+### 34.
+(function() {
+	var objA = {
+		foo: 'foo',
+		bar: 'bar'
+	};
+	var objB = {
+		foo: 'foo',
+		bar: 'bar'
+	};
+	console.log(objA == objB);
+	console.log(objA === objB);
+}());
 ```
 
-### 106. JavaScript Proxies
+### 105. JavaScript Proxies
 
 - In JavaScript, proxies (proxy object) are used to wrap an object and redefine various operations into the object such as reading, insertion, validation, etc. Proxy allows you to add custom behavior to an object or a function.
 
