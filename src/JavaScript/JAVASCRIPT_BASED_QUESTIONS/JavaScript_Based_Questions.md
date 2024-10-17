@@ -5920,8 +5920,6 @@ The return statement inside the foo function exits the function immediately, so 
 }());
 ```
 
-
-
 ### 102. What would be the output of following code ?
 
 ```js
@@ -6525,6 +6523,199 @@ const output = `${[] && 'Im'}possible! You should${'' && `n't`} see a therapist 
 	console.log(objA == objB);
 	console.log(objA === objB);
 }());
+
+
+### 35.
+const myPromise = () => Promise.resolve('I have resolved!');
+
+function firstFunction() {
+  myPromise().then(res => console.log(res));
+  console.log('second');
+}
+
+async function secondFunction() {
+  console.log(await myPromise());
+  console.log('second');
+}
+
+firstFunction();
+secondFunction();
+
+### 36.
+Promise.resolve(5);
+// o/p : Promise {<fulfilled>: 5}
+
+### 37.
+const colorConfig = {
+  red: true,
+  blue: false,
+  green: true,
+  black: true,
+  yellow: false,
+};
+
+const colors = ['pink', 'red', 'blue'];
+
+console.log(colorConfig.colors[1]);
+
+// 1. In JavaScript, we have two ways to access properties on an object: bracket notation, or dot notation.
+// In this example, we use dot notation (colorConfig.colors) instead of bracket notation (colorConfig["colors"]).
+
+// 2. With dot notation, JavaScript tries to find the property on the object with that exact name.
+//  In this example, JavaScript tries to find a property called colors on the colorConfig object. There is no property called colors, so this returns undefined.
+// Then, we try to access the value of the first element by using [1]. We cannot do this on a value that's undefined,
+//  so it throws a TypeError: Cannot read property '1' of undefined.
+
+// 3. JavaScript interprets (or unboxes) statements. When we use bracket notation, it sees the first opening bracket [ and keeps going until it finds the closing bracket ].
+// Only then, it will evaluate the statement. If we would've used colorConfig[colors[1]], it would have returned the value of the red property on the colorConfig object.
+
+
+### 38.
+const food = ['🍕', '🍫', '🥑', '🍔'];
+const info = { favoriteFood: food[0] };
+
+info.favoriteFood = '🍝';
+
+console.log(food);
+// 1. We set the value of the favoriteFood property on the info object equal to the string with the pizza emoji, '🍕'.
+// A string is a primitive data type. In JavaScript, primitive data types don't interact by reference.
+
+// 2. In JavaScript, primitive data types (everything that's not an object) interact by value. In this case,
+// we set the value of the favoriteFood property on the info object equal to the value of the first element in the food array, the string with the pizza emoji in this case ('🍕').
+// A string is a primitive data type, and interact by value (see my blogpost if you're interested in learning more)
+
+// 3. Then, we change the value of the favoriteFood property on the info object.
+// The food array hasn't changed, since the value of favoriteFood was merely a copy of the value of the first element in the array,
+//  and doesn't have a reference to the same spot in memory as the element on food[0]. When we log food, it's still the original array, ['🍕', '🍫', '🥑', '🍔'].
+
+
+### 39.
+JSON.parse();
+// With the JSON.parse() method, we can parse JSON string to a JavaScript value.
+// Stringifying a number into valid JSON, then parsing the JSON string to a JavaScript value:
+const jsonNumber = JSON.stringify(4); // '4'
+JSON.parse(jsonNumber); // 4
+
+// Stringifying an array value into valid JSON, then parsing the JSON string to a JavaScript value:
+const jsonArray = JSON.stringify([1, 2, 3]); // '[1, 2, 3]'
+JSON.parse(jsonArray); // [1, 2, 3]
+
+// Stringifying an object  into valid JSON, then parsing the JSON string to a JavaScript value:
+const jsonArray = JSON.stringify({ name: 'Lydia' }); // '{"name":"Lydia"}'
+JSON.parse(jsonArray); // { name: 'Lydia' }
+
+
+
+### 40.
+function* generatorOne() {
+  yield ['a', 'b', 'c'];
+}
+
+function* generatorTwo() {
+  yield* ['a', 'b', 'c'];
+}
+
+const one = generatorOne();
+const two = generatorTwo();
+
+console.log(one.next().value);
+console.log(two.next().value);
+
+// With the yield keyword, we yield values in a generator function. With the yield* keyword, we can yield values from another generator function,
+//  or iterable object (for example an array).
+
+// In generatorOne, we yield the entire array ['a', 'b', 'c'] using the yield keyword. The value of value property on the object returned
+//  by the next method on one (one.next().value) is equal to the entire array ['a', 'b', 'c'].
+
+// console.log(one.next().value); // ['a', 'b', 'c']
+// console.log(one.next().value); // undefined
+// In generatorTwo, we use the yield* keyword. This means that the first yielded value of two, is equal to the first yielded value in the iterator.
+// The iterator is the array ['a', 'b', 'c']. The first yielded value is a, so the first time we call two.next().value, a is returned.
+
+// console.log(two.next().value); // 'a'
+// console.log(two.next().value); // 'b'
+// console.log(two.next().value); // 'c'
+// console.log(two.next().value); // undefined
+
+
+### 41.
+let config = {
+  alert: setInterval(() => {
+    console.log('Alert!',this);
+  }, 1000),
+};
+
+config = null;
+// Normally when we set objects equal to null, those objects get garbage collected as there is no reference anymore to that object.
+// However, since the callback function within setInterval is an arrow function (thus bound to the config object), the callback function still holds a reference to the config object.
+// As long as there is a reference, the object won't get garbage collected. Since this is an interval, setting config to null or delete-ing config.alert wont garbage-collect
+// the interval, so the interval will still be called. It should be cleared with clearInterval(config.alert) to remove it from memory.
+// Since it was not cleared, the setInterval callback function will still get invoked every 1000ms (1s).
+
+
+
+### 42.
+
+const person = {
+  name: 'Lydia',
+  age: 21,
+};
+
+const changeAge = (x = { ...person }) => (x.age += 1);
+const changeAgeAndName = (x = { ...person }) => {
+  x.age += 1;
+  x.name = 'Sarah';
+};
+
+changeAge(person);
+changeAgeAndName();
+
+console.log(person);
+
+// 1. Both the changeAge and changeAgeAndName functions have a default parameter, namely a newly created object { ...person }.
+// This object has copies of all the key/values in the person object.
+
+// 2. First, we invoke the changeAge function and pass the person object as its argument. This function increases the value of the age property by 1.
+// person is now { name: "Lydia", age: 22 }.
+
+// 3. Then, we invoke the changeAgeAndName function, however we don't pass a parameter. Instead, the value of x is equal to a new object: { ...person }.
+// Since it's a new object, it doesn't affect the values of the properties on the person object. person is still equal to { name: "Lydia", age: 22 }.
+
+
+### 43.
+let num = 1;
+const list = ['🥳', '🤠', '🥰', '🤪'];
+console.log(list[(num += 1)]);
+
+// With the += operator, we're incrementing the value of num by 1. num had the initial value 1, so 1 + 1 is 2.
+// The item on the second index in the list array is 🥰, console.log(list[2]) prints 🥰.
+
+
+### 44.
+const person = {
+  firstName: 'Lydia',
+  lastName: 'Hallie',
+  pet: {
+    name: 'Mara',
+    breed: 'Dutch Tulip Hound',
+  },
+  getFullName() {
+    return `${this.firstName} ${this.lastName}`;
+  },
+};
+
+console.log(person.pet?.name);
+console.log(person.pet?.family?.name);
+console.log(person.getFullName?.());
+console.log(member.getLastName?.());
+
+
+// With the optional chaining operator ?., we no longer have to explicitly check whether the deeper nested values are valid or not.
+// If we're trying to access a property on an undefined or null value (nullish), the expression short-circuits and returns undefined.
+// person.pet?.name: person has a property named pet: person.pet is not nullish. It has a property called name, and returns Mara.
+// person.pet?.family?.name: person has a property named pet: person.pet is not nullish. pet does not have a property called family, person.pet.family is nullish.
+// The expression returns undefined. person.getFullName?.(): person has a property named getFullName: person.getFullName() is not nullish and can get invoked,
+// which returns Lydia Hallie. member.getLastName?.(): variable member is non-existent therefore a ReferenceError gets thrown!
 ```
 
 ### 105. JavaScript Proxies
