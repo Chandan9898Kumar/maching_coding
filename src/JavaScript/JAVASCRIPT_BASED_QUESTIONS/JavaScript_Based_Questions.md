@@ -6894,7 +6894,62 @@ class Flamingo extends Bird {
 
 const pet = new Flamingo();
 
-// We create the variable pet which is an instance of the Flamingo class. When we instantiate this instance, the constructor on Flamingo gets called. First, "I'm pink. 🌸" gets logged, after which we call super(). super() calls the constructor of the parent class, Bird. The constructor in Bird gets called, and logs "I'm a bird. 🦢".
+// We create the variable pet which is an instance of the Flamingo class. When we instantiate this instance, the constructor on Flamingo gets called.
+// First, "I'm pink. 🌸" gets logged, after which we call super(). super() calls the constructor of the parent class, Bird. The constructor in Bird gets called,
+// and logs "I'm a bird. 🦢".
+
+### 55.
+const animals = {};
+let dog = { emoji: '🐶' }
+let cat = { emoji: '🐈' }
+
+animals[dog] = { ...dog, name: "Mara" }
+animals[cat] = { ...cat, name: "Sara" }
+
+console.log(animals[dog])
+
+// Since the value of dog is an object, animals[dog] actually means that we’re creating a new property called "[object Object]" equal to the new object.
+// animals["[object Object]"] is now equal to { emoji: "🐶", name: "Mara"}.
+// cat is also an object, which means that animals[cat] actually means that we’re overwriting the value of animals["[object Object]"] with the new cat properties.
+// Logging animals[dog], or actually animals["[object Object]"] since converting the dog object to a string results "[object Object]", returns the { emoji: "🐈", name: "Sara" }.
+
+### 56.
+const promise1 = Promise.resolve('First')
+const promise2 = Promise.resolve('Second')
+const promise3 = Promise.reject('Third')
+const promise4 = Promise.resolve('Fourth')
+
+const runPromises = async () => {
+	const res1 = await Promise.all([promise1, promise2])
+	const res2  = await Promise.all([promise3, promise4])
+	return [res1, res2]
+}
+
+runPromises()
+	.then(res => console.log(res))
+	.catch(err => console.log(err))
+
+// The Promise.all method runs the passed promises in parallel. If one promise fails, the Promise.all method rejects with the value of the rejected promise.
+// In this case, promise3 is rejected with the value "Third". We’re catching the rejected value in the chained catch method on the runPromises invocation
+// to catch any errors within the runPromises function. Only "Third" gets logged, since promise3 is rejected with this value.
+
+
+### 57.
+let randomValue = { name: "Lydia" }
+randomValue = 23
+
+if (!typeof randomValue === "string") {
+	console.log("It's not a string!")
+} else {
+	console.log("Yay it's a string!")
+}
+
+// The condition within the if statement checks whether the value of !typeof randomValue is equal to "string". The ! operator converts the value to a boolean value.
+// If the value is truthy, the returned value will be false, if the value is falsy, the returned value will be true.
+// In this case, the returned value of typeof randomValue is the truthy value "number", meaning that the value of !typeof randomValue is the boolean value false.
+
+// !typeof randomValue === "string" always returns false, since we're actually checking false === "string".
+// Since the condition returned false, the code block of the else statement gets run, and Yay it's a string! gets logged.
 ```
 
 ### 105. JavaScript Proxies
