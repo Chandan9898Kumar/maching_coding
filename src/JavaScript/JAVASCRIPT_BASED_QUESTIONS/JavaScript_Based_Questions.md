@@ -7381,4 +7381,16 @@ const addFilling = (bread) => `Filling added to ${bread}`;
 const makeSandwich = compose(addFilling, compose(spreadButter, sliceBread));
 
 console.log(makeSandwich("Multigrain"));
+
+-OR;
+
+const compose = (f, g, h) => (x) => f(g(h(x)));
+
+const sliceBread = (bread) => `${bread} is sliced`;
+const spreadButter = (bread) => `Butter spread on ${bread}`;
+const addFilling = (bread) => `Filling added to ${bread}`;
+
+const makeSandwich = compose(addFilling, spreadButter, sliceBread);
+
+console.log(makeSandwich("Multigrain"));
 ```

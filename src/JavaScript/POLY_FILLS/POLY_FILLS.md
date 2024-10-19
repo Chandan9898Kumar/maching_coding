@@ -1813,7 +1813,7 @@ function createSetTimeoutPolyfill() {
       if (Date.now() > start) {
         callback.apply(this, args);
       } else {
-        requestIdleCallback(triggerCallback);  // requestIdleCallback makes triggerCallback function keep getting called. 
+        requestIdleCallback(triggerCallback);  // requestIdleCallback makes triggerCallback function keep getting called.
       }
     }
 
@@ -2213,4 +2213,41 @@ const createDeferredExecution = () => {
 2. Reusable Logic: The resolve and reject functions can be reused across different game scenarios, enabling flexible handling of various outcomes like winning or losing.
 3. Simplified State Management: It makes managing asynchronous state transitions cleaner by separating the transitions from the handling logic.
 
+```
+
+### Polyfills of Split()
+
+```js
+let text = "How=are=you doing today?";
+
+String.prototype.mySplit = function (separator = "") {
+  const str = this.toString();
+  const array = [];
+
+  if (!arguments.length) {
+    return [str];
+  }
+
+  if (!separator.length) {
+    return [...str];
+  }
+
+  let newStr = "";
+
+  for (let x of str) {
+    if (x === separator) {
+      array.push(newStr);
+      newStr = "";
+    } else {
+      newStr += x;
+    }
+  }
+
+  array.push(newStr);
+  return array;
+};
+
+let result = text.mySplit("=");
+
+console.log(result);
 ```
