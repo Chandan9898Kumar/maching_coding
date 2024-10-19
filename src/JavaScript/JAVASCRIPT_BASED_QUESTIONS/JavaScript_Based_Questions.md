@@ -7272,3 +7272,113 @@ proxiedPerson.age = 17;
 console.log(proxiedPerson.age);
 // 28
 ```
+
+### 106. What is Function Composition?
+
+Function Composition is a technique in which you combine two or more functions to produce a new function. `The idea is to take the output of one function and use it as the input for another.`
+
+Mathematically, given two functions f and g, their composition is represented as f(g(x)). Here, g(x) is computed first, and its result is passed to f.
+
+```js
+const f = (x) => x + 2;
+const g = (x) => x * 3;
+
+// Composing f and g
+const composedFunction = (x) => f(g(x)); // f(g(x)) = f(3x) = 3x + 2
+
+console.log(composedFunction(2)); // Outputs 8
+```
+
+- Simple Analogy: Making a Sandwich
+
+Let’s relate function composition to making a sandwich, a real-world example most of us are familiar with.
+
+1. Bread Slicing Function: You start by slicing the bread.
+2. Spreading Function: Next, you spread butter, mayo, or any spread of your choice.
+3. Filling Function: Lastly, you add the fillings — lettuce, tomato, cheese, and so forth.
+
+Each step in making a sandwich can be represented as a function. When you combine these functions, you get a composed function — the process of making a sandwich!
+
+`Let’s turn our sandwich analogy into JavaScript functions! :`
+
+```js
+// Bread Slicing Function
+const sliceBread = (bread) => `${bread} is sliced`;
+
+// Spreading Function
+const spreadButter = (bread) => `Butter spread on ${bread}`;
+
+// Filling Function
+const addFilling = (bread) => `Filling added to ${bread}`;
+
+// Composing Functions to make a Sandwich
+const makeSandwich = (bread) => addFilling(spreadButter(sliceBread(bread)));
+
+console.log(makeSandwich("Whole Wheat"));
+// Outputs: "Filling added to Butter spread on Whole Wheat is sliced"
+```
+
+- Reusability and Maintainability.
+
+One of the key benefits of function composition is reusability. Each function created can be used independently or in conjunction with others. If you wish to make a toast, you can reuse the sliceBread and spreadButter functions without the addFilling function.
+
+```js
+const makeToast = (bread) => spreadButter(sliceBread(bread))
+console.log(makeToast('White Bread'))
+// Outputs: "Butter spread on White Bread is sliced"
+
+Maintainability is another advantage. If you want to upgrade your sandwich with a new spread, you only need to modify the spreadButter function without touching the other functions.
+```
+
+- Closure: Composing Functions Smoothly
+
+Closure in JavaScript allows a function to access variables from an enclosing scope, even after the outer function has finished executing. This concept is particularly useful in function composition to maintain the state between different function calls.
+
+```js
+const addTopping = (topping) => (bread) => `${topping} added to ${bread}`;
+const addLettuce = addTopping("Lettuce");
+console.log(addLettuce("Butter spread on Whole Wheat is sliced"));
+// Outputs: "Lettuce added to Butter spread on Whole Wheat is sliced"
+```
+
+- Point-Free Style.
+
+Point-free style or tacit programming emphasizes defining functions without explicitly mentioning their arguments. In JavaScript, higher-order functions (functions that take other functions as arguments or return them) play a significant role in achieving this.
+
+```js
+### Before Point-Free: Here’s a simple example without using point-free style:
+
+const double = (x) => x * 2
+const increment = (x) => x + 1
+const transform = (x) => increment(double(x))
+
+
+### After Point-Free: Now, adopting a point-free style in pure JavaScript:
+
+const double = (x) => x * 2
+const increment = (x) => x + 1
+
+// This is a basic compose function
+const compose = (f, g) => (x) => f(g(x))
+
+const transform = compose(increment, double)
+
+
+### Here, the compose function is the main player, allowing us to chain increment and double without explicitly referencing their arguments. When you invoke transform, it processes the input through both double and increment without explicitly detailing how the data flows between these functions.
+```
+
+- Higher Order Functions and Composition.
+
+In JavaScript, functions that accept other functions as arguments or return functions are called Higher Order Functions. They are the backbone of function composition.
+
+```js
+const compose = (f, g) => (x) => f(g(x));
+
+const sliceBread = (bread) => `${bread} is sliced`;
+const spreadButter = (bread) => `Butter spread on ${bread}`;
+const addFilling = (bread) => `Filling added to ${bread}`;
+
+const makeSandwich = compose(addFilling, compose(spreadButter, sliceBread));
+
+console.log(makeSandwich("Multigrain"));
+```
