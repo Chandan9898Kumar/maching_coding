@@ -2218,7 +2218,7 @@ const createDeferredExecution = () => {
 ### Polyfills of Split()
 
 ```js
-let text = "How=are=you doing today?";
+let text = "The quick the fox jumps the lazy dog.";
 
 String.prototype.mySplit = function (separator = "") {
   const str = this.toString();
@@ -2232,22 +2232,22 @@ String.prototype.mySplit = function (separator = "") {
     return [...str];
   }
 
-  let newStr = "";
-
-  for (let x of str) {
-    if (x === separator) {
-      array.push(newStr);
-      newStr = "";
+  function startSplit(str) {
+    let index = str.indexOf(separator);
+    if (index >= 0) {
+      array.push(str.substring(0, index));
+      startSplit(str.substring(index + separator.length), index + separator.length);
     } else {
-      newStr += x;
+      array.push(str);
     }
   }
 
-  array.push(newStr);
+  startSplit(str);
+
   return array;
 };
 
-let result = text.mySplit("=");
+let result = text.mySplit("the");
 
 console.log(result);
 ```
