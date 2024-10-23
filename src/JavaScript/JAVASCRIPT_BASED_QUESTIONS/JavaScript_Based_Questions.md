@@ -7394,3 +7394,167 @@ const makeSandwich = compose(addFilling, spreadButter, sliceBread);
 
 console.log(makeSandwich("Multigrain"));
 ```
+
+### 107. Batch api calls in sequence in React
+
+- Example 1.
+
+```js
+let batch = 5;
+let int = 0;
+
+const asyncTask = function (i) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(`Completing ${i}`), 1000);
+  });
+};
+
+const promises = [
+  asyncTask(1),
+  asyncTask(2),
+  asyncTask(3),
+  asyncTask(4),
+  asyncTask(5),
+  asyncTask(6),
+  asyncTask(7),
+  asyncTask(8),
+  asyncTask(9),
+  asyncTask(10),
+  asyncTask(11),
+  asyncTask(12),
+  asyncTask(13),
+  asyncTask(14),
+  asyncTask(15),
+  asyncTask(16),
+  asyncTask(17),
+  asyncTask(18),
+  asyncTask(19),
+  asyncTask(20),
+];
+
+const batchApi = async (int, batch, promises) => {
+  try {
+    const response = await Promise.all(promises.slice(int, batch));
+    console.log(response, "response");
+  } catch (error) {
+    console.log(error);
+  } finally {
+    if (batch !== promises.length) {
+      int = batch;
+      batch = batch + 5;
+      setTimeout(() => {
+        batchApi(int, batch, promises);
+      }, 5000);
+    } else {
+      int = 0;
+      batch = 5;
+      setTimeout(() => {
+        batchApi(int, batch, promises);
+      }, 7000);
+    }
+  }
+};
+
+batchApi(int, batch, promises);
+```
+
+- Example 2.
+
+```js
+import React, { useState, useEffect } from "react";
+
+// helper function to create promise task
+// that resolves randomly after some time
+const asyncTask = function (i) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(`Completing ${i}`), 1000);
+  });
+};
+
+// helper function to create sub arrays of given size
+const chop = (arr, size = arr.length) => {
+  //temp array
+  const temp = [...arr];
+
+  //output
+  const output = [];
+  let i = 0;
+
+  //iterate the array
+  while (i < temp.length) {
+    //slice the sub-array of given size
+    //and push them in output array
+    output.push(temp.slice(i, i + size));
+    i = i + size;
+  }
+
+  return output;
+};
+
+const App = () => {
+  // array of promises
+  // 20
+  const promises = [
+    asyncTask(1),
+    asyncTask(2),
+    asyncTask(3),
+    asyncTask(4),
+    asyncTask(5),
+    asyncTask(6),
+    asyncTask(7),
+    asyncTask(8),
+    asyncTask(9),
+    asyncTask(10),
+    asyncTask(11),
+    asyncTask(12),
+    asyncTask(13),
+    asyncTask(14),
+    asyncTask(15),
+    asyncTask(16),
+    asyncTask(17),
+    asyncTask(18),
+    asyncTask(19),
+    asyncTask(20),
+  ];
+
+  // sub array of promises of size 5
+  // 4 sub arrays in total
+  const subArrays = chop(promises, 5);
+
+  // to track the indexes of subarrays
+  const [index, setIndex] = useState(0);
+
+  // helper function to perform the asyncoperations
+  const asyncOperations = async (promises) => {
+    try {
+      // execute all the promises of sub-array togther
+      const resp = await Promise.all(promises);
+
+      // print the output of the current sub array
+      console.log(index, resp);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      // update the index after the operation
+      setIndex(index < subArrays.length - 1 ? index + 1 : 0);
+    }
+  };
+
+  useEffect(() => {
+    // run first promise after 5 second
+    if (index === 0) {
+      setTimeout(() => {
+        asyncOperations(subArrays[index]);
+      }, 5000);
+    }
+    // and the remaining promises after the previous one is done
+    else {
+      asyncOperations(subArrays[index]);
+    }
+  }, [index]);
+
+  return <></>;
+};
+
+export default App;
+```
