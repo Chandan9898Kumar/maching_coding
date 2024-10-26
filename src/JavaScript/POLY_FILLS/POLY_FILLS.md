@@ -634,6 +634,48 @@ Array.prototype.flat = function (depth = 1) {
 
 const result = myArr.flat(flatLength);
 console.log(result, "result >>>>>>>>>>>>>>>>");
+
+
+
+### 9. polyfills of fill method.
+
+1. The fill() method fills specified elements in an array with a value.
+2. The fill() method overwrites the original array.
+3. Start and end position can be specified. If not, all elements will be filled.
+
+// Syntax
+// array.fill(value, start, end)
+
+const arrays = [1,2,3,4,5,6]
+const start = 0
+const end = 2
+
+  Array.prototype.myFill = function(item, start, end) {
+  if (!Array.isArray(this) || this.length === 0) {
+   return [];
+  }
+
+  if (arguments.length === 1 || (arguments.length === 2 && typeof start !== 'number')) {
+   for (let i = 0; i < this.length; i++) {
+    this[i] = item;
+   }
+  } else if (arguments.length === 2 && typeof start === 'number') {
+   for (let i = start; i < this.length; i++) {
+    this[i] = item;
+   }
+  } else if (arguments.length === 3 && typeof start === 'number' && typeof end === 'number') {
+   for (let i = start; i < end; i++) {
+    this[i] = item;
+   }
+  }
+
+  return this;
+}
+
+
+const result = arrays.myFill('o');
+console.log(result, 'result', arrays);
+
 ```
 
 # 3. Create a polyfill method that transforms array values into upper case: Create a polyfill of upperCase for Array items.
