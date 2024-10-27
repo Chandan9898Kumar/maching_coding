@@ -551,9 +551,12 @@ class Student {
 
 `DEFINITION :` Abstraction is a fundamental concept in object-oriented programming (OOP) that refers to the practice of hiding the implementation details of an object and exposing only the essential features to the user. In JavaScript, abstraction is achieved by using abstract classes and interfaces or with the help of Abstract Classes and Abstract Methods..
 `OR`
-An abstract class is a class that cannot be instantiated and is meant to be used as a base class for other classes. Abstract classes typically contain one or more abstract methods, which are methods that have a signature but no implementation. These methods must be implemented by the derived classes.
+An abstract class is a class that cannot be instantiated and is meant to be used as a base class for other classes. `Abstract classes typically contain one or more abstract methods, which are methods that have a signature but no implementation.` These methods must be implemented by the derived classes.
 
-JavaScript does not support abstract classes natively, but you can achieve similar functionality by using a combination of function constructors and prototypes.
+`OR`
+Abstraction is the process of exposing only the necessary information to the outside world while hiding the internal implementation details. It helps to reduce complexity by showing only the essential features of an object or system. In other words, abstraction is about presenting a simplified interface to the outside world, making it easier to interact with the object or system without worrying about the underlying complexities.
+
+- JavaScript does not support abstract classes natively, but you can achieve similar functionality by using a combination of function constructors and prototypes.
 
 `NOTE : `
 
@@ -669,6 +672,10 @@ let shape = new Shape(); // Error: Cannot instantiate abstract class Shape
 
 2. Interfaces are another way to achieve abstraction in JavaScript, although it's not a native feature of javascript. Some libraries like TypeScript provide interfaces. An interface defines a set of methods that a class must implement but does not provide an implementation for those methods. This allows developers to ensure that a class has the required methods without specifying how those methods should be implemented.
 ```
+
+### Difference between Abstraction and Encapsulation.
+
+(Abstraction and Encapsulation)["https://www.scaler.com/topics/difference-between-encapsulation-and-abstraction/]
 
 ### What is Polymorphism?
 

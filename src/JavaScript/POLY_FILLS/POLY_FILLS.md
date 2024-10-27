@@ -652,21 +652,21 @@ const end = 2
 
   Array.prototype.myFill = function(item, start, end) {
   if (!Array.isArray(this) || this.length === 0) {
-   return [];
+ return [];
   }
 
   if (arguments.length === 1 || (arguments.length === 2 && typeof start !== 'number')) {
-   for (let i = 0; i < this.length; i++) {
-    this[i] = item;
-   }
+ for (let i = 0; i < this.length; i++) {
+ this[i] = item;
+ }
   } else if (arguments.length === 2 && typeof start === 'number') {
-   for (let i = start; i < this.length; i++) {
-    this[i] = item;
-   }
+ for (let i = start; i < this.length; i++) {
+ this[i] = item;
+ }
   } else if (arguments.length === 3 && typeof start === 'number' && typeof end === 'number') {
-   for (let i = start; i < end; i++) {
-    this[i] = item;
-   }
+ for (let i = start; i < end; i++) {
+this[i] = item;
+}
   }
 
   return this;
