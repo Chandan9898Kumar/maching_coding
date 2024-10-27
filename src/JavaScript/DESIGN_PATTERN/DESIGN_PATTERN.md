@@ -3562,6 +3562,8 @@ In simple words:
 
 > Imagine you have a series of processing tasks, and each task can be handled by a different entity. The Chain of Responsibility pattern allows you to link these entities in a chain. When a task is presented, each entity in the chain has the chance to handle it. If one entity can handle it, the chain stops; otherwise, the task moves along the chain until it finds a handler.
 
+An example of a chain-of-responsibility is event-bubbling in which an event propagates through a series of nested controls one of which may choose to handle the event.
+
 ![Chain of Responsibility Pattern](./images/chain-of-responsibility-pattern.png)
 
 ### Implementation :
@@ -3642,6 +3644,18 @@ manager.processRequest(10000); // Vice President approves the purchase of $10000
 ### Example 2.
 
 - Behavioral pattern that allows multiple objects to handle a request, passing it along a chain until one of the objects handles it. Each object in the chain either processes the request or passes it to the next handler in the chain. This pattern is useful for decoupling the sender of a request from its receivers, providing a way to handle requests by different handlers without hard-wiring the request-processing code to specific classes. It promotes flexibility in assigning responsibilities to objects dynamically.
+
+In this pattern, there are three key components:
+
+1. The sender
+2. The recipient
+3. The request
+
+The `sender` is responsible for initiating requests, while the `recipient` is composed of a series of one or more objects. Each of these objects has the authority to decide whether to directly respond to the request or delegate it to the next object in the chain. The `request` can take the form of a standard function call to the recipient without any parameters, or it can be encapsulated within an object containing all the necessary data.
+
+The initial receiver object at the beginning of the chain is where senders dispatch their requests. Senders are only aware of this first link in the chain and have no knowledge of subsequent receivers. The primary receiver can choose to handle the request or pass it on to a secondary receiver in the chain for further processing.
+
+- OR
 
 - Components of Chain of Responsibility Method Design Pattern
 
@@ -3728,6 +3742,35 @@ level1.handleRequest(unknownQuery);
 //   This design pattern is effective in handling queries of varying complexity by delegating responsibility through a chain, ensuring each query reaches the appropriate handler.
 ```
 
+### Example 3.
+
+This example differs slightly from the classic Chain of Responsibility pattern in that not one, but all handlers participate in handling the request.
+
+The code demonstrates an elegant solution to a money dispensing machine problem. Say, a customer requires $247 from an ATM machine. What is the combination of bank notes ($100, $50, $20, $10, $5, $1) that satisfies that request?
+
+A Request is created with the amount requested. Next, a series of get calls are chained together, each one handling a particular denomination. Each handler determines the number of bank notes dispensed and substract this amount from the remaining amount. The request object is passed through the chain by returning this in the get method.
+
+```js
+var Request = function (amount) {
+  this.amount = amount;
+  console.log("Requested: $" + amount + "\n");
+};
+
+Request.prototype = {
+  get: function (bill) {
+    var count = Math.floor(this.amount / bill);
+    this.amount -= count * bill;
+    console.log("Dispense " + count + " $" + bill + " bills");
+    return this;
+  },
+};
+function run() {
+  var request = new Request(378);
+
+  request.get(100).get(50).get(20).get(10).get(5).get(1);
+}
+```
+
 ### When To Use Chain of Responsibility Pattern ? ✅
 
 - **Coupling:** Keep things simple and scalable by using this pattern to hide details from the requester.
@@ -3747,6 +3790,22 @@ level1.handleRequest(unknownQuery);
 - **Handling Overhead:** Might slow things down a bit.
 - **Debugging Challenges:** Finding problems can be tricky.
 - **Responsibility Overload:** Avoid giving one person too many jobs.
+
+### Practical Applications Of Chain Of Responsibility Design Pattern In JavaScript
+
+1. Event Propagation: The Chain of Responsibility pattern finds practical use in the space of user interface frameworks. It enables the seamless propagation of events throughout nested UI components. This empowers various elements to react to these events at different hierarchical levels, ensuring a flexible and extensible approach to event handling.
+
+2. Logging Strategies: This design pattern is a valuable asset in the space of logging systems. It’s adept at forming a chain of responsibility for handling distinct log levels and message types. Loggers can be structured in a way that allows each logger in the chain to process logs according to its specific criteria, providing a sophisticated and customizable logging strategy.
+
+3. Middleware Management: Web frameworks, such as Express.js, make effective use of the Chain of Responsibility pattern to manage middleware. In this context, middleware components are organized in a chain, where each middleware can either process incoming requests or pass them along to the next middleware in line. This approach ensures efficient request handling and allows for the creation of complex request-processing pipelines.
+
+### A Real Life Example
+
+In the real world, the JavaScript Chain of Responsibility design pattern can be illustrated through the operation of an ATM (Automated Teller Machine). When we insert our ATM card into the machine and initiate a transaction, the ATM system employs the Chain of Responsibility pattern to handle our request, ultimately providing us with the requested cash.
+
+### Link
+
+[Chain of Responsibility](https://www.calibraint.com/blog/chain-of-responsibility-design-pattern)
 
 ## Command 👮‍♂
 
