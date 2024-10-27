@@ -3639,12 +3639,102 @@ manager.processRequest(4500); // Director approves the purchase of $4500
 manager.processRequest(10000); // Vice President approves the purchase of $10000
 ```
 
+### Example 2.
+
+- Behavioral pattern that allows multiple objects to handle a request, passing it along a chain until one of the objects handles it. Each object in the chain either processes the request or passes it to the next handler in the chain. This pattern is useful for decoupling the sender of a request from its receivers, providing a way to handle requests by different handlers without hard-wiring the request-processing code to specific classes. It promotes flexibility in assigning responsibilities to objects dynamically.
+
+- Components of Chain of Responsibility Method Design Pattern
+
+The Chain of Responsibility design pattern consists of several key components:
+
+1. Handler Interface: Defines an interface for handling requests. It typically includes a method to handle the request and a method to set the next handler in the chain.
+2. Concrete Handler: Implements the handler interface and processes the request. If the handler cannot process the request, it passes it to the next handler in the chain.
+3. Client: Initiates the request and sets up the chain of handlers. The client sends the request to the first handler in the chain.
+4. Next Handler Reference: A reference in each handler to the next handler in the chain, allowing the request to be passed along the chain if the current handler cannot process it.
+
+`Problem Statement:`
+Imagine a tech support system where customer queries are handled by different levels of support agents. A basic query can be handled by a Level 1 support agent, but more complex issues need to be escalated to Level 2 or even Level 3 support. Without a clear process, queries might be mishandled, leading to delays or unresolved issues. The challenge is to efficiently route each customer query to the appropriate support level.
+
+`Solution`
+The Chain of Responsibility design pattern can be applied to solve this problem. Each support level will be a handler in the chain, processing the query or passing it on to the next level if it cannot handle it.
+
+```js
+// Handler Interface
+class SupportHandler {
+  setNextHandler(handler) {
+    this.nextHandler = handler;
+  }
+
+  handleRequest(query) {
+    throw new Error("This method should be overridden!");
+  }
+}
+
+// Concrete Handlers (Level 1, Level 2, and Level 3 Support)
+class Level1Support extends SupportHandler {
+  handleRequest(query) {
+    if (query.difficulty === "easy") {
+      console.log("Level 1 Support: Handling easy query.");
+    } else if (this.nextHandler) {
+      this.nextHandler.handleRequest(query);
+    }
+  }
+}
+
+class Level2Support extends SupportHandler {
+  handleRequest(query) {
+    if (query.difficulty === "medium") {
+      console.log("Level 2 Support: Handling medium query.");
+    } else if (this.nextHandler) {
+      this.nextHandler.handleRequest(query);
+    }
+  }
+}
+
+class Level3Support extends SupportHandler {
+  handleRequest(query) {
+    if (query.difficulty === "hard") {
+      console.log("Level 3 Support: Handling hard query.");
+    } else if (this.nextHandler) {
+      this.nextHandler.handleRequest(query);
+    } else {
+      console.log("Query cannot be handled at any level.");
+    }
+  }
+}
+
+// Client Setup
+const level1 = new Level1Support();
+const level2 = new Level2Support();
+const level3 = new Level3Support();
+
+level1.setNextHandler(level2);
+level2.setNextHandler(level3);
+
+const easyQuery = { difficulty: "easy" };
+const mediumQuery = { difficulty: "medium" };
+const hardQuery = { difficulty: "hard" };
+const unknownQuery = { difficulty: "unknown" };
+
+level1.handleRequest(easyQuery);
+level1.handleRequest(mediumQuery);
+level1.handleRequest(hardQuery);
+level1.handleRequest(unknownQuery);
+
+// Below is the explanation of the above code:
+//   SupportHandler: This is the base class with methods to set the next handler and handle requests.
+//   Level1Support, Level2Support, Level3Support: These are concrete handlers. Each one checks if it can handle the query. If not, it passes the query to the next handler in the chain.
+//   Client Setup: The client sets up the chain of responsibility by linking the support levels. When a query is passed to the first handler, it either processes it or passes it along the chain.
+//   This design pattern is effective in handling queries of varying complexity by delegating responsibility through a chain, ensuring each query reaches the appropriate handler.
+```
+
 ### When To Use Chain of Responsibility Pattern ? ✅
 
 - **Coupling:** Keep things simple and scalable by using this pattern to hide details from the requester.
 - **Multiple Conditionals:** Organize messy code with lots of "if" statements by spreading them out.
 - **Code Duplication:** Gather scattered, similar code in one place for better organization.
 - **Sequential Processing:** Use it when tasks must happen in a specific order, like following steps in a recipe.
+- When you want to simplify the code by allowing request processing to be passed through a chain of handlers.
 
 ### Advantages of Chain of Responsibility Pattern 🪄 :
 
@@ -4602,7 +4692,8 @@ app.listen(3000, () => {
 
 ### Example In JavaScript.
 
-1. 
+1.
+
 ```js
 // Model
 function UserModel() {
@@ -4633,67 +4724,68 @@ userController.addUser("John Doe");
 `Explanation:`;
 // The MVC pattern separates concerns in an application. UserModel handles data, UserView renders the data, and UserController manages user interactions, ensuring a clean and organized structure.
 ```
+
 2.
 
 ```js
-// Model  
-class TodoModel {  
-  constructor() {  
-   this.todos = [];  
-  }  
-  
-  addTodo(todo) {  
-   this.todos.push(todo);  
-  }  
-  
-  removeTodo(todo) {  
-   this.todos = this.todos.filter(t => t !== todo);  
-  }  
-  
-  getTodos() {  
-   return this.todos;  
-  }  
-}  
-  
-// View  
-class TodoView {  
-  constructor(model) {  
-   this.model = model;  
-  }  
-  
-  render() {  
-   console.log('Todo List:');  
-   this.model.getTodos().forEach(todo => {  
-    console.log(`- ${todo}`);  
-   });  
-  }  
-}  
-  
-// Controller  
-class TodoController {  
-  constructor(model, view) {  
-   this.model = model;  
-   this.view = view;  
-  }  
-  
-  addTodo(todo) {  
-   this.model.addTodo(todo);  
-   this.view.render();  
-  }  
-  
-  removeTodo(todo) {  
-   this.model.removeTodo(todo);  
-   this.view.render();  
-  }  
-}  
-  
-// Usage  
-const model = new TodoModel();  
-const view = new TodoView(model);  
-const controller = new TodoController(model, view);  
-  
-controller.addTodo('Buy milk');  
-controller.addTodo('Walk the dog');  
+// Model
+class TodoModel {
+  constructor() {
+   this.todos = [];
+  }
+
+  addTodo(todo) {
+   this.todos.push(todo);
+  }
+
+  removeTodo(todo) {
+   this.todos = this.todos.filter(t => t !== todo);
+  }
+
+  getTodos() {
+   return this.todos;
+  }
+}
+
+// View
+class TodoView {
+  constructor(model) {
+   this.model = model;
+  }
+
+  render() {
+   console.log('Todo List:');
+   this.model.getTodos().forEach(todo => {
+    console.log(`- ${todo}`);
+   });
+  }
+}
+
+// Controller
+class TodoController {
+  constructor(model, view) {
+   this.model = model;
+   this.view = view;
+  }
+
+  addTodo(todo) {
+   this.model.addTodo(todo);
+   this.view.render();
+  }
+
+  removeTodo(todo) {
+   this.model.removeTodo(todo);
+   this.view.render();
+  }
+}
+
+// Usage
+const model = new TodoModel();
+const view = new TodoView(model);
+const controller = new TodoController(model, view);
+
+controller.addTodo('Buy milk');
+controller.addTodo('Walk the dog');
 controller.removeTodo('Buy milk');
 
 
@@ -4703,6 +4795,6 @@ The TodoModel class has methods for adding, removing, and getting todos. The Tod
 
 ```
 
+### NOTE : Now Days We are Using Express.js, So
 
-### NOTE : Now Days We are Using Express.js, So 
 Since we're building a RESTful API, we don't need a traditional view layer. Instead, we'll use the res.json() method to return JSON data to the client.
