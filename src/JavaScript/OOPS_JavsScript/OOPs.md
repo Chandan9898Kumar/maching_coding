@@ -675,7 +675,7 @@ let shape = new Shape(); // Error: Cannot instantiate abstract class Shape
 
 ### Difference between Abstraction and Encapsulation.
 
-(Abstraction and Encapsulation)[https://www.scaler.com/topics/difference-between-encapsulation-and-abstraction/]
+- [Abstraction and Encapsulation](https://www.scaler.com/topics/difference-between-encapsulation-and-abstraction/)
 
 ### What is Polymorphism?
 
