@@ -844,6 +844,35 @@ console.log(obj,'obj',obj.foo)
 
 - NOTE : We have used Object.prototype.myCreate, so it will add myCreate method inside prototype, but if we do like this :
  Object.myCreate then it will add Create method Create method inside Constructor method which is also a correct implementation.
+
+ ### Other Example :
+
+let Animal = {
+  isHuman: false,
+  sound: "Unspecified",
+  makeSound() {
+    console.log(this.sound);
+  },
+};
+
+let properties = {
+  isHuman: {
+    value: true,
+  },
+  name: {
+    value: "Jack",
+    enumerable: true,
+    writable: true,
+  },
+  introduce: {
+    value: function () {
+      console.log(`Hey! I am ${this.name}.`);
+    },
+  },
+};
+
+human = Object.create(Animal, properties);
+console.log(human,'human',Animal)
 ```
 
 # 5. Polyfills of Promises.
