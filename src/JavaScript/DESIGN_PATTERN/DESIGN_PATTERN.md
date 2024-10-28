@@ -3771,6 +3771,93 @@ function run() {
 }
 ```
 
+### Example 4.
+
+Suppose you are developing an order processing system, and you want to handle orders based on their total amount. You can use the Chain of Responsibility Pattern to create a chain of handlers, each responsible for processing orders within a certain price range:
+
+```js
+// Handler interface
+class OrderHandler {
+  constructor() {
+    this.nextHandler = null;
+  }
+
+  setNextHandler(handler) {
+    this.nextHandler = handler;
+  }
+
+  handleOrder(order) {
+    if (this.canHandleOrder(order)) {
+      this.processOrder(order);
+    } else if (this.nextHandler) {
+      this.nextHandler.handleOrder(order);
+    } else {
+      console.log("No handler can process this order.");
+    }
+  }
+
+  canHandleOrder(order) {}
+  processOrder(order) {}
+}
+
+// Concrete Handlers
+class SmallOrderHandler extends OrderHandler {
+  canHandleOrder(order) {
+    return order.amount <= 100;
+  }
+
+  processOrder(order) {
+    console.log(`Processing small order for ${order.amount}`);
+  }
+}
+
+class MediumOrderHandler extends OrderHandler {
+  canHandleOrder(order) {
+    return order.amount <= 500;
+  }
+
+  processOrder(order) {
+    console.log(`Processing medium order for ${order.amount}`);
+  }
+}
+
+class LargeOrderHandler extends OrderHandler {
+  canHandleOrder(order) {
+    return order.amount > 500;
+  }
+
+  processOrder(order) {
+    console.log(`Processing large order for ${order.amount}`);
+  }
+}
+
+// Client
+class Order {
+  constructor(amount) {
+    this.amount = amount;
+  }
+}
+
+// Usage
+const smallOrderHandler = new SmallOrderHandler();
+const mediumOrderHandler = new MediumOrderHandler();
+const largeOrderHandler = new LargeOrderHandler();
+
+smallOrderHandler.setNextHandler(mediumOrderHandler);
+mediumOrderHandler.setNextHandler(largeOrderHandler);
+
+const order1 = new Order(80);
+const order2 = new Order(250);
+const order3 = new Order(600);
+
+smallOrderHandler.handleOrder(order1); // Output: "Processing small order for 80"
+smallOrderHandler.handleOrder(order2); // Output: "Processing medium order for 250"
+smallOrderHandler.handleOrder(order3); // Output: "Processing large order for 600"
+
+
+### In this example, the Chain of Responsibility Pattern is used to handle orders of different amounts. Handlers like SmallOrderHandler, MediumOrderHandler, and LargeOrderHandler each determine if they can process an order based on the order's amount. If they can, they process it; otherwise, they pass the order to the next handler in the chain.
+```
+
 ### When To Use Chain of Responsibility Pattern ? ✅
 
 - **Coupling:** Keep things simple and scalable by using this pattern to hide details from the requester.
@@ -3801,7 +3888,15 @@ function run() {
 
 ### A Real Life Example
 
-In the real world, the JavaScript Chain of Responsibility design pattern can be illustrated through the operation of an ATM (Automated Teller Machine). When we insert our ATM card into the machine and initiate a transaction, the ATM system employs the Chain of Responsibility pattern to handle our request, ultimately providing us with the requested cash.
+1. In the real world, the JavaScript Chain of Responsibility design pattern can be illustrated through the operation of an ATM (Automated Teller Machine). When we insert our ATM card into the machine and initiate a transaction, the ATM system employs the Chain of Responsibility pattern to handle our request, ultimately providing us with the requested cash.
+
+1. `Request Handling:` Managing HTTP request processing pipelines, where each middleware or handler can process or forward the request.
+
+1. `Logging and Error Handling:` Handling log messages or errors in a structured way, with each handler responsible for a specific type of log message or error condition.
+
+1. `Event Handling:` In event-driven systems, you can use this pattern to handle events with multiple subscribers, where each subscriber can process or filter events.
+
+1. `Authorization and Authentication:` Implementing authentication and authorization checks in a sequence, with each handler verifying a specific aspect of the request.
 
 ### Link
 
@@ -3894,6 +3989,243 @@ remote.pressButton(); // Light is OFF
 ```
 
 > NOTE: This is a basic TypeScript implementation of a Command pattern, but in reality, it can encompass additional functionalities such as performing undo, redo, and more.
+
+### The components of the Command Method include
+
+1. `Command Interface:` The Command interface declares the methods that should be implemented by all the concrete classes. It serves as a common template that declares the method that is common for all the classes.
+2. `Concrete Command class`:` The Concrete Command class implements the actions through the execute method and holds the information related to performed actions.
+3. `Receiver:` The Receiver class contains the actual logic to process the requests.
+4. `Invoker:` The invoker holds a reference to a command and triggers the execution of the command without knowing the specifics of the action being performed.
+
+### Other Definition
+
+The command method is a behavioral design pattern that encapsulates an incoming request into a standalone object. This object contains all the necessary information to perform a request including the method to call and parameters.
+
+### Example 2.
+
+We will implement control of a light bulb’s state (On or Off) using an organized and flexible structure. The system should allow the client to interact with the light bulb via commands and provide a simple and efficient way to switch the light on and off.
+
+```js
+
+1. Creation of Command class
+// Note: JavaScript doesn’t support Interfaces directly. Create a class with empty implementation and override the method in other class.
+// In this step, We have created the command class which contains the declaration of the execute method.
+
+class Command {
+  execute() {}
+}
+
+
+2. Creation of Concrete Command class.
+
+// In this step, We have created two classes namely `OnCommand` and `OffCommand` which extend the `Command` class. Each class contains a variable `lightBulb` which holds the information i.e. `On` or `Off ` status. These classes override the `execute` method of the command class and define it with command-specific implementation.
+class OnCommand extends Command {
+  constructor(lightBulb) {
+    super();
+    this.lightBulb = lightBulb;
+  }
+
+  execute() {
+    this.lightBulb.On();
+  }
+}
+
+class OffCommand extends Command {
+  constructor(lightBulb) {
+    super();
+    this.lightBulb = lightBulb;
+  }
+
+  execute() {
+    this.lightBulb.Off();
+  }
+}
+
+3. Creation of Receiver.
+// In this step, We have created the `Receiver` class which is `LightBulb`, which contains the actual implementation of the `on` and `off` methods.
+class LightBulb {
+  On() {
+    console.log("Bulb is ON");
+  }
+
+  Off() {
+    console.log("Bulb is OFF");
+  }
+}
+
+4. Creation of Invoker
+// In this step, We have created the Invoker which is a `Switch` class that defines a constructor that initializes the command to a null value at first. The Switch class defines two methods namely `setCommand` and `executeCommand` whose purpose is to set the command (on or off) and execute the command (the console logs the information).
+
+class Switch {
+  constructor() {
+    this.command = null;
+  }
+
+  setCommand(command) {
+    this.command = command;
+  }
+
+  executeCommand() {
+    this.command.execute();
+  }
+}
+
+5. Usage and Client code
+// The client code interacts with the `Concrete Command` class, `Receiver` and `Invoker`. The `Invoker (Switch)` sets the command and executes the command accordingly.
+
+const light = new LightBulb();
+const On = new OnCommand(light);
+const Off = new OffCommand(light);
+
+const switchButton = new Switch();
+
+switchButton.setCommand(On);
+switchButton.executeCommand();
+
+switchButton.setCommand(Off);
+switchButton.executeCommand();
+
+
+### Explanation.
+
+1. ON/OFF functionality of Light bulb using command design pattern, we can find `Command` class, which contains the methods that should be executed by all the remaining class which extends the `Command` class, here we declared the execute method that should be defined and implemented by the sub classes of `Command` class. i.e. `OnCommand` and `OffCommand` classes.
+
+2. `execute` method contains the implementation for specific commands and calls the respective methods associated with those commands (`on` and `off`).
+
+3. The implementation for `on` and `off` is mentioned in the `LightBulb` class which acts as the Reciever class.
+
+4. `OnCommand` , `OffCommand` and `LightBulb` classes are directly associated. The `Switch` class acts as the invoker through which we can able to the set the specific command and execute that command and the defined methods `SetCommand` and `executeCommand` do this task.
+
+```
+
+### Example 3.
+
+In our example, the calculator object contains four methods – add, subtract, divide, and multiply. Command objects define a method execute, which has the responsibility of invoking a method.
+
+```js
+var calculator = {
+  add: function (x, y) {
+    return x + y;
+  },
+  subtract: function (x, y) {
+    return x - y;
+  },
+  divide: function (x, y) {
+    return x / y;
+  },
+  multiply: function (x, y) {
+    return x * y;
+  },
+};
+var manager = {
+  execute: function (name, args) {
+    if (name in calculator) {
+      return calculator[name].apply(calculator, [].slice.call(arguments, 1));
+    }
+    return false;
+  },
+};
+console.log(manager.execute("add", 5, 2)); // prints 7
+console.log(manager.execute("multiply", 2, 4)); // prints 8
+```
+
+### Example 4.
+
+Let’s say we have an online food delivery platform. Users can place, track, and cancel orders.
+On the OrderManager class, we have access to the placeOrder, trackOrder and cancelOrder methods. It would be totally valid JavaScript to just use these methods directly!
+
+```js
+class OrderManager() {
+  constructor() {
+    this.orders = []
+  }
+
+  placeOrder(order, id) {
+    this.orders.push(id)
+    return `You have successfully ordered ${order} (${id})`;
+  }
+
+  trackOrder(id) {
+    return `Your order ${id} will arrive in 20 minutes.`
+  }
+
+  cancelOrder(id) {
+    this.orders = this.orders.filter(order => order.id !== id)
+    return `You have canceled your order ${id}`
+  }
+}
+
+const manager = new OrderManager();
+
+manager.placeOrder("Pad Thai", "1234");
+manager.trackOrder("1234");
+manager.cancelOrder("1234");
+```
+
+- However, there are downsides to invoking the methods directly on the manager instance. It could happen that we decide to rename certain methods later on, or the functionality of the methods change.
+
+Say that instead of calling it placeOrder, we now rename it to addOrder! This would mean that we would have to make sure that we don’t call the placeOrder method anywhere in our codebase, which could be very tricky in larger applications. Instead, we want to decouple the methods from the manager object, and create separate command functions for each command!
+
+Let’s refactor the OrderManager class: instead of having the placeOrder, cancelOrder and trackOrder methods, it will have one single method: execute. This method will execute any command it’s given.
+
+Each command should have access to the orders of the manager, which we’ll pass as its first argument.
+
+```js
+class OrderManager {
+  constructor() {
+    this.orders = [];
+  }
+
+  execute(command, ...args) {
+    return command.execute(this.orders, ...args);
+  }
+}
+
+// We need to create three Commands for the order manager:
+// 1. PlaceOrderCommand
+// 2. CancelOrderCommand
+// 3. TrackOrderCommand
+class Command {
+  constructor(execute) {
+    this.execute = execute;
+  }
+}
+
+function PlaceOrderCommand(order, id) {
+  return new Command((orders) => {
+    orders.push(id);
+    console.log(`You have successfully ordered ${order} (${id})`);
+  });
+}
+
+function CancelOrderCommand(id) {
+  return new Command((orders) => {
+    orders = orders.filter((order) => order.id !== id);
+    console.log(`You have canceled your order ${id}`);
+  });
+}
+
+function TrackOrderCommand(id) {
+  return new Command(() => console.log(`Your order ${id} will arrive in 20 minutes.`));
+}
+
+const manager = new OrderManager();
+
+manager.execute(new PlaceOrderCommand("Pad Thai", "1234"));
+manager.execute(new TrackOrderCommand("1234"));
+manager.execute(new CancelOrderCommand("1234"));
+
+
+> Perfect! Instead of having the methods directly coupled to the OrderManager instance, they’re now separate, decoupled functions that we can invoke through the execute method that’s available on the OrderManager.
+```
+
+### Pros
+
+The command pattern allows us to decouple methods from the object that executes the operation. It gives you more control if you’re dealing with commands that have a certain lifespan, or commands that should be queued and executed at specific times.
+
+### Cons
+
+The use cases for the command pattern are quite limited, and often adds unnecessary boilerplate to an application.
 
 ### When To Use Command Pattern ? ✅
 
