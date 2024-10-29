@@ -855,6 +855,31 @@ export function useInterval(callback, delay) {
 
   return savedId.current;
 }
+
+//  NOTE : if we try to pass reference to setInterval then it will not work :
+useEffect(() => {
+  if (interval) {
+    savedId.current = setInterval(savedCallback.current, interval);
+    return () => {
+      clearInterval(savedId.current);
+    };
+  }
+}, [interval]);
+
+//  Reason :
+// The issue is that savedCallback.current is not a function when you pass it to setInterval. This is because useRef initializes the ref with undefined, and you're not updating it with the actual callback function until the next render cycle.
+// When you call setInterval(savedCallback.current, interval), savedCallback.current is still undefined, so setInterval is not calling the callback function.
+
+//  To fix this : Pass reference function to dependency of useEffect.
+
+useEffect(() => {
+  if (interval) {
+    savedId.current = setInterval(savedCallback.current, interval);
+    return () => {
+      clearInterval(savedId.current);
+    };
+  }
+}, [interval, savedCallback.current]);
 ```
 
 ### ReactJS useTimeout Custom Hook.
