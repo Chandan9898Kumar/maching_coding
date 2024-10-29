@@ -835,22 +835,25 @@ export function useInterval(callback, delay) {
   // Creating a ref
   const savedCallback = useRef();
 
-  // To remember the latest callback .
+  const savedId = useRef();
+  // To remember the latest callback .If we don't have a callback inside the use effect hook as dependency then it will not work because every time state changes then
+  // This useInterval hook gets called again and again and the callback function gets new memory in space  so, useEffect hook will not get the latest function.
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
 
-  // combining the setInterval and
-  //clearInterval methods based on delay.
+  // combining the setInterval and clearInterval methods based on delay.
   useEffect(() => {
     function func() {
       savedCallback.current();
     }
     if (delay !== null) {
-      let id = setInterval(func, delay);
-      return () => clearInterval(id);
+      savedId.current = setInterval(func, delay);
+      return () => clearInterval(savedId.current);
     }
   }, [delay]);
+
+  return savedId.current;
 }
 ```
 
