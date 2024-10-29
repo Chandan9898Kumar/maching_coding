@@ -739,3 +739,178 @@ const OptimisticUpdate = () => {
   );
 };
 ```
+
+### Implement Custom useLocalStorage Hook in React.
+
+```js
+
+### 1st Example :
+
+export const useLocalStorage = (key: string) => {
+  const setItem = (value: unknown) => {
+    try {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getItem = () => {
+    try {
+      const item = window.localStorage.getItem(key);
+      return item ? JSON.parse(item) : undefined;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeItem = () => {
+    try {
+      window.localStorage.removeItem(key);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return { setItem, getItem, removeItem };
+};
+
+
+
+### 2nd Example:
+
+import { useState } from "react";
+
+const useLocalStorage = (key, defaultValue) => {
+    // Create state variable to store
+    // localStorage value in state
+    const [localStorageValue, setLocalStorageValue] = useState(() => {
+        try {
+            const value = localStorage.getItem(key)
+            // If value is already present in
+            // localStorage then return it
+
+            // Else set default value in
+            // localStorage and then return it
+            if (value) {
+                return JSON.parse(value)
+            } else {
+                localStorage.setItem(key, JSON.stringify(defaultValue));
+                return defaultValue
+            }
+        } catch (error) {
+            localStorage.setItem(key, JSON.stringify(defaultValue));
+            return defaultValue
+        }
+    })
+
+    // this method update our localStorage and our state
+    const setLocalStorageStateValue = (valueOrFn) => {
+        let newValue;
+        if (typeof valueOrFn === 'function') {
+            const fn = valueOrFn;
+            newValue = fn(localStorageValue)
+        }
+        else {
+            newValue = valueOrFn;
+        }
+        localStorage.setItem(key, JSON.stringify(newValue));
+        setLocalStorageValue(newValue)
+    }
+    return [localStorageValue, setLocalStorageStateValue]
+}
+
+export default useLocalStorage;
+
+
+```
+
+### ReactJS useInterval Custom Hook.
+
+```js
+import React, { useState, useEffect, useRef } from "react";
+
+// creating the custom useInterval hook
+export function useInterval(callback, delay) {
+  // Creating a ref
+  const savedCallback = useRef();
+
+  // To remember the latest callback .
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+
+  // combining the setInterval and
+  //clearInterval methods based on delay.
+  useEffect(() => {
+    function func() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      let id = setInterval(func, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
+```
+
+### ReactJS useTimeout Custom Hook.
+
+```js
+import React, { useState, useEffect, useRef } from 'react';
+
+// creating the custom useTimeout hook
+const useTimeout = (callback, delay) => {
+
+	// Creating a ref
+	const savedCallback = useRef();
+
+	// To remember the latest callback .
+	useEffect(() => {
+		savedCallback.current = callback;
+	}, [callback]);
+
+	// Setting and clearing up a timeout
+	useEffect(() => {
+		const func = () => {
+			savedCallback.current();
+		}
+		if (delay !== null) {
+			let id = setTimeout(func, delay);
+			return () => clearTimeout(id);
+		}
+	}, [delay]);
+};
+
+export default useTimeout;
+
+
+### App.js
+
+
+import { React, useState } from 'react';
+import './App.css';
+import useTimeout from './useTimeout';
+
+const App = () => {
+    const [text, setText] = useState(false);
+
+    //using the custom useTimeout hook
+    useTimeout(() => {
+        setText(true);
+    }, 5000);
+
+    return (
+        <div className='msg'>
+            <h1>
+                {text
+                    ? 'Hey Geek, welcome back to geeksforgeeks.'
+                    : 'Your message is loading......'}
+            </h1>
+        </div>
+    )
+}
+
+export default App;
+
+```
