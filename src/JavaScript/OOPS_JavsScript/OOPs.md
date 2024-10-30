@@ -1438,8 +1438,7 @@ class MyClass {
 
 function implementsInterface(obj, interfaceObj) {
 	for (const method in interfaceObj) {
-		if (!(method in obj) ||
-			typeof obj[method] !== "function") {
+		if (!(method in obj) || typeof obj[method] !== "function") {
 			return false;
 		}
 	}
