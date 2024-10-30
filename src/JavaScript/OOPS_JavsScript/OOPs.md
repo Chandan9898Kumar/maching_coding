@@ -1457,3 +1457,4 @@ if (implementsInterface(myObject, MyInterface)) {
 
 
 ```
+

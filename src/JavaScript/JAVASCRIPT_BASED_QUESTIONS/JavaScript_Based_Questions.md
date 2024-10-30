@@ -7558,3 +7558,43 @@ const App = () => {
 
 export default App;
 ```
+
+### 108. What is the O/p
+
+```js
+class Tea {
+  constructor(name) {
+    this.name = name;
+  }
+
+  print = () => {
+    console.log(this.name, "this", this);
+  };
+
+  game() {
+    console.log(this.name, "this game", this);
+  }
+}
+
+class Chai extends Tea {
+  constructor(name, id) {
+    super(name);
+    this.id = id;
+  }
+
+  print() {
+    console.log(this.name, this.age, "<<<<  this >>>>>>>  ", this);
+  }
+}
+
+const oneTea = new Tea("Tata");
+
+oneTea.print();
+
+const TwoChai = new Chai("Darj", 8);
+
+TwoChai.print();
+
+// When you defines a normal method (Inside Chai we have defined normal print method) then it goes directly to the prototype and when defines method
+// (Inside Tea we defined Print method as an arrow Method) as an arrow method then it becomes direct property of the object.
+```
