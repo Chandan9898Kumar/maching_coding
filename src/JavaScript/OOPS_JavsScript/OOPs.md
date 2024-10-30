@@ -712,7 +712,7 @@ greet("Jane", 30); // Output: Hello, Jane! You are 30 years old.
 
 ### In this example, we define two functions with the same name greet, but with different parameters. When we call the function with one argument, the first function is called, and when we call it with two arguments, the second function is called.
 
-### Check : Ad-hoc Polymorphism below for more information. 
+### Check : Ad-hoc Polymorphism below for more information.
 ```
 
 2. `Function overriding` refers to the ability of a subclass to provide a different implementation of a method that is already provided by its superclass. In JavaScript, this can be achieved by reassigning the prototype of the subclass.
@@ -1123,7 +1123,7 @@ The multiple conditions are addressed to perform actions based on that particula
 
 Constructors create instances of a class, which are commonly referred to as objects. The new keyword in JavaScript causes a constructor to be called when an object is declared. A constructor creates an object and sets any object properties if they exist.
 
-### JavaScript Composition:
+### JavaScript Object Composition:
 
 Composition means to Compose. Everything in JavaScript is treated as an object even functions in JavaScript are treated as a high-class object. Such objects are quite complex in nature to make large complex objects simple, many small objects are composed together. Thus, we can say that composition is the cleaner, reusable and better solution for such large complex objects.
 
@@ -1155,7 +1155,7 @@ const Brand = {
 const Treadmill = function (Design, Motor, StopMotor) {
 	const brand = Object.create(Design);
 	const motor = Object.create(Motor);
-	const stopmotor = Object.create(StopMotor);
+	const stopMotor = Object.create(StopMotor);
 	const props = {
 	motorspeed: 0,
 	model: brand.model,
@@ -1183,7 +1183,7 @@ const Treadmill = function (Design, Motor, StopMotor) {
 	},
 
 	stop() {
-		props.motorspeed = stopmotor.stop(props.motorspeed);
+		props.motorspeed = stopMotor.stop(props.motorspeed);
 	},
 	};
 };
@@ -1206,6 +1206,191 @@ Treadmill1.log("model");
 
 
 - As it can be seen the above code is much cleaner than the one below because here the machine functionality & Features are all separated. So the class can implement functionality suitable as per their requirements.Treadmill1 can implement the functionality of Treadmill when needed. Now, Treadmill1 can increase its motorspeed, decrease its motorspped, and even change its model name as per requirement. When talked about composition, the Inheritance gets assisted automatically.
+
+
+### In JavaScript, Object  composition is achieved by creating objects that contain other objects or values as properties. This allows developers to build complex data structures and objects that can be easily managed and manipulated.
+
+`There are several benefits to using composition in JavaScript, including:`
+
+1. Modularity: Composition allows developers to break down complex objects into smaller, more manageable pieces. This makes it easier to understand, maintain, and modify the code.
+2. Reusability: By creating objects that can be composed together, developers can reuse code and reduce duplication.
+3. Flexibility: Composition makes it easy to add or remove properties and behaviors from objects, making it easier to adapt to changing requirements.
+4. Encapsulation: Composition helps to encapsulate data and behavior, making it easier to hide implementation details and expose only the necessary information.
+
+
+`To implement Object composition in JavaScript, developers can use various techniques, including:`
+
+1. `Object literals:` Creating objects using object literals, such as { name: 'John', age: 30 }.
+2. `Constructors:` Creating objects using constructors, such as function Person(name, age) { this.name = name; this.age = age; }.
+3. `Factory functions:` Creating objects using factory functions, such as function createPerson(name, age) { return { name, age }; }.
+
+
+### Example :
+
+// Create a simple object
+const address = {
+  street: '123 Main St',
+  city: 'Anytown',
+  state: 'CA',
+  zip: '12345'
+};
+
+// Create a more complex object that contains the simple object
+const person = {
+  name: 'John Doe',
+  age: 30,
+  address: address
+};
+
+// Access the properties of the composed object
+console.log(person.name); // Output: John Doe
+console.log(person.address.street); // Output: 123 Main St
+
+### Explanation :
+
+// > In this example, we create a simple address object with four properties: street, city, state, and zip. We then create a more complex person object that contains the address object as a property. This is an example of composition, where the person object is composed of the address object.
+
+// > By using composition, we can create complex objects from simpler ones, making it easier to manage and manipulate data. We can also reuse the address object in other parts of our code, reducing duplication and improving maintainability.
+
+
+### Object Composition with Object.assign:
+// Object composition with Object.assign allows you to combine properties from multiple objects into a new one.
+Example :
+
+const person = {
+  name: "John",
+  age: 30,
+};
+
+const address = {
+  street: "123 Main Street",
+  city: "Example City",
+};
+
+const personWithAddress = Object.assign({}, person, address);
+
+console.log(personWithAddress);
+// Output: { name: "John", age: 30, street: "123 Main Street", city: "Example City }
+
+
+### Object Composition with Object.create:
+
+// Object composition with Object.create allows you to create a new object that inherits properties from another object.
+- Example:
+
+const person = {
+  name: "John",
+  age: 30,
+};
+
+const info = {
+  job: "Developer",
+  city: "Tech Town",
+};
+
+const personWithInfo = Object.create(person);
+Object.assign(personWithInfo, info);
+
+console.log(personWithInfo);
+// Output:
+
+### Object Composition with Spreading (...):
+//  Object composition using the spreading operator (...) allows you to combine properties from multiple objects.
+
+- Example:
+
+const product = {
+  name: "Laptop",
+  price: 1000,
+};
+
+const specifications = {
+  brand: "BrandXYZ",
+  weight: "2.5 kg",
+};
+
+const productWithSpecifications = { ...product, ...specifications };
+
+console.log(productWithSpecifications);
+// Output: { name: "Laptop", price: 1000, brand: "BrandXYZ", weight: "2.5 kg" }
+
+
+### Class Composition:
+
+// Class composition involves creating objects by combining instances of different classes. You can achieve this by creating a class with properties and methods that use instances of other classes.
+
+- Example :
+
+class Engine {
+  start() {
+    console.log("Engine started");
+  }
+}
+
+class Wheels {
+  inflate() {
+    console.log("Wheels inflated");
+  }
+}
+
+class Car {
+  constructor() {
+    this.engine = new Engine();
+    this.wheels = new Wheels();
+  }
+
+  // Combine classes to create an auto
+  startCar() {
+    this.engine.start();
+    this.wheels.inflate();
+    console.log("Car started");
+  }
+}
+
+const vehicle = new Car();
+vehicle.startCar();
+// Output: Engine started
+// Output: Wheels inflated
+// Output: Car started
+
+```
+
+### Function Composition.
+
+> Function composition is the process of chaining together multiple functions to form a new function. It involves applying a series of transformations or operations to an input value, where the output of one function becomes the input of the next function in the composition chain.
+
+> The compose function takes in two or more functions and returns a new function that applies these functions in right-to-left order. This means that the rightmost function is applied first, followed by the next function to its left, and so on.
+
+- Example
+
+```js
+
+### compose function takes any number of functions and invokes them all one after the other:
+
+// function composition of any number of functions
+const compose = (...fns) => x => fns.reduceRight((y, f) => f(y), x);
+const double = x => x * 2
+const square = x => x * x
+
+// function composition
+var output_final = compose(square, double)(2);
+console.log(output_final);
+
+// In the code above, we can see that the compose function is implemented using a general approach on line 2, so now it can take any number of functions. The output remains the same as before even with using this implementation
+
+### pipe function
+// On the other hand, we can reverse the order of the function invocation by using the pipe function:
+
+// function composition using pipe of any number of functions
+const pipe = (...fns) => x => fns.reduce((y, f) => f(y), x);
+const double = x => x * 2
+const square = x => x * x
+
+// function pipe
+var output_final = pipe(square, double)(2);
+console.log(output_final);
+
+// In the code above, we can see that the pipe function is implemented using a general approach on line 2, so it can now take any number of functions. This is similar to the previous compose function, except that it uses reduce instead of the reduceRight method. The output is different in this case because the square function is invoked before the double function while, ​in our compose function, it was in the opposite order.
 ```
 
 ### Explain sub-classes and inheritance in ES6
