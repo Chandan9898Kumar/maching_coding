@@ -7598,3 +7598,46 @@ TwoChai.print();
 // When you defines a normal method (Inside Chai we have defined normal print method) then it goes directly to the prototype and when defines method
 // (Inside Tea we defined Print method as an arrow Method) as an arrow method then it becomes direct property of the object.
 ```
+
+### 109. why "8" is being printed before all other console logs, despite being in an event loop
+
+```js
+console.log("7");
+
+new Promise((resolve) => {
+  console.log("8");
+  resolve(8);
+}).then((res) => {
+  console.log(res + 1);
+});
+
+Promise.resolve('11').then((res)=>console.log(res))
+
+console.log('10')
+
+Promise.resolve('12').then((res)=>console.log(res))
+
+console.log('13')
+
+
+### Explanation
+
+When you create a new promise, the code inside the promise constructor is executed immediately, synchronously. This means that the console.log('8') statement is executed right away, before the promise is even resolved.
+
+The then method, on the other hand, is executed asynchronously, after the promise is resolved. This is because the then method is added to the event loop, which is a queue of tasks that are executed one by one.
+
+In your code, the order of execution is as follows:
+
+console.log('7') is executed synchronously.
+The promise constructor is executed, which logs "8" to the console synchronously.
+The promise is resolved with the value 8.
+The then method is added to the event loop.
+console.log('10') is executed synchronously.
+The event loop executes the then method, which logs "9" (res + 1) to the console.
+So, the correct order of output is:
+7
+8
+10
+9
+
+```
