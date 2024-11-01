@@ -1881,8 +1881,10 @@ function createSetTimeoutPolyfill() {
         return;
       }
 
-      if (Date.now() > start) {
+      if (Date.now() > start &&  intervalMap[id];) {
         callback.apply(this, args);
+        delete intervalMap[id]
+        return
       } else {
         requestIdleCallback(triggerCallback);  // requestIdleCallback makes triggerCallback function keep getting called.
       }
@@ -1922,7 +1924,10 @@ console.log("stop");
 
 Window: requestIdleCallback() method :
 
-The window.requestIdleCallback() method queues a function to be called during a browsers idle periods. This enables developers to perform background and low priority work on the main event loop, without impacting latency-critical events such as animation and input response. Functions are generally called in first-in-first-out order; however, callbacks which have a timeout specified may be called out-of-order if necessary in order to run them before the timeout elapses.
+The window.requestIdleCallback() method queues a function to be called during a browsers idle periods.
+This enables developers to perform background and low priority work on the main event loop, without impacting latency-critical events such as animation and input response.
+Functions are generally called in first-in-first-out order; however, callbacks which have a timeout specified may be called out-of-order if necessary in order to run them
+before the timeout elapses.
 You can call requestIdleCallback() within an idle callback function to schedule another callback to take place no sooner than the next pass through the event loop.
 
 Syntax :
@@ -1931,7 +1936,8 @@ Syntax :
 
 `Parameters`
 1. callback
-A reference to a function that should be called in the near future, when the event loop is idle. The callback function is passed an IdleDeadline object describing the amount of time available and whether or not the callback has been run because the timeout period expired.
+A reference to a function that should be called in the near future, when the event loop is idle. The callback function is passed an IdleDeadline object
+describing the amount of time available and whether or not the callback has been run because the timeout period expired.
 
 ```
 
