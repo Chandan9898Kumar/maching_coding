@@ -1119,7 +1119,7 @@ Promise.PromiseAll([p1, p2, p3, p4(), p5()])
     console.log(error, "error >>>>>>>>>>>>>>>");
   });
 
-`Method 2. Here we simply using new Promise() method instead of creating a promise from scratch just like Above`;
+`Method 2. Here we simply using new Promise() method instead of creating a promise from scratch just like Above` It is More Optimized;
 
 Promise.PromiseAll = function (arrayOfPromises) {
   return new Promise((resolve, reject) => {
@@ -1167,6 +1167,50 @@ Promise.PromiseAll = function (arrayOfPromises) {
     });
   });
 };
+
+Promise.PromiseAll([p1, p2, p3, p4(), p5()])
+  .then((result) => {
+    console.log(result, "result >>>>>>>>>>>>>>");
+  })
+  .catch((error) => {
+    console.log(error, "error >>>>>>>>>>>>>>>");
+  });
+
+
+
+### Method 3. By Recursively calling the method.
+
+Promise.PromiseAll = function (arrayOfPromises) {
+  return new Promise((resolve, reject) => {
+    let result = [];
+    let pending = arrayOfPromises.length;
+    let index =0
+
+    async function callback(){
+
+        try{
+          let response = await arrayOfPromises[index]
+          result.push(response)
+          index++
+
+          if(result.length===pending){
+            resolve(result)
+            return
+          }
+
+          if(index<pending){
+            callback()
+          }
+
+        }catch(error){
+          reject(error)
+          return
+        }
+    }
+
+    callback()
+  })
+}
 
 Promise.PromiseAll([p1, p2, p3, p4(), p5()])
   .then((result) => {
