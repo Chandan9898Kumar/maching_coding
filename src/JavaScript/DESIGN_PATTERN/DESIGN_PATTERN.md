@@ -4294,6 +4294,187 @@ while (stringIterator.hasNext()) {
 
 > NOTE: This was a simple TypeScript implementation of an iterator, but in reality, it can include more functionalities such as traversing in reverse and so on.
 
+### Explanation 2.
+
+The Iterator Pattern lets you access and traverses through elements of an aggregate object (collection) sequentially without exposing its underlying representation. This pattern allows JavaScript developers to design looping constructs that are far more flexible and sophisticated. In ES6, Iterator and Generators are introduced, which further aids in the Iteration pattern implementation.
+
+`Example:`
+
+This is a simple straight-forward code for front-to-back iteration. We have defined two methods for the Iterator – hasNext() and next().
+
+```js
+let items = ["Hi", "John", "how", "are", "you"];
+
+function Iterator(value) {
+  this.details = value;
+  this.index = 0;
+}
+Iterator.prototype = {
+  hasNext() {
+    return this.index < this.details.length;
+  },
+
+  next() {
+    return this.details[this.index++];
+  },
+  hasBack() {
+    return this.index > 0;
+  },
+  back() {
+    this.index--;
+    if (this.index >= 0 && this.index < this.details.length) {
+      return this.details[this.index];
+    }
+  },
+};
+
+const iterate = new Iterator(items);
+
+while (iterate.hasNext()) {
+  console.log("next", iterate.next());
+}
+
+setTimeout(() => {
+  while (iterate.hasBack()) {
+    console.log("back", iterate.back());
+  }
+}, 3000);
+```
+
+### Explanation 3.
+
+Iterator design pattern is a behavioral design pattern that provides a way to access the elements of an aggregate object sequentially without exposing its underlying representation. It separates the responsibility of accessing and traversing the elements from the aggregate object. This pattern is widely used in many programming languages, including JavaScript, to manage collections and provide a consistent way of accessing their elements.
+
+`The Iterator pattern consists of the following key components:`
+
+1. `Iterator:` This is an interface that declares methods for traversing the elements of a collection.
+2. `ConcreteIterator:` This is a specific implementation of the Iterator interface, providing the implementation for traversing the collection.
+3. `Client:` The client is responsible for using the Iterator to traverse the elements of the collection without knowing its internal structure.
+4. `Items:` These are the elements contained within the collection.
+
+`Example :`
+
+Consider a scenario where you have a custom data structure named “CustomList”, and you want to implement an iterator to traverse the elements of this list.
+
+```js
+// CustomList class implementing the Iterable interface
+class CustomList {
+constructor() {
+	this.list = [];
+}
+
+add(item) {
+	this.list.push(item);
+}
+
+getIterator() {
+	return new ListIterator(this);
+}
+}
+
+// Iterator class implementing the Iterator interface
+class ListIterator {
+constructor(list) {
+	this.list = list.list;
+	this.index = 0;
+}
+
+hasNext() {
+	return this.index < this.list.length;
+}
+
+next() {
+	return this.list[this.index++];
+}
+}
+
+// Client code
+const customList = new CustomList();
+customList.add("item1");
+customList.add("item2");
+customList.add("item3");
+
+const iterator = customList.getIterator();
+while (iterator.hasNext()) {
+console.log(iterator.next());
+}
+
+
+In this example:
+
+We have implemented the Iterator design pattern in JavaScript using a custom “CustomList” class and an “ListIterator” class. The “CustomList” class acts as an iterable collection, while the “ListIterator” class is responsible for iterating through the elements of the collection.
+
+Let’s break down the example step by step:
+
+  1. CustomList class: This class represents a custom list and has a property “list” initialized as an empty array in the constructor. It has a method “add” to add items to the list and a “getIterator” method that returns an instance of the “ListIterator” class, passing the current instance of the “CustomList” as a parameter.
+
+  2. ListIterator class: This class represents the iterator and takes an instance of “CustomList” as a parameter in its constructor. It has two methods: “hasNext”, which checks if there are more elements to iterate, and next, which returns the “next” element in the list and increments the index.
+
+  3. Client code: The client code initializes a new “CustomList”, adds some items to it, and then retrieves an iterator using the “getIterator” method. It then uses the iterator to iterate through the elements of the list using a “while” loop and logs each element to the console.
+
+The client code can iterate through the elements of the “CustomList” without needing to know its internal implementation. The use of the Iterator pattern enables separation between the iteration logic and the data structure, making the code more modular and maintainable.
+```
+
+### Explanation 4.
+
+What is an iterator in JavaScript?
+
+1. The iterator is a function that takes the collection as input and returns an object that has different methods, majorly next().
+2. next() returns an object with the next value from the collection in the sequence and flag determining if we have reached the end of the collection.
+3. We can create a custom iterator function by creating a closure with a variable that will track the items returned and then return an object from the function that will have a method next().
+
+```js
+function createIterator(collection){
+  let i = 0;
+  return {
+    next(){
+     if(i < collection.length){
+    	return {value: collection[i++], done: false};
+     }
+
+        return {value: null, done: true};
+     }
+  }
+};
+
+const arr = [1, 2, 3];
+const iterator = createIterator(arr);
+console.log(iterator.next());
+// {"value": 1, "done": false }
+
+console.log(iterator.next());
+// {"value": 2, "done": false }
+
+console.log(iterator.next());
+// {"value": 3, "done": false }
+
+console.log(iterator.next());
+// {"value": null, "done": true }
+
+> The purpose of the iterator pattern is to provide similar methods to a different type of data structures to iterate on the values in a different sequence.
+
+### Other Way : Creating iterators using Generator functions in JavaScript
+
+function* Gen() {
+  yield* ["a", "b", "c"];
+}
+
+const g = Gen();
+
+console.log(g.next());
+// { value: "a", done: false }
+
+console.log(g.next());
+// { value: "b", done: false }
+
+console.log(g.next());
+// { value: "c", done: false }
+
+console.log(g.next());
+// { value: undefined, done: false }
+
+```
+
 ### When To Use Iterator Pattern ? ✅
 
 - **Complex Navigation Logic:** Useful when traversing complex data structures like trees or graphs gets complicated and entangled with business logic.
