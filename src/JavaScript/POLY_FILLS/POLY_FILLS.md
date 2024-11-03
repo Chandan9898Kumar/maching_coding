@@ -1232,7 +1232,7 @@ The Promise.allSettled() method returns a promise that resolves to an array of o
 `Each object has two properties: status and value (or reason).`
 
 1. The status can be either fulfilled or rejected.
-2. The value if case the promise is fulfilled or reason) if the promise is rejected.
+2. The value if case the promise is fulfilled or reason if the promise is rejected.
 
 `NOTE :` It Returns resolve and reject promise together in then method. Here catch method is not being called.
 
