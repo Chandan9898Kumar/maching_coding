@@ -1,18 +1,60 @@
 ### 1. Find The OutPut
 
 ```ts
-foo(); // Output: "Hello"
+foo(); // Output: "Hello 2"
 function foo() {
-  console.log("Hello");
+  console.log("Hello 1");
 }
 // The above code is equivalent to:
 function foo() {
-  console.log("Hello");
+  console.log("Hello 2");
 }
-foo(); // Output: "Hello"
+foo(); // Output: "Hello 2"
 
 
 - In above example, we define `a function foo()` and call it before the actual declaration. Surprisingly, the code works without any errors. This is `because function declarations are hoisted to the top of their scope`, allowing us to `call the function before its declaration in the code`.
+
+
+### Example 2.
+
+foo();
+function foo() {
+  console.log("Hello");
+}
+
+function foo() {
+  console.log("Hello 2");
+}
+foo()
+
+Explanation:
+
+Hello 2" is being printed twice and "Hello" is not printed.
+
+1. In JavaScript, function declarations are "hoisted" to the top of the script, regardless of where they are defined. This means that the function is moved to the top of the script, even if it's defined later in the code.
+
+2. In your example, the first foo() call is executed before the function is defined. However, because of hoisting, the function is already defined at the top of the script, so the first call to foo() will execute the first function definition, which logs "Hello".
+
+3. The second function definition, which logs "Hello 2", is defined later in the code, but it overwrites the first function definition. So, when the second foo() call is made, it will execute the second function definition, which logs "Hello 2".
+
+4. The reason why "Hello" is not printed at all is because the first function definition is overwritten by the second one, so the first function is never executed.
+
+- To illustrate this, here's what the code looks like after hoisting:
+
+function foo() {
+  console.log("Hello");
+}
+
+foo(); // logs "Hello"
+
+function foo() {
+  console.log("Hello 2");
+}
+
+foo(); // logs "Hello 2"
+
+As you can see, the first function definition is executed once, and then the second function definition overwrites it, so the second call to foo() executes the second function definition.
+
 ```
 
 ### 2. Difference between Micro-task Queue and Callback Queue ?
@@ -137,18 +179,6 @@ console.log(parse_URL("https://github.com/pubnub/python/search?utf8=%E2%9C%93&q=
 
 2. The <body> node is the sibling of the <head> node because they share the same immediate parent, which is the <html> element.
 
-<!--
-How to flatten a deeply nested array?
-How to implement Array indexOf method?
-How to implement Array includes method?
-How to implement Array findIndex method?
-How to implement Array find method?
-How to implement Array at method?
-How to implement Array some method?
-How to implement Array every method?
-How to implement Array unshift method?
-How to implement Array pop method? -->
-
 ### 5. What is the Output
 
 ```ts
@@ -216,6 +246,65 @@ function outer() {
 }
 
 outer();
+
+
+### Example 2.
+
+- the output is showing 2 instead of undefined  due to hoisting
+
+var value = 2;
+
+function outer(value) {
+  console.log(value, "outer");
+
+  function inner() {
+    console.log(value, "inner");
+  }
+
+  inner();
+
+  var value = 5;
+}
+
+outer(value);
+
+
+In JavaScript, variable declarations are "hoisted" to the top of the scope, but their assignments are not. This means that the variable is declared at the top of the scope, but its value is not assigned until the assignment statement is executed.
+
+In your example, the value variable is declared at the top of the outer function scope, but its assignment var value = 5; is not executed until after the inner function is called.
+
+- Here's what the code looks like after hoisting:
+
+var value = 2;
+
+function outer(value) {
+  var value; // hoisted declaration
+  console.log(value, "outer");
+
+  function inner() {
+   console.log(value, "inner");
+  }
+
+  inner();
+
+  value = 5; // assignment happens after inner() is called
+}
+
+outer(value);
+
+
+When the outer function is called, the value parameter is passed with the value 2. The value variable is declared at the top of the outer function scope, but its value is not assigned yet. So, when the console.log(value, "outer"); statement is executed, it logs 2, which is the value of the value parameter passed to the outer function.
+
+The inner function is then called, and it logs 2 again, because the value variable is still not assigned a new value.
+
+Finally, the assignment value = 5; is executed, but it's too late, the inner function has already been called and logged the value 2.
+
+So, to summarize:
+
+  1. The value variable is declared at the top of the outer function scope due to hoisting.
+  2. The assignment value = 5; happens after the inner function is called.
+  3. The inner function logs the value 2 because the value variable is still not assigned a new value.
+
 ```
 
 ### 8. what is the output

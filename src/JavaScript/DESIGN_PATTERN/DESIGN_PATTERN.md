@@ -5303,51 +5303,51 @@ userController.addUser("John Doe");
 // Model
 class TodoModel {
   constructor() {
-   this.todos = [];
+ this.todos = [];
   }
 
   addTodo(todo) {
-   this.todos.push(todo);
+ this.todos.push(todo);
   }
 
   removeTodo(todo) {
-   this.todos = this.todos.filter(t => t !== todo);
+ this.todos = this.todos.filter(t => t !== todo);
   }
 
   getTodos() {
-   return this.todos;
+ return this.todos;
   }
 }
 
 // View
 class TodoView {
   constructor(model) {
-   this.model = model;
+ this.model = model;
   }
 
   render() {
-   console.log('Todo List:');
-   this.model.getTodos().forEach(todo => {
-    console.log(`- ${todo}`);
-   });
+ console.log('Todo List:');
+ this.model.getTodos().forEach(todo => {
+ console.log(`- ${todo}`);
+  });
   }
 }
 
 // Controller
 class TodoController {
   constructor(model, view) {
-   this.model = model;
-   this.view = view;
+ this.model = model;
+ this.view = view;
   }
 
   addTodo(todo) {
-   this.model.addTodo(todo);
-   this.view.render();
+ this.model.addTodo(todo);
+ this.view.render();
   }
 
   removeTodo(todo) {
-   this.model.removeTodo(todo);
-   this.view.render();
+ this.model.removeTodo(todo);
+ this.view.render();
   }
 }
 
