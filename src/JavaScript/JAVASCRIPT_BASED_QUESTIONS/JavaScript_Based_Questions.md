@@ -360,24 +360,91 @@ console.log(4);
 
 //  Explanation :
 
-//   js starts executing the code synchronously so,
+//  js starts executing the code synchronously so,
 //  first console.log(3) will be printed.
 //  next code will move on to check function ,now this is a asynchronous function which executes its statement synchronously up-to the await statement.
 //  so when it reaches the await statement promise.resolve function is called  since argument provided to this function is a function call itself with console.log(1)
 //  so this console function is also executed and return undefined (console does not return anything) so this undefined is passed to the promise.resolve function
 //  top level code up-to await is now executed synchronously but the below which comes after the await will run asynchronously(consider this as a .then(()=>))
 //  now however this promise resolved immediately js first completes the synchronous task first and moves on to next synchronous code which is console.log(4)
-// now all  of these synchronous task has finished executing and then it moves back to execute asynchronous task so this means that after
-// running console.log(4)  the final console.log(2) statement will be executed.
+//  now all  of these synchronous task has finished executing and then it moves back to execute asynchronous task so this means that after
+//  running console.log(4)  the final console.log(2) statement will be executed.
 
 //  Note : the asynchronous code is handled by the micro-task queue and it is executed by the event loop only after the call stack is empty.
+
+When you use await with a promise, it pauses the execution of the surrounding code until the promise is resolved. However, it does not block the execution of other code outside of the async function.
+
+- In your example, here's what happens:
+
+1. console.log(3) is executed immediately, logging 3 to the console.
+2. The check() function is called, which is an async function.
+3. Inside check(), await Promise.resolve(console.log(1)) is executed. This creates a promise that resolves immediately, logging 1 to the console.
+4. Because of the await keyword, the execution of the check() function is paused until the promise is resolved.
+5. Meanwhile, the code outside of the check() function continues to execute, so console.log(4) is executed, logging 4 to the console.
+6. Once the promise is resolved, the execution of the check() function resumes, and console.log(2) is executed, logging 2 to the console.
+
+- So, the order of execution is:
+
+1. console.log(3) (immediate)
+2. console.log(1) (inside check(), due to await)
+3. console.log(4) (outside check(), while check() is paused)
+4. console.log(2) (inside check(), after promise is resolved)
+5. This is why the output is 3, 1, 4, 2 . The await keyword only pauses the execution of the surrounding code inside the async function, but does not block the execution of other code outside of it.
+
+
+Example 2. This code will work asynchronously, will wait for promise to resolve by then  console with value 4 will be printed.
+
+- Check this code, It resolving with value 1
+
+async function check() {
+  await Promise.resolve(1);
+  console.log(2);
+}
+
+console.log(3);
+check();
+console.log(4);
+
+> O/p : 3,4,2
+
+
+
+### Example 3. This code will work synchronously.
+
+async function check() {
+  Promise.resolve(console.log(1));
+  console.log(2);
+}
+
+console.log(3);
+check();
+console.log(4);
+
+> O/p : 3,1,2,4
+
+### Example 4. This code will work asynchronously by putting .then(()) to micro-stack
+
+//  NOTE : .then(()) goes to micro-task queue.
+
+async function check() {
+   Promise.resolve(console.log(5)).then(()=>{
+     console.log(1)
+   });
+  console.log(2);
+}
+
+console.log(3);
+check();
+console.log(4);
 ```
 
 ### 10. what is the output
 
-<!--  Check above explanation -->
+<!--  Check above explanation  both have same working functionality -->
 
 ```ts
+Example 1.
+
 async function check() {
   await setTimeout(() => {
     console.log(1);
@@ -391,7 +458,34 @@ console.log(4);
 
 // O/P :  3,4,2,1
 
-//   Next  below code console.log(2) will not works as async because no await is there as given at above example.
+### Explanation: the output is coming as 3, 4, 2, 1 is due to the way JavaScript handles asynchronous code, setTimeout, and the await keyword.
+
+- Here's what happens:
+
+1. console.log(3) is executed immediately, logging 3 to the console.
+2. The check() function is called, which is an async function.
+3. Inside check(), await setTimeout(() => { console.log(1); }, 100) is executed. This sets a timer to log 1 to the console after 100ms.
+4. Because of the await keyword, the execution of the check() function is paused until the timer is resolved (i.e., after 100ms).
+5. Meanwhile, the code outside of the check() function continues to execute, so console.log(4) is executed, logging 4 to the console.
+6. After 100ms, the timer is resolved, and the execution of the check() function resumes.
+7. The next statement in check() is console.log(2), which logs 2 to the console.
+8. Finally, the callback function inside setTimeout is executed, logging 1 to the console.
+
+- So, the order of execution is:
+
+1. console.log(3) (immediate)
+2. console.log(4) (outside check(), while check() is paused)
+3. console.log(2) (inside check(), after timer is resolved)
+4. console.log(1) (inside setTimeout callback, after 100ms)
+
+This is why the output is 3, 4, 2, 1 instead of 3, 2, 4, 1. The await keyword only pauses the execution of the surrounding code inside the async function, but does not block the execution of other code outside of it. Additionally, setTimeout is an asynchronous function that schedules a callback to be executed after a certain delay, which in this case is 100ms.
+
+
+
+// Just like above here we have removed await keyword,  Next below code console.log(2) will not works as async because no await is there as given at above example.
+
+Example 2.
+
 async function check() {
   setTimeout(() => {
     console.log(1);
