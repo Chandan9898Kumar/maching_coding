@@ -518,6 +518,7 @@ count() // 3
 //  Method 1. with the help of closure we can get it.
 function add() {
   let counter = 0;
+
   function countValue() {
     counter += 1;
     return counter;
@@ -528,6 +529,13 @@ function add() {
     counter = 0;
   };
 
+  //  OR We can add reset in Function prototype like this as well.
+
+  // Function.prototype.reset = function () {
+  //   counter = 0;
+  //   return counter;
+  // };
+
   return countValue;
 }
 
@@ -536,6 +544,7 @@ const count = add();
 console.log(count());
 console.log(count());
 console.log(count());
+
 count.reset();
 
 console.log(count());
@@ -672,7 +681,6 @@ console.log(result);
 6️⃣ Additionally, React can batch multiple state updates together, which further optimizes performance by reducing the frequency of re-renders and updates to the DOM.
 
 ```
-
 
 ### 16. fetch retry function typescript
 
