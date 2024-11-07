@@ -4811,6 +4811,144 @@ editor.restoreMemento(documentHistory.getMemento(0));
 console.log(editor.getText()); // Hello World!
 ```
 
+### Example 2.
+
+1. A behavioral design pattern in JavaScript called Memento focuses on externalizing and capturing an object’s internal state so that it can later be restored. When you need to add features like undo/redo functionality, history tracking, or reverting an item to a former state, this pattern is quite helpful.
+
+2. The Memento pattern provides temporary storage as well as restoration of an object. The mechanism in which you store the object’s state depends on the required duration of persistence, which may vary.
+
+- The Memento pattern consists of three key components: `the Originator`, `the Memento`, and `the Caretaker`.
+
+  1. `Originator:` This is the object whose state needs to be saved and restored. It creates a Memento object to capture its state and can also restore its state from a Memento.
+     (The Originator defines the interface that triggers the creation and storing of itself as the memento.)
+
+  2. `Memento:` The Memento is an immutable object that stores the state of the Originator. It only allows the Originator to access its content, ensuring that the state remains encapsulated. (The Memento is the internal state representation of the Originator that is passed and retrieved from the Caretaker.)
+
+  3. `Caretaker:` The Caretaker is responsible for keeping track of multiple Mementos. It can save and retrieve Mementos to and from an Originator.
+     (The Caretaker has one job: to store or save the memento to be used later. It can retrieve the memento it stored but it does not mutate anything.)
+
+`Case :` Imagine you are developing a document editor application, and you want to implement an undo/redo feature. Users should be able to revert to previous document states. Let’s apply the Memento pattern to this scenario.
+
+```js
+// Originator: Document
+class Document {
+	constructor(content) {
+		this.content = content;
+	}
+
+	createMemento() {
+		return new DocumentMemento(this.content);
+	}
+
+	restoreFromMemento(memento) {
+		this.content = memento.getContent();
+	}
+
+	getContent() {
+		return this.content;
+	}
+}
+
+// Memento: DocumentMemento
+class DocumentMemento {
+	constructor(content) {
+		this.content = content;
+	}
+
+	getContent() {
+		return this.content;
+	}
+}
+
+// Caretaker: HistoryManager
+class HistoryManager {
+	constructor() {
+		this.history = [];
+	}
+)
+	push(document) {
+		this.history.push(document.createMemento());
+	}
+
+	pop() {
+		if (this.history.length === 0) return null;
+		return this.history[this.history.length - 1];
+	}
+}
+
+function runDocumentEditor() {
+	const editor = new Document("Initial content");
+	const historyManager = new HistoryManager();
+
+	historyManager.push(editor); // Save initial state
+
+	editor.content = "Updated content"; // Modify the document
+	historyManager.push(editor); // Save updated state
+
+	editor.restoreFromMemento(historyManager.pop()); // Restore to the previous state
+
+	console.log(editor.getContent()); // Output: "Initial content"
+}
+
+runDocumentEditor();
+
+
+### Lets Break down Document Editor to get a better understanding,
+
+1. `Originator (Document):`
+The ‘Document’ class represents the object whose state we want to track and restore. In this case, it’s a document with content. Here’s what this class does:
+
+  A. `Constructor:` It initializes the ‘content’ property with the initial document content provided as a parameter.
+
+  B. `createMemento():` This method creates a Memento object (an instance of ‘DocumentMemento’) that captures the current state of the document, which is the content. It returns the created Memento.
+
+  C. `restoreFromMemento(memento):` This method allows the document to restore its state from a given Memento. It sets the document’s content to match the content stored in the Memento.
+
+  D. `getContent():` This method simply returns the current content of the document.
+
+
+2. `Memento (DocumentMemento):`
+The ‘DocumentMemento’ class represents the Memento object responsible for storing the state of the ‘Document’. Here’s what this class does:
+
+  A. `Constructor:` It takes the document’s content as a parameter during creation and stores it internally.
+
+  B. `getContent():` This method allows external objects (in this case, the ‘Document’) to retrieve the stored content. It ensures that only the ‘Document’ can access its own content.
+
+
+3. `Caretaker (HistoryManager):`
+TThe ‘HistoryManager’ class acts as the caretaker, responsible for managing and keeping track of the history of document states. It uses an array to store Mementos. Here’s what this class does:
+
+  A. `Constructor:` Initializes an empty array called ‘history’ to store Mementos.
+
+  B. `push(document):` This method takes a ‘Document’ object as a parameter, creates a Memento from it using createMemento(), and then pushes the Memento onto the history array. This operation saves the current state of the document.
+
+  C. `pop():` This method retrieves the most recent Memento from the ‘history’ array, effectively representing an “undo” operation. If the ‘history’ array is empty, it returns ‘null’.
+
+
+4. `runDocumentEditor() Function:`
+This function demonstrates how the Memento pattern works in practice:
+
+  A. It creates a ‘Document’ object called ‘editor’ with initial content and a ‘HistoryManager’ called ‘historyManager’ to manage the history of states.
+  B. It pushes the initial state of the ‘editor’ (the “Initial content”) into the ‘historyManager’.
+  C. It modifies the content of the ‘editor’ to “Updated content.”
+  D. It pushes the updated state of the ‘editor’ into the ‘historyManager’.
+  E. It pops the most recent state from the ‘historyManager’, effectively performing an “undo” operation.
+  F. Finally, it prints the content of the ‘editor’ to the console, which should show “Initial content” since we reverted to the previous state.
+
+
+- This example demonstrates how the Memento pattern allows you to save and restore the state of an object, making it useful for implementing features like undo/redo functionality in applications like document editors. Users can navigate through the history of changes and revert to previous states easily.
+
+```
+
+### Applications Of The Memento Pattern.
+
+`The versatility of the Memento pattern makes it applicable in various domains and scenarios, including :`
+
+1. `Text Editors or Document Editing Software:` Enabling undo/redo functionalities for reverting changes made to documents.
+2. `Gaming:` Facilitating the saving and restoration of game states, allowing players to return to specific points in the game.
+3. `Version Control Systems:` Managing different versions of files or code repositories by storing their states.
+4. `Database Management Systems:` Implementing transaction rollback mechanisms to restore databases to previous consistent states in case of failures.
+
 ### When To Use Memento Pattern ? ✅
 
 - **Undo Mechanism:** Ideal when an application needs an undo mechanism to revert changes made to an object's state.
