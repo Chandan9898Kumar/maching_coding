@@ -117,44 +117,6 @@ C. This process continues in a loop.
 A. Microtasks are often used for tasks that need to be completed immediately and impact the rendering process.
 B. Callbacks in the Callback Queue are typically used for less critical tasks, such as deferred or background operations.
 
-### 3. Write a JavaScript function to parse an URL.
-
-```ts
-function parse_URL(url) {
-  var a = document.createElement("a");
-  a.href = url;
-  return {
-    source: url,
-    protocol: a.protocol.replace(":", ""),
-    host: a.hostname,
-    port: a.port,
-    query: a.search,
-    params: (function () {
-      var ret = {},
-        seg = a.search.replace(/^\?/, "").split("&"),
-        len = seg.length,
-        i = 0,
-        s;
-      for (; i < len; i++) {
-        if (!seg[i]) {
-          continue;
-        }
-        s = seg[i].split("=");
-        ret[s[0]] = s[1];
-      }
-      return ret;
-    })(),
-    file: (a.pathname.match(/\/([^\/?#]+)$/i) || [, ""])[1],
-    hash: a.hash.replace("#", ""),
-    path: a.pathname.replace(/^([^\/])/, "/$1"),
-    relative: (a.href.match(/tps?:\/\/[^\/]+(.+)/) || [, ""])[1],
-    segments: a.pathname.replace(/^\//, "").split("/"),
-  };
-}
-
-console.log(parse_URL("https://github.com/pubnub/python/search?utf8=%E2%9C%93&q=python"));
-```
-
 ### 4. What is Document Object Model (DOM)
 
 - The Document Object Model (DOM) is an application programming interface (API) for manipulating HTML documents.
@@ -788,9 +750,56 @@ class LocalStorage {
   };
 }
 
-const localStorage = new LocalStorage();
+const localStorageItem = new LocalStorage();
 
-//  2.                                               Implementation using Map
+// 2.                                     Implementation using Array:
+
+class LocalStorage {
+  constructor() {
+    this.store = [];
+    this.length = 0;
+  }
+
+  setItem(key, value) {
+    this.store.push({ [key]: value });
+    this.length += 1;
+  }
+
+  getItem(key = "") {
+    if (!key) {
+      throw new Error("Failed to execute 'removeItem' on 'Storage': 1 argument required, but only 0 present.");
+    }
+    for (let item of this.store) {
+      if (key in item) {
+        return item[key];
+      }
+    }
+
+    return undefined;
+  }
+
+  removeItem(key = "") {
+    if (!key) {
+      throw new Error("Failed to execute 'removeItem' on 'Storage': 1 argument required, but only 0 present.");
+    }
+
+    for (let x = 0; x < this.store.length; x++) {
+      if (key in this.store[x]) {
+        this.store.splice(x, 1);
+        this.length -= 1;
+      }
+    }
+  }
+
+  clear() {
+    this.store = [];
+    this.length = 0;
+  }
+}
+
+const localStorageItem = new LocalStorage();
+
+//  3.                                               Implementation using Map
 class LocalStorage {
   constructor() {
     this.store = new Map();
@@ -836,7 +845,16 @@ class LocalStorage {
   };
 }
 
-const localStorage = new LocalStorage();
+const localStorageItem = new LocalStorage();
+
+localStorageItem.setItem("1", "part one");
+localStorageItem.setItem("2", "part two");
+localStorageItem.setItem("3", "part 3");
+localStorageItem.setItem("4", "part 4");
+console.log(localStorageItem, "before clear");
+console.log(localStorageItem.getItem("3"));
+localStorageItem.removeItem("2");
+console.log(localStorageItem, "after clear");
 ```
 
 ### 18. LocalStorage with expiry
