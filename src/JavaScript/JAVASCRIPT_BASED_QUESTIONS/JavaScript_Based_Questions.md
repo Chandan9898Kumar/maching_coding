@@ -933,6 +933,9 @@ While adding the entry we will accept the expiry date in milliseconds (30 days b
 Likewise, while getting the value for the given key, check if there is a value associated with the key, if it exists and is not expired then return the value, else remove the entry and return null.
 
 ```ts
+
+### Example 1. By using window object and using localStorage.
+
 window.myLocalStorage = {
   getItem(key) {
     // get the parsed value of the given key
@@ -995,6 +998,87 @@ setTimeout(() => {
 
 `Output:`;
 // null
+
+
+
+### Example 2. By building custom local storage with class and not using built in localStorage.
+
+class LocalStorage {
+  constructor() {
+    this.store = {};
+    this.length = 0;
+  }
+
+  getItem = (...args) => {
+    if (!args.length) {
+      throw new TypeError("Failed to execute 'getItem'. 1 argument required, but only 0 present.");
+    }
+
+    const key = args[0];
+
+    if (Object.prototype.hasOwnProperty.call(this.store, key)) {
+
+      if(this.store.expiry<= Date.now()){
+        delete this.store[key]
+        delete this.store['expiry']
+        return null
+      }
+      return this.store[key];
+    }
+
+    return undefined;
+  };
+
+  setItem = (...args) => {
+    if (!args.length || args.length < 2) {
+      throw new TypeError(`Failed to execute 'setItem'. 2 argument required, but only ${args.length} present.`);
+    }
+
+    const key = args[0];
+    const value = args[1]
+    const expiry=args[2]
+    if(expiry){
+      this.store['expiry'] = Date.now()+expiry
+    }
+
+    this.store[String(key)] = String(value);
+    this.length += 1;
+  };
+
+  removeItem = (...args) => {
+    if (!args.length) {
+      throw new TypeError("Failed to execute 'removeItem'. 1 argument required, but only 0 present.");
+    }
+
+    const key = args[0];
+
+    if (Object.prototype.hasOwnProperty.call(this.store, key)) {
+      delete this.store[key];
+    }
+
+    this.length -= 1;
+  };
+
+  clear = () => {
+    this.store = {};
+    this.length = 0;
+  };
+}
+
+const localStorageItem = new LocalStorage();
+localStorageItem.setItem("1", "part one",30);
+
+setTimeout(()=>{
+
+ console.log(localStorageItem.getItem("1"),'Get Item inside')
+
+ console.log(localStorageItem,'localStorageItem inside')
+
+},4000)
+
+console.log(localStorageItem.getItem("1"),'Get Item outside')
+console.log(localStorageItem,'localStorageItem outside')
+
 ```
 
 ### 19. design ui which shows concentric circles based on given number of times.
