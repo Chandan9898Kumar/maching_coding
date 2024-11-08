@@ -4872,6 +4872,7 @@ class HistoryManager {
 
 	pop() {
 		if (this.history.length === 0) return null;
+    this.history.pop()
 		return this.history[this.history.length - 1];
 	}
 }
