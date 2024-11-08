@@ -55,6 +55,18 @@ foo(); // logs "Hello 2"
 
 As you can see, the first function definition is executed once, and then the second function definition overwrites it, so the second call to foo() executes the second function definition.
 
+
+### Other Example:
+
+console.log(foo) // O/p  function foo
+var foo='foo'
+
+function foo(){
+  console.log('fun')
+}
+
+console.log(foo) // O/p 'foo
+
 ```
 
 ### 2. Difference between Micro-task Queue and Callback Queue ?
@@ -266,6 +278,57 @@ So, to summarize:
   1. The value variable is declared at the top of the outer function scope due to hoisting.
   2. The assignment value = 5; happens after the inner function is called.
   3. The inner function logs the value 2 because the value variable is still not assigned a new value.
+
+
+
+### Example 3.
+
+var x =10
+function outer(){
+    console.log(x,'x1')
+    var x =20
+    function inner(){
+      console.log(x,'x2')
+      var x = 30
+      console.log(x,'x3')
+    }
+  inner()
+}
+outer()
+
+
+### Example 4.
+
+let a=10
+function outer(){
+    console.log(a,'a1')
+
+    if(true){
+      console.log(a,'a2')
+      var a = 20
+      let b= 30
+    }
+  console.log(b,'b')
+}
+outer()
+
+
+### Example 5.
+
+(function (){
+  console.log(x,'x1')
+
+  var x= 10
+
+  (function (){
+  console.log(x,'x2')
+
+  var x= 20
+  console.log(x,'x3')
+})()
+
+})()
+
 
 ```
 
