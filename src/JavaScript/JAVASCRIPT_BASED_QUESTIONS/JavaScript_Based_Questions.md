@@ -1448,7 +1448,7 @@ Ramda is a functional programming library that includes a mergeDeepRight functio
 const R = require('ramda');
 const ramdaMergedObj = R.mergeDeepRight(obj1, obj2);
 
-- 7. Using ES6 Spread Operator for Deep Merge
+- 7. Using ES6 Spread Operator for Deep Merge : shallow copy
 Leveraging the ES6 spread operator with recursion allows for a concise syntax while achieving a deep merge.
 
 function deepMergeWithSpread(obj1, obj2) {
@@ -1470,7 +1470,7 @@ function deepMergeWithSpread(obj1, obj2) {
 const deepMergedObjSpread = deepMergeWithSpread(obj1, obj2);
 
 
-- 8. Deep Merge with Recursive Function
+- 8. Deep Merge with Recursive Function : shallow copy
 For a deep merge, a recursive function can be employed to traverse and merge nested objects at all levels.
 
 function deepMerge(obj1, obj2) {
@@ -1487,6 +1487,20 @@ function deepMerge(obj1, obj2) {
 }
 
 const deepMergedObj = deepMerge(obj1, obj2);
+
+- 9 Shallow copy
+function deepMerge(...objs){
+  let result = {}
+
+  for(let item of objs){
+    for(let key in item){
+      result [key] = item[key]
+    }
+  }
+  return result
+}
+
+const result = deepMerge(obj1,obj2)
 ```
 
 ### 24. What is a deep copy ?
@@ -1572,6 +1586,9 @@ const obj = {
        }
     }
 }
+
+// Method 1. 
+
 const deepCopy = (val) => {
    if (["string", "boolean", "number"].includes(typeof val)) {
       return val;
@@ -1586,7 +1603,7 @@ const deepCopy = (val) => {
 }
 console.log(deepCopy(obj));
 
-//   Method 2
+//   Method 2.
 
 const  deepClone(value) {
   if (typeof value !== 'object' || value === null) {
@@ -1603,6 +1620,89 @@ const  deepClone(value) {
 }
 
 console.log(deepClone(obj))
+
+
+//  Method 3. By using for loops
+
+const obj1 = {
+  place:'Germany',
+  name: "gk",
+  Home: {
+    genre:[1,2,{'horror':8,'rate':9},{'imdb':9}],
+    place: "London",
+    country: "Uk",
+    Game: {
+      type: {
+        action: "gta",
+      },
+    },
+  },
+};
+
+function deepMergeShallow(obj1){
+
+  let result = {}
+
+   if(["string", "boolean", "number",'function'].includes(typeof obj1)){
+     return obj1
+   }
+
+  if (Array.isArray(obj1)) {
+      return obj1.map(deepMergeShallow)
+   }
+
+   for(let item in obj1){
+      if(typeof obj1[item]==='object'){
+       result [item] = deepMergeShallow(obj1[item])
+      }else{
+        result [item] = obj1[item]
+      }
+    }
+
+  //      OR Below more optimized.
+  
+  //  for(let item in obj1){
+  //       let value= obj1[item]
+  //      result [item] = deepMergeShallow(value)
+  //   }
+    
+
+  return result
+}
+
+const result = deepMergeShallow(obj1)
+
+result.Home.genre[2]['horror']='sare gama'
+console.log(result,obj1)
+
+
+
+### Method 4. This is more Optimized
+
+function deepMergeShallow(input) {
+    // Handle null and primitive types
+    if (input === null || ["string", "boolean", "number", "function"].includes(typeof input)) {
+        return input;
+    }
+
+    // Handle arrays
+    if (Array.isArray(input)) {
+        return input.map(deepMergeShallow);
+    }
+
+    // Handle objects
+    const result = {};
+    Object.keys(input).forEach(key => {
+        const value = input[key]
+        result[key] = deepMergeShallow(value);
+    });
+
+    return result;
+}
+
+const result = deepMergeShallow(obj1)
+result.Home.genre[2]['horror']='sare gama'
+console.log(result,obj1);
 ```
 
 ### 25. Convert HEX color to RGB in JavaScript.
