@@ -4972,6 +4972,14 @@ This function demonstrates how the Memento pattern works in practice:
 
 The Observer pattern is a behavioral design pattern where an object, known as the subject, maintains a list of dependents, known as observers, that are notified of any changes in the subject's state. This pattern establishes a one-to-many relationship between the subject and its observers, allowing multiple objects to react to changes in another object.
 
+> OR
+
+Observer design pattern, a staple of behavioral design patterns in JavaScript, provides a means to establish a one-to-many relationship between objects. This design pattern is especially valuable for decoupling components and facilitating extensibility in software applications. By employing this pattern, you can have one object (the subject) notify multiple observers (subscribers) about changes or events without requiring them to have direct knowledge of each other. This decoupling enhances maintainability and extensibility in your software projects.
+
+> OR
+
+The Observer is a behavioral JavaScript design patterns that lets you define a subscription mechanism to notify multiple objects (observers) about any events that happen to the object (subject) they’re observing. This pattern is also `called Pub/Sub, short for Publication/Subscription`. It defines a one-to-many dependency between objects, promotes loose coupling, and facilitates good object-oriented design.
+
 In Simple Words:
 
 > Defines a subscription mechanism to notify multiple objects about changes in an object's state.
@@ -5049,6 +5057,293 @@ weatherStation.setTemperature(25);
 // Temperature Display: 25°C
 // Temperature Display: 25°C
 ```
+
+### Example 2.
+
+- The Observer pattern typically consists of three key participants:
+
+  1. `Subject (e.g., WeatherStation):`The subject is the entity responsible for tracking a particular set of data or conditions and notifying observers when significant changes occur. In our example, we’ll use a WeatherStation as the subject.
+
+  2. `Observers (e.g., DisplayDevices) :` Observers are entities that register interest with the subject to receive updates when specific events or changes occur. In our case, we’ll represent these as DisplayDevice objects.
+
+  3. `Notify Method :` The subject provides a notify method that allows it to inform registered observers when changes take place. Observers, in turn, implement an update method that is called by the subject when changes occur.
+
+```js
+
+
+// Define a WeatherStation class
+class WeatherStation {
+constructor() {
+	// Initialize an empty array to hold observers
+	this.observers = [];
+	// Initialize the temperature to 0
+	this.temperature = 0;
+}
+
+// Method to add an observer to the list
+addObserver(observer) {
+	this.observers.push(observer);
+}
+
+// Method to remove an observer from the list
+removeObserver(observer) {
+	this.observers = this.observers.filter(obs => obs !== observer);
+}
+
+// Method to set the temperature and notify observers
+setTemperature(temperature) {
+	this.temperature = temperature;
+	this.notifyObservers();
+}
+
+// Method to notify all observers about the temperature change
+notifyObservers() {
+	this.observers.forEach(observer => {
+	// Call the update method on each observer
+	observer.update(this.temperature);
+	});
+}
+}
+
+// Define a DisplayDevice class
+class DisplayDevice {
+constructor(name) {
+	// Store the name of the display device
+	this.name = name;
+}
+
+// Method called when the display is updated with temperature
+update(temperature) {
+	// Log a message indicating the name of the display and the temperature
+	console.log(`${this.name} Display: Temperature is ${temperature}°C`);
+}
+}
+
+// Create an instance of the WeatherStation class
+const weatherStation = new WeatherStation();
+
+// Create two instances of the DisplayDevice class with different names
+const displayDevice1 = new DisplayDevice("Display 1");
+const displayDevice2 = new DisplayDevice("Display 2");
+
+// Add both display devices as observers to the weather station
+weatherStation.addObserver(displayDevice1);
+weatherStation.addObserver(displayDevice2);
+
+// Simulate a change in temperature by setting it to 25°C
+weatherStation.setTemperature(25);
+
+// Simulate another change in temperature by setting it to 30°C
+weatherStation.setTemperature(30);
+
+
+### Explanation:
+
+1.`WeatherStation Class:` This class represents a weather station and is responsible for managing temperature data and notifying observers when the temperature changes.
+
+    A. `Constructor:` The WeatherStation class begins with a constructor function. It initializes two important properties:
+
+    B. `Observers:` An empty array to hold all the observers (in this case, the display devices).
+
+    C. `Temperature:` An initial temperature value set to 0°C.
+
+    D. `AddObserver Method:` The addObserver method allows observers to subscribe to the weather station. It takes an observer parameter (in this context, a display device) and adds it to the list of observers.
+
+    E. `RemoveObserver Method:` The removeObserver method enables the removal of observers from the list. It takes an observer as a parameter and filters out the matching observer from the list of observers.
+
+    F. `SetTemperature Method:` The setTemperature method is used to update the temperature data. It takes a temperature parameter and sets the temperature property to the new value. After updating the temperature, it calls notifyObservers().
+
+    G. `NotifyObservers Method:` The notifyObservers method iterates through the list of observers (display devices) and informs them of the temperature change. For each observer, it calls the update method and passes the current temperature as an argument.
+
+2. `DisplayDevice Class:` This class represents a display device, such as a digital thermometer, and is designed to respond to temperature updates.
+
+    A. `Constructor:` The DisplayDevice class begins with its constructor function, which takes a name parameter. This parameter represents the name or identifier of the display device.
+
+    B. `update Method:` The update method is called when the display device receives a temperature update from the weather station. It logs a message to the console, indicating the device’s name and the current temperature in degrees Celsius.
+
+    C. `Creating Instances:` Instances of the WeatherStation and DisplayDevice classes are created. Additionally, two display devices are instantiated with names, ‘Display 1’ and ‘Display 2’.
+
+3. `Adding Observers:` Both display devices are added as observers to the weather station using the addObserver method. This means they will be notified when the temperature changes.
+
+4. `Simulating Temperature Changes:` To simulate temperature changes, the setTemperature method of the weather station is called twice. First, it sets the temperature to 25°C, and then it updates it to 30°C. Each time the temperature changes, the observers are notified, and they log the updated temperature to the console.
+
+
+
+### How it Works:
+
+1. `Monitoring Temperature:` The WeatherStation constantly keeps an eye on the Temperature data. It’s like a sensor that detects changes in temperature.
+2. `Notifying Observers:` When the WeatherStation senses a change in temperature, it immediately notifies the DisplayDevices. This is similar to sending a message to each screen.
+3. `Updating Display:` Each DisplayDevice, upon receiving the notification, updates its own display with the new temperature data. It’s like each screen showing the updated temperature to the user.
+
+
+```
+
+
+### NOTE : Publish/Subscribe Pattern:
+
+The Observer Method is often associated with the Publish/Subscribe pattern. In this pattern, there is a message broker (or event bus) that acts as an intermediary between publishers (objects producing events) and subscribers (objects interested in specific events). Publishers send events to the broker, and subscribers subscribe to specific event types.
+
+<p align="center">
+  <img src="../../Assests/pubsub.png" width="450" title="One to Many">
+</p>
+
+- In this diagram:
+  1. `Publisher:` This is the source of data or events. It publishes data to specific topics.
+  2. `Subscriber:` These are entities interested in receiving data or events from specific topics.
+  3. `Topic:` It’s like a channel or category that acts as an intermediary between publishers and subscribers. It stores the list of subscribers for a specific type of data or event.
+
+- How it Works:
+  1. `Publishing:` The Publisher publishes data to a particular Topic. It’s like a radio station broadcasting on a specific channel.
+  2. `Subscribing:` Subscribers express their interest by subscribing to specific Topics. They say, “I want to listen to data from this channel.”
+  3. `Forwarding:` When the Publisher sends data to a Topic, the Topic forwards that data to all Subscribers interested in that Topic. It’s like broadcasting a message to everyone tuned to a particular radio channel.
+
+
+### Example
+
+```js
+
+### Method 1. By Using Function.
+
+function pubSub() {
+  const subscribers = [];
+
+  function publish(data) {
+    subscribers.forEach((subscriber) => subscriber(data));
+  }
+
+  function subscribe(fn) {
+    subscribers.push(fn);
+  }
+
+  return {
+    publish,
+    subscribe,
+  };
+}
+
+// driver code
+const pubSubObj = pubSub();
+pubSubObj.subscribe((data) => {
+  console.log("Subscriber 1: " + data);
+});
+pubSubObj.subscribe((data) => {
+  console.log("Subscriber 2: " + data);
+});
+
+// all subscribers will be called with the data on publish
+pubSubObj.publish("Value is 10");
+
+
+
+### Method 2. By Using Class.
+
+class NewsPublisher {
+  constructor() {
+    this.subscribers = [];
+  }
+
+  subscribe(subscriber) {
+    this.subscribers.push(subscriber);
+  }
+
+  unsubscribe(subscriber) {
+    const index = this.subscribers.indexOf(subscriber);
+    if (index !== -1) {
+      this.subscribers.splice(index, 1);
+    }
+  }
+
+  publishNews(news) {
+    this.subscribers.forEach((subscriber) => {
+      subscriber(news);
+    });
+  }
+}
+
+// Usage
+const publisher = new NewsPublisher();
+
+const subscriber1 = (news) => {
+  console.log(`Subscriber 1 received news: ${news}`);
+};
+
+const subscriber2 = (news) => {
+  console.log(`Subscriber 2 received news: ${news}`);
+};
+
+publisher.subscribe(subscriber1);
+publisher.subscribe(subscriber2);
+
+publisher.publishNews('Breaking News: Important Announcement');
+
+```
+
+
+### Example 3.
+
+The Observer Pattern is a behavioral design pattern that establishes a one-to-many dependency between objects. It allows one object (the subject or observable) to notify multiple observers (listeners) about changes in its state or data. This pattern is commonly used for implementing distributed event handling systems, where one object's state changes trigger actions in other dependent objects.
+
+In JavaScript, you can implement the Observer Pattern using custom classes or built-in features like `event listeners` and `the addEventListener`.
+
+- Implementation :
+  Suppose you're building a weather application, and you want different parts of the UI to update when the weather conditions change. You can use a custom implementation of the Observer Pattern:
+
+```js
+class WeatherStation {
+  constructor() {
+    this.observers = [];
+  }
+
+  addObserver(observer) {
+    this.observers.push(observer);
+  }
+
+  removeObserver(observer) {
+    const index = this.observers.indexOf(observer);
+    if (index !== -1) {
+      this.observers.splice(index, 1);
+    }
+  }
+
+  notifyObservers() {
+    this.observers.forEach((observer) => {
+      observer.update(this);
+    });
+  }
+
+  setWeatherData(weatherData) {
+    this.weatherData = weatherData;
+    this.notifyObservers();
+  }
+}
+
+class WeatherDisplay {
+  update(weatherStation) {
+    console.log(`Current weather: ${weatherStation.weatherData}`);
+  }
+}
+
+// Usage
+const weatherStation = new WeatherStation();
+const display1 = new WeatherDisplay();
+const display2 = new WeatherDisplay();
+
+weatherStation.addObserver(display1);
+weatherStation.addObserver(display2);
+
+weatherStation.setWeatherData('Sunny'); // Both displays update with the new weather data
+
+
+###  Explanation
+In this example, the WeatherStation acts as the subject that notifies observers (display objects) when the weather data changes. Observers subscribe to the subject using the addObserver method and implement the update method to react to changes.
+```
+
+### When using the Observer Pattern, consider the following:
+  1. `Memory Management:` Be cautious about memory leaks when observers hold references to subjects. Ensure proper removal of observers when they are no longer needed.
+  2. `Order of Notification:` The order in which observers are notified can be important in some scenarios. Ensure that the order meets your application's requirements.
+  3. `Event Handling:` When using built-in event handling mechanisms, be aware of event propagation and bubbling in the DOM if applicable.
+
+
 
 ### When to Use Observer Pattern? ✅
 
