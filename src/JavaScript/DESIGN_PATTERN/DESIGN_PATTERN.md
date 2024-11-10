@@ -4980,6 +4980,11 @@ Observer design pattern, a staple of behavioral design patterns in JavaScript, p
 
 The Observer is a behavioral JavaScript design patterns that lets you define a subscription mechanism to notify multiple objects (observers) about any events that happen to the object (subject) they’re observing. This pattern is also `called Pub/Sub, short for Publication/Subscription`. It defines a one-to-many dependency between objects, promotes loose coupling, and facilitates good object-oriented design.
 
+> OR
+
+Observer design pattern in JavaScript, Also known as pub/sub pattern short for publication/subscription. It is clear from the name itself that if you are subscribed to the publication and if something is published in the publication it will notify the subscriber.
+A subscription model in which an object subscribes to a host and the host notifies the object whenever an event occurs is known as the observer pattern.
+
 In Simple Words:
 
 > Defines a subscription mechanism to notify multiple objects about changes in an object's state.
@@ -5178,7 +5183,6 @@ weatherStation.setTemperature(30);
 
 ```
 
-
 ### NOTE : Publish/Subscribe Pattern:
 
 The Observer Method is often associated with the Publish/Subscribe pattern. In this pattern, there is a message broker (or event bus) that acts as an intermediary between publishers (objects producing events) and subscribers (objects interested in specific events). Publishers send events to the broker, and subscribers subscribe to specific event types.
@@ -5188,6 +5192,7 @@ The Observer Method is often associated with the Publish/Subscribe pattern. In t
 </p>
 
 - In this diagram:
+
   1. `Publisher:` This is the source of data or events. It publishes data to specific topics.
   2. `Subscriber:` These are entities interested in receiving data or events from specific topics.
   3. `Topic:` It’s like a channel or category that acts as an intermediary between publishers and subscribers. It stores the list of subscribers for a specific type of data or event.
@@ -5196,7 +5201,6 @@ The Observer Method is often associated with the Publish/Subscribe pattern. In t
   1. `Publishing:` The Publisher publishes data to a particular Topic. It’s like a radio station broadcasting on a specific channel.
   2. `Subscribing:` Subscribers express their interest by subscribing to specific Topics. They say, “I want to listen to data from this channel.”
   3. `Forwarding:` When the Publisher sends data to a Topic, the Topic forwards that data to all Subscribers interested in that Topic. It’s like broadcasting a message to everyone tuned to a particular radio channel.
-
 
 ### Example
 
@@ -5278,7 +5282,6 @@ publisher.publishNews('Breaking News: Important Announcement');
 
 ```
 
-
 ### Example 3.
 
 The Observer Pattern is a behavioral design pattern that establishes a one-to-many dependency between objects. It allows one object (the subject or observable) to notify multiple observers (listeners) about changes in its state or data. This pattern is commonly used for implementing distributed event handling systems, where one object's state changes trigger actions in other dependent objects.
@@ -5338,12 +5341,76 @@ weatherStation.setWeatherData('Sunny'); // Both displays update with the new wea
 In this example, the WeatherStation acts as the subject that notifies observers (display objects) when the weather data changes. Observers subscribe to the subject using the addObserver method and implement the update method to react to changes.
 ```
 
+### Example 4.
+
+To create the observer design pattern, we need to have two types of participants.
+
+1. `Host`
+   A. It will maintain the list of observers.
+   B. Provides option to subscribe and unsubscribe to the observers.
+   C. Notifies the observer when state changes.
+
+2. Observer
+   A. Has a function that gets called/invoked every time a state changes.
+
+```js
+const Move = function () {
+  this.handlers = [];
+
+  this.subscribe = function (fn) {
+    this.handlers.push(fn);
+  };
+
+  this.unsubscribe = function (fn) {
+    this.handlers = this.handlers.filter((item) => item !== fn);
+  };
+
+  this.fire = function (o, thisObj) {
+    const scope = thisObj || window;
+    this.handlers.forEach((item) => {
+      item.call(scope, o);
+    });
+  };
+};
+
+// 1st observer
+const moveHandler = function (item) {
+  console.log("fired: " + item);
+};
+
+// 2nd observer
+const moveHandler2 = function (item) {
+  console.log("Moved: " + item);
+};
+
+const move = new Move();
+
+// subscribe 1st observer
+move.subscribe(moveHandler);
+move.fire("event #1");
+
+// unsubscribe 1st observer
+move.unsubscribe(moveHandler);
+move.fire("event #2");
+
+// subscribe 1st & 2nd observer
+move.subscribe(moveHandler);
+move.subscribe(moveHandler2);
+move.fire("event #3");
+
+// Output:
+// "fired: event #1"
+
+// "fired: event #3"
+
+// "Moved: event #3"
+```
+
 ### When using the Observer Pattern, consider the following:
-  1. `Memory Management:` Be cautious about memory leaks when observers hold references to subjects. Ensure proper removal of observers when they are no longer needed.
-  2. `Order of Notification:` The order in which observers are notified can be important in some scenarios. Ensure that the order meets your application's requirements.
-  3. `Event Handling:` When using built-in event handling mechanisms, be aware of event propagation and bubbling in the DOM if applicable.
 
-
+1. `Memory Management:` Be cautious about memory leaks when observers hold references to subjects. Ensure proper removal of observers when they are no longer needed.
+2. `Order of Notification:` The order in which observers are notified can be important in some scenarios. Ensure that the order meets your application's requirements.
+3. `Event Handling:` When using built-in event handling mechanisms, be aware of event propagation and bubbling in the DOM if applicable.
 
 ### When to Use Observer Pattern? ✅
 
