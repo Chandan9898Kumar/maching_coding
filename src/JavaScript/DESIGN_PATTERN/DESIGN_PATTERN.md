@@ -5280,6 +5280,40 @@ publisher.subscribe(subscriber2);
 
 publisher.publishNews('Breaking News: Important Announcement');
 
+
+### 3.
+
+class Store {
+    constructor() {
+        this.listeners = []; // Initialize an empty array for listeners
+    }
+
+    subscribe(listener) {
+        this.listeners.push(listener); // Add the listener to the array
+        return () => {
+            // Return an unsubscribe function
+            this.listeners = this.listeners.filter(l => l !== listener); // Remove the listener
+        };
+    }
+
+    notify() {
+        // Notify all listeners about a state change
+        this.listeners.forEach(listener => listener());
+    }
+}
+
+// Example usage
+const store = new Store();
+
+const unsubscribe1 = store.subscribe(() => console.log('Listener 1'));
+const unsubscribe2 = store.subscribe(() => console.log('Listener 2'));
+
+store.notify(); // Both listeners will be called
+
+unsubscribe1(); // Unsubscribe the first listener
+
+store.notify(); // Only "Listener 2" will be called
+
 ```
 
 ### Example 3.
