@@ -707,33 +707,6 @@ console.log(result);
 
 ```
 
-### 16. fetch retry function typescript
-
-```ts
-export async function fetchRetry(url: string, delay: number, tries: number, callback: () => void, handleError?: (error: any) => void) {
-  async function onError(err: any) {
-    const triesLeft = tries - 1;
-    if (!triesLeft) {
-      handleError?.(err);
-      return;
-    }
-    await wait(delay);
-    return fetchRetry(url, delay, triesLeft, callback, handleError);
-  }
-  try {
-    const response = await fetchPolyfill(api(url));
-    const result: { canRoute: boolean } = await response.json();
-    if (result.canRoute) {
-      callback();
-    } else {
-      onError("Contact not created in Hubspot CRM");
-    }
-  } catch (error) {
-    onError(error);
-  }
-}
-```
-
 ### 17. Design and Implement localStorage API .
 
 you need to design and implement the localStorage API. It should mimic the behaviour of existing window.localStorage.
@@ -1587,7 +1560,7 @@ const obj = {
     }
 }
 
-// Method 1. 
+// Method 1.
 
 const deepCopy = (val) => {
    if (["string", "boolean", "number"].includes(typeof val)) {
@@ -1660,12 +1633,12 @@ function deepMergeShallow(obj1){
     }
 
   //      OR Below more optimized.
-  
+
   //  for(let item in obj1){
   //       let value= obj1[item]
   //      result [item] = deepMergeShallow(value)
   //   }
-    
+
 
   return result
 }
@@ -2155,6 +2128,7 @@ asyncParallel(taskList, (error, result) => {
  let start = 0;
 
  let count = (count, message) => {
+  console.log(start,'start')
    console.log(`${message} is ${count}`);
  }
 
@@ -2171,6 +2145,7 @@ asyncParallel(taskList, (error, result) => {
  let start = 0;
 
  let count = (count, message) => {
+  console.log(start,'start')
    console.log(`${message} is ${count}`);
  }
 
@@ -2179,6 +2154,9 @@ asyncParallel(taskList, (error, result) => {
 //count is 0
 //count is 0
 //count is 0
+
+### Explanation :
+// The setInterval function does not update the count variable on each iteration because the count variable is passed by value, not by reference. This means that the setInterval function receives a copy of the current value of count when it is called, and any changes made to the count variable inside the setInterval function do not affect the original count variable.
 
 `NOTE :`  Here the start is not getting increment because the value is accessed from the global scope. Also this method won’t work in IE9 and less.
 
@@ -2199,12 +2177,14 @@ increment.start();
 //NaN
 //NaN
 
-Now this inside the setInterval is referring to its context but we want to access the parent’s this. Incrementing the undefined value is resulting in NaN.
-So we assign the parent’s this to another variable and use it.
+### Explanation :
+// The issue you're experiencing is due to the way JavaScript handles the this keyword in different contexts. In your case, the this keyword inside the setInterval function is referring to the global object, which is window in a browser environment, instead of the increment object.
+
+// This is because the setInterval function is a method of the window object, and when it calls the callback function, it sets the this keyword to the global object, which is window. This is a common gotcha in JavaScript, known as the "this" context issue.
 
 `Solution :`
 
-1.
+1. Use a closure to capture the this context.
 
 let increment = {
   count: 1,
@@ -2237,6 +2217,35 @@ increment.start();
 //1
 //2
 //3
+
+
+### Explanation:
+// When you use an arrow function inside setInterval, it helps to set the this keyword to the object increment by leveraging the lexical scoping rules of arrow functions.
+
+// Here's what happens:
+
+// 1. The start method is called on the increment object, which sets the this context to the increment object.
+// 2. The setInterval function is called, which takes a callback function as its first argument.
+// 3. The callback function is an arrow function, which inherits the this context from the surrounding scope, which is the start method.
+// 4. Since the start method has its this context set to the increment object, the arrow function also inherits this this context.
+// 5. When the arrow function is executed by setInterval, the this keyword inside the arrow function refers to the increment object.
+// 6. In other words, the arrow function "remembers" the this context of the start method, which is the increment object, and uses it as its own this context. This allows the this keyword inside the arrow function to refer to the increment object, rather than the global object window.
+// 7. The arrow function is lexically scoped to the start method, which is scoped to the increment object. Therefore, the this keyword inside the arrow function refers to the increment object.
+
+// 8. By using an arrow function, you can ensure that the this keyword inside the setInterval callback refers to the increment object, rather than the global object window. This allows you to access the count property and increment it correctly.
+
+
+
+3. Use the bind method to set the this context explicitly:
+let increment = {
+  count: 1,
+  start: function(){
+   setInterval(function(){
+    console.log(this.count++, this);
+   }.bind(this), 1000)
+  }
+}
+
 ```
 
 ### 29. Retry promises N number of times in JavaScript.
@@ -2367,7 +2376,7 @@ To retry the promise we have to call the same function recursively with reduced 
     });
 ```
 
-### NEW Way Of Retry promises N number of times in JavaScript.
+### 2. NEW Way Of Retry promises N number of times in JavaScript.
 
 ```js
 const wait = (ms) =>
@@ -2424,14 +2433,40 @@ fetchDataWithRetry(apiUrl, maxRetries)
 
   `In the above exercise -`
 
-  1. The "fetchDataWithRetry()" function accepts two parameters: url specifies the API endpoint to fetch data from, and maxRetries indicates the maximum number of retries if the request fails.
+  // 1. The "fetchDataWithRetry()" function accepts two parameters: url specifies the API endpoint to fetch data from, and maxRetries indicates the maximum number of retries if the request fails.
 
-  2. Inside the function, a counter retries is initialized to keep track of the number of retries. The core logic is encapsulated in the fetchData() function, which performs the fetch request and handles success and failure cases.
+  // 2. Inside the function, a counter retries is initialized to keep track of the number of retries. The core logic is encapsulated in the fetchData() function, which performs the fetch request and handles success and failure cases.
 
-  3. If the request is successful (response.ok), the data is resolved using resolve(data). Otherwise, if the request fails, the function checks if the number of retries is less than or equal to the 'maxRetries'. If so, it logs a retry message and recursively calls "fetchData()" again to retry the request. If the maximum number of retries is reached, it rejects the Promise with an error.
+  // 3. If the request is successful (response.ok), the data is resolved using resolve(data). Otherwise, if the request fails, the function checks if the number of retries is less than or equal to the 'maxRetries'. If so, it logs a retry message and recursively calls "fetchData()" again to retry the request. If the maximum number of retries is reached, it rejects the Promise with an error.
 
-  4. In the usage example, the apiUrl specifies the API endpoint, and 'maxRetries' is set to 3. The function "fetchDataWithRetry()" is called, and the retrieved data or error is logged accordingly.
+  // 4. In the usage example, the apiUrl specifies the API endpoint, and 'maxRetries' is set to 3. The function "fetchDataWithRetry()" is called, and the retrieved data or error is logged accordingly.
 
+
+
+### 3.  Retry promises N number of times in TypeScript.
+
+export async function fetchRetry(url: string, delay: number, tries: number, callback: () => void, handleError?: (error: any) => void) {
+  async function onError(err: any) {
+    const triesLeft = tries - 1;
+    if (!triesLeft) {
+      handleError?.(err);
+      return;
+    }
+    await wait(delay);
+    return fetchRetry(url, delay, triesLeft, callback, handleError);
+  }
+  try {
+    const response = await fetchPolyfill(api(url));
+    const result: { canRoute: boolean } = await response.json();
+    if (result.canRoute) {
+      callback();
+    } else {
+      onError("Contact not created in Hubspot CRM");
+    }
+  } catch (error) {
+    onError(error);
+  }
+}
 ```
 
 ### 30. How to implement custom map function with limit on number of operations?
