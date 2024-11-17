@@ -8094,6 +8094,10 @@ An LRU Cache, or Least Recently Used Cache, is a data structure that stores info
 
 A popular analogy is a clothes rack in a closet: as clothes are worn and hung back up, they go on the right side of the rack. As time goes on, one can easily tell which clothes haven't been worn in a longer period of time by looking at the left side of the rack.
 
+> OR
+
+The LRU `(Least Recently Used)` Cache is a type of the data structure that is used to the store a limited number of items with the capability to the quickly retrieve and manage these items. When the cache reaches its limit the least recently used item is removed to the make space for the new item. This is particularly useful in the scenarios where you need to the maintain a fixed amount of the data and ensure quick access and updates such as in web browsers database management systems and memory management.
+
 - `Why would I want to use one ?`
 
 The main advantage of using an LRU Cache versus other data structures to store information comes in the form of added functionality.
@@ -8110,7 +8114,7 @@ However, if quickly implementing an LRU Cache from scratch in a small scale proj
 
 The Least/Most Recently Used functionality will remain the same, which in practice is the key aspect of the data structure.
 
-Implementing the Least/Most Recently Used (LRU / MRU)
+### A. Implementing the Least/Most Recently Used (LRU / MRU) : Using Map
 
 ```js
 class LRUCache {
@@ -8216,4 +8220,75 @@ setTimeout(() => {
 // At this point we've created the fundamental functionality of an LRU Cache, but there's one step to go in order to have a complete data structure. We might want to retrieve the Least Recently Used (LRU) or Most Recently Used (MRU) values!
 
 // In order to do so, we're going to convert our Map into an array, then retrieve the first (LRU) and last (MRU) values of the array respectively:
+```
+
+### B. Implementing the Least/Most Recently Used (LRU / MRU) : Using Map and Doubly Linked List.
+
+The combination of a `Map and a Doubly Linked List` is a common approach to the implement an LRU Cache. The Map provides an average O(1) time complexity for the get and set operations while the Doubly Linked List helps in the keeping track of the order of the usage. When an item is accessed it is moved to the front of list ensuring that the least recently used item is at the end of the list.
+
+```js
+class ListNode {
+  constructor(key, value) {
+    this.key = key;
+    this.value = value;
+    this.prev = null;
+    this.next = null;
+  }
+}
+class LRUCache {
+  constructor(capacity) {
+    this.capacity = capacity;
+    this.cache = new Map();
+    this.head = new ListNode(null, null);
+    this.tail = new ListNode(null, null);
+    this.head.next = this.tail;
+    this.tail.prev = this.head;
+  }
+  _remove(node) {
+    let prev = node.prev;
+    let next = node.next;
+    prev.next = next;
+    next.prev = prev;
+  }
+  _add(node) {
+    let next = this.head.next;
+    this.head.next = node;
+    node.prev = this.head;
+    node.next = next;
+    next.prev = node;
+  }
+  get(key) {
+    if (!this.cache.has(key)) {
+      return -1;
+    }
+    let node = this.cache.get(key);
+    this._remove(node);
+    this._add(node);
+    return node.value;
+  }
+  put(key, value) {
+    if (this.cache.has(key)) {
+      this._remove(this.cache.get(key));
+    }
+    let newNode = new ListNode(key, value);
+    this._add(newNode);
+    this.cache.set(key, newNode);
+    if (this.cache.size > this.capacity) {
+      let lru = this.tail.prev;
+      this._remove(lru);
+      this.cache.delete(lru.key);
+    }
+  }
+}
+// Example usage
+let lru = new LRUCache(2);
+lru.put(1, 1);
+lru.put(2, 2);
+console.log(lru.get(1));
+lru.put(3, 3);
+console.log(lru.get(2));
+lru.put(4, 4);
+console.log(lru.get(1));
+console.log(lru.get(3));
+console.log(lru.get(4));
 ```
