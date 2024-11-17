@@ -8085,3 +8085,135 @@ So, the correct order of output is:
 9
 
 ```
+
+### 110. Implementing a Simple LRU Cache in JavaScript.
+
+- `What is an LRU Cache ?`
+
+An LRU Cache, or Least Recently Used Cache, is a data structure that stores information in the order that it has most recently been added or accessed.
+
+A popular analogy is a clothes rack in a closet: as clothes are worn and hung back up, they go on the right side of the rack. As time goes on, one can easily tell which clothes haven't been worn in a longer period of time by looking at the left side of the rack.
+
+- `Why would I want to use one ?`
+
+The main advantage of using an LRU Cache versus other data structures to store information comes in the form of added functionality.
+
+A Cache in computer science terms can be thought of as a block of recently used data stored in a quickly accessible location in memory, resulting in faster performance when that same data is repeatedly pulled up.
+
+If we consider an LRU Cache, it could be useful in an application that has users searching through a database for information. Normally every time a user looks something up, the app would ping its database with a request, taking precious time to do so. If, however, we store the most recently (or most commonly) searched-for items in an LRU cache, we can quickly check to see if the searched-for item exists in the cache, and if so we can retrieve it in significantly less time! Super useful.
+
+- `how do we build one ?`
+
+Traditionally LRU Caches are built by combining a Hash Map with a Doubly Linked List, in order to maintain fast lookup of items and retrieval of most-recently-used and least-recently-used items in constant O(1) time.
+
+However, if quickly implementing an LRU Cache from scratch in a small scale project is of interest to you, then one can be built out simply using nothing more than a JavaScript Class and a Map() object, at a cost to retrieval runtime.
+
+The Least/Most Recently Used functionality will remain the same, which in practice is the key aspect of the data structure.
+
+Implementing the Least/Most Recently Used (LRU / MRU)
+
+```js
+class LRUCache {
+  constructor(capacity) {
+    this.cache = new Map();
+
+    this.capacity = capacity;
+  }
+
+  get(key) {
+    if (!this.cache.has(key)) {
+      return undefined;
+    }
+
+    const value = this.cache.get(key);
+
+    this.cache.delete(key);
+
+    this.cache.set(key, value);
+    return value;
+  }
+
+  put(key, value) {
+    if (this.cache.has(key)) {
+      this.cache.delete(key);
+      console.log("delete", this);
+    }
+
+    if (this.cache.size === this.capacity) {
+      this.cache.delete(this.cache.keys().next().value);
+    }
+
+    this.cache.set(key, value);
+  }
+
+  // Implement LRU/MRU retrieval methods
+  getLeastRecent() {
+    return Array.from(this.cache)[0];
+  }
+
+  getMostRecent() {
+    return Array.from(this.cache)[this.cache.size - 1];
+  }
+}
+
+const cachesData = new LRUCache(2);
+
+console.log(cachesData.get("apple"));
+cachesData.put("apple", 5000);
+cachesData.put("grape", 3000);
+
+console.log(cachesData, "cache", cachesData.getMostRecent(), cachesData.getLeastRecent());
+
+setTimeout(() => {
+  cachesData.put("apple", 8000);
+  console.log(cachesData, "cache");
+}, 3000);
+
+setTimeout(() => {
+  cachesData.put("orange", 10000);
+  console.log(cachesData, "cache");
+}, 6000);
+
+
+### Steps:
+
+1. Establish the Class and Constructor.
+// Within this class, we'll set a constructor so that every instance of an LRU Cache maintains the same structure. Our cache will take in a capacity as an argument, which will set the maximum size that our cache can grow to before we remove the least recently used item from its storage in order to save space and keep the structure organized.
+
+// We'll use this constructor to also establish the cache itself, using a JavaScript Map object:
+
+// The reason we're using a Map object here is that JavaScript Maps maintain the order in which keys and values have been inserted. This does most of the work for us!
+
+
+2. Build out the Get and Put methods of the Cache.
+
+- For Get methods :
+
+// Now, we're going to implement our two vital functions within the class: Get and Put, which will retrieve a value and insert a key/value pair into the cache respectively.
+
+// Let's break down what we just did above for get method.
+
+// A. We check to see if the key exists in our Map. If it doesn't, we return "undefined" (this could be any return value that represents a failed retrieval, such as -1 or an error message.)
+
+// B. Next we declare a variable "val", get the value associated with that key, and assign it to the variable.
+
+// C. We delete that key/value pair from our cache, and then set it again. Since our map keeps the order in which we insert things, this puts our retrieved key/value pair back at the front (most recently used) spot.
+
+// D. We return the value for use in our program wherever this method was called.
+
+
+- For Put method :
+
+// A. The first line checks if the key already exists in the Map and deletes it if so; calling .delete() either deletes the key/value pair if it exists OR returns undefined and continues if it doesn't.
+
+// B. If our cache is currently at its maximum capacity ( cache.size === this.capacity ), we delete our least recently used key/value pair by using this.cache.keys().next().value to get the first key of the Map using an iterator object and passing it as an argument to this.cache.delete() . We then set a new key/value pair in the cache using the arguments passed into the Put method.
+
+// C. If we're not currently at maximum capacity, we simply add the new key/value pair as normal.
+
+
+3. Implement getLeastRecent and getMostRecent methods
+
+// At this point we've created the fundamental functionality of an LRU Cache, but there's one step to go in order to have a complete data structure. We might want to retrieve the Least Recently Used (LRU) or Most Recently Used (MRU) values!
+
+// In order to do so, we're going to convert our Map into an array, then retrieve the first (LRU) and last (MRU) values of the array respectively:
+```
