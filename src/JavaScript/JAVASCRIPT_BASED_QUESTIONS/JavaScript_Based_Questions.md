@@ -5794,22 +5794,42 @@ const browserHistory = new BrowserHistory(defaultUrl);
 ### 2. It more optimized than above.
 
 class BrowserHistory {
+
+
+   /**
+  * Initializes the browser history with a default URL.
+  * @param {string} defaultUrl - The default URL to start with.
+  */
   constructor(defaultUrl) {
    this.history = [defaultUrl];
    this.currentIndex = 0;
   }
 
-  visit(url) {
 
+  /**
+  * Visits a new URL and adds it to the browser history.
+  * @param {string} url - The URL to visit.
+  */
+  visit(url) {
    this.history.push(url);
    this.currentIndex = this.history.length -1
   }
 
+  /**
+  * Goes back in the browser history by a specified number of steps.
+  * @param {number} steps - The number of steps to go back.
+  * @returns {string} The URL at the new current index.
+  */
   previous(steps) {
    this.currentIndex = Math.max(this.currentIndex - steps, 0);
    return this.history[this.currentIndex];
   }
 
+ /**
+  * Goes forward in the browser history by a specified number of steps.
+  * @param {number} steps - The number of steps to go forward.
+  * @returns {string} The URL at the new current index.
+  */
   forward(steps) {
    this.currentIndex = Math.min(this.currentIndex + steps, this.history.length - 1);
    return this.history[this.currentIndex];
