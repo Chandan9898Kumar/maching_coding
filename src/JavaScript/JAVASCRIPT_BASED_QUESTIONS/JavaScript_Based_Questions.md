@@ -5872,17 +5872,17 @@ We can implement a browser history design by employing two stacks. We need a sta
 `Follow the steps mentioned below to implement the idea:`
 
 1. Create two stacks, backStack, and forwardStack.
-   A. A backStack stores the current URL, while a forwardStack keeps track of previously visited URLs.
+    A. A backStack stores the current URL, while a forwardStack keeps track of previously visited URLs.
 2. The constructor BrowserHistory(string homepage) initializes the object with the homepage of the browser. Push the homepage into backStack.
 3. We have a visit() function to visit a URL from the current page:
-   A. While visiting a URL, the forward history gets cleared up. Since there will be nothing beyond the last visited URL. So, pop all the elements from the forwardStack and then push the URL we need to visit in the backSTack.
+    A. While visiting a URL, the forward history gets cleared up. Since there will be nothing beyond the last visited URL. So, pop all the elements from the forwardStack and then push the URL we need to visit in the backSTack.
 4. We have a back() function to move backward in history and return to the current page. The steps represent the number of steps we need to move.
-   A. To move steps back, run a while loop till there is at least one element left in the backStack or we have moved step number of times.
-   B. Push the top of the backStack into the forwardStack and then pop it from the backStack. Return the topmost element from the backStack.
-   C. If we can only return x steps in the history and steps > x, we will return only x steps.
+    A. To move steps back, run a while loop till there is at least one element left in the backStack or we have moved step number of times.
+    B. Push the top of the backStack into the forwardStack and then pop it from the backStack. Return the topmost element from the backStack.
+    C. If we can only return x steps in the history and steps > x, we will return only x steps.
 5. There is a forward() function to move steps forward in history and return the current page.
-   A. To move steps forward, run a while loop for steps numbers of times and till the stack is not empty push the top element of forwardStack into backStack and then pop it from the forwardStack.
-   B.Return the top value of backStack.
+    A. To move steps forward, run a while loop for steps numbers of times and till the stack is not empty push the top element of forwardStack into backStack and then pop it from the forwardStack.
+    B.Return the top value of backStack.
 
 ```js
 // JavaScript Implementation of the approach

@@ -698,11 +698,7 @@ Example 1.
 
 ### In JavaScript, we cant define multiple functions with the same name, but we can use a technique called "function parameter destructuring" to achieve similar behavior.
 
-function greet(name) {
-  console.log(`Hello, ${name}!`);
-}
-
-function greet(name, age) {
+function greet(name, age=98) {
   console.log(`Hello, ${name}! You are ${age} years old.`);
 }
 
