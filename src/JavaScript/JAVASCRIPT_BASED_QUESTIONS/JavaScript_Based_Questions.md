@@ -5872,17 +5872,17 @@ We can implement a browser history design by employing two stacks. We need a sta
 `Follow the steps mentioned below to implement the idea:`
 
 1. Create two stacks, backStack, and forwardStack.
-    A. A backStack stores the current URL, while a forwardStack keeps track of previously visited URLs.
+   A. A backStack stores the current URL, while a forwardStack keeps track of previously visited URLs.
 2. The constructor BrowserHistory(string homepage) initializes the object with the homepage of the browser. Push the homepage into backStack.
 3. We have a visit() function to visit a URL from the current page:
-    A. While visiting a URL, the forward history gets cleared up. Since there will be nothing beyond the last visited URL. So, pop all the elements from the forwardStack and then push the URL we need to visit in the backSTack.
+   A. While visiting a URL, the forward history gets cleared up. Since there will be nothing beyond the last visited URL. So, pop all the elements from the forwardStack and then push the URL we need to visit in the backSTack.
 4. We have a back() function to move backward in history and return to the current page. The steps represent the number of steps we need to move.
-    A. To move steps back, run a while loop till there is at least one element left in the backStack or we have moved step number of times.
-    B. Push the top of the backStack into the forwardStack and then pop it from the backStack. Return the topmost element from the backStack.
-    C. If we can only return x steps in the history and steps > x, we will return only x steps.
+   A. To move steps back, run a while loop till there is at least one element left in the backStack or we have moved step number of times.
+   B. Push the top of the backStack into the forwardStack and then pop it from the backStack. Return the topmost element from the backStack.
+   C. If we can only return x steps in the history and steps > x, we will return only x steps.
 5. There is a forward() function to move steps forward in history and return the current page.
-    A. To move steps forward, run a while loop for steps numbers of times and till the stack is not empty push the top element of forwardStack into backStack and then pop it from the forwardStack.
-    B.Return the top value of backStack.
+   A. To move steps forward, run a while loop for steps numbers of times and till the stack is not empty push the top element of forwardStack into backStack and then pop it from the forwardStack.
+   B.Return the top value of backStack.
 
 ```js
 // JavaScript Implementation of the approach
@@ -8134,7 +8134,7 @@ However, if quickly implementing an LRU Cache from scratch in a small scale proj
 
 The Least/Most Recently Used functionality will remain the same, which in practice is the key aspect of the data structure.
 
-### A. Implementing the Least/Most Recently Used (LRU / MRU) : Using Map
+### 110.A. Implementing the Least/Most Recently Used (LRU / MRU) : Using Map
 
 ```js
 class LRUCache {
@@ -8242,7 +8242,7 @@ setTimeout(() => {
 // In order to do so, we're going to convert our Map into an array, then retrieve the first (LRU) and last (MRU) values of the array respectively:
 ```
 
-### B. Implementing the Least/Most Recently Used (LRU / MRU) : Using Map and Doubly Linked List.
+### 110.B. Implementing the Least/Most Recently Used (LRU / MRU) : Using Map and Doubly Linked List.
 
 The combination of a `Map and a Doubly Linked List` is a common approach to the implement an LRU Cache. The Map provides an average O(1) time complexity for the get and set operations while the Doubly Linked List helps in the keeping track of the order of the usage. When an item is accessed it is moved to the front of list ensuring that the least recently used item is at the end of the list.
 
@@ -8311,4 +8311,33 @@ lru.put(4, 4);
 console.log(lru.get(1));
 console.log(lru.get(3));
 console.log(lru.get(4));
+```
+
+### 111. What is the output ?
+
+```js
+function asyncFunction1(value = 1, delay = 8000) {
+  console.log(value, "value >>>>>>>>>>>>>>", delay);
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value);
+    }, delay);
+  });
+}
+
+let files = [asyncFunction1(1, 8000), asyncFunction1(2, 5000), asyncFunction1(3, 2000)];
+
+const main = async () => {
+  console.log("Before For Each Loop");
+
+  for (let i = 0; i < files.length; i++) {
+    console.log(i, "i >>>>>>>>>>>>>>>>>>>>>>>>>");
+    const result = await files[i];
+    console.log(result, "result");
+  }
+
+  console.log("After For Each Loop");
+};
+
+main();
 ```
