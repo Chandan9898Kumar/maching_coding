@@ -5472,8 +5472,6 @@ In Simple Words:
 
 > Enables an object to alter its behavior when its internal state changes by encapsulating states in separate classes.
 
-![Observer Pattern](./images/state-pattern.png)
-
 ### Implementation:
 
 ```ts
