@@ -5535,6 +5535,19 @@ documentEditor.write("Review comments");
 documentEditor.save(); // Cannot save in review mode
 ```
 
+
+### Other Definitions
+ State method or State Design Patterns is a pattern that allows an object to alter its behavior when internal state changes occur. This pattern is used when an object wants to change its state dynamically. When we want to change behavior of object it internally uses if-else block to perform actions.
+
+
+**Key Component of State Design Patterns**
+  `1. Context:` Based on internal State Context object behavior changes. Context refers to the current state object.
+
+  `2. State:`The state is a base class or an interface that defines a set of methods.Each state class implements these methods to provide particular behavior associated with that state.
+
+  `3. Concrete States:`Concrete state class provides the behavior associated with that particular state.Each state provides its own implementation defined by the state interface of its own state methods.
+
+
 ### When to Use State Pattern? ✅
 
 - **Object Behavior Depends on State:** Useful when the behavior of an object changes based on its internal state.
