@@ -5380,12 +5380,12 @@ In this example, the WeatherStation acts as the subject that notifies observers 
 To create the observer design pattern, we need to have two types of participants.
 
 1. `Host`
-  A. It will maintain the list of observers.
-  B. Provides option to subscribe and unsubscribe to the observers.
-  C. Notifies the observer when state changes.
+   A. It will maintain the list of observers.
+   B. Provides option to subscribe and unsubscribe to the observers.
+   C. Notifies the observer when state changes.
 
 2. Observer
-  A. Has a function that gets called/invoked every time a state changes.
+   A. Has a function that gets called/invoked every time a state changes.
 
 ```js
 const Move = function () {
@@ -5468,6 +5468,14 @@ move.fire("event #3");
 
 The State pattern is a behavioral design pattern that allows an object to change its behavior when its internal state changes. The pattern represents states as separate classes and allows the context (the object whose behavior changes) to switch between these states dynamically.
 
+> OR
+
+State method or State Design Patterns is a pattern that allows an object to alter its behavior when internal state changes occur. This pattern is used when an object wants to change its state dynamically. When we want to change behavior of object it internally uses if-else block to perform actions.
+
+> OR
+
+The State Pattern is a behavioral design pattern that allows an object to alter its behavior when its internal state changes. This pattern is particularly useful when an object can be in one of several states and its behavior depends on that state. It encapsulates state-specific behavior in separate classes and delegates state-specific behavior to the current state object.
+
 In Simple Words:
 
 > Enables an object to alter its behavior when its internal state changes by encapsulating states in separate classes.
@@ -5535,18 +5543,204 @@ documentEditor.write("Review comments");
 documentEditor.save(); // Cannot save in review mode
 ```
 
-
-### Other Definitions
- State method or State Design Patterns is a pattern that allows an object to alter its behavior when internal state changes occur. This pattern is used when an object wants to change its state dynamically. When we want to change behavior of object it internally uses if-else block to perform actions.
-
+### Example 2.
 
 **Key Component of State Design Patterns**
-  `1. Context:` Based on internal State Context object behavior changes. Context refers to the current state object.
+`1. Context:` Based on internal State Context object behavior changes. Context refers to the current state object.
 
-  `2. State:`The state is a base class or an interface that defines a set of methods.Each state class implements these methods to provide particular behavior associated with that state.
+`2. State:`The state is a base class or an interface that defines a set of methods.Each state class implements these methods to provide particular behavior associated with that state.
 
-  `3. Concrete States:`Concrete state class provides the behavior associated with that particular state.Each state provides its own implementation defined by the state interface of its own state methods.
+`3. Concrete States:`Concrete state class provides the behavior associated with that particular state.Each state provides its own implementation defined by the state interface of its own state methods.
 
+**Problem Statement:**
+
+A fan has states like Low Speed, High Speed, Off, Low Speed, Medium Speed.
+
+**Stepwise Implementation of State Method :**
+
+1. `Identify States:` Identifying different states. In this case states include Off, Low Speed, Medium Speed, High Speed.
+2. `Create State Classes:` Create a class for each state. In this case offFanState, HighSpeedFanState, LowSpeedFanState and MediumSpeedFanState.
+3. `Context Class:` Create a context class holding an instance variable that represents current state. Fan represents Context Class and current state is Present State.
+4. `Define Methods in State Classes:` Define methods in every state class. In this case clickButton Method represents the work/action done.
+5. `Context State Transition Method:` In given Context class define methods to set present state. In this case Fan represents Context class and we set it using setState method.
+6. `Context Delegation:` The methods in context class delegates the behavior to present state.
+7. `Creating Instances:` Instantiating the context class and every state class. Setting initial state(this.presentState=this.offFanState).
+8. `Testing Implementation:` We use fanStates.clickButton() for stimulating different state methods.
+
+```js
+class offFanState {
+  //Fan is in initial state
+  constructor(fan) {
+    //Creating a constructor
+    this.fan = fan; //This variable accessing current class
+  }
+
+  clickButton() {
+    console.log("Keep fan on low speed"); //Initial Fan kept on low speed
+    this.fan.setState(this.fan.lowSpeedStateOfFan); //Setting fan lo LowSpeedFanState
+  }
+}
+
+class HighSpeedFanState {
+  //Creating class for highspeed
+  constructor(fan) {
+    this.fan = fan;
+  }
+
+  clickButton() {
+    console.log("Switch Off Fan"); //Swichting off the fan
+    this.fan.setState(this.fan.offFanStateOfFan); //by setting state to above off class using this
+  }
+}
+
+class LowSpeedFanState {
+  //Low speed class
+  constructor(fan) {
+    this.fan = fan;
+  }
+
+  clickButton() {
+    console.log("Switch using state method to Medium speed");
+    this.fan.setState(this.fan.mediumSpeedStateOfFan); //by setting state to medium class using this
+  }
+}
+
+class MediumSpeedFanState {
+  //Medium state class
+  constructor(fan) {
+    this.fan = fan;
+  }
+
+  clickButton() {
+    console.log("Switch using state method to High speed");
+    this.fan.setState(this.fan.highSpeedStateOfFan); //by setting state to highspeed class using this
+  }
+}
+
+class Fan {
+  //Main Class
+  constructor() {
+    //Create instances for all states using this
+    this.offFanState = new offFanState(this);
+    this.highSpeedStateOfFan = new HighSpeedFanState(this);
+    this.lowSpeedStateOfFan = new LowSpeedFanState(this);
+    this.mediumSpeedStateOfFan = new MediumSpeedFanState(this);
+    this.presentState = this.offFanState;
+  }
+
+  setState(presentState) {
+    //Setting presentState
+    this.presentState = presentState;
+  }
+
+  clickButton() {
+    //Creating Button
+    this.presentState.clickButton();
+  }
+}
+
+let fanStates = new Fan();
+fanStates.clickButton(); //Low speed
+fanStates.clickButton(); //Medium speed
+fanStates.clickButton(); //High Speed
+fanStates.clickButton(); //Switch off fan
+```
+
+Diagrammatic Representation of above Example:
+
+`It includes:-`
+
+`Actors:`
+
+1. User:-User can turn-on, low the speed of fan, medium the speed of fan, high the speed of fan and turn-off the fan.
+2. State-Methods:-Includes Low, Medium and High speed of fan changing when user changes.
+
+`System:`
+
+1. Fan Controller System:-It consists of actors(users, state-methods) and contains use cases like Turn-off, Low-speed, Medium-speed, High-speed and Turn-On.
+
+`Use cases:`
+
+1. `Turn-on Fan:- `User initially Turn-on fan.
+2. `Low-speed:-` User lows down the speed of fan. The state changes from OffState to LowSpeedState.
+3. `Medium-speed:-` User increases the speed of fan. The state changes from LowSpeedState to MediumSpeedState.
+4. `High-speed:-` User increases the speed of fan. The state changes from MediumSpeedState to HighSpeedState.
+5. `Turn-off:-` User turns-off the fan. It reaches final state.
+
+<p align="center">
+  <img src="../../Assests/state.jpg" width="450" title="Many to Many">
+</p>
+
+### Example 3
+
+Let's consider a simple example of a TrafficLight system, which can be in one of three states: Red, Yellow, or Green. Each state will have its own behavior when the light changes.
+
+```js
+// State Interface
+class State {
+    change(trafficLight) {
+        throw new Error("This method should be overridden!");
+    }
+}
+
+// Concrete States
+class RedState extends State {
+    change(trafficLight) {
+        console.log("Changing from Red to Green");
+        trafficLight.setState(new GreenState());
+    }
+}
+
+class YellowState extends State {
+    change(trafficLight) {
+        console.log("Changing from Yellow to Red");
+        trafficLight.setState(new RedState());
+    }
+}
+
+class GreenState extends State {
+    change(trafficLight) {
+        console.log("Changing from Green to Yellow");
+        trafficLight.setState(new YellowState());
+    }
+}
+
+// Context
+class TrafficLight {
+    constructor() {
+        this.state = new RedState(); // Initial state
+    }
+
+    setState(state) {
+        this.state = state;
+    }
+
+    change() {
+        this.state.change(this);
+    }
+}
+
+// Client Code
+const trafficLight = new TrafficLight();
+
+trafficLight.change(); // Changing from Red to Green
+trafficLight.change(); // Changing from Green to Yellow
+trafficLight.change(); // Changing from Yellow to Red
+trafficLight.change(); // Changing from Red to Green
+
+
+
+### Explanation:
+
+  1. `State Interface:` We define a State class with a method change() that needs to be implemented by concrete states.
+
+  2. `Concrete States:` We create three concrete state classes: `RedState`, `YellowState`, and `GreenState`. Each of these classes implements the change() method, which changes the state of the TrafficLight.
+
+  3. `Context ( TrafficLight ):` The TrafficLight class maintains an instance of a State. It provides a method setState() to change the current state and a change() method that delegates the state-specific behavior to the current state. Or maintains a reference to the current state and delegates behavior to that state.
+
+  4. `Client Code:` We create an instance of TrafficLight, and call the change() method multiple times. Each call changes the state of the TrafficLight and prints the transition.
+
+```
 
 ### When to Use State Pattern? ✅
 
