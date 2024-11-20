@@ -5380,12 +5380,12 @@ In this example, the WeatherStation acts as the subject that notifies observers 
 To create the observer design pattern, we need to have two types of participants.
 
 1. `Host`
-   A. It will maintain the list of observers.
-   B. Provides option to subscribe and unsubscribe to the observers.
-   C. Notifies the observer when state changes.
+  A. It will maintain the list of observers.
+  B. Provides option to subscribe and unsubscribe to the observers.
+  C. Notifies the observer when state changes.
 
 2. Observer
-   A. Has a function that gets called/invoked every time a state changes.
+  A. Has a function that gets called/invoked every time a state changes.
 
 ```js
 const Move = function () {
