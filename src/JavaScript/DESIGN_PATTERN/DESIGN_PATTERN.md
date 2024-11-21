@@ -5774,7 +5774,7 @@ trafficLight.change(); // Changing from Red to Green
 
 The State Pattern is valuable in various scenarios, including:
 
-**Workflow Management:** Managing the workflow of an application with different states and transitions, such as order processing or approval workflows.
+**Workflow Management:** In a workflow system, tasks can be in different states (e.g., pending, in progress, completed). The State Pattern can help manage transitions between these states and define behaviors specific to each state.
 
 **Game Development:** Implementing game character behaviors that change based on game states, such as "idle," "attacking," or "defending."
 
@@ -5782,6 +5782,7 @@ The State Pattern is valuable in various scenarios, including:
 
 **Finite State Machines:** Implementing finite state machines for parsing, validation, or network communication.
 
+**Network Connections:** A network connection can be in various states (e.g., connecting, connected, disconnected). The State Pattern can help manage the behavior of the connection based on its current state.
 
 ### Points :
 
