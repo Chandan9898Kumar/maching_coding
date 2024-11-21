@@ -924,7 +924,7 @@ window.myLocalStorage = {
       }
 
       // else return the value
-      return result.data;
+      return result[key];
     }
 
     // if the key does not have value
@@ -937,7 +937,7 @@ window.myLocalStorage = {
     // store the value as object
     // along with expiry date
     let result = {
-      data: value,
+      [key]: value,
     };
 
     if (maxAge) {
