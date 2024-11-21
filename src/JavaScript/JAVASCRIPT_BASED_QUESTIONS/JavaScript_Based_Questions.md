@@ -974,7 +974,7 @@ setTimeout(() => {
 
 
 
-### Example 2. By building custom local storage with class and not using built in localStorage.
+### Example 2. By building custom local storage with class and not using built in localStorage. Here we are setting a single expiry time  for all the key/value pairs .
 
 class LocalStorage {
   constructor() {
@@ -1051,6 +1051,86 @@ setTimeout(()=>{
 
 console.log(localStorageItem.getItem("1"),'Get Item outside')
 console.log(localStorageItem,'localStorageItem outside')
+
+
+
+### 3. This Custom Expiry is More accurate than Above example. Here we are setting expiry time  for each the key/value pairs separately.
+class LocalStorage {
+
+  constructor(){
+    this.storage = {}
+    this.length = 0
+  }
+
+
+  setItem(key,value,expiry=0){
+
+    if(!key){
+      throw new Error('key is required')
+    }
+    if(!value){
+      throw new Error('value is required')
+    }
+
+     const item = {
+      [key] : value,
+       expiry: Date.now() + expiry
+    }
+    this.length +=1
+
+    this.storage[String(key)] = item
+  }
+
+  getItem(key){
+
+    if(!this.storage[key]){
+      return undefined
+    }
+
+    if(Date.now() >= this.storage[key].expiry){
+      this.length -=1
+      delete this.storage[key]
+      return null
+    }
+
+    return this.storage[key][key]
+
+  }
+
+  removeItem(key){
+    if(!key){
+      throw new Error('key is required')
+    }
+    this.length -=1
+    delete this.storage[key]
+  }
+
+  clear(){
+    this.storage = {}
+    this.length=0
+  }
+
+}
+
+const localStorage = new LocalStorage()
+
+localStorage.setItem('place','Nether')
+localStorage.setItem('Country','uk')
+localStorage.setItem('Id','99',50)
+console.log(localStorage.getItem('Id'))
+
+console.log(localStorage,'localStorage')
+
+setTimeout(()=>{
+  console.log(localStorage.getItem('Id'))
+  console.log(localStorage,'localStorage')
+},2000)
+
+
+localStorage.clear()
+
+console.log(localStorage,'localStorage')
+
 
 ```
 
