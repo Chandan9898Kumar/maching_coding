@@ -5470,7 +5470,7 @@ The State pattern is a behavioral design pattern that allows an object to change
 
 > OR
 
-State method or State Design Patterns is a pattern that allows an object to alter its behavior when internal state changes occur. This pattern is used when an object wants to change its state dynamically. When we want to change behavior of object it internally uses if-else block to perform actions.
+State method or State Design Patterns is a pattern that allows an object to alter its behavior when internal state changes occur. This pattern is used when an object wants to change its state dynamically.
 
 > OR
 
@@ -5742,11 +5742,20 @@ trafficLight.change(); // Changing from Red to Green
 
 ```
 
+### Pros :
+
+1. Whenever we want to alter the behavior of an object by changing the internal state, and we do not want to handle a lot of if / else complex conditional blocks, then in that state design pattern can be highly advantageous.
+
+2. Whenever we want to add new states so that new behaviors can be generated in the application and we do not want to impact the existing behaviors pertaining to the previously defined states, in that case also State design pattern is the best bet.
+
+3. State design pattern is beneficial in implementing a polymorphic behavior, as the same function call is performing different tasks each time.
+
 ### When to Use State Pattern? ✅
 
 - **Object Behavior Depends on State:** Useful when the behavior of an object changes based on its internal state.
 - **Avoiding Long Switch Statements:** When there are multiple conditional statements (if/else or switch) based on the state, and you want to avoid long and complex switch statements.
 - **Dynamic State Transitions:** When state transitions need to be dynamic, allowing for different transitions based on the current state.
+- **Avoiding Long Switch Statements:** An application that has large/numerous case statements which change flow of control based on runtime state information. Not necessarily a class, but any sort of application that has a lot of switch/case/if/else statements based on a set of variables can be transformed to use the state design pattern.
 
 ### Advantages of State Pattern 🪄
 
@@ -5759,6 +5768,13 @@ trafficLight.change(); // Changing from Red to Green
 - **Increased Number of Classes:** The pattern introduces multiple state classes, potentially increasing the overall number of classes in the system.
 - **Complexity for Simple State Machines:** For simple state machines, using the State pattern may introduce unnecessary complexity.
 - **Global Access to Context:** State classes may need access to the context, which can lead to a global context or dependency injection.
+
+
+### Points :
+
+1. In State Design Pattern, each state is connected to another state so that a flow can be created from an initial state to some final state as in finite state machines.
+2. State patterns allow us to switch from one state to another dynamically at runtime so that the behavior of the context object can change. 
+3. State pattern allows different states to be dependent on each other in a flow so that the behavior of the context class can be changed from one state to another. 
 
 ## Strategy 🎯
 
