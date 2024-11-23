@@ -2200,7 +2200,7 @@ asyncParallel(taskList, (error, result) => {
 });
 ```
 
-### 28. Javascript setInterval method
+### 28. Javascript setInterval method And Same will go for setTimeout.
 
 ```js
 
@@ -2209,7 +2209,7 @@ asyncParallel(taskList, (error, result) => {
 
  let count = (count, message) => {
   console.log(start,'start')
-   console.log(`${message} is ${count}`);
+  console.log(`${message} is ${count}`);
  }
 
  setInterval(function(){
@@ -2237,6 +2237,8 @@ asyncParallel(taskList, (error, result) => {
 
 ### Explanation :
 // The setInterval function does not update the count variable on each iteration because the count variable is passed by value, not by reference. This means that the setInterval function receives a copy of the current value of count when it is called, and any changes made to the count variable inside the setInterval function do not affect the original count variable.
+
+// you are passing start++ as the first argument to the count function. However, start++ uses the value of start (which is 0 initially) and then increments it afterwards. This means that every time count is called by setInterval, it receives the initial value of start (which is 0), and only after that does start get incremented. As a result, the value of count (the first parameter) remains 0 in all invocations of the count function.
 
 `NOTE :`  Here the start is not getting increment because the value is accessed from the global scope. Also this method won’t work in IE9 and less.
 
@@ -2302,12 +2304,21 @@ increment.start();
 ### Explanation:
 // When you use an arrow function inside setInterval, it helps to set the this keyword to the object increment by leveraging the lexical scoping rules of arrow functions.
 
+//  Lexical scoping is a crucial concept in JavaScript that allows functions to access variables from their enclosing scopes. This feature enables powerful programming patterns, such as closures, which can help manage state and encapsulate data effectively. 
+
+// Enclosing scopes are a fundamental aspect of JavaScript's lexical scoping model. They allow inner functions to access variables defined in their outer functions, enabling powerful programming patterns like closures. enclosing scopes refer to the outer contexts in which a function is defined.
+
+//  NOTE :
+
+// In the context of lexical scoping, the “enclosing scope” is often used to explain how variables and functions declared in an outer scope are accessible in an inner scope. When a function is defined inside another function, it creates a nested lexical scope, where the inner function can access variables and functions defined in its containing (or enclosing) scope.
+
+
 // Here's what happens:
 
 // 1. The start method is called on the increment object, which sets the this context to the increment object.
 // 2. The setInterval function is called, which takes a callback function as its first argument.
-// 3. The callback function is an arrow function, which inherits the this context from the surrounding scope, which is the start method.
-// 4. Since the start method has its this context set to the increment object, the arrow function also inherits this this context.
+// 3. The callback function is an arrow function, which inherits the "this" context from the surrounding scope, which is the start method.
+// 4. Since the start method has its "this" context set to the increment object, the arrow function also inherits "this" context.
 // 5. When the arrow function is executed by setInterval, the this keyword inside the arrow function refers to the increment object.
 // 6. In other words, the arrow function "remembers" the this context of the start method, which is the increment object, and uses it as its own this context. This allows the this keyword inside the arrow function to refer to the increment object, rather than the global object window.
 // 7. The arrow function is lexically scoped to the start method, which is scoped to the increment object. Therefore, the this keyword inside the arrow function refers to the increment object.
