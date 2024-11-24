@@ -2304,7 +2304,7 @@ increment.start();
 ### Explanation:
 // When you use an arrow function inside setInterval, it helps to set the this keyword to the object increment by leveraging the lexical scoping rules of arrow functions.
 
-//  Lexical scoping is a crucial concept in JavaScript that allows functions to access variables from their enclosing scopes. This feature enables powerful programming patterns, such as closures, which can help manage state and encapsulate data effectively. 
+//  Lexical scoping is a crucial concept in JavaScript that allows functions to access variables from their enclosing scopes. This feature enables powerful programming patterns, such as closures, which can help manage state and encapsulate data effectively.
 
 // Enclosing scopes are a fundamental aspect of JavaScript's lexical scoping model. They allow inner functions to access variables defined in their outer functions, enabling powerful programming patterns like closures. enclosing scopes refer to the outer contexts in which a function is defined.
 
@@ -2331,9 +2331,9 @@ increment.start();
 let increment = {
   count: 1,
   start: function(){
-   setInterval(function(){
-    console.log(this.count++, this);
-   }.bind(this), 1000)
+ setInterval(function(){
+ console.log(this.count++, this);
+ }.bind(this), 1000)
   }
 }
 
@@ -6543,37 +6543,6 @@ var person1 = new Person('John');
 	Person.displayName();
 ```
 
-### 103. Implement Retry function.
-
-```js
-export function wait(delay: number) {
-  return new Promise((resolve) => setTimeout(resolve, delay));
-}
-
-export async function fetchRetry(url: string, delay: number, tries: number, callback: () => void, handleError?: (error: any) => void) {
-  async function onError(err: any) {
-    const triesLeft = tries - 1;
-    if (!triesLeft) {
-      handleError?.(err);
-      return;
-    }
-    await wait(delay);
-    return fetchRetry(url, delay, triesLeft, callback, handleError);
-  }
-  try {
-    const response = await fetchPolyfill(api(url));
-    const result: { canRoute: boolean } = await response.json();
-    if (result.canRoute) {
-      callback();
-    } else {
-      onError("Contact not created in Hubspot CRM");
-    }
-  } catch (error) {
-    onError(error);
-  }
-}
-```
-
 ### 104. What would be the output of following code ?
 
 ```js
@@ -8431,4 +8400,237 @@ const main = async () => {
 };
 
 main();
+```
+
+### 112. Write a JavaScript function that takes an array of URLs and downloads the contents of each URL in parallel using Promises and store result in sequence.
+
+```js
+### Method 1. Using forEach
+
+const urls = [
+  'https://jsonplaceholder.typicode.com/posts/1',
+  'https://jsonplaceholder.typicode.com/posts/2',
+  'https://jsonplaceholder.typicode.com/posts/3'
+]
+
+
+function parallelUrls(urls){
+   const fetchResult = async(url)=>{
+     try{
+       const response = await fetch(url)
+       if(response.status!==200){
+         throw new Error('Something Went Wrong...')
+       }
+       const result = await response.json()
+       return result
+     }catch(error){
+       throw error
+     }
+   }
+
+  return new Promise((resolve,reject)=>{
+    let result = []
+    let state = 0
+    urls.forEach((url,index)=>{
+      fetchResult(url).then((response)=>{
+        result[index]=response
+        state++
+      }).catch((error)=>{
+        reject(error)
+      }).finally(()=>{
+        if(state===urls.length){
+          resolve(result)
+        }
+      })
+    })
+  })
+}
+
+parallelUrls(urls).then((content)=>{
+  console.log('downloaded content',content)
+}).catch((error)=>{
+  console.log(error,'error content')
+})
+
+
+### Method 2. Using Map
+
+
+function downloadContents(urls) {
+  const promises = urls.map(url => {
+    return new Promise((resolve, reject) => {
+      fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.text();
+        })
+        .then(data => resolve(data))
+        .catch(error => reject(error));
+    });
+  });
+
+  return Promise.all(promises);
+}
+
+
+downloadContents(urls)
+  .then(contents => {
+    console.log('Downloaded contents:', contents);
+  })
+  .catch(error => {
+    console.log('Error:', error.message);
+  });
+
+```
+
+### 113. Write a JavaScript program that implements a function that performs a series of asynchronous operations in sequence using Promises and 'async/await'.
+
+```js
+
+
+function asyncOperation1(value) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log('Asynchronous Operation 1');
+      resolve(value+1);
+    }, 1000);
+  });
+}
+
+function asyncOperation2(value) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log('Asynchronous Operation 2');
+      resolve(value+2);
+    }, 4000);
+  });
+}
+
+function asyncOperation3(value) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      console.log('Asynchronous Operation 3');
+      resolve(value+3);
+    }, 1500);
+  });
+}
+
+
+
+### Method 1. using async/await
+
+async function performOperations() {
+  try {
+    let result1 = await asyncOperation1(0);
+    let result2 = await asyncOperation2(result1);
+    let result3 = await asyncOperation3(result2);
+    console.log('All operations completed');
+    return result3
+  } catch (error) {
+    console.log('Error:', error.message);
+  }
+}
+
+performOperations();
+
+
+### Method 2. Using reduce method.
+
+async function asyncSequenceFunction(arrayOfPromises){
+  return arrayOfPromises.reduce((promiseAccumulator, currentPromise) => {
+    return promiseAccumulator.then((response) => {
+      return currentPromise(response);
+    });
+  }, Promise.resolve(0));
+}
+
+asyncSequenceFunction(
+[
+asyncOperation1,
+asyncOperation2,
+asyncOperation3
+]).then((response)=>{
+  console.log(response,'Final Response')
+}).catch((error)=>{
+   console.log(error,'Error Response')
+})
+
+```
+
+### 114. Write a JavaScript program to implement a function that executes a given function repeatedly at a fixed interval using 'setInterval()'.
+
+```js
+function repeat_Function(fn, interval) {
+  // Execute the function immediately
+  fn();
+
+  // Set up the interval to execute the function repeatedly
+  const intervalId = setInterval(fn, interval);
+
+  // Return a function to stop the execution
+  return function stopExecution() {
+    clearInterval(intervalId);
+    console.log("Execution stopped.");
+  };
+}
+
+// Usage example:
+const intervalMs = 1000; // 1 second
+
+// Define the function to be repeated
+function printMessage() {
+  console.log("Executing the function...");
+}
+
+// Start the repeated execution
+const stopExecution = repeat_Function(printMessage, intervalMs);
+
+// Stop the execution after 4 seconds
+setTimeout(() => {
+  stopExecution();
+}, 4000);
+```
+
+### 115. Write a JavaScript function that fetches data from an API and cancels the request if it takes longer than a specified time.
+
+```js
+function fetchDataWithTimeout(url, timeout) {
+  const controller = new AbortController();
+  const { signal } = controller;
+
+  const timeoutId = setTimeout(() => {
+    controller.abort();
+  }, timeout);
+
+  return fetch(url, { signal })
+    .then((response) => {
+      clearTimeout(timeoutId);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      if (error.name === "AbortError") {
+        throw new Error("Request timed out.");
+      } else {
+        throw error;
+      }
+    });
+}
+// Usage example:
+const url = "https://jsonplaceholder.typicode.com/posts/1";
+const timeoutMs = 5000;
+//const timeoutMs = 50;
+console.log("Timeout milliseconds: " + timeoutMs);
+
+fetchDataWithTimeout(url, timeoutMs)
+  .then((data) => {
+    console.log("Data:", data);
+  })
+  .catch((error) => {
+    console.log("Error:", error.message);
+  });
 ```
