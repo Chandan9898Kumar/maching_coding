@@ -2568,6 +2568,7 @@ each input through an asynchronous iteratee function or rejects it if any error 
 
 `The mapLimit function` is a utility that allows you to process an array of items asynchronously with a limit on the number of concurrent operations.
 This is useful when you want to avoid overwhelming a resource (like a database or an API) by controlling how many asynchronous tasks are running at the same time.
+This is useful for scenarios where you want to avoid overwhelming a server or API with too many requests at once.
 
 `In this question, you need to implement a custom mapLimit function that takes 4 arguments`
 1. inputs: An array of inputs
