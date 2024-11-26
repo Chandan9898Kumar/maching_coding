@@ -2562,8 +2562,14 @@ export async function fetchRetry(url: string, delay: number, tries: number, call
 
 ### 30. How to implement custom map function with limit on number of operations?
 
-In this question, you need to implement a custom mapLimit function that takes 4 arguments
+Implement a mapLimit function that is similar to the Array.map() which returns a promise that resolves on the list of output by mapping 
+each input through an asynchronous iteratee function or rejects it if any error occurs. It also accepts a limit to decide how many operations can occur at a time.
 
+
+`The mapLimit function` is a utility that allows you to process an array of items asynchronously with a limit on the number of concurrent operations.
+This is useful when you want to avoid overwhelming a resource (like a database or an API) by controlling how many asynchronous tasks are running at the same time.
+
+`In this question, you need to implement a custom mapLimit function that takes 4 arguments`
 1. inputs: An array of inputs
 2. limit: The maximum number of operations at any given time.
 3. iterateeFn: The async function that should be called with each input to generate the corresponding output. It will have two arguments:
@@ -2620,6 +2626,7 @@ function getUserById(id, callback, activeIndex) {
   const randomRequestTime = Math.floor(Math.random() * 100) + 200;
 
   setTimeout(() => {
+    console.log('Id :',id)
     callback("User" + id, activeIndex);
   }, randomRequestTime);
 }
