@@ -2562,15 +2562,15 @@ export async function fetchRetry(url: string, delay: number, tries: number, call
 
 ### 30. How to implement custom map function with limit on number of operations?
 
-Implement a mapLimit function that is similar to the Array.map() which returns a promise that resolves on the list of output by mapping 
+Implement a mapLimit function that is similar to the Array.map() which returns a promise that resolves on the list of output by mapping
 each input through an asynchronous iteratee function or rejects it if any error occurs. It also accepts a limit to decide how many operations can occur at a time.
-
 
 `The mapLimit function` is a utility that allows you to process an array of items asynchronously with a limit on the number of concurrent operations.
 This is useful when you want to avoid overwhelming a resource (like a database or an API) by controlling how many asynchronous tasks are running at the same time.
 This is useful for scenarios where you want to avoid overwhelming a server or API with too many requests at once.
 
 `In this question, you need to implement a custom mapLimit function that takes 4 arguments`
+
 1. inputs: An array of inputs
 2. limit: The maximum number of operations at any given time.
 3. iterateeFn: The async function that should be called with each input to generate the corresponding output. It will have two arguments:
@@ -2747,6 +2747,98 @@ function mapLimit(inputs, limit, iterateeFn, callback) {
 mapLimit([1,2,3,4,5], 2, getUserById, (allResults) => {
   console.log('output:', allResults)
 })
+
+
+- 5. Using Promises
+
+/**
+ * Applies an asynchronous function to each item in an array, with a specified concurrency limit.
+ *
+ * @param {Array} arr The array to be processed.
+ * @param {Number} limit The maximum number of concurrent operations.
+ * @param {Function} asyncFn The asynchronous function to be applied to each item.
+ * @returns {Promise} A promise that resolves with the results of the asynchronous operations.
+ */
+
+async function mapLimit(arr, limit, asyncFn) {
+  // Initialize an empty array to store the results
+  const results = new Array(arr.length);
+
+  // Initialize a counter to keep track of the current index
+  let index = 0;
+
+  // Initialize a counter to keep track of the number of completed operations
+  let completed = 0;
+
+  // Return a promise that resolves with the results
+  return new Promise((resolve, reject) => {
+   // Define a function to execute the asynchronous operation
+   function execute() {
+    // Check if all operations have been completed
+    if (completed === arr.length) {
+      // Resolve the promise with the results
+      resolve(results);
+      return;
+    }
+
+    // Check if the concurrency limit has been reached
+    if (index >= arr.length) {
+      return;
+    }
+
+    // Get the current item and increment the index
+    const currentItem = arr[index++];
+
+    // Apply the asynchronous function to the current item
+    asyncFn(currentItem)
+      .then((result) => {
+       // Store the result in the results array
+       results[completed++] = result;
+        console.log(result,'result')
+       // Execute the next operation
+       execute();
+      })
+      .catch((error) => {
+       // Reject the promise with the error
+       reject(error);
+      });
+   }
+
+   // Execute the first 'limit' operations
+   for (let i = 0; i < limit; i++) {
+    execute();
+   }
+  });
+
+
+}
+
+// Example usage:
+const arr = [1, 2, 3, 4, 5];
+const limit = 2;
+
+const callback =async (item) => {
+  // Simulate an asynchronous operation
+ return await new Promise((resolve) => {
+   setTimeout(() => {
+    resolve(item * 2);
+   }, 1000);
+  });
+}
+
+mapLimit(arr, limit, callback)
+.then((results) => {
+  // Use globalThis.console to make sure console is defined
+  globalThis.console.log(results); // Output: [2, 4, 6, 8, 10]
+})
+.catch((error) => {
+  globalThis.console.error(error);
+});
+
+
+### This implementation uses a promise to manage the asynchronous operations and ensures that the concurrency limit is not exceeded. 
+The execute function is used to apply the asynchronous function to each item in the array, and the results are stored in the results array. 
+Once all operations have been completed, the promise is resolved with the results.
 
 ```
 
