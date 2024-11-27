@@ -5769,7 +5769,6 @@ trafficLight.change(); // Changing from Red to Green
 - **Complexity for Simple State Machines:** For simple state machines, using the State pattern may introduce unnecessary complexity.
 - **Global Access to Context:** State classes may need access to the context, which can lead to a global context or dependency injection.
 
-
 ### Real-World Use Cases
 
 The State Pattern is valuable in various scenarios, including:
@@ -5787,12 +5786,16 @@ The State Pattern is valuable in various scenarios, including:
 ### Points :
 
 1. In State Design Pattern, each state is connected to another state so that a flow can be created from an initial state to some final state as in finite state machines.
-2. State patterns allow us to switch from one state to another dynamically at runtime so that the behavior of the context object can change. 
-3. State pattern allows different states to be dependent on each other in a flow so that the behavior of the context class can be changed from one state to another. 
+2. State patterns allow us to switch from one state to another dynamically at runtime so that the behavior of the context object can change.
+3. State pattern allows different states to be dependent on each other in a flow so that the behavior of the context class can be changed from one state to another.
 
 ## Strategy 🎯
 
 The Strategy pattern is a behavioral design pattern that defines a family of algorithms, encapsulates each algorithm, and makes them interchangeable. It allows the client to choose an appropriate algorithm at runtime without altering the context (the object that uses the algorithm). This pattern enables a class to vary its behavior dynamically by having multiple algorithms and selecting one of them.
+
+> OR
+
+Strategy Method or Strategy Pattern in JavaScript helps solve the problem of needing to use different methods or behaviors in your code and easily switch between them. Strategy Method is a behavioral design pattern in JavaScript that defines a family of algorithms, encapsulates each one, and makes them interchangeable. It allows the client to choose an algorithm from a family of algorithms at runtime, without altering the code that uses these algorithms.
 
 In Simple Words:
 
@@ -5852,6 +5855,195 @@ sorter.performSort(dataset); // Using Bubble Sort ; [0, 1, 3, 7, 9, 77, 100]
 sorter.setStrategy(new QuickSort());
 sorter.performSort(dataset); // // Using Quick Sort ; [0, 1, 3, 7, 9, 77, 100]
 ```
+
+### Example 2.
+
+Suppose you are developing an e-commerce application, and you want to calculate discounts for different types of customers. You can use the Strategy Pattern to encapsulate discount strategies:
+
+```js
+// Discount Strategies
+const regularCustomerDiscount = (amount) => amount * 0.1; // 10% discount
+const premiumCustomerDiscount = (amount) => amount * 0.2; // 20% discount
+
+// Context
+class ShoppingCart {
+  constructor(discountStrategy) {
+    this.items = [];
+    this.discountStrategy = discountStrategy;
+  }
+
+  addItem(item) {
+    this.items.push(item);
+  }
+
+  calculateTotal() {
+    const subtotal = this.items.reduce((total, item) => total + item.price, 0);
+    return subtotal - this.discountStrategy(subtotal);
+  }
+}
+
+// Usage
+const regularCustomerCart = new ShoppingCart(regularCustomerDiscount);
+const premiumCustomerCart = new ShoppingCart(premiumCustomerDiscount);
+
+regularCustomerCart.addItem({ name: 'Item 1', price: 50 });
+premiumCustomerCart.addItem({ name: 'Item 2', price: 100 });
+
+console.log(`Regular Customer Total: $${regularCustomerCart.calculateTotal()}`); // Output: $45 (after 10% discount)
+console.log(`Premium Customer Total: $${premiumCustomerCart.calculateTotal()}`);
+
+
+### In this example, we define two discount strategies as functions (regularCustomerDiscount and premiumCustomerDiscount). The ShoppingCart class takes a discount strategy as a parameter and calculates the total price based on the chosen strategy.
+```
+
+### Example 3.
+
+Strategy Patterns allows one of a family of algorithms to be selected on-the-fly at runtime. The pattern defines a family of algorithms, encapsulates each one, and makes them interchangeable at run-time without client interference.
+
+Scenario :
+
+We have created a `class Shipping` which encapsulates all possible strategies for shipping a parcel – `FedEx, UPS, and USPS`. Using this pattern, we can swap the strategy during runtime and generate appropriate output.
+
+```js
+//Strategy1
+function FedEx() {
+  this.calculate = (package) => {
+    //calculations  happen here..
+    return 2.99;
+  };
+}
+
+//Strategy2
+function UPS() {
+  this.calculate = (package) => {
+    //calculations  happen here..
+    return 1.59;
+  };
+}
+
+//Strategy3
+function USPS() {
+  this.calculate = (package) => {
+    //calculations  happen here..
+    return 4.5;
+  };
+}
+
+// encapsulation
+function Shipping() {
+  this.company = "";
+  this.setStrategy = (company) => {
+    this.company = company;
+  };
+  this.calculate = (package) => {
+    return this.company.calculate(package);
+  };
+}
+
+//usage
+const fedex = new FedEx();
+const ups = new UPS();
+const usps = new USPS();
+
+const package = { from: "Alabama", to: "Georgia", weight: 1.5 };
+
+const shipping = new Shipping();
+shipping.setStrategy(fedex);
+console.log("Fedex:" + shipping.calculate(package)); // OUTPUT => "Fedex:2.99"
+```
+
+### Example 4:
+
+The problem statement is essentially to create a flexible and extensible discount system for a shopping cart, allowing for different discount strategies to be easily added and applied to different shopping carts. This pattern is useful for scenarios where you want to decouple the discount logic from the shopping cart and make it easy to change or extend the discount strategies.
+
+`Key Component of Strategy Method:`
+
+1. `Context:` This is the class or component that uses the Strategy. It maintains a reference to a Strategy object and can switch between different strategies at runtime.
+2. `Strategy Interface:` An interface or an abstract class that defines a set of methods that concrete strategies must implement.
+3. `Concrete Strategies:` These are the individual implementations of the Strategy Interface. They encapsulate specific algorithmic behaviors.
+
+```js
+// Strategy Interface : DiscountStrategy is an abstract class with a method calculateDiscount(orderTotal) that needs to be implemented by concrete discount strategies.
+class DiscountStrategy {
+  calculateDiscount(orderTotal) {
+    // To be implemented by concrete strategies
+  }
+}
+
+// There are three concrete discount strategies implemented in the code:
+// 1. NoDiscount: Provides no discount (returns 0).
+// 2. TenPercentDiscount: Applies a 10% discount on the order total.
+// 3. TwentyPercentDiscount: Applies a 20% discount on the order total.
+
+class NoDiscount extends DiscountStrategy {
+  calculateDiscount(orderTotal) {
+    return 0;
+  }
+}
+
+class TenPercentDiscount extends DiscountStrategy {
+  calculateDiscount(orderTotal) {
+    return orderTotal * 0.1;
+  }
+}
+
+class TwentyPercentDiscount extends DiscountStrategy {
+  calculateDiscount(orderTotal) {
+    return orderTotal * 0.2;
+  }
+}
+
+// Context : The ShoppingCart class represents the shopping cart and takes a discount strategy as a parameter during initialization. It allows items to be added to the cart and calculates the total order price, taking into account the selected discount strategy.
+class ShoppingCart {
+  constructor(discountStrategy) {
+    this.discountStrategy = discountStrategy;
+    this.items = [];
+  }
+
+  addItem(item) {
+    this.items.push(item);
+  }
+
+  calculateTotal() {
+    const orderTotal = this.items.reduce((total, item) =&gt; total + item.price, 0);
+    return orderTotal - this.discountStrategy.calculateDiscount(orderTotal);
+  }
+}
+
+// Example usage : Three different shopping carts (cart1, cart2, and cart3) are created with different discount strategies and items. The code calculates and prints the total price for each cart after applying the selected discount strategy.
+
+
+const noDiscount = new NoDiscount();
+const tenPercentDiscount = new TenPercentDiscount();
+const twentyPercentDiscount = new TwentyPercentDiscount();
+
+const cart1 = new ShoppingCart(noDiscount);
+cart1.addItem({ name: 'Item 1', price: 50 });
+console.log('Cart 1 Total:', cart1.calculateTotal());
+
+const cart2 = new ShoppingCart(tenPercentDiscount);
+cart2.addItem({ name: 'Item 1', price: 50 });
+console.log('Cart 2 Total:', cart2.calculateTotal());
+
+const cart3 = new ShoppingCart(twentyPercentDiscount);
+cart3.addItem({ name: 'Item 1', price: 50 });
+console.log('Cart 3 Total:', cart3.calculateTotal());
+
+
+### Overall, this structure allows the "Context" class to utilize different algorithms without being dependent on their specific implementations. It enables the client to switch between different algorithms easily at runtime, promoting flexibility and maintainability.
+```
+
+### Real-World Use Cases
+
+`The Strategy Pattern is valuable in various scenarios, including:`
+
+1. **Algorithm Selection:** When you need to select an algorithm from a family of algorithms dynamically.
+
+2. **Configuration and Settings:** Configuring an application with different behavior options, such as sorting algorithms or data storage strategies.
+
+3. **Customizable Behavior:** Allowing users to customize and extend the behavior of an application by providing different strategies.
+
+4. **Testing and Mocking:** In unit testing, you can use the Strategy Pattern to provide mock implementations of components for testing.
 
 ### When to Use Strategy Pattern? ✅
 
