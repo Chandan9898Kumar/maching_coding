@@ -2560,7 +2560,7 @@ export async function fetchRetry(url: string, delay: number, tries: number, call
 }
 ```
 
-### 30. How to implement custom map function with limit on number of operations?
+### 30.A How to implement custom map function with limit on number of operations?
 
 Implement a mapLimit function that is similar to the Array.map() which returns a promise that resolves on the list of output by mapping
 each input through an asynchronous iteratee function or rejects it if any error occurs. It also accepts a limit to decide how many operations can occur at a time.
@@ -2840,6 +2840,85 @@ mapLimit(arr, limit, callback)
 The execute function is used to apply the asynchronous function to each item in the array, and the results are stored in the results array.
 Once all operations have been completed, the promise is resolved with the results.
 
+```
+
+### 30.B Implement custom function with limit on number of operations? First 3 sub-arrays will be executed first in series , then 2nd sub-arrays will be executed in series then 3rd sub-arrays will be executed. And Each item will be passing it value to next function in series. 
+
+```js
+function asyncFunc1(value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value + 1);
+    }, 6000);
+  });
+}
+
+function asyncFunc2(value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value + 2);
+    }, 4000);
+  });
+}
+
+function asyncFunc3(value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value + 3);
+    }, 5000);
+  });
+}
+
+function asyncFunc4(value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value + 4);
+    }, 7000);
+  });
+}
+
+function asyncFunc5(value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value + 5);
+    }, 2000);
+  });
+}
+
+function asyncFunc6(value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value + 6);
+    }, 1000);
+  });
+}
+
+function callbackManager(arrays) {
+  let result = arrays.reduce((acc, curr) => {
+    return acc.then((response) => {
+
+      return new Promise((resolve) => {
+        const subArr = curr.reduce((acc, curr) => {
+          console.log(curr, "curr in order");
+          return acc.then((response) => {
+            return curr(response);
+          });
+        }, Promise.resolve(response));
+        resolve(subArr);
+      });
+      
+    });
+
+  }, Promise.resolve(0));
+
+  return result;
+}
+
+let result = callbackManager([[asyncFunc1, asyncFunc2, asyncFunc3], [asyncFunc4, asyncFunc5], [asyncFunc6]]);
+
+result.then((response) => {
+  console.log(response, "response");
+});
 ```
 
 ### 31. Create an array sequence from 1 to N in a single line in JavaScript
@@ -8735,82 +8814,3 @@ fetchDataWithTimeout(url, timeoutMs)
   });
 ```
 
-### 116. How to implement custom function with limit on number of operations? First 3 sub-arrays will be executed first in series , then 2nd sub-arrays will be executed
-###  in series then 3rd sub-arrays will be executed. And Each item will be passing it value to next function in series. 
-
-```js
-function asyncFunc1(value) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(value + 1);
-    }, 6000);
-  });
-}
-
-function asyncFunc2(value) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(value + 2);
-    }, 4000);
-  });
-}
-
-function asyncFunc3(value) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(value + 3);
-    }, 5000);
-  });
-}
-
-function asyncFunc4(value) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(value + 4);
-    }, 7000);
-  });
-}
-
-function asyncFunc5(value) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(value + 5);
-    }, 2000);
-  });
-}
-
-function asyncFunc6(value) {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(value + 6);
-    }, 1000);
-  });
-}
-
-function callbackManager(arrays) {
-  let result = arrays.reduce((acc, curr) => {
-    return acc.then((response) => {
-
-      return new Promise((resolve) => {
-        const subArr = curr.reduce((acc, curr) => {
-          console.log(curr, "curr in order");
-          return acc.then((response) => {
-            return curr(response);
-          });
-        }, Promise.resolve(response));
-        resolve(subArr);
-      });
-      
-    });
-
-  }, Promise.resolve(0));
-
-  return result;
-}
-
-let result = callbackManager([[asyncFunc1, asyncFunc2, asyncFunc3], [asyncFunc4, asyncFunc5], [asyncFunc6]]);
-
-result.then((response) => {
-  console.log(response, "response");
-});
-```
