@@ -6426,35 +6426,35 @@ This pattern is particularly useful in scenarios where you have a series of step
 
 The Template Method design pattern in JavaScript can be useful in various scenarios where you want to create a common algorithm structure while allowing flexibility for specific implementations. Here are some common uses of the Template Method pattern in JavaScript:
 
-**UI Frameworks:**
-When building user interface frameworks or libraries, you can use the Template Method pattern to define a common structure for components (e.g., buttons, dialogs) while allowing developers to customize the rendering, event handling, or other behavior of those components in subclasses.
+1. **UI Frameworks:**
+   When building user interface frameworks or libraries, you can use the Template Method pattern to define a common structure for components (e.g., buttons, dialogs) while allowing developers to customize the rendering, event handling, or other behavior of those components in subclasses.
 
-**Data Processing:**
-In data processing or data transformation tasks, you can define a template method that outlines the overall process (e.g., loading data, transforming it, and saving it) while letting subclasses implement the specific data transformation logic.
+2. **Data Processing:**
+   In data processing or data transformation tasks, you can define a template method that outlines the overall process (e.g., loading data, transforming it, and saving it) while letting subclasses implement the specific data transformation logic.
 
-**Game Development:**
-In game development, you can use the Template Method pattern to define common game loops, character behaviors, or level designs while allowing different games or characters to implement their unique features within the established framework.
+3. **Game Development:**
+   In game development, you can use the Template Method pattern to define common game loops, character behaviors, or level designs while allowing different games or characters to implement their unique features within the established framework.
 
-**HTTP Request Handling:**
-When dealing with HTTP request handling, you can create a template method for request processing that includes common steps like authentication, request parsing, and response generation, while letting specific routes or endpoints define their custom logic.
+4. **HTTP Request Handling:**
+   When dealing with HTTP request handling, you can create a template method for request processing that includes common steps like authentication, request parsing, and response generation, while letting specific routes or endpoints define their custom logic.
 
-**Algorithmic Processing:**
-For algorithmic tasks, you can use the Template Method pattern to define the overall algorithm structure and let subclasses provide their implementations for specific algorithmic steps.
+5. **Algorithmic Processing:**
+   For algorithmic tasks, you can use the Template Method pattern to define the overall algorithm structure and let subclasses provide their implementations for specific algorithmic steps.
 
-**Testing Frameworks:**
-In the development of testing frameworks, you can use the Template Method pattern to define the overall testing process (e.g., setup, execution, teardown) while allowing custom test cases or test suites to specify their unique test logic.
+6. **Testing Frameworks:**
+   In the development of testing frameworks, you can use the Template Method pattern to define the overall testing process (e.g., setup, execution, teardown) while allowing custom test cases or test suites to specify their unique test logic.
 
-**Document Generation:**
-When generating documents or reports, you can define a template method that outlines the structure and content of the document, such as headers, footers, and sections, while allowing subclasses to provide the specific content for each section.
+7. **Document Generation:**
+   When generating documents or reports, you can define a template method that outlines the structure and content of the document, such as headers, footers, and sections, while allowing subclasses to provide the specific content for each section.
 
-**Middleware and Filters:**
-In web applications, you can use the Template Method pattern to define middleware or filter chains, where each middleware can perform specific tasks before or after the main request handling process, such as authentication, logging, or security checks.
+8. **Middleware and Filters:**
+   In web applications, you can use the Template Method pattern to define middleware or filter chains, where each middleware can perform specific tasks before or after the main request handling process, such as authentication, logging, or security checks.
 
-**State Machines:**
-When implementing state machines, you can use the Template Method pattern to define a common structure for state transitions, error handling, and actions to perform on state changes, with subclasses specifying the details for each state.
+9. **State Machines:**
+   When implementing state machines, you can use the Template Method pattern to define a common structure for state transitions, error handling, and actions to perform on state changes, with subclasses specifying the details for each state.
 
-**Code Generators:**
-In code generation tools, you can use the Template Method pattern to define code generation processes, such as parsing input, generating code, and handling dependencies, while allowing customization for different programming languages or target platforms.
+10. **Code Generators:**
+    In code generation tools, you can use the Template Method pattern to define code generation processes, such as parsing input, generating code, and handling dependencies, while allowing customization for different programming languages or target platforms.
 
 ### When to Use Template Method Pattern? ✅
 
@@ -6476,6 +6476,10 @@ In code generation tools, you can use the Template Method pattern to define code
 ## Visitor 🚶‍♂
 
 The Visitor pattern is a behavioral design pattern that allows you to define a new operation without changing the classes of the elements on which it operates. It separates the algorithms from the objects on which they operate by encapsulating these algorithms in visitor objects. This pattern enables you to add new behaviors to a set of classes without modifying their structure.
+
+> OR
+
+The visitor pattern is a behavioral design pattern that allows you to add new behaviors or operations to a set of objects without modifying their structure. It achieves this by separating the algorithm from the objects on which it operates.
 
 In Simple Words:
 
@@ -6560,6 +6564,243 @@ circle.accept(areaCalculatorVisitor); // Area of Circle: 78.54
 square.accept(drawingVisitor); // Drawing Square with side 4
 square.accept(areaCalculatorVisitor); // Area of Square: 16
 ```
+
+### Example 2:
+
+**Key Components:**
+
+1. `Visitor Interface:` You define an interface that lists the methods representing the operations you want to perform on various object types. Each method typically corresponds to a different object type or class.
+
+2. `Concrete Visitors:` Concrete visitor classes implement the Visitor interface and provide the actual implementation of the operations for each object type. These classes encapsulate the behavior you want to add.
+
+3. `Visitable Elements:` Objects or elements that you want to apply the visitor pattern to should implement an accept method. This method takes a visitor object as an argument and calls the appropriate visitor method.
+
+```js
+// Visitor Interface
+class ShapeVisitor {
+  visitCircle(circle) {}
+  visitSquare(square) {}
+  visitTriangle(triangle) {}
+}
+
+// Concrete Visitors
+class AreaCalculator extends ShapeVisitor {
+  visitCircle(circle) {
+    return Math.PI * Math.pow(circle.radius, 2);
+  }
+
+  visitSquare(square) {
+    return Math.pow(square.side, 2);
+  }
+
+  visitTriangle(triangle) {
+    // Assuming Heron's formula for triangle area calculation
+    const s = (triangle.sideA + triangle.sideB + triangle.sideC) / 2;
+    return Math.sqrt(s * (s - triangle.sideA) * (s - triangle.sideB) * (s - triangle.sideC));
+  }
+}
+
+class PerimeterCalculator extends ShapeVisitor {
+  visitCircle(circle) {
+    return 2 * Math.PI * circle.radius;
+  }
+
+  visitSquare(square) {
+    return 4 * square.side;
+  }
+
+  visitTriangle(triangle) {
+    return triangle.sideA + triangle.sideB + triangle.sideC;
+  }
+}
+
+// Visitable Elements
+class Circle {
+  constructor(radius) {
+    this.radius = radius;
+  }
+
+  accept(visitor) {
+    return visitor.visitCircle(this);
+  }
+}
+
+class Square {
+  constructor(side) {
+    this.side = side;
+  }
+
+  accept(visitor) {
+    return visitor.visitSquare(this);
+  }
+}
+
+class Triangle {
+  constructor(sideA, sideB, sideC) {
+    this.sideA = sideA;
+    this.sideB = sideB;
+    this.sideC = sideC;
+  }
+
+  accept(visitor) {
+    return visitor.visitTriangle(this);
+  }
+}
+
+// Usage
+const circle = new Circle(5);
+const square = new Square(4);
+const triangle = new Triangle(3, 4, 5);
+
+const areaCalculator = new AreaCalculator();
+const perimeterCalculator = new PerimeterCalculator();
+
+const circleArea = circle.accept(areaCalculator);
+const squarePerimeter = square.accept(perimeterCalculator);
+const triangleArea = triangle.accept(areaCalculator);
+
+console.log(`Circle Area: ${circleArea}`);
+console.log(`Square Perimeter: ${squarePerimeter}`);
+console.log(`Triangle Area: ${triangleArea}`);
+```
+
+### Example 3.
+
+The Visitor pattern is a design pattern that allows you to separate an algorithm from the objects on which it operates( you can create new operations without altering the existing classes of objects. This is achieved by creating a separate class or set of classes (the Visitor) that encapsulate the algorithm. ). This pattern is particularly useful when you have a structure of objects that you want to perform operations on without changing the classes of those objects. It promotes the open/closed principle, allowing you to add new operations without modifying existing code.
+
+**Key Concepts:**
+
+1. `Visitor:` An interface or abstract class that declares a visit method for each type of element in the object structure.
+2. `Element:` An interface or abstract class that declares an accept method that takes a visitor as an argument.
+3. `ConcreteElement:` Classes that implement the Element interface and define the accept method to call the visitor's corresponding visit method.
+4. `ConcreteVisitor:` Classes that implement the Visitor interface and define the operations to be performed on the elements.
+
+`Let's illustrate the Visitor pattern with a simple example involving a shopping cart with different types of items: Book and Fruit.`
+
+```js
+// Visitor Interface
+class Visitor {
+    visitBook(book) {
+        throw new Error("This method should be overridden.");
+    }
+
+    visitFruit(fruit) {
+        throw new Error("This method should be overridden.");
+    }
+}
+
+// Element Interface
+class Item {
+    accept(visitor) {
+        throw new Error("This method should be overridden.");
+    }
+}
+
+// Concrete Elements
+class Book extends Item {
+    constructor(title, price) {
+        super();
+        this.title = title;
+        this.price = price;
+    }
+
+    accept(visitor) {
+        visitor.visitBook(this);
+    }
+}
+
+class Fruit extends Item {
+    constructor(name, price) {
+        super();
+        this.name = name;
+        this.price = price;
+    }
+
+    accept(visitor) {
+        visitor.visitFruit(this);
+    }
+}
+
+// Concrete Visitor
+class ShoppingCartVisitor extends Visitor {
+    visitBook(book) {
+        console.log(`Book: ${book.title}, Price: ${book.price}`);
+        // Apply discount or any other logic for books
+    }
+
+    visitFruit(fruit) {
+        console.log(`Fruit: ${fruit.name}, Price: ${fruit.price}`);
+        // Apply discount or any other logic for fruits
+    }
+}
+
+// Client Code
+const items = [
+    new Book("JavaScript: The Good Parts", 25),
+    new Fruit("Apple", 1),
+    new Book("Eloquent JavaScript", 30),
+    new Fruit("Banana", 0.5),
+];
+
+const shoppingCartVisitor = new ShoppingCartVisitor();
+for (const item of items) {
+    item.accept(shoppingCartVisitor);
+}
+
+
+### Explanation :
+  1. Visitor Interface: The Visitor class defines methods for visiting different types of items (books and fruits).
+
+  2. Element Interface: The Item class defines the accept method that takes a visitor.
+
+  3. Concrete Elements: The Book and Fruit classes implement the Item interface and provide their own implementation of the accept method.
+
+  4. Concrete Visitor: The ShoppingCartVisitor class implements the Visitor interface and provides specific logic for processing books and fruits.
+
+  5. Client Code: The client creates an array of items (books and fruits) and a visitor. It then iterates over the items and calls the accept method, which in turn calls the appropriate visit method based on the type of item.
+
+
+```
+
+### The main features and characteristics of the Visitor pattern:
+
+1. `Separation of Concerns:` The Visitor pattern promotes the separation of concerns by isolating the operations that can be performed on a data structure or object hierarchy from the structure itself. This separation makes it easier to add new operations or behaviors without modifying existing classes.
+
+2. `Open-Closed Principle:` The pattern follows the Open-Closed Principle, which states that a class should be open for extension but closed for modification. With the Visitor pattern, you can introduce new behaviors (visitors) without changing the existing elements being visited.
+
+3. `Double Dispatch:` The Visitor pattern uses a technique called double dispatch. In dynamic languages like JavaScript, this means that the specific method to be executed depends on both the type of the element being visited and the type of the visitor. This enables the selection of the appropriate behavior at runtime.
+
+4. `Traversal of Complex Structures:` It's particularly useful when working with complex data structures, object hierarchies, or composite structures (like trees or graphs). Visitors can traverse these structures and perform operations on their elements without exposing the details of the structure.
+
+5. `Extensibility:` You can add new visitors to introduce new operations without modifying the existing elements. This makes the pattern suitable for scenarios where you expect the set of operations to change or grow over time.
+
+6. `Maintainability:` The Visitor pattern can enhance code maintainability by keeping related operations encapsulated within their own visitor classes, making it easier to understand and maintain the codebase.
+
+### The Visitor pattern is a powerful design pattern used in various scenarios in software development. Here are some common use cases for the Visitor pattern:
+
+1. `Traversal of Complex Data Structures:` When you have complex data structures like trees, graphs, or composite structures (e.g., directories and files), the Visitor pattern can be used to traverse these structures while performing specific operations at each node or element.
+
+2. `Adding New Operations to Classes:` When you need to add new behaviors or operations to a set of classes without modifying their code, the Visitor pattern allows you to encapsulate these behaviors in visitor classes, promoting the Open-Closed Principle.
+
+3. `Type-Safe Operations:`It can be used to ensure that operations are type-safe. By defining specific visitor methods for each type of element, you can catch type-related errors at compile-time rather than runtime.
+
+4. `Distributed Behavior:` In distributed systems, the Visitor pattern can be used to distribute behavior or processing logic across various components or nodes of the system while keeping the behavior encapsulated within visitors.
+
+5. `Parsing and AST Processing:` When building compilers, interpreters, or any system that deals with abstract syntax trees (ASTs), the Visitor pattern can be employed to traverse the AST and perform semantic analysis, code generation, or other operations.
+
+6. `Database Query Generation:` In database systems or ORMs (Object-Relational Mapping), the Visitor pattern can be used to generate complex SQL queries or other database operations based on an object-oriented representation of queries.
+
+7. `GUI Components:` In graphical user interfaces, the Visitor pattern can be used to perform various operations on UI components, such as rendering, event handling, or layout calculations.
+
+8. `Document Manipulation:` When working with documents, such as XML or JSON structures, the Visitor pattern can be used to traverse and manipulate document elements based on specific criteria.
+
+9. `Optimizing Data Structures:` In some cases, you might use the Visitor pattern to optimize data structures or perform transformations. For example, you could use it to collect statistics, validate data, or reorganize elements in a data structure.
+
+10. `Logging and Debugging:` The Visitor pattern can be used for logging, debugging, or profiling by attaching visitors to different parts of the code to gather information or trace execution.
+
+11. `Modeling Game Entities:` In game development, the Visitor pattern can be employed to model game entities and behaviors. Visitors can represent various actions that game entities can perform.
+
+12. `Extensible Plugins:` When building extensible systems with plugins or extensions, the Visitor pattern can be used to add new functionality through plugins without modifying the core code.
 
 ### When to Use Visitor Pattern? ✅
 
