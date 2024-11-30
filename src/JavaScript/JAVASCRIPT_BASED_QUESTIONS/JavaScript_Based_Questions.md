@@ -2842,9 +2842,145 @@ Once all operations have been completed, the promise is resolved with the result
 
 ```
 
-### 30.B Implement custom function with limit on number of operations? First 3 sub-arrays will be executed first in series , then 2nd sub-arrays will be executed in series then 3rd sub-arrays will be executed. And Each item will be passing it value to next function in series. 
+### 30.B Implement a mapLimit function that is similar to the Array.map() which returns a promise that resolves on the list of output by mapping each input through an asynchronous iteratee function or rejects it if any error occurs. It also accepts a limit to decide how many operations can occur at a time.
+
+The asynchronous iteratee function will accept a input and a callback. The callback function will be called when the input is finished processing, the first argument of the callback will be the error flag and the second will be the result.
+
+`To implement this function we will have to use the combination of both Async.parallel and Async.series.`
+
+1. First chop the input array into the subarrays of the given limit. This will return us an array of arrays like [[1, 2, 3], [4, 5]].
+
+2. The parent array will run in series that is the next subarray will execute only after the current subarray is done.
+
+3. All the elements of each sub-array will run in parallel.
+
+4. Accumulate all the results of each sub-array element and resolve the promise with this.
+
+5. If there is any error, reject.
+
+6. sub-array will run in parallel but store result in sequence, So use index to store result.
 
 ```js
+// helper function to chop array in chunks of given size
+Array.prototype.chop = function (size) {
+  //temp array
+  const temp = [...this];
+
+  //if the size is not defined
+  if (!size) {
+    return temp;
+  }
+
+  //output
+  const output = [];
+  let i = 0;
+
+  //iterate the array
+  while (i < temp.length) {
+    //slice the sub-array of a given size
+    //and push them in output array
+    output.push(temp.slice(i, i + size));
+    i = i + size;
+  }
+
+  return output;
+};
+
+const mapLimit = (arr, limit, fn) => {
+  // return a new promise
+  return new Promise((resolve, reject) => {
+    // chop the input array into the subarray of limit
+    // [[1, 2, 3], [1, 2, 3]]
+    let chopped = arr.chop(limit);
+
+    // for all the subarrays of chopped
+    // run it in series
+    // that is one after another
+    // initially it will take an empty array to resolve
+    // merge the output of the subarray and pass it on to the next
+
+    const final = chopped.reduce((a, b) => {
+      return a.then((val) => {
+        // run the sub-array values in parallel ( elements inside b array will call in sequence but run in parallel depending on their resolve timer.  )
+        // pass each input to the iteratee function
+        // and store their outputs in sequence( order in which they are called ) by using index
+        // after all the tasks are executed
+        // merge the output with the previous one and resolve
+
+        return new Promise((resolve, reject) => {
+          const results = [];
+          let tasksCompleted = 0;
+          b.forEach((e, index) => {
+            fn(e, (error, value) => {
+              if (error) {
+                reject(error);
+              } else {
+                results[index] = value;
+                tasksCompleted++;
+                if (tasksCompleted >= b.length) {
+                  resolve([...val, ...results]);
+                }
+              }
+            });
+          });
+        });
+      });
+    }, Promise.resolve([]));
+
+    // based on final promise state
+    // invoke the final promise.
+    final
+      .then((result) => {
+        resolve(result);
+      })
+      .catch((e) => {
+        reject(e);
+      });
+  });
+};
+
+let numPromise = mapLimit([1, 2, 3, 4, 5], 3, function (num, callback) {
+  setTimeout(function () {
+    num = num * 2;
+    console.log(num);
+    callback(null, num);
+  }, 2000);
+});
+
+numPromise.then((result) => console.log("success:" + result)).catch(() => console.log("no success"));
+```
+
+### 30.c "Design a custom function that executes a series of operations in batches, where the batch size is determined by a specified limit. For instance, if the limit is set to 2, the function will execute the first two operations sequentially, followed by the next two operations, and so on, ensuring that each batch of operations is executed in series before proceeding to the next batch."
+
+**Alternatively, you could also phrase it as:**
+
+`Create a custom function that throttles the execution of multiple operations by limiting the number of concurrent executions to a specified limit. For example, if the limit is set to 2, the function will execute the first two operations in series, then the next two operations in series, and continue this pattern until all operations have been executed."`
+
+```js
+Array.prototype.chop = function (size) {
+  //temp array
+  const temp = [...this];
+
+  //if the size is not defined
+  if (!size) {
+    return temp;
+  }
+
+  //output
+  const output = [];
+  let i = 0;
+
+  //iterate the array
+  while (i < temp.length) {
+    //slice the sub-array of a given size
+    //and push them in output array
+    output.push(temp.slice(i, i + size));
+    i = i + size;
+  }
+
+  return output;
+};
+
 function asyncFunc1(value) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -2893,10 +3029,11 @@ function asyncFunc6(value) {
   });
 }
 
+const arr = [asyncFunc1, asyncFunc2, asyncFunc3, asyncFunc4, asyncFunc5, asyncFunc6];
+
 function callbackManager(arrays) {
   let result = arrays.reduce((acc, curr) => {
     return acc.then((response) => {
-
       return new Promise((resolve) => {
         const subArr = curr.reduce((acc, curr) => {
           console.log(curr, "curr in order");
@@ -2906,15 +3043,15 @@ function callbackManager(arrays) {
         }, Promise.resolve(response));
         resolve(subArr);
       });
-      
     });
-
   }, Promise.resolve(0));
 
   return result;
 }
 
-let result = callbackManager([[asyncFunc1, asyncFunc2, asyncFunc3], [asyncFunc4, asyncFunc5], [asyncFunc6]]);
+let limit = 2;
+
+let result = callbackManager(arr.chop(limit));
 
 result.then((response) => {
   console.log(response, "response");
@@ -8813,4 +8950,3 @@ fetchDataWithTimeout(url, timeoutMs)
     console.log("Error:", error.message);
   });
 ```
-
