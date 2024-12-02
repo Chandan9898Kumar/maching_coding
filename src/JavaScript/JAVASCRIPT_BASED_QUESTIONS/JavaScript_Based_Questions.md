@@ -8953,7 +8953,23 @@ fetchDataWithTimeout(url, timeoutMs)
 
 ### 116. Implement Circuit breaker in JavaScript.
 
+> Definition
+
+The Circuit Breaker pattern is a design pattern used in software development to improve the stability and resilience of applications, especially when dealing with external services or APIs. It helps to prevent a system from making repeated calls to a service that is likely to fail, thus allowing it to recover and reducing the load on the failing service.
+
 A circuit breaker is a design pattern that helps to prevent cascading failures. Falling under the sustainable category, it is majorly used on the micro-services but can be implemented on the front-end side as well.
+
+` How Circuit Breaker Works :`
+
+The Circuit Breaker pattern has three main states:
+
+**1. Closed:** The circuit is closed, and requests are allowed to pass through. If a certain number of requests fail within a specified time frame, the circuit breaker transitions to the "Open" state.
+
+**2. Open:** The circuit is open, and requests are not allowed to pass through. Instead, the circuit breaker will return an error immediately without attempting to call the external service. After a specified time, the circuit breaker transitions to the "Half-Open" state.
+
+**3. Half-Open:** In this state, a limited number of requests are allowed to pass through. If these requests succeed, the circuit breaker transitions back to the "Closed" state. If they fail, it goes back to the "Open" state.
+
+Example :
 
 Imagine you are making an API call and the request keeps failing, rather than keep on bombarding the server, we can halt the request sending for a certain time. That is how a circuit breaker works.
 
@@ -8966,21 +8982,21 @@ We have to implement a function that will halt the operation for X amount of tim
 This can implemented by forming a closure where we track the count of failure and time since the last failure and based on that decide if the function is available or not.
 
 ```js
-const circuitBreaker = (fn, failureCount, timeThreshold) => {
+const circuitBreaker = (fn, failureCount, recoveryTime) => {
   let failures = 0;
-  let timeSinceLastFailure = 0;
+  let lastFailureTime = 0;
   let isClosed = false;
 
   return function (...args) {
     // if service is closed
     if (isClosed) {
-      const diff = Date.now() - timeSinceLastFailure;
+      const timeSinceFailure = Date.now() - lastFailureTime;
 
       // if the time since last failure has exceeded
       // the time threshold
       // open the service
-      if (diff > timeThreshold) {
-        isClosed = false;
+      if (timeSinceFailure > recoveryTime) {
+        isClosed = false; // Transition to half-open state
       }
       // else throw error
       else {
@@ -9029,20 +9045,41 @@ const testFunction = () => {
 };
 
 
-let t = testFunction();
-let c = circuitBreaker(t, 3, 200);
+let failingFunction = testFunction();
+let breaker = circuitBreaker(failingFunction, 3, 200);
 
-c(); // "error"
-c(); // "error"
-c(); // "error"
+breaker(); // "error"
+breaker(); // "error"
+breaker(); // "error"
 
 // service is closed for 200 MS
-console.log(c(),'1 >>>>>>>') // "service unavailable"
-console.log(c(),'2 >>>>>>>') // "service unavailable"
-console.log(c(),'3 >>>>>>') // "service unavailable"
-console.log(c(),'4 >>>>>>>') // "service unavailable"
-console.log(c(),'5 >>>>>>>')// "service unavailable"
+console.log(breaker(),'1 >>>>>>>') // "service unavailable"
+console.log(breaker(),'2 >>>>>>>') // "service unavailable"
+console.log(breaker(),'3 >>>>>>') // "service unavailable"
+console.log(breaker(),'4 >>>>>>>') // "service unavailable"
+console.log(breaker(),'5 >>>>>>>')// "service unavailable"
 
 // service becomes available after 300ms
-setTimeout(() => {console.log(c());}, 300); // "hello";
+setTimeout(() => {console.log(breaker());}, 300); // "hello";
+
+
+
+
+### Explanation of the Code:
+1. The circuitBreaker function wraps around any function fn that you want to protect.
+2. It tracks failures and manages state transitions between closed, open, and half-open.
+3. If failureCount exceeds failureThreshold, it opens the circuit.
+4. After recoveryTime, it attempts to call the function again in half-open state.
+
+
+### Functionality
+1. When a function fails repeatedly (exceeding a defined threshold), the circuit breaker opens, rejecting subsequent calls for a recovery period.
+
+2. After this period, it transitions to half-open, testing if the service has recovered by allowing a few requests through.
+
+3. If these requests succeed, it closes the circuit; if they fail, it reopens the circuit.
+
+
+### NOTE :
+By implementing a circuit breaker, you can prevent one failing service from causing a chain reaction of failures across your application.
 ```
