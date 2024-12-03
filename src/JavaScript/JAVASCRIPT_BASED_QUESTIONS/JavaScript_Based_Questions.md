@@ -707,6 +707,26 @@ console.log(result);
 
 ```
 
+### 15. What is the output ?
+
+```js
+const promise = new Promise((resolve, reject) => {
+  console.log(1);
+  setTimeout(() => {
+    console.log("timerStart");
+    resolve("success");
+    console.log("timerEnd");
+  }, 0);
+  console.log(2);
+});
+
+promise.then((res) => {
+  console.log(res);
+});
+
+console.log(4);
+```
+
 ### 17. Design and Implement localStorage API .
 
 you need to design and implement the localStorage API. It should mimic the behaviour of existing window.localStorage.
