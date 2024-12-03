@@ -2681,6 +2681,12 @@ console.log(coffeeWithMilkAndSugar.cost()); // Output: 8
 
 Facade design pattern is a Structural design pattern that allows users to create a simple interface that hides the complex implementation details of the system making it easier to use.
 
+**One example is a support department with multiple responsibilities, such as verifying whether or not an item was billed, a support ticket was received, or an order was placed.**
+
+<p align="center">
+  <img src="../../Assests/facade.png" width="450" title="Many to Many">
+</p>
+
 In simple words:
 
 > It provides a simplified interface to a complex subsystem.
@@ -2782,7 +2788,7 @@ method() {
 
 
 - Explanation:
-In this step, I have created a `Facade` class that contains a constructor that intialies the objects of the three Substystems i.e. `SubsystemA`, `SubsystemB`, `SubsystemC` respectively. The `Facade` class is also responsible for providing a common interface. So, I created a method called `commonInterface` which hides the implementation details of subsystem and serves as a entry point.
+In this step, I have created a `Facade` class that contains a constructor that initializes the objects of the three Subsystems i.e. `SubsystemA`, `SubsystemB`, `SubsystemC` respectively. The `Facade` class is also responsible for providing a common interface. So, I created a method called `commonInterface` which hides the implementation details of subsystem and serves as a entry point.
 
 
 class Facade {
