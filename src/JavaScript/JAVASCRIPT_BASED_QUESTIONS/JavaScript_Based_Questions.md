@@ -3164,7 +3164,21 @@ console.log(arr);
 
 ```
 
-### 32. Write your own Event Emitter
+### 32. Write your own Event Emitter.
+
+The Event Emitter in JavaScript, particularly in the context of Node.js, is a core component that facilitates event-driven programming. It allows objects to emit events and for other objects to listen and respond to those events, following a publisher-subscriber pattern.
+
+The EventEmitter class is part of the events module in Node.js. It provides methods to manage events, including:
+
+1. `on:` Register a listener for an event.
+
+2. `emit:` Trigger an event.
+
+3. `once:` Register a one-time listener for an event. once designed to register a listener that will be invoked only the first time an event is emitted. After the listener is called, it is automatically removed, meaning it will not respond to subsequent emissions of the same event.
+
+4. `removeListener:` Remove a specific listener from an event.
+
+5. `removeAllListeners:` Remove all listeners for a specific event.
 
 ```js
 class MyEventEmitter {
@@ -3191,6 +3205,14 @@ class MyEventEmitter {
     const filteredListeners = (listener) => listener !== fn;
     this.events[eventName] = this.events[eventName].filter(filteredListeners);
     return this;
+  }
+
+  removeAllListeners(eventName) {
+    if (!this.events[eventName]) {
+      return this;
+    }
+
+    this.events[eventName] = [];
   }
 
   emit(eventName, data) {
@@ -3225,18 +3247,48 @@ class MyEventEmitter {
 }
 
 // Usage
-const myEventEmitter = new MyEventEmitter();
+const emitter = new MyEventEmitter();
+
 const handleMyEvent = (data) => {
   console.log("Was fired: ", data);
-};
+}
 
-myEventEmitter.on("testEvent", handleMyEvent);
-myEventEmitter.emit("testEvent", "Hi"); // Was fired: trigger
-myEventEmitter.emit("testEvent", "trigger"); // Was fired: trigger
-myEventEmitter.emit("testEvent", "again");
-// myEventEmitter.emit('fakeEvent', {});
-myEventEmitter.removeListener("testEvent", handleMyEvent);
-myEventEmitter.emit("testEvent", "again");
+const handleMyGame = (name) => {
+  console.log("Game Played By: ", name);
+}
+
+const onceListener =()=>{
+  console.log("Listener will be listened:only by ", name)
+}
+const eventName = 'Testing My Emitter'
+
+emitter.on(eventName,handleMyEvent)
+emitter.on(eventName,handleMyGame)
+emitter.emit(eventName,'By Duke')
+emitter.emit(eventName,'By Nuke')
+
+emitter.once(eventName,onceListener)
+
+setTimeout(()=>{
+ emitter.emit(eventName,'By Duke')
+  console.log(emitter,'emitter timer ')
+  // Here onceListener will be called first time when emit is called first time.
+},3000)
+
+setTimeout(()=>{
+ emitter.emit(eventName,'By Duke')
+  console.log(emitter,'emitter timer ')
+  // Here onceListener will not be called because it is automatically removed from this.events when emit is called second times.
+},5000)
+
+
+### How once Works
+
+1. Registration: When you use once(eventName, listener), you are telling the EventEmitter to listen for an event named eventName and execute the listener function only the next time that event is emitted.
+
+2. Automatic Removal: After the listener is executed, it is removed from the list of listeners for that event, ensuring that it cannot be triggered again.(On the second call to emit, there is no onceListener function inside the this.events because the listener has already been removed after its first invocation.)
+
+3. The `once` method provides a clean and efficient way to manage listeners in an event-driven architecture, ensuring that specific actions are only taken when needed without cluttering your event handling logic with unnecessary checks or state management.
 ```
 
 ### 33. the frequently and commonly used methods available on Math object with coding examples
