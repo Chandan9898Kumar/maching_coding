@@ -937,6 +937,8 @@ console.log(user.printUser()); // Display user information.
 
 The Factory Method Pattern is a creational design pattern that provides an interface for creating objects in a superclass, allowing subclasses to alter the type of objects created.
 
+In this pattern, a factory function or method is used to create objects based on input parameters. This approach helps in decoupling the object creation process from the actual implementation, making it easier to manage and extend.
+
 In Simple Terms:
 
 > It enables the delegation of object instantiation to child classes, offering a way to create objects without specifying their exact classes.
@@ -1079,6 +1081,87 @@ const bike = vehicleFactory.create(
 console.log(bike);
 console.log(bike.startEngine());
 console.log(bike.stopEngine());
+```
+
+`Example 3:`
+
+Here’s a simple example demonstrating the Factory Pattern by creating different types of vehicles (Car, Bike, Truck) based on the input type:
+
+```js
+// Vehicle constructor functions
+class Car {
+  constructor(brand, model) {
+    this.vehicleType = 'Car';
+    this.brand = brand;
+    this.model = model;
+  }
+
+  drive() {
+    return `Driving a ${this.brand} ${this.model} car.`;
+  }
+}
+
+class Bike {
+  constructor(brand, model) {
+    this.vehicleType = 'Bike';
+    this.brand = brand;
+    this.model = model;
+  }
+
+  ride() {
+    return `Riding a ${this.brand} ${this.model} bike.`;
+  }
+}
+
+class Truck {
+  constructor(brand, model) {
+    this.vehicleType = 'Truck';
+    this.brand = brand;
+    this.model = model;
+  }
+
+  haul() {
+    return `Hauling with a ${this.brand} ${this.model} truck.`;
+  }
+}
+
+// Vehicle factory that creates vehicles based on type
+class VehicleFactory {
+  static createVehicle(type, brand, model) {
+    switch (type) {
+      case 'car':
+        return new Car(brand, model);
+      case 'bike':
+        return new Bike(brand, model);
+      case 'truck':
+        return new Truck(brand, model);
+      default:
+        throw new Error('Vehicle type not supported.');
+    }
+  }
+}
+
+// Using the factory to create vehicles
+const myCar = VehicleFactory.createVehicle('car', 'Tesla', 'Model 3');
+console.log(myCar.drive()); // Output: Driving a Tesla Model 3 car.
+
+const myBike = VehicleFactory.createVehicle('bike', 'Yamaha', 'MT-15');
+console.log(myBike.ride()); // Output: Riding a Yamaha MT-15 bike.
+
+const myTruck = VehicleFactory.createVehicle('truck', 'Ford', 'F-150');
+console.log(myTruck.haul()); // Output: Hauling with a Ford F-150 truck.
+
+
+
+### Explanation of the Example:
+
+1. `Vehicle Classes:` Three classes (Car, Bike, Truck) are defined, each with its own properties and methods.
+
+2. `VehicleFactory Class:` This class contains a static method createVehicle that takes the type of vehicle as an argument and returns an instance of the corresponding class.
+
+3. `Usage:` The factory method is called to create different types of vehicles without needing to know the details of their instantiation.
+
+> This pattern is particularly useful in scenarios where the object creation process is complex or when the types of objects to be created can change dynamically or or when multiple types of objects are needed that share common properties but differ in specific implementations.
 ```
 
 ### When To Use Factory Pattern ? ✅
