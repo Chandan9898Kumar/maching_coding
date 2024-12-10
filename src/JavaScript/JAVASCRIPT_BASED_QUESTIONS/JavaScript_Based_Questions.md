@@ -3729,7 +3729,7 @@ const obj = {
 2. JSON.stringify(obj, ["id", "username", "email"]); // {"id":1,"username":"John","email":"john@email.com"}
 ```
 
-### 60. Write a program to make all the properties of an object read only but allow the addition of new properties.
+### 60.A Write a program to make all the properties of an object read only but allow the addition of new properties.
 
 - The exisiting properties of the object can be made read only with set keyword using Proxy.
 
@@ -3752,7 +3752,7 @@ NOTE :
 If condition takes care whether the property is new or existing to handle the read only scenario.
 ```
 
-### 60. Design a utility on an array of objects where the access can be made to the object using index (as usual) and also from primary key of the object.
+### 60.B Design a utility on an array of objects where the access can be made to the object using index (as usual) and also from primary key of the object.
 
 . The access to the index happens for arrays by default and the Proxy can be setup to enable the fetching of object using primary key (any other key can also be coded)
 
@@ -3807,46 +3807,8 @@ obj.x.y.z = "nested value";
 obj.x.y.z; // nested value
 ```
 
-### 62. Extract the list of all the elements from the list of numbers given in 2 arrays.
 
-- The union array will be the result if all the elements from the 2 arrays are picked
-
-```js
-const set1 = new Set(arr1);
-const set2 = new Set(arr2);
-const distinctArr = [...set1, ...set2];
-```
-
-### 63. Get the list of all distinct elements which are present in both list of numbers.
-
-- The intersection array will be the result if the common elements from the 2 arrays are picked.
-
-```js
-Method .1.
-const intersectionArr = arr1.filter((value) => arr2.includes(value));
-const distinctIntersectionArr = [...new Set(intersectionArr)];
-
-Method .2.
-const set1 = new Set(arr1);
-const set2 = new Set(arr2);
-const distinctIntersectionArr = [...set1].filter((value) => set2.has(value));
-```
-
-### 64. Extract list of elements present only in the first list given.
-
-- The only present elements of 1st list will be the result when all the elements of 1st list not present in the 2nd are chosen.
-
-```js
-const set1 = new Set(arr1);
-const set2 = new Set(arr2);
-const intersectionArr = [...set1].filter((value) => !set2.has(value));
-
-`Notes`
-
-Elements of 2nd list only can be obtained by checking for all the elements of lis 2 which are not present in list1
-```
-
-### 65. Create a Proxy object through which the array can be accessed as usual but also allow to access the values through negative indices.
+### 62. Create a Proxy object through which the array can be accessed as usual but also allow to access the values through negative indices.
 
 ```js
 . get trap of proxy can be used to map the negative index to the valid array position
@@ -3861,6 +3823,46 @@ let array = new Proxy(arr, {
   },
 });
 ```
+
+### 63. Extract the list of all the elements from the list of numbers given in 2 arrays.
+
+- The union array will be the result if all the elements from the 2 arrays are picked
+
+```js
+const set1 = new Set(arr1);
+const set2 = new Set(arr2);
+const distinctArr = [...set1, ...set2];
+```
+
+### 64. Get the list of all distinct elements which are present in both list of numbers.
+
+- The intersection array will be the result if the common elements from the 2 arrays are picked.
+
+```js
+Method .1.
+const intersectionArr = arr1.filter((value) => arr2.includes(value));
+const distinctIntersectionArr = [...new Set(intersectionArr)];
+
+Method .2.
+const set1 = new Set(arr1);
+const set2 = new Set(arr2);
+const distinctIntersectionArr = [...set1].filter((value) => set2.has(value));
+```
+
+### 65. Extract list of elements present only in the first list given.
+
+- The only present elements of 1st list will be the result when all the elements of 1st list not present in the 2nd are chosen.
+
+```js
+const set1 = new Set(arr1);
+const set2 = new Set(arr2);
+const intersectionArr = [...set1].filter((value) => !set2.has(value));
+
+`Notes`
+
+Elements of 2nd list only can be obtained by checking for all the elements of lis 2 which are not present in list1
+```
+
 
 ### 66. Write a code to eliminate duplicate objects in an array where each object has an 'id' property which can be used to identify the object and the duplicate object with lower rank to be removed.
 
