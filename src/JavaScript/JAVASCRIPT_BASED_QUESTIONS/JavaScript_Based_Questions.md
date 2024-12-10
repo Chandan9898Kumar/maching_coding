@@ -3731,7 +3731,7 @@ const obj = {
 
 ### 60.A Write a program to make all the properties of an object read only but allow the addition of new properties.
 
-- The exisiting properties of the object can be made read only with set keyword using Proxy.
+- The existing properties of the object can be made read only with set keyword using Proxy.
 
 ```js
 const readOnlyObj = new Proxy(obj, {
@@ -8023,7 +8023,7 @@ proxy.age = 33; // Read only
 
 3. Side Effects
 
-You can use a proxy to call another function when a condition is met.
+You can use a proxy to `call another function` when a condition is met.
 
 ```js
 const myFunction = () => {
@@ -8047,7 +8047,7 @@ proxy.name = "Jack"; // execute this function
 proxy.age = 33; // Can only access name property
 ```
 
-4. This example uses Proxy methods to delete properties.
+4. This example uses Proxy methods to `delete properties`.
 
 ```js
 const courseDetail = {
