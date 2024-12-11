@@ -3807,7 +3807,6 @@ obj.x.y.z = "nested value";
 obj.x.y.z; // nested value
 ```
 
-
 ### 62. Create a Proxy object through which the array can be accessed as usual but also allow to access the values through negative indices.
 
 ```js
@@ -3862,7 +3861,6 @@ const intersectionArr = [...set1].filter((value) => !set2.has(value));
 
 Elements of 2nd list only can be obtained by checking for all the elements of lis 2 which are not present in list1
 ```
-
 
 ### 66. Write a code to eliminate duplicate objects in an array where each object has an 'id' property which can be used to identify the object and the duplicate object with lower rank to be removed.
 
@@ -3983,6 +3981,26 @@ function removeDuplicates() {
     console.log(newArray);
 }
 removeDuplicates();
+
+
+Method 4.
+
+function removeDuplicate(arrays) {
+  const resultMap = {};
+
+  for (const item of arrays) {
+    // If the id is not in the resultMap or the current item's rank is higher, update it
+    if (!resultMap[item.id] || resultMap[item.id].rank > item.rank) {
+      resultMap[item.id] = item;
+    }
+  }
+
+  // Convert the resultMap values back to an array
+  return Object.values(resultMap);
+}
+
+const result = removeDuplicate(arr);
+console.log(result, 'result');
 ```
 
 ### 67. Write a utility which prints numbers starting from an initial value and increment in steps which can be started and stopped by the user, any number of times
