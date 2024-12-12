@@ -332,6 +332,38 @@ export default Object.freeze({
   increment: () => ++counter,
   decrement: () => --counter,
 });
+
+
+
+
+### ES6 Implementation
+Here's an implementation using ES6 classes and the Symbol API :
+
+const singletonSymbol = Symbol('singleton');
+
+class Singleton {
+  constructor() {
+    if (!this.constructor[singletonSymbol]) {
+      this.constructor[singletonSymbol] = this;
+    }
+    return this.constructor[singletonSymbol];
+  }
+
+  sayHello() {
+    console.log("Hello from Singleton!");
+  }
+}
+
+// Usage
+const singleton1 = new Singleton();
+const singleton2 = new Singleton();
+
+// Both singleton1 and singleton2 will reference the same instance
+console.log(singleton1 === singleton2); // true
+
+singleton1.sayHello(); // Hello from Singleton!
+
+In this implementation, we use a Symbol to create a private property on the Singleton class. This ensures that the instance is truly singleton and cannot be bypassed.
 ```
 
 `The Object.freeze`: method makes sure that consuming code cannot modify the Singleton. Properties on the frozen instance cannot be added or modified, which reduces the risk of accidentally overwriting the values on the Singleton.
@@ -371,6 +403,12 @@ Consider using Singleton when:
 - An entity is accessed inconsistently across the system.
 - Duplicate instances are generated, and identical instances are unnecessary.
 - Excessive parameters are passed through layers for an object.
+
+### Why Use Singleton Pattern?
+
+1. `Resource Sharing:` Singleton pattern is useful when you want to share a resource across multiple parts of your application.
+2. `Memory Efficiency:` It saves memory by creating only one instance of a class.
+3. `Global Access:` It provides a global point of access to the instance.
 
 ### Disadvantages of Singleton Pattern 🆘 :
 
