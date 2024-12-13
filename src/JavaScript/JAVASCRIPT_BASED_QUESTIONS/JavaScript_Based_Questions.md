@@ -4471,7 +4471,7 @@ console.log(result,'result')
 
 ```js
 
-//  METHOD : 1
+### METHOD : 1
 function asyncFunc1(callback) {
   console.log("Started asyncFunc1");
   setTimeout(() => {
@@ -4512,7 +4512,7 @@ callbackManager([asyncFunc1, asyncFunc2, asyncFunc3]);
 //  It wil work in a sequence.
 
 
-// METHOD 2:  ABOVE CODE IS BETTER THAN BELOW CODE.
+### METHOD 2:  ABOVE CODE IS BETTER THAN BELOW CODE.
 function asyncFunc() {
   console.log("Started asyncFunc1");
   //Async1 code
@@ -4535,6 +4535,85 @@ asyncFunc();
 
 1. The asynchronous block of code can be a function which executes asynchronously
 2. The execution of such function can be simulated using setTimeout to with delay and execute different blocks of code inside each
+
+
+### Method 3 : using for loop.
+
+function callbackManager(arrays){
+  let index =0
+
+  function postCall(){
+
+    if(index>=arrays.length){
+      return
+    }
+
+    if(index<arrays.length){
+      arrays[index++](postCall)
+    }
+  }
+  for(let x=0;x<1;x++){
+    postCall(x)
+  }
+}
+callbackManager([asyncFunc1, asyncFunc2, asyncFunc3]);
+
+### Extra Here we are storing values in sequence.
+
+function asyncFunc1(callback) {
+  console.log("Started asyncFunc1");
+  setTimeout(() => {
+    console.log("Completed asyncFunc1");
+    callback(1);
+  }, 3000);
+}
+
+function asyncFunc2(callback) {
+  console.log("Started asyncFunc2");
+  setTimeout(() => {
+    console.log("Completed asyncFunc2");
+    callback(2);
+  }, 2000);
+}
+
+function asyncFunc3(callback) {
+  console.log("Started asyncFunc3");
+  setTimeout(() => {
+    console.log("Completed asyncFunc3");
+    callback(3);
+  }, 1000);
+}
+
+
+
+function callbackManager(arrays,callback){
+  let index =0
+  let result = []
+  function postCall(values){
+      
+    if(values){
+      result.push(values)
+    }
+    if(index>=arrays.length){
+      callback(result)
+      return
+    }
+    
+    if(index<arrays.length){
+      arrays[index++](postCall)
+    }
+  }
+  for(let x=0;x<1;x++){
+    postCall(x)
+  }
+
+}
+
+const finalResult =(result)=>{
+  console.log(result,'result')
+}
+
+callbackManager([asyncFunc1, asyncFunc2, asyncFunc3],finalResult);
 
 ```
 
@@ -4581,7 +4660,7 @@ function asyncFunc6(callback) {
 
 
 
-### METHOD 1:
+### METHOD 1: Here functions are being called in sequence not in parallel
 
 function getValue(result) {
   console.log(result, "result");
