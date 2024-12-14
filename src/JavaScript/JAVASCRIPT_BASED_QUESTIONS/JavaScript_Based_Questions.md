@@ -4660,36 +4660,7 @@ function asyncFunc6(callback) {
 
 
 
-### METHOD 1: Here functions are being called in sequence not in parallel
-
-function getValue(result) {
-  console.log(result, "result");
-}
-
-function callbackManager(asyncFunctions, callback) {
-  let output = [];
-
-  function asyncExecutor(value) {
-    if (value) {
-      output.push(value);
-    }
-
-    let asyncfunc = asyncFunctions.shift();
-
-    if (asyncfunc && typeof asyncfunc === "function") {
-      asyncfunc(asyncExecutor);
-    } else {
-      callback(output);
-    }
-  }
-
-  asyncExecutor();
-}
-
-callbackManager([asyncFunc1, asyncFunc2, asyncFunc3, asyncFunc4, asyncFunc5, asyncFunc6],getValue);
-
-
-### METHOD 2:
+### METHOD 1:
 
 
 function finalResult(data){
@@ -4868,7 +4839,7 @@ function asyncFunc6(value) {
 
 
 
- ### A. Here this function is calling Function of an array and storing data in sequence (Not in parallel).
+ ### A. Here  callbackManager function is calling Function of an array and storing data both in sequence (Not in parallel).
  function callbackManager(asyncFunctions, callback) {
 
    return new Promise((resolve,reject)=>{
@@ -4898,7 +4869,7 @@ result.then((response)=>{
 })
 
 
-### B. Here this  function is calling Functions of an array in parallel and storing data in sequence.
+### B. Here callbackManager  function is calling Functions of an array in parallel and storing data in sequence.
 
  function callbackManager(asyncFunctions, callback) {
    return new Promise((resolve,reject)=>{
