@@ -4895,7 +4895,8 @@ result.then((response)=>{
 
 ```
 
-### 78. YOU HAVE AN ARRAY OF ASYNC FUNCTIONS ( OR PROMISES ). YOU NEED TO EXECUTE THEM IN BATCHES WHERE EACH BATCH RUNS IN PARALLEL BUT BATCHES THEMSELVES ARE PROCEED IN SERIES.
+### 78.YOU HAVE AN ARRAY OF ASYNC FUNCTIONS ( OR PROMISES ). YOU NEED TO EXECUTE THEM IN BATCHES WHERE functions in EACH BATCH can RUNS IN PARALLEL and store result in sequence BUT BATCHES THEMSELVES ARE PROCEED IN SERIES (like if we have total 6 ASYNC FUNCTIONS and we want to call them in batch of two then 1st batch [fn1,fn2] will execute then after 2nd batch [fn3,fn4] and then 3rd batch [f5,f6] will executed.)
+
 
 ```JS
 
@@ -5058,6 +5059,36 @@ const wait =(delay)=>{
 
 callbackManager([p1,p2,p3,p4,p5,p6],batch)
 
+
+### Method 3: By using forEach loop.
+
+ function callbackManager(asyncFunctions,batch){
+    
+   async function postBatchCall(){
+     let batchedItem = asyncFunctions.slice(0,batch)
+     let count=0
+     let result = []
+     
+     batchedItem.forEach((fn,index)=>{
+       fn().then(async(res)=>{
+         result[index] =res
+         count++
+         if(count>=batch){
+           asyncFunctions.splice(0,batch)
+           console.log(result,'result')
+           await wait(4000)
+           postBatchCall()
+            
+         }
+       })
+     
+     })
+    
+   }
+   
+   postBatchCall()
+}
+callbackManager([asyncFunc1,asyncFunc2,asyncFunc3,asyncFunc4,asyncFunc5,asyncFunc6],batch)
 ```
 
 ### 79. Execute 3 asynchronous functions one after the other in sequence using async await.
