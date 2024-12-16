@@ -1678,6 +1678,11 @@ import {add,subtract,multiply} from "./math.js"
 
 ```
 
+
+- The Module Pattern in JavaScript is a design pattern that helps in organizing and encapsulating code.
+- It allows you to create private and public members, which helps in maintaining a clean global scope and avoiding naming conflicts.
+- The Module Pattern is particularly useful for creating reusable components and managing state.
+
 ### Tradeoffs
 
 - Encapsulation: The values within a module are scoped to that specific module. Values that aren't explicitly exported are not available outside of the module.
