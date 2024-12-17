@@ -33,7 +33,7 @@ Hello 2" is being printed twice and "Hello" is not printed.
 
 1. In JavaScript, function declarations are "hoisted" to the top of the script, regardless of where they are defined. This means that the function is moved to the top of the script, even if it's defined later in the code.
 
-2. In your example, the first foo() call is executed before the function is defined. However, because of hoisting, the function is already defined at the top of the script, so the first call to foo() will execute the first function definition, which logs "Hello".
+2. In your example, the first foo() call is executed before the function is defined. However, because of hoisting, the function is already defined at the top of the script. two function declarations with the same name foo are provided. In JavaScript, when you declare a function with the same name multiple times, the last declaration will overwrite any previous declarations. Therefore, the second function definition (which logs "Hello 2") will replace the first one (which logs "Hello").
 
 3. The second function definition, which logs "Hello 2", is defined later in the code, but it overwrites the first function definition. So, when the second foo() call is made, it will execute the second function definition, which logs "Hello 2".
 
@@ -45,12 +45,10 @@ function foo() {
   console.log("Hello");
 }
 
-foo(); // logs "Hello"
-
 function foo() {
   console.log("Hello 2");
 }
-
+foo(); // logs "Hello 2" 
 foo(); // logs "Hello 2"
 
 As you can see, the first function definition is executed once, and then the second function definition overwrites it, so the second call to foo() executes the second function definition.
