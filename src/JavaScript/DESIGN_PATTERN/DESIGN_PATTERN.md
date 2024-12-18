@@ -1673,6 +1673,238 @@ const darkButton = darkFactory.createButton(); // Output: Dark theme button crea
 - Abstract Factory Pattern allows us to create entire families of related objects that are compatible with each other. The client code remains unaware of the specific implementations.
 ```
 
+
+### Example 3:
+The Abstract Factory pattern is a creational design pattern that provides an interface for creating families of related or dependent objects
+without specifying their concrete classes. This pattern is particularly useful when the system needs to be independent of how its objects are created, composed, and represented.
+
+In JavaScript, the Abstract Factory pattern can be implemented using functions or classes. Below is an example that demonstrates
+how to use the Abstract Factory pattern to create different types of vehicles (like cars and bikes) and their respective factories.
+
+
+```js
+1. Define the Product Interfaces: Create interfaces for the products (Car and Bike).
+// Car interface
+class Car {
+    drive() {
+        throw new Error("This method should be overridden!");
+    }
+}
+
+// Bike interface
+class Bike {
+    ride() {
+        throw new Error("This method should be overridden!");
+    }
+}
+
+2. Create Concrete Products: Implement the concrete products.
+
+// Concrete Car Products
+class Sedan extends Car {
+    drive() {
+        return "Driving a sedan!";
+    }
+}
+
+class SUV extends Car {
+    drive() {
+        return "Driving an SUV!";
+    }
+}
+
+// Concrete Bike Products
+class MountainBike extends Bike {
+    ride() {
+        return "Riding a mountain bike!";
+    }
+}
+
+class RoadBike extends Bike {
+    ride() {
+        return "Riding a road bike!";
+    }
+}
+
+
+3. Define the Abstract Factory Interface: Create an interface for the factory.
+class VehicleFactory {
+    createCar() {
+        throw new Error("This method should be overridden!");
+    }
+
+    createBike() {
+        throw new Error("This method should be overridden!");
+    }
+}
+
+4. Create Concrete Factories: Implement the concrete factories.
+
+class SedanFactory extends VehicleFactory {
+    createCar() {
+        return new Sedan();
+    }
+
+    createBike() {
+        return new MountainBike();
+    }
+}
+
+class SUVFactory extends VehicleFactory {
+    createCar() {
+        return new SUV();
+    }
+
+    createBike() {
+        return new RoadBike();
+    }
+}
+
+5. Client Code: Use the factories to create products.
+
+function clientCode(factory) {
+    const car = factory.createCar();
+    const bike = factory.createBike();
+
+    console.log(car.drive());
+    console.log(bike.ride());
+}
+
+// Using SedanFactory
+console.log("Using Sedan Factory:");
+clientCode(new SedanFactory());
+
+// Using SUVFactory
+console.log("Using SUV Factory:");
+clientCode(new SUVFactory());
+```
+
+
+### Example 4 :
+
+`Key Components of the Abstract Factory Pattern :`
+
+1. `Abstract Factory:` An interface that declares methods for creating abstract products.
+2. `Concrete Factory:` Implements the abstract factory interface and creates specific products.
+3.` Abstract Product:` An interface for a type of product that the factory creates.
+4. `Concrete Product:` Implements the abstract product interface.
+5. `Client:` Uses only the interfaces declared by the abstract factory and abstract products.
+
+
+Here's a practical example of the Abstract Factory pattern in JavaScript, demonstrating how to create UI components with different themes (light and dark).
+
+```js
+// Step 1: Define Abstract Products
+
+// Abstract Product Interfaces
+class Button {
+    render() {}
+}
+
+class InputField {
+    render() {}
+}
+
+
+// Step 2: Create Concrete Products
+
+
+// Concrete Products for Light Theme
+class LightThemeButton extends Button {
+    render() {
+        console.log("Rendering a light theme button");
+    }
+}
+
+class LightThemeInputField extends InputField {
+    render() {
+        console.log("Rendering a light theme input field");
+    }
+}
+
+// Concrete Products for Dark Theme
+class DarkThemeButton extends Button {
+    render() {
+        console.log("Rendering a dark theme button");
+    }
+}
+
+class DarkThemeInputField extends InputField {
+    render() {
+        console.log("Rendering a dark theme input field");
+    }
+}
+
+
+//  Step 3: Define Abstract Factory
+
+// Abstract Factory Interface
+class UIFactory {
+    createButton() {}
+    createInputField() {}
+}
+
+
+//  Step 4: Create Concrete Factories
+
+// Concrete Factory for Light Theme
+class LightThemeFactory extends UIFactory {
+    createButton() {
+        return new LightThemeButton();
+    }
+    
+    createInputField() {
+        return new LightThemeInputField();
+    }
+}
+
+// Concrete Factory for Dark Theme
+class DarkThemeFactory extends UIFactory {
+    createButton() {
+        return new DarkThemeButton();
+    }
+    
+    createInputField() {
+        return new DarkThemeInputField();
+    }
+}
+
+
+//   Step 5: Client Code
+
+function clientCode(factory) {
+    const button = factory.createButton();
+    const inputField = factory.createInputField();
+
+    button.render();
+    inputField.render();
+}
+
+// Usage
+console.log("Client: Testing client code with Light Theme");
+clientCode(new LightThemeFactory());
+console.log("----------------");
+console.log("Client: Testing client code with Dark Theme");
+clientCode(new DarkThemeFactory());
+
+
+
+### Explanation :
+
+1. Abstract Products (Button, InputField) define common interfaces for products created by factories.
+
+2. Concrete Products (LightThemeButton, DarkThemeButton, etc.) implement these interfaces, providing specific functionality.
+
+3. Abstract Factory (UIFactory) declares methods for creating products.
+
+4. Concrete Factories (LightThemeFactory, DarkThemeFactory) implement the creation methods to produce specific product instances.
+
+5. The client code interacts with the factories through their interfaces, allowing it to work with any concrete factory without needing to know its specifics.
+
+`This design pattern promotes flexibility and scalability, making it easier to introduce new product families without altering existing code significantly.`
+```
+
+
 ### When To Use Abstract Factory Pattern ? ✅
 
 - **Interrelated Dependencies:** Ensure that a client uses objects that belong together in a family.
