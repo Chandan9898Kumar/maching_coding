@@ -9336,3 +9336,95 @@ setTimeout(() => {console.log(breaker());}, 300); // "hello";
 ### NOTE :
 By implementing a circuit breaker, you can prevent one failing service from causing a chain reaction of failures across your application.
 ```
+
+### 117. Explain what a hash table is in JavaScript.
+
+A hash table (also known as a hash map) is a data structure that allows you to store key-value pairs and efficiently retrieve the value associated with a given key. Hash tables use a hash function to compute an index into an array of buckets or slots, from which the desired value can be found.
+
+`Key Concepts:`
+
+1. Hash Function: This function takes a key and computes an index (hash code) for the key. The hash function should distribute keys uniformly across the buckets to minimize collisions.
+
+2. Buckets: These are storage locations in the hash table array. Each bucket can store multiple key-value pairs in case of collisions.
+
+3. Collisions: When two keys hash to the same index, a collision occurs. Collisions are typically handled using chaining (where each bucket points to a linked list of entries that hash to the same index) or open addressing (where a probing sequence is used to find an empty slot).
+
+**Example of a Simple Hash Table in JavaScript:**
+
+```js
+class HashTable {
+  constructor(size = 50) {
+    this.buckets = new Array(size);
+    this.size = size;
+  }
+
+  // Simple hash function to compute an index from a key
+  hash(key) {
+    let hash = 0;
+    for (let i = 0; i < key.length; i++) {
+      hash = (hash + key.charCodeAt(i) * i) % this.size;
+    }
+    return hash;
+  }
+
+  // Method to set a key-value pair
+  set(key, value) {
+    const index = this.hash(key);
+    if (!this.buckets[index]) {
+      this.buckets[index] = [];
+    }
+    this.buckets[index].push([key, value]);
+  }
+
+  // Method to get a value by key
+  get(key) {
+    const index = this.hash(key);
+    if (!this.buckets[index]) return undefined;
+
+    for (let i = 0; i < this.buckets[index].length; i++) {
+      if (this.buckets[index][i][0] === key) {
+        return this.buckets[index][i][1];
+      }
+    }
+    return undefined;
+  }
+
+  // Method to remove a key-value pair
+  remove(key) {
+    const index = this.hash(key);
+    if (!this.buckets[index]) return false;
+
+    for (let i = 0; i < this.buckets[index].length; i++) {
+      if (this.buckets[index][i][0] === key) {
+        this.buckets[index].splice(i, 1);
+        return true;
+      }
+    }
+    return false;
+  }
+}
+
+// Example usage:
+const hashTable = new HashTable();
+hashTable.set("name", "Alice");
+hashTable.set("age", 25);
+
+console.log(hashTable.get("name")); // Output: Alice
+console.log(hashTable.get("age")); // Output: 25
+
+hashTable.remove("age");
+console.log(hashTable.get("age")); // Output: undefined
+
+
+### Explanation:
+
+1. Hash Function: The hash method computes an index based on the key's characters.
+
+2. Set Method: The set method stores the key-value pair in the computed bucket index.
+
+3. Get Method: The get method retrieves the value associated with a given key by searching through the bucket.
+
+4. Remove Method: The remove method deletes the key-value pair from the hash table.
+
+Hash tables are widely used due to their average-case constant time complexity (O(1)) for insertion, deletion, and lookup operations, making them extremely efficient for many applications.
+```
