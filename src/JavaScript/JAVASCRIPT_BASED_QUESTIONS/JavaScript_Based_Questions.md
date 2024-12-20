@@ -127,7 +127,7 @@ C. This process continues in a loop.
 A. Microtasks are often used for tasks that need to be completed immediately and impact the rendering process.
 B. Callbacks in the Callback Queue are typically used for less critical tasks, such as deferred or background operations.
 
-### Virtual DOM.
+### 3. Virtual DOM.
 
 ReactJS Virtual DOM is an in-memory representation of the actual DOM (Document Object Model). React uses this lightweight JavaScript object to track changes in the application state and efficiently update the actual DOM only where necessary.
 
