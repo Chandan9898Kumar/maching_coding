@@ -127,6 +127,21 @@ C. This process continues in a loop.
 A. Microtasks are often used for tasks that need to be completed immediately and impact the rendering process.
 B. Callbacks in the Callback Queue are typically used for less critical tasks, such as deferred or background operations.
 
+### Virtual DOM.
+
+ReactJS Virtual DOM is an in-memory representation of the actual DOM (Document Object Model). React uses this lightweight JavaScript object to track changes in the application state and efficiently update the actual DOM only where necessary.
+
+`How Does the Virtual DOM Work ? `
+
+1. **Rendering the Virtual DOM:** React creates a virtual representation of the UI as a tree of JavaScript objects.
+2. **Updating State:** It generates a new Virtual DOM tree to reflect the updated state when the application state changes.
+3. **Diffing Algorithm:** React compares the new Virtual DOM tree with the previous one using its efficient diffing algorithm to identify the minimal set of changes required.
+4. **Updating the Real DOM:** React applies only the necessary changes to the real DOM, optimizing rendering performance.
+
+<p align="center">
+  <img src="../../Assests/virtual.webp" width="450" title="Virtual Dom">
+</p>
+
 ### 4. What is Document Object Model (DOM)
 
 - The Document Object Model (DOM) is an application programming interface (API) for manipulating HTML documents.
