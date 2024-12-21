@@ -740,6 +740,79 @@ promise.then((res) => {
 console.log(4);
 ```
 
+### 16. Guess the Output
+
+```js
+
+> Question 1:
+
+function Person(name) {
+  this.name = name;
+
+  function person() {
+    return {
+      name: 'Prithvi'
+    };
+  }
+
+  var person = {
+    name: 'Ajay',
+    Game:'GTA 6'
+  };
+
+  var person = false;
+  return person
+
+}
+
+const data = new Person('Hoka')
+console.log(data,'data')
+
+
+Question 2:
+
+function Person(name) {
+  this.name = name;
+
+  function person() {
+    return {
+      name: 'Prithvi'
+    };
+  }
+  var person = {
+    name: 'Ajay',
+    Game:'GTA 6'
+  };
+
+  return person
+
+}
+
+const data = new Person('Hoka')
+console.log(data,'data')
+
+
+> Question 3:
+
+function Person(name) {
+  this.name = name;
+
+  function person() {
+    return {
+      name: 'Prithvi'
+    };
+  }
+
+  return person
+
+}
+
+const data = new Person('Hoka')
+console.log(data,'data')
+
+
+```
+
 ### 17. Design and Implement localStorage API .
 
 you need to design and implement the localStorage API. It should mimic the behaviour of existing window.localStorage.
