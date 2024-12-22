@@ -9501,3 +9501,158 @@ console.log(hashTable.get("age")); // Output: undefined
 
 Hash tables are widely used due to their average-case constant time complexity (O(1)) for insertion, deletion, and lookup operations, making them extremely efficient for many applications.
 ```
+
+### 118. implement Deep Filter Functionality.
+
+In this question, you must implement a function that takes two arguments `object` and `filter (callback) function`, then returns a filtered object.
+
+Implement a function which omit negative values and return object with their positive values.
+
+```js
+> The output will be :
+
+{
+    "a": 1,
+    "b": {
+        "c": 2,
+        "h": {
+            "i": 5,
+            "j": 6
+        }
+    }
+}
+
+```
+
+```js
+const input = {
+  a: 1,
+  b: {
+    c: 2,
+    d: -3,
+    e: {
+      f: {
+        g: -4,
+      },
+    },
+    h: {
+      i: 5,
+      j: 6,
+    },
+  },
+};
+
+const callback = (value) => {
+  return value > 0;
+};
+
+const filterValue = (collection, callback) => {
+  if (typeof collection !== "object") {
+    throw new Error("collection Should be an object");
+  }
+
+  if (typeof callback !== "function") {
+    throw new Error("callback Should be a function");
+  }
+
+  let finalResult = {};
+
+  function processing(finalResult, collection) {
+    for (let item in collection) {
+      if (typeof collection[item] === "object") {
+        let newResult = {};
+        let response = processing(newResult, collection[item]);
+        if (Object.keys(response).length) {
+          finalResult[item] = response;
+        }
+      }
+      if (typeof collection[item] === "number" && callback(collection[item])) {
+        finalResult[item] = collection[item];
+      }
+    }
+    return finalResult;
+  }
+  processing(finalResult, collection);
+
+  return finalResult;
+};
+
+const result = filterValue(input, callback);
+console.log(result, "result");
+```
+
+### 119. implement Deep Filter Functionality. Same as above Question.
+
+In this question, you must implement a function that takes two arguments `object` and `filter (callback) function`, then returns a filtered object.
+
+Implement a function which omit non-string values and return object with their string values.
+
+> The output will be :
+
+```js
+{
+    "b": {
+        "c": "Hello John",
+        "h": {
+            "j": "Good night for now"
+        }
+    }
+}
+```
+
+```js
+const input = {
+  a: 1,
+  b: {
+    c: "Hello John",
+    d: -3,
+    e: {
+      f: {
+        g: -4,
+      },
+    },
+    h: {
+      i: 5,
+      j: "Good night for now",
+    },
+  },
+};
+
+const callback = (value) => {
+  return typeof value === "string";
+};
+
+const filterValue = (collection, callback) => {
+  if (typeof collection !== "object") {
+    throw new Error("collection Should be an object");
+  }
+
+  if (typeof callback !== "function") {
+    throw new Error("callback Should be a function");
+  }
+
+  let finalResult = {};
+  function processing(finalResult, collection) {
+    for (let item in collection) {
+      if (typeof collection[item] === "object") {
+        let newResult = {};
+        let response = processing(newResult, collection[item]);
+        if (Object.keys(response).length) {
+          finalResult[item] = response;
+        }
+      }
+
+      if (callback(collection[item])) {
+        finalResult[item] = collection[item];
+      }
+    }
+    return finalResult;
+  }
+  processing(finalResult, collection);
+
+  return finalResult;
+};
+
+const result = filterValue(input, callback);
+console.log(result, "result");
+```
