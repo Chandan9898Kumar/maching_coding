@@ -676,6 +676,67 @@ this[i] = item;
 const result = arrays.myFill('o');
 console.log(result, 'result', arrays);
 
+
+
+### 10. polyfills of Sort method.
+
+// Simple polyfill for sort() method using Bubble Sort
+Array.prototype.mySort = function(compareFunction) {
+    // Default compare function if none provided
+    if (!compareFunction) {
+        compareFunction = (a, b) => {
+            return String(a) > String(b) ? 1 : -1;
+        }
+    }
+
+    const length = this.length;
+
+    // Bubble sort
+    for (let i = 0; i < length - 1; i++) {
+        for (let j = 0; j < length - 1 - i; j++) {
+            if (compareFunction(this[j], this[j + 1]) > 0) {
+                // Swap elements
+                [this[j], this[j + 1]] = [this[j + 1], this[j]];
+            }
+        }
+    }
+
+    return this;
+};
+
+// Test Cases
+// 1. Sorting numbers
+const numbers = [5, 2, 8, 1, 9];
+console.log("Sorting numbers:");
+console.log("Before:", numbers);
+console.log("After:", numbers.mySort());
+// Output: [1, 2, 5, 8, 9]
+
+// 2. Sorting strings
+const fruits = ['banana', 'apple', 'orange'];
+console.log("\nSorting strings:");
+console.log("Before:", fruits);
+console.log("After:", fruits.mySort());
+// Output: ['apple', 'banana', 'orange']
+
+// 3. Custom sorting (descending order)
+const nums = [1, 5, 2, 4, 3];
+console.log("\nCustom sorting (descending):");
+console.log("Before:", nums);
+console.log("After:", nums.mySort((a, b) => b - a));
+// Output: [5, 4, 3, 2, 1]
+
+// 4. Sorting objects by age
+const people = [
+    { name: 'John', age: 30 },
+    { name: 'Alice', age: 25 },
+    { name: 'Bob', age: 35 }
+];
+console.log("\nSorting objects by age:");
+console.log("Before:", people);
+console.log("After:", people.mySort((a, b) => a.age - b.age));
+// Output: sorted by age (25, 30, 35)
+
 ```
 
 # 3. Create a polyfill method that transforms array values into upper case: Create a polyfill of upperCase for Array items.
