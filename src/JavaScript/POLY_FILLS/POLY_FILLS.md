@@ -27,6 +27,11 @@ Function.prototype.myCall = function (context = {}, ...vals) {
     throw new Error(this + "This is not callable");
   }
   context = context === null || context === undefined ? window : context;
+  // 1. // Will fallback to window if context is null, undefined, 0, '', or false
+  // context = context || window;
+
+  // 2. // Most modern and readable approach
+  // context = context ?? window;
 
   context = Object(context);
 
@@ -63,14 +68,14 @@ function calling(greet, message) {
   return `${greet} ${this.FName} ${this.LNAME} ${message}`;
 }
 
-Function.prototype.myApply = function (context = {}, arg = []) {
+Function.prototype.myApply = function (context = window, arg = []) {
   if (typeof this !== "function") {
     throw new Error(this + "It is not callable");
   }
   if (!Array.isArray(arg)) {
     throw new Error(`${arg} should be an array `);
   }
-  context = context === null || context === undefined ? window : context;
+  context = context ?? window;
 
   context = Object(context);
 
@@ -101,8 +106,8 @@ function calling(greet, message, status, ...rest) {
   return `${greet} ${this.FName} ${this.LNAME} ${message} and your status is ${status}`;
 }
 
-Function.prototype.myBind = function (context = {}, ...args) {
-  context = context === null || context === undefined ? window : context;
+Function.prototype.myBind = function (context = window, ...args) {
+  context = context ?? window;
 
   if (typeof this !== "function") {
     throw new Error("Not Callable");
@@ -135,8 +140,8 @@ console.log(result2, "result2");
 
 A. `BY Using Call Method :`
 
-Function.prototype.myBind = function (context = {}, ...args) {
-  context = context === null || context === undefined ? window : context;
+Function.prototype.myBind = function (context = window, ...args) {
+  context = context ?? window
 
   if (typeof this !== "function") {
     throw new Error("Not Callable");
