@@ -2438,3 +2438,52 @@ let result = text.mySplit("the");
 
 console.log(result);
 ```
+
+### 8. Polyfills of localStorage 
+
+```js
+function LocalsStorage() {
+  let obj = new Map();
+
+  this.setItem = function (key, value) {
+    obj.set(key, value);
+    localStorage.setItem(key, JSON.stringify(value));
+    this.length = obj.size;
+  };
+
+  this.getItem = function (key) {
+    if (obj.has(key)) {
+      return localStorage.getItem(key);
+    }
+    return null;
+  };
+
+  this.removeItem = function (key) {
+    if (obj.has(key)) {
+      obj.delete(key);
+      this.length = obj.size;
+    }
+    localStorage.removeItem(key);
+  };
+
+  this.clear = function () {
+    obj.clear();
+    localStorage.clear();
+    this.length = obj.size;
+  };
+
+  this.length = obj.size;
+}
+
+const localStorages = new LocalsStorage();
+
+localStorages.setItem("game", "Car Race");
+localStorages.setItem("fame", "oscar");
+localStorages.setItem("tame", "pet");
+console.log(localStorages.getItem("game"));
+console.log(localStorages.getItem("fame"));
+console.log(localStorages.getItem("tame"));
+console.log(localStorages.length);
+localStorages.removeItem("tame");
+console.log(localStorages.length);
+```
