@@ -1996,11 +1996,23 @@ function createSetTimeoutPolyfill() {
         delete intervalMap[id]
         return
       } else {
-        requestIdleCallback(triggerCallback);  // requestIdleCallback makes triggerCallback function keep getting called.
+       // This recursive call is crucial!
+       // It schedules the next check
+         requestIdleCallback(triggerCallback, { timeout: 100 }); // Minimum 100ms delay between recursive calls which help to tackle stack overflow.
+         // requestIdleCallback makes triggerCallback function keep getting called. This creates separate calls in different animation frames.
+         // Execution happens like:
+        // Frame 1: triggerCallback()
+        // Frame 2: triggerCallback()
+        // Frame 3: triggerCallback()
+        // Each in its own clean stack
+        // Cleans up between frames
+
+        // NOTE: If we called triggerCallback() directly, then This creates an infinite loop in the same call stack and  Will cause stack overflow.
+        // Also : It Keeps all previous calls in memory.
       }
     }
 
-    requestIdleCallback(triggerCallback);
+    requestIdleCallback(triggerCallback, { timeout: 100 });
 
     return id;
   }
@@ -2050,6 +2062,77 @@ A reference to a function that should be called in the near future, when the eve
 describing the amount of time available and whether or not the callback has been run because the timeout period expired.
 
 ```
+
+NOTE : `Using requestIdleCallback for a setTimeout polyfill isn't ideal.`
+
+Here's why:
+
+1. `Timing Accuracy` : requestIdleCallback is designed for low-priority background tasks and executes during idle periods. This means it doesn't guarantee precise timing that setTimeout should provide. [1]
+
+2. `Execution Priority` : setTimeout tasks should execute as soon as possible after their delay, while requestIdleCallback intentionally waits for idle periods.
+
+# Here's a better implementation using requestAnimationFrame which is more suitable for timing-sensitive operations:
+
+```js
+function createSetTimeoutPolyfill() {
+  let intervalId = 1;
+  let intervalMap = {};
+
+  function callSetTimeout(callback, delay = 0, ...args) {
+    if (typeof callback !== "function") {
+      throw new TypeError('"callback" must be a function');
+    }
+
+    let id = intervalId++;
+    intervalMap[id] = true;
+    const start = Date.now() + delay;
+
+    function triggerCallback() {
+      if (!intervalMap[id]) {
+        return;
+      }
+
+      if (Date.now() >= start) {
+        callback.apply(this, args);
+        delete intervalMap[id];
+        return;
+      }
+
+      // Use requestAnimationFrame for more precise timing
+      requestAnimationFrame(triggerCallback); // Creates a fresh stack for each frame
+    }
+
+    requestAnimationFrame(triggerCallback);
+    return id;
+  }
+
+  function clearSetTimeout(id) {
+    delete intervalMap[id];
+  }
+
+  return { callSetTimeout, clearSetTimeout };
+}
+
+// Usage example
+const { callSetTimeout, clearSetTimeout } = createSetTimeoutPolyfill();
+
+const callbackFunction = (response) => {
+  console.log(response, "response");
+};
+
+// Test it
+const timeoutId = callSetTimeout(callbackFunction, 5000, "Hi, How are you");
+
+// Benefits of using requestAnimationFrame:
+
+// Better Timing : It runs at ~60fps (approximately every 16.7ms), providing more accurate timing than requestIdleCallback
+
+// Proper Priority : It's designed for timing-sensitive operations, similar to how real setTimeout works
+
+// Performance : It's optimized for animations and timing operations, making it more suitable for this use case
+```
+
+`However, for a setTimeout polyfill, requestAnimationFrame remains the better choice as it more closely matches the expected behavior of the native setTimeout.`
 
 ## 7. Polyfills of setInterval() .
 
@@ -2439,7 +2522,7 @@ let result = text.mySplit("the");
 console.log(result);
 ```
 
-### 8. Polyfills of localStorage 
+### 8. Polyfills of localStorage
 
 ```js
 function LocalsStorage() {
