@@ -470,6 +470,7 @@ Common Reflow Triggers:
 
 ```js
 // 1. DOM Element Changes
+
 // These operations trigger reflow
 element.style.width = "200px"; // Size changes
 element.style.position = "absolute"; // Position changes
@@ -483,6 +484,17 @@ window.scroll(); // Scrolling
 // 3. DOM Manipulation
 parentElement.appendChild(newElement); // Adding elements
 element.removeChild(childElement); // Removing elements
+
+// 4. Position Changes
+element.style.position = "absolute";
+element.style.top = "50px";
+element.style.left = "100px";
+element.style.float = "left";
+
+// 5. Text/Content Changes
+element.style.fontSize = "16px";
+element.style.lineHeight = "1.5";
+element.textContent = "New text";
 ```
 
 2. Painting occurs when visual styles change without affecting layout.
