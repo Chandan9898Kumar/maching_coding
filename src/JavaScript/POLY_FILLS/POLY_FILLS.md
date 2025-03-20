@@ -742,6 +742,55 @@ console.log("Before:", people);
 console.log("After:", people.mySort((a, b) => a.age - b.age));
 // Output: sorted by age (25, 30, 35)
 
+
+
+
+### Polyfills of indexOf
+
+// Array indexOf polyfill
+if (!Array.prototype.indexOf) {
+  Array.prototype.indexOf = function(searchElement, fromIndex) {
+    // Handle case when array is null/undefined
+    if (this === null || this === undefined) {
+      throw new TypeError('Cannot read property "indexOf" of null or undefined');
+    }
+
+    // Convert this to object
+    const array = Object(this);
+
+    // Convert array length to integer
+    const length = array.length >>> 0;
+
+    // Return -1 if array is empty
+    if (length === 0) {
+      return -1;
+    }
+
+    // Convert fromIndex to integer
+    let fromIndexInt = parseInt(fromIndex) || 0;
+
+    // Handle negative fromIndex
+    if (fromIndexInt < 0) {
+      fromIndexInt = Math.max(length + fromIndexInt, 0);
+    }
+
+    // Search for element
+    for (let i = fromIndexInt; i < length; i++) {
+      if (i in array && array[i] === searchElement) {
+        return i;
+      }
+    }
+
+    return -1;
+  };
+}
+
+// Usage Example
+const arr = [1, 2, 3, 4, 2, 5];
+console.log(arr.indexOf(2));     // 1
+console.log(arr.indexOf(2, 2));  // 4
+console.log(arr.indexOf(6));     // -1
+
 ```
 
 # 3. Create a polyfill method that transforms array values into upper case: Create a polyfill of upperCase for Array items.
@@ -941,7 +990,64 @@ human = Object.create(Animal, properties);
 console.log(human,'human',Animal)
 ```
 
-# 5. Polyfills of Promises.
+### 5. Polyfills of Strings
+
+1. polyfills of indexOf
+
+```js
+// String indexOf polyfill
+if (!String.prototype.indexOf) {
+  String.prototype.indexOf = function (searchValue, fromIndex) {
+    // Handle null/undefined string
+    if (this === null || this === undefined) {
+      throw new TypeError('Cannot read property "indexOf" of null or undefined');
+    }
+
+    // Convert this to string
+    const string = String(this);
+
+    // Convert searchValue to string
+    const searchString = String(searchValue);
+
+    const stringLength = string.length;
+    const searchLength = searchString.length;
+
+    // Convert fromIndex to integer
+    let fromIndexInt = parseInt(fromIndex) || 0;
+
+    // Handle negative fromIndex
+    if (fromIndexInt < 0) {
+      fromIndexInt = 0;
+    }
+
+    // Search for string
+    for (let i = fromIndexInt; i <= stringLength - searchLength; i++) {
+      let found = true;
+
+      for (let j = 0; j < searchLength; j++) {
+        if (string[i + j] !== searchString[j]) {
+          found = false;
+          break;
+        }
+      }
+
+      if (found) {
+        return i;
+      }
+    }
+
+    return -1;
+  };
+}
+
+// Usage Example
+const str = "Hello World";
+console.log(str.indexOf("World")); // 6
+console.log(str.indexOf("world")); // -1
+console.log(str.indexOf("o", 5)); // 7
+```
+
+# 6. Polyfills of Promises.
 
 1. - polyfills of Promise
 

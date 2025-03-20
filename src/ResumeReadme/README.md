@@ -354,3 +354,144 @@ c. Refetches when network is restored
    d. Request cancellation
 
 `NOTE :` RTK Query significantly reduces boilerplate code while providing advanced features for data fetching and caching, making it a preferred choice for many Redux-based applications.
+
+### React Questions
+
+# 1. Question
+
+what is JSX , and how does react convert jsx into html ?
+
+JSX (JavaScript XML) is a syntax extension for JavaScript that allows you to write HTML-like code within your JavaScript code. It makes React code more readable and writing templates more intuitive.
+
+Here's how JSX works and gets converted to HTML:
+
+1. JSX Syntax:
+
+```js
+// JSX Example
+const element = (
+  <div className="greeting">
+    <h1>Hello, World!</h1>
+    <p>Welcome to React</p>
+  </div>
+);
+```
+
+2. Behind the scenes, Babel (a JavaScript compiler) transforms this JSX into regular JavaScript using React.createElement() calls:
+
+```js
+// Transformed JavaScript
+const element = React.createElement("div", { className: "greeting" }, React.createElement("h1", null, "Hello, World!"), React.createElement("p", null, "Welcome to React"));
+```
+
+3. The React.createElement() function creates objects (Virtual DOM elements) that look like this:
+
+```js
+// Simplified representation of the object created
+{
+  type: 'div',
+  props: {
+    className: 'greeting',
+    children: [
+      {
+        type: 'h1',
+        props: {
+          children: 'Hello, World!'
+        }
+      },
+      {
+        type: 'p',
+        props: {
+          children: 'Welcome to React'
+        }
+      }
+    ]
+  }
+}
+
+
+```
+
+`The conversion process happens in this order:`
+
+1. You write JSX code
+
+2. Babel transforms JSX into React.createElement() calls during the build process
+
+3. React.createElement() creates Virtual DOM elements
+
+4. React uses these Virtual DOM elements to efficiently update the actual DOM
+
+NOTE : JSX is not required for using React, but it makes the code more readable and writing templates more intuitive, which is why it's commonly used in React applications.
+
+Example :
+
+```js
+1. Simple Component with JSX:
+
+// With JSX
+function Welcome() {
+  return <h1>Hello, World!</h1>;
+}
+
+2. Same Component without JSX:
+// Without JSX
+function Welcome() {
+  return React.createElement('h1', null, 'Hello, World!');
+}
+
+
+```
+
+# 2. Question
+
+What occurs when a change in state triggers a color/ state change? How does HTML parse these changes and display the updates? What are the underlying steps involved in this process?
+
+`The Complete Process Step by Step:`
+
+1. Initial Trigger : When state changes
+2. Component Re-render : React schedules a re-render
+3. Virtual DOM Creation : New Virtual DOM tree is created
+
+4. Diffing Process : React compares old and new Virtual DOM
+
+5. Batch Processing : Multiple state updates are batched. ( React will batch these into a single re-render )
+
+6. Final DOM Update : Only necessary DOM updates are made
+
+# Question 3.
+
+What are reflow and painting in React/HTML, and when do they occur?
+
+1. `Reflow (Layout):`
+   A reflow occurs when changes affect the layout of elements (position, size, etc.).
+
+Common Reflow Triggers:
+
+```js
+// 1. DOM Element Changes
+// These operations trigger reflow
+element.style.width = "200px"; // Size changes
+element.style.position = "absolute"; // Position changes
+element.style.margin = "20px"; // Margin/padding changes
+element.style.display = "block"; // Display changes
+
+// 2. Window Operations
+window.resize(); // Window resize
+window.scroll(); // Scrolling
+
+// 3. DOM Manipulation
+parentElement.appendChild(newElement); // Adding elements
+element.removeChild(childElement); // Removing elements
+```
+
+2. Painting occurs when visual styles change without affecting layout.
+
+`Common Paint Triggers:`
+
+```js
+// These operations only trigger repaint
+element.style.color = "red"; // Color changes
+element.style.backgroundColor = "blue"; // Background changes
+element.style.visibility = "hidden"; // Visibility changes
+```
