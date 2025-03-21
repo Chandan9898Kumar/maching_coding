@@ -507,3 +507,189 @@ element.style.color = "red"; // Color changes
 element.style.backgroundColor = "blue"; // Background changes
 element.style.visibility = "hidden"; // Visibility changes
 ```
+
+# Question 4.
+
+What are First Contentful Paint (FCP), Largest Contentful Paint (LCP), Total Blocking Time (TBT), and Cumulative Layout Shift (CLS)? How do these metrics impact website performance, and what strategies can be implemented to enhance them?"
+
+1. `First Contentful Paint (FCP):`
+
+a. Measures the time from when the page starts loading to when any content (text, image, canvas, etc.) is first displayed
+
+b. Target: Under 1.8 seconds for good user experience
+
+`Definition:` FCP measures the time it takes for the first piece of content (text, image, etc.) to be rendered on the screen after a user navigates to a page.
+
+`Impact:` A fast FCP indicates that users can start engaging with the content quickly, which enhances their perception of the site's speed.
+
+Optimization strategies:
+
+```js
+// 1. Eliminate render-blocking resources
+// Add async/defer to non-critical scripts
+<script async src="non-critical.js"></script>
+<script defer src="deferred.js"></script>
+
+// 2. Preload critical resources
+<link rel="preload" href="critical-style.css" as="style">
+<link rel="preload" href="important-font.woff2" as="font" crossorigin>
+
+// 3. Implement critical CSS inline
+<style>
+  /* Critical styles needed for above-the-fold content */
+  .header { ... }
+  .hero { ... }
+</style>
+
+
+Improvement Strategies:
+
+  Optimize server response times.
+  Minimize render-blocking resources (e.g., CSS and JavaScript).
+  Use efficient caching strategies.
+  Implement a Content Delivery Network (CDN) to reduce latency.
+
+```
+
+2. `Largest Contentful Paint (LCP):`
+
+a. Measures loading performance by timing when the largest content element becomes visible
+
+b. Target: Under 2.5 seconds
+
+`Definition:` LCP measures the time it takes for the largest visible content element (such as an image or video) to load and become visible in the viewport.
+
+`Impact:` A good LCP score is crucial for user satisfaction, as it reflects how quickly the main content of the page is loaded.
+
+Optimization strategies:
+
+```js
+// 1. Optimize images
+// Use modern formats and responsive images
+<picture>
+  <source srcset="image.webp" type="image/webp">
+  <source srcset="image.jpg" type="image/jpeg">
+  <img src="image.jpg" alt="..." loading="lazy">
+</picture>
+
+// 2. Implement caching
+// Example using service worker
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => response || fetch(event.request))
+  );
+});
+
+// 3. Prioritize LCP element
+const observer = new PerformanceObserver((list) => {
+  const entries = list.getEntries();
+  const lcpElement = entries[entries.length - 1];
+  // Add priority hints or preload if needed
+});
+observer.observe({ entryTypes: ['largest-contentful-paint'] });
+
+
+Improvement Strategies:
+  Optimize images and videos (e.g., use next-gen formats like WebP).
+  Ensure that critical resources are loaded quickly.
+  Improve server response times and leverage lazy loading for offscreen images.
+```
+
+3. `Total Blocking Time (TBT):`
+
+a. Measures the total time between FCP and Time to Interactive where the main thread was blocked
+
+b. Target: Under 200 milliseconds
+
+`Definition:` TBT measures the total time between FCP and Time to Interactive (TTI) when the main thread is blocked and unable to respond to user input.
+
+`Impact:` High TBT can lead to a frustrating user experience, as it indicates that the page is not fully interactive.
+
+Optimization strategies:
+
+```js
+// 1. Break up long tasks
+// Instead of one long task
+function longTask() {
+  // Heavy computation
+}
+
+// Break into smaller chunks
+function breakUpTask(data) {
+  const chunks = splitIntoChunks(data);
+
+  function processChunk() {
+    const chunk = chunks.shift();
+    if (chunk) {
+      // Process chunk
+      requestIdleCallback(processChunk);
+    }
+  }
+
+  requestIdleCallback(processChunk);
+}
+
+// 2. Use Web Workers for heavy computation
+const worker = new Worker("compute.js");
+worker.postMessage(data);
+worker.onmessage = (event) => {
+  // Handle result
+};
+
+Improvement Strategies:
+  Minimize JavaScript execution time and optimize scripts.
+  Split long tasks into smaller, asynchronous tasks.
+  Use web workers to handle heavy computations off the main thread.
+```
+
+4. `Cumulative Layout Shift (CLS):`
+
+a. Measures visual stability by quantifying unexpected layout shifts
+
+b. Target: Under 0.1
+
+`Definition:` CLS quantifies the visual stability of a page by measuring how much the content shifts during loading.
+
+`Impact:` A high CLS score can lead to a poor user experience, as unexpected shifts can cause users to click on the wrong elements.
+
+Optimization strategies:
+
+```js
+// 1. Reserve space for dynamic content
+.ad-container {
+  min-height: 250px;
+  width: 100%;
+}
+
+// 2. Set dimensions for media elements
+<img
+  src="image.jpg"
+  width="800"
+  height="600"
+  alt="..."
+/>
+
+// 3. Use CSS transform for animations instead of properties that trigger layout
+// Bad
+.element {
+  animation: move 1s {
+    from { top: 0; }
+    to { top: 100px; }
+  }
+}
+
+// Good
+.element {
+  animation: move 1s {
+    from { transform: translateY(0); }
+    to { transform: translateY(100px); }
+  }
+}
+
+Improvement Strategies :
+  Always specify size attributes for images and videos.
+  Avoid inserting content above existing content (e.g., ads) without reserving space.
+  Use CSS to create a stable layout and avoid layout thrashing.
+
+```
