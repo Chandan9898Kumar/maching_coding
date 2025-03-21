@@ -9656,3 +9656,67 @@ const filterValue = (collection, callback) => {
 const result = filterValue(input, callback);
 console.log(result, "result");
 ```
+
+### 120.
+
+a. Implement a function promisify that accepts two parameters:
+b. promises - an array of promises.
+c.timeout - a number representing the timeout limit in milliseconds.
+
+`The function should:`
+a. Resolve with an array of results from all fulfilled promises if at least one promise resolves within the specified timeout.
+b. Reject with an array of errors if no promises have resolved within the timeout.
+
+```js
+const promise1 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve("5000");
+  }, 5000);
+});
+
+const promise2 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject("2000");
+  }, 1000);
+});
+
+const promise3 = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    reject("1000");
+  }, 1000);
+});
+
+let timeoutLimit = 8000;
+function promiseReturn(promises, timer) {
+  return new Promise((resolve, reject) => {
+    let resolved = [];
+    let notResolved = [];
+    let count = 0;
+
+    let id = setTimeout(() => {
+      if (count) {
+        resolve(resolved);
+      } else {
+        reject(notResolved.length ? notResolved : " Not Resolved");
+      }
+    }, timer);
+
+    promises.forEach((p, i) => {
+      p.then((result) => {
+        resolved.push(result);
+        count++;
+      }).catch((err) => {
+        notResolved.push(err);
+      });
+    });
+  });
+}
+
+promiseReturn([promise1, promise2, promise3], timeoutLimit)
+  .then((res) => {
+    console.log(res, "response");
+  })
+  .catch((err) => {
+    console.log(err, "error");
+  });
+```
