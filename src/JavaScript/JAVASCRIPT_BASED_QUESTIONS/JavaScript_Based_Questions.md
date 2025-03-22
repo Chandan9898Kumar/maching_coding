@@ -3706,7 +3706,63 @@ pubSubObj.publish("Value is 10");
 
 
 `NOTE :`
-This is a well known JavaScript pattern called as Publish/Subscribe Pattern
+1. This is a well known JavaScript pattern called as Publish/Subscribe Pattern.
+
+2. The Publish/Subscribe (Pub/Sub) Pattern is a messaging pattern that enables loose coupling between components in a system through asynchronous communication.
+
+
+### Example 2:
+
+// Basic structure
+class PubSub {
+    constructor() {
+        this.subscribers = {};
+    }
+
+    subscribe(event, callback) {
+        if (!this.subscribers[event]) {
+            this.subscribers[event] = [];
+        }
+        this.subscribers[event].push(callback);
+
+        // Return unsubscribe function
+        return () => {
+            this.subscribers[event] = this.subscribers[event].filter(cb => cb !== callback);
+        };
+    }
+
+    publish(event, data) {
+        if (!this.subscribers[event]) return;
+
+        this.subscribers[event].forEach(callback => {
+            callback(data);
+        });
+    }
+}
+
+// Create a PubSub instance
+const pubsub = new PubSub();
+
+// Subscribe to events
+const unsubscribe = pubsub.subscribe('userLoggedIn', (user) => {
+    console.log(`User ${user.name} logged in!`);
+});
+
+// Publish events
+pubsub.publish('userLoggedIn', { name: 'John' });
+
+// Unsubscribe when needed
+unsubscribe();
+
+
+`This pattern is particularly useful in:`
+
+  1. Event-driven architectures
+  2. UI component communication
+  3. Application state management
+  4. Real-time features
+  5. Microservices communication
+
 ```
 
 ### 56. Display all the keys and values of a nested object.
