@@ -749,3 +749,104 @@ element.getBoundingClientRect();
 // 5. Paint Operations (Painting Phase)
 // Browser converts the above into pixels
 ```
+
+# Question 6.
+
+Explain the difference between async and defer attributes in script loading:
+
+Key Differences:
+
+1. `Loading Behavior :`
+
+A. async: Downloads the script asynchronously while HTML parsing continues, executes immediately once downloaded
+
+B. defer: Downloads the script asynchronously while HTML parsing continues, but waits to execute until HTML is fully parsed
+
+2. `Execution Order :`
+
+A. async: Scripts execute in no particular order (first downloaded, first executed)
+
+B. defer: Scripts execute in order they appear in the document
+
+3. `DOM Ready :`
+
+A. async: Doesn't wait for DOM to be ready
+
+B. defer: Waits for DOM to be fully ready before execution
+
+**Use Cases:**
+
+`Use async when :`
+
+1. The script is completely independent
+2. No dependencies on other scripts
+3. Doesn't manipulate DOM on load
+4. Examples: Analytics, tracking scripts
+
+```js
+<script async src="analytics.js"></script>
+<script async src="tracking.js"></script>
+
+```
+
+**Use defer when :**
+
+1. Script depends on DOM being ready
+2. Script has dependencies on other scripts
+3. Order of execution matters
+
+```js
+<script defer src="framework.js"></script>
+<script defer src="app.js"></script>
+<script defer src="components.js"></script>
+
+```
+
+**Use regular script when :**
+
+1. Script needs to block parsing
+2. You need immediate execution
+
+```js
+<script src="critical.js"></script>
+```
+
+# Question 7.
+
+Explain Execution Context and Global Execution Context (GEC)
+
+`Execution Context` is the environment where JavaScript code is executed. It contains information about the variables, functions, and the scope chain that the code has access to.
+
+`Types of Execution Context:`
+
+1. Global Execution Context (GEC)
+2. Function Execution Context (FEC)
+3. Eval Execution Context
+
+**Global Execution Context (GEC) :**
+GEC is the default context created when JavaScript code starts running. It represents the global scope. Only one GEC exists per JavaScript program
+
+# Question 8.
+
+How a web page is rendered in browser?
+
+In each HTTP request that browser makes for an HTML page, the server returns the data into bytes, these bytes are then converted to Characters, Tokens, Nodes, and finally DOM (Document Object Model).
+
+Once the DOM is generated, the parsing of the page starts, the HTML contains CSS code or links, JavaScript code or links, media elements such as images, etc, each of them is then parsed separately and plugged together to create a render tree, which is then converted to the layout and then is painted on the screen at the refresh rate of 60 frames per second.
+
+This complete process is called a critical rendering path.
+
+`The complete page rendering can be broken down into 5 different steps :`
+
+1. `HTML Parsing & DOM Construction :` Browser receives HTML content then Converts HTML into DOM nodes.
+
+2.` Creation of CSSOM. ( CSSOM stores all the styling information ) :` It blocks the rendering of the webpage until all the CSS style is loaded, parsed, and applied to each DOM node. It is blocking in nature because CSS styles can be overridden.
+
+3. `Formation of Render tree (Combines DOM and CSSOM):` Once the DOM and the CSSOM are ready, the browser engine combines them together to create the render tree.
+
+4. `Layouting ( Reflow ) :` Once the render tree is ready the layout can be created, the layout is bounded on the device dimension. Calculate exact position and size of each element.
+
+5. `Paint :` Once the layout is ready, it can be painted pixel by pixel on the screen at the refresh rate of 60fps.
+
+NOTE :
+DOM parsing : DOM parsing is the process where the browser converts HTML code into a tree-like structure called the Document Object Model (DOM).
