@@ -9829,3 +9829,92 @@ function isBalanced(s) {
 let s = "{([])}";
 console.log(isBalanced(s) ? "true" : "false");
 ```
+
+### 122. find longest alphaword,find the longest word where the letters are in alphabetical order.
+
+A word is considered an "alphaword" if its letters are in alphabetical order
+
+```js
+const list = ["accent", "bananas", "floor"];
+const list2 = ["fly", "apple", "record"];
+
+// Function to check if word is in alphabetical order
+function isAlphaWord(word) {
+  for (let i = 0; i < word.length - 1; i++) {
+    if (word[i] > word[i + 1]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// Function to find longest alphaword
+function findLongestAlphaWord(words) {
+  let longestAlphaWord = "";
+
+  for (let word of words) {
+    if (isAlphaWord(word) && word.length > longestAlphaWord.length) {
+      longestAlphaWord = word;
+    }
+  }
+
+  return longestAlphaWord || "No alphaword found";
+}
+
+console.log(findLongestAlphaWord(list));
+
+
+Let's break down how it works:
+
+1. isAlphaWord function:
+  Compares each character with the next one
+
+  Returns false if any character is greater than the next one
+
+  Returns true if all characters are in order
+
+2. findLongestAlphaWord function:
+  Keeps track of the longest alphaword found
+
+  Checks each word if it's an alphaword
+
+  Updates longestAlphaWord if current word is longer
+
+
+
+### Solution 2.
+
+const findLongestAlphaWord = (words) => {
+    return words
+        .filter(word =>
+            [...word].every((char, i) => i === 0 || char >= word[i - 1])
+        )
+        .reduce((longest, current) =>
+            current.length > longest.length ? current : longest
+        , "") || "No alphaword found";
+};
+
+// Examples of alphawords:
+// "act" (a->c->t)
+// "flow" (f->l->o->w)
+// "glory" (g->l->o->r->y)
+
+// Examples of non-alphawords:
+// "banana" (n comes after a)
+// "zebra" (e comes after z)
+// "cloud" (o comes after u)
+
+const testWords = ["act", "flow", "glory", "banana", "zebra", "cloud"];
+console.log(findLongestAlphaWord(testWords)); // "glory"
+
+
+Remember:
+
+  Case matters ('A' < 'a' in JavaScript)
+
+  For case-insensitive comparison, convert words to lowercase first
+
+  Empty strings are technically in alphabetical order
+
+  The solution returns an empty string if no alphaword is found
+```
