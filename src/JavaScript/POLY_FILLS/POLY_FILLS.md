@@ -2676,3 +2676,80 @@ console.log(localStorages.length);
 localStorages.removeItem("tame");
 console.log(localStorages.length);
 ```
+
+### 9. Polyfills for useState
+
+```js
+import React, { useReducer } from "react";
+
+// Component
+export default function App() {
+  const [count, setCount] = useMyState(0);
+  const [multiplier, setMultiplier] = useMyState(5);
+
+  const handleIncrement = () => {
+    setCount(count + 1);
+  };
+
+  const handleMultiply = () => {
+    setMultiplier((prev) => prev * 10);
+  };
+
+  return (
+    <div>
+      <h1>Custom useState Demo</h1>
+      <div>
+        <button onClick={handleIncrement}>Add</button>
+        <span> Count: {count}</span>
+      </div>
+      <hr />
+      <div>
+        <button onClick={handleMultiply}>Multiply</button>
+        <span> Result: {multiplier}</span>
+      </div>
+    </div>
+  );
+}
+
+// Optimized custom useState implementation
+const useMyState = (initialValue) => {
+  // Store states in closure to prevent external access
+  const stateStore = React.useRef([]);
+
+  // Use useRef to maintain hook index across renders
+  const hookIndex = React.useRef(0);
+
+  // Create reducer for forcing updates
+  const [, forceRender] = useReducer((s) => s + 1, 0);
+
+  // Get current hook's index
+  const currentIndex = hookIndex.current++;
+
+  function setValue(newValue) {
+    const currentState = stateStore.current[currentIndex][0];
+
+    // Handle both function and direct value updates
+    const value = typeof newValue === "function" ? newValue(currentState) : newValue;
+
+    // Only update and re-render if value actually changed
+    if (!Object.is(currentState, value)) {
+      stateStore.current[currentIndex][0] = value;
+      forceRender();
+    }
+  }
+
+  // Initialize state if it doesn't exist
+  if (!stateStore.current[currentIndex]) {
+    stateStore.current[currentIndex] = [initialValue, setValue];
+  }
+
+  // Reset hook index on cleanup
+  React.useEffect(() => {
+    return () => {
+      hookIndex.current = 0;
+    };
+  });
+
+  return stateStore.current[currentIndex];
+};
+```
