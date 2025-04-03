@@ -2753,3 +2753,47 @@ const useMyState = (initialValue) => {
   return stateStore.current[currentIndex];
 };
 ```
+
+### 8. Polyfill of useEffect
+
+```js
+const useCustomEffect = (callback, deps) => {
+  // Track if this is the first render
+  let firstRender = useRef(true);
+  // Store previous dependencies
+  const prevDeps = useRef([]);
+
+  // Handle first render separately
+  if (firstRender.current) {
+    firstRender.current = false;
+    // Execute callback and handle cleanup if returned
+    let cleanup = callback();
+
+    return () => {
+      if (cleanup && typeof cleanup === "function") {
+        cleanup();
+      }
+    };
+  }
+
+  // Validate deps is an array if provided
+  if (deps && !Array.isArray(deps)) {
+    throw new Error("Dependencies should be an array");
+  }
+
+  // Check if dependencies have changed
+  // If deps not provided, effect runs after every render
+  let depsChanged = deps ? JSON.stringify(deps) !== JSON.stringify(prevDeps.current) : true;
+
+  if (depsChanged) {
+    // Execute callback and handle cleanup
+    let cleanup = callback();
+    if (cleanup && typeof cleanup === "function" && deps) {
+      cleanup();
+    }
+  }
+
+  // Update previous dependencies
+  prevDeps.current = deps || [];
+};
+```
