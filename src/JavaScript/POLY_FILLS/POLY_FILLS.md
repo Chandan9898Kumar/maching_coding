@@ -2797,3 +2797,81 @@ const useCustomEffect = (callback, deps) => {
   prevDeps.current = deps || [];
 };
 ```
+
+### 8. Polyfills  And CustomHook Of useMemo is same.
+
+```js
+import React, { useState, useRef } from "react";
+import "./style.css";
+
+let data = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 56, 57, 689, 45, 678];
+
+export default function App() {
+  const [value, setValue] = useState(0);
+  const [number, setNumber] = useState(10);
+
+  const myFunction = () => {
+    console.log("my function");
+    return data.filter((item) => item > number);
+  };
+  const memoValue = useMyMemo(myFunction, [number]);
+
+  return (
+    <div>
+      <h1>Hello StackBlitz!</h1>
+      <input type="tel" value={value} onChange={(event) => setValue(event.target.value)} />
+      <button onClick={() => setNumber(value)}>
+        Add {"  "}
+        {number}
+      </button>
+      <br />
+      Memoized Value :{" "}
+      {memoValue.map((item, index) => (
+        <p key={item + index}>{item}</p>
+      ))}
+    </div>
+  );
+}
+
+const useMyMemo = (callback, deps) => {
+  // Store cache in a useRef because it will persist the value throughout lifecycle of the component
+  const cache = useRef({
+    deps: undefined,
+    value: undefined,
+  });
+
+  // Validate inputs
+  if (typeof callback !== "function") {
+    throw new Error("First argument must be a function");
+  }
+
+  if (deps !== undefined && !Array.isArray(deps)) {
+    throw new Error("Second argument must be an array or undefined");
+  }
+
+  // Check if deps have changed using Object.is for proper comparison
+  const depsChanged = deps === undefined || !Array.isArray(cache.current.deps) || deps.length !== cache.current.deps.length || deps.some((dep, index) => !Object.is(dep, cache.current.deps[index]));
+
+  // Compute new value if deps changed or no cache exists
+  if (depsChanged) {
+    cache.current.value = callback();
+    cache.current.deps = deps;
+  }
+
+  return cache.current.value;
+};
+
+
+
+### This implementation better mirrors React's actual useMemo behavior and handles edge cases more robustly. It will properly memoize the callback result and only recompute when the dependencies actually change.
+
+Remember that like React's useMemo:
+
+  1. It only caches the most recent value
+
+  2. It's primarily useful for expensive computations
+
+  3. The callback should be pure (no side effects)
+
+  4. Dependencies should be stable across renders when you want to prevent recomputation
+```
