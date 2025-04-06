@@ -2798,7 +2798,7 @@ const useCustomEffect = (callback, deps) => {
 };
 ```
 
-### 8. Polyfills  And CustomHook Of useMemo is same.
+### 8. Polyfills And CustomHook Of useMemo is same.
 
 ```js
 import React, { useState, useRef } from "react";
@@ -2874,4 +2874,91 @@ Remember that like React's useMemo:
   3. The callback should be pure (no side effects)
 
   4. Dependencies should be stable across renders when you want to prevent recomputation
+```
+
+### 9. Polyfill of useCallback and its custom hook are same.
+
+```js
+import React, { useState, useRef, memo } from "react";
+import "./style.css";
+
+export default function App() {
+  const [counter, setCounter] = useState(1);
+  const [mul, setMul] = useState(1);
+
+  const handleMul = useMyCallback(() => {
+    setMul(counter + 1);
+  }, []);
+  return (
+    <div>
+      <h1>useCallback Polyfills</h1>
+      <p>Counter : {counter}</p>
+      <button onClick={() => setCounter(counter + 1)}>Add</button>
+
+      <Child mul={mul} onClick={handleMul} />
+    </div>
+  );
+}
+
+const ChildPage = ({ mul, onClick }) => {
+  console.log("child");
+  return (
+    <>
+      <h1>Multiplied : {mul}</h1>
+      <button onClick={onClick}>Multiply</button>
+    </>
+  );
+};
+
+const Child = memo(ChildPage);
+
+function useMyCallback(callback, dependencies) {
+  // Store the previous values in refs to persist across renders
+  const previousCallback = useRef(null);
+  const previousDependencies = useRef([]);
+
+  // Check if dependencies changed
+  const dependenciesChanged = React.useMemo(() => {
+    // If no dependencies provided, always return true
+    if (!dependencies) return true;
+
+    // If previous dependencies don't match in length, dependencies changed
+    if (previousDependencies.current.length !== dependencies.length) {
+      return true;
+    }
+
+    // Compare each dependency with its previous value
+    return dependencies.some((dep, index) => !Object.is(dep, previousDependencies.current[index]));
+  }, dependencies);
+
+  // If dependencies changed or no previous callback exists, update the callback
+  if (dependenciesChanged || !previousCallback.current) {
+    previousCallback.current = callback;
+    previousDependencies.current = dependencies;
+  }
+
+  // Return the memoized callback
+  return previousCallback.current;
+}
+
+//              Below is 2nd  way of doing it.
+
+// const useMyCallback = (callback, deps) => {
+//   const prevCallback = useRef(callback);
+//   const prevDeps = useRef(deps);
+
+//   console.log(prevCallback.current, prevDeps.current, deps);
+
+//   let isDepsChange = deps
+//     ? JSON.stringify(deps) !== JSON.stringify(prevDeps.current)
+//     : true;
+
+//   if (isDepsChange) {
+//     prevCallback.current = callback;
+//     prevDeps.deps = deps;
+//     return prevCallback.current;
+//   }
+//   prevDeps.deps = deps;
+//   return prevCallback.current;
+// };
 ```
