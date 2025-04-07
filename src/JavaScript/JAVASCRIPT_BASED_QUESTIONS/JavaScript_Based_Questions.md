@@ -65,6 +65,38 @@ function foo(){
 
 console.log(foo) // O/p 'foo
 
+
+// During hoisting ( memory creation phase ):
+// 1. Function declaration gets priority
+// 2. Variable declaration happens but
+//    doesn't override function
+
+
+// Step 1: First console.log(foo)
+┌────────────────────────────────┐
+│ Global Execution Context       │
+│                               │
+│ console.log(foo)              │
+│ Output: [Function: foo]       │ <- Prints function because function
+│                               │    declaration takes precedence
+└────────────────────────────────┘
+
+// Step 2: Variable assignment
+┌────────────────────────────────┐
+│ Global Execution Context       │
+│                               │
+│ foo = 'foo'                   │ <- Variable foo gets assigned string
+│                               │    value, overwriting function
+└────────────────────────────────┘
+
+// Step 3: Second console.log(foo)
+┌────────────────────────────────┐
+│ Global Execution Context       │
+│                               │
+│ console.log(foo)              │
+│ Output: "foo"                 │ <- Prints string value since foo
+│                               │    was reassigned
+└────────────────────────────────┘
 ```
 
 ### 2. Difference between Micro-task Queue and Callback Queue ?
