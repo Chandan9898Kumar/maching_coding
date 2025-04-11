@@ -217,25 +217,44 @@ console.log(sortedData,'sortedData)
 
 ### 6. find smallest word by length in an array.if length match then compare by ascii character.
 
-```ts
+```js
 const arr=['hello','cat','data','sata','apple','game','do','famous','bo',]
 
-// Method /1.
-function smallest(arr){
-let smallLength= arr[0]
-for(let x of arr){
-if(smallLength.length>x.length){
-smallLength=x
-}
-if(smallLength.length===x.length){
-if(smallLength >x ){
-smallLength = x
-}
-}
-}
-return smallLength
+function smallest(arr) {
+  let smallLength = arr[0]
+  for (let x of arr) {
+    if (smallLength.length > x.length) {
+      smallLength = x
+    }
+    if (smallLength.length === x.length) {
+      if (smallLength > x) {
+        smallLength = x
+      }
+    }
+  }
+  return smallLength
 }
 const result = smallest(arr) o/p = 'bo'
+
+//  2nd way :
+
+function smallest() {
+
+  return arr.reduce((acc,curr)=>{
+     if (acc.length > curr.length) {
+      acc = curr
+    }
+    if (acc.length === curr.length && acc > curr) {
+      acc = curr
+    }
+
+    return acc
+
+  },arr[0])
+}
+
+const result = smallest()
+console.log(result)
 
 ```
 
