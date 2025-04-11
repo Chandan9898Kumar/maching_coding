@@ -83,6 +83,8 @@ Creational design patterns 🎨 revolve around the intricacies of object creatio
 
 > The Singleton pattern is a creational design pattern ensuring that a class has only one instance while providing global access to this instance.
 
+> The Singleton pattern ensures a class has only one instance and provides a global point of access to it.
+
 In simple words:
 
 > "Singleton - ensures that only one object of a particular class is ever created."
@@ -373,6 +375,38 @@ In this implementation, we use a Symbol to create a private property on the Sing
 `Memory`: Restricting the instantiation to just one instance could potentially save a lot of memory space. Instead of having to set up memory for a new instance each time, we only have to set up memory for that one instance, which is referenced throughout the application.
 
 `Unnecessary`: ES2015 Modules are singletons by default. We no longer need to explicitly create singletons to achieve this global, non-modifiable behavior.
+
+In ES6 modules, when you export a value, that same value is shared across all imports. This means modules naturally behave like singletons. Here's how:
+
+```js
+// counter.js
+let count = 0;
+
+export const increment = () => ++count;
+export const decrement = () => --count;
+export const getCount = () => count;
+
+//  2nd.
+
+// app1.js
+import { increment, getCount } from "./counter.js";
+
+increment();
+console.log(getCount()); // 1
+
+//  3rd
+
+// app2.js
+import { increment, getCount } from "./counter.js";
+
+increment();
+console.log(getCount()); // 2 (not 1!)
+
+// The count variable is shared between all imports. This is because modules are:
+1; // Executed only once : The first time they're imported
+2; // Cached : Subsequent imports reuse the same instance
+3; // Stateful : They maintain their state across imports
+```
 
 `Dependency Hiding`: When importing another module, it may not always be obvious that that module is importing a Singleton. This could lead to unexpected value modification within the Singleton, which would be reflected throughout the application.
 
@@ -1673,14 +1707,13 @@ const darkButton = darkFactory.createButton(); // Output: Dark theme button crea
 - Abstract Factory Pattern allows us to create entire families of related objects that are compatible with each other. The client code remains unaware of the specific implementations.
 ```
 
-
 ### Example 3:
+
 The Abstract Factory pattern is a creational design pattern that provides an interface for creating families of related or dependent objects
 without specifying their concrete classes. This pattern is particularly useful when the system needs to be independent of how its objects are created, composed, and represented.
 
 In JavaScript, the Abstract Factory pattern can be implemented using functions or classes. Below is an example that demonstrates
 how to use the Abstract Factory pattern to create different types of vehicles (like cars and bikes) and their respective factories.
-
 
 ```js
 1. Define the Product Interfaces: Create interfaces for the products (Car and Bike).
@@ -1779,17 +1812,14 @@ console.log("Using SUV Factory:");
 clientCode(new SUVFactory());
 ```
 
-
 ### Example 4 :
 
 `Key Components of the Abstract Factory Pattern :`
 
 1. `Abstract Factory:` An interface that declares methods for creating abstract products.
-2. `Concrete Factory:` Implements the abstract factory interface and creates specific products.
-3.` Abstract Product:` An interface for a type of product that the factory creates.
-4. `Concrete Product:` Implements the abstract product interface.
-5. `Client:` Uses only the interfaces declared by the abstract factory and abstract products.
-
+2. `Concrete Factory:` Implements the abstract factory interface and creates specific products. 3.` Abstract Product:` An interface for a type of product that the factory creates.
+3. `Concrete Product:` Implements the abstract product interface.
+4. `Client:` Uses only the interfaces declared by the abstract factory and abstract products.
 
 Here's a practical example of the Abstract Factory pattern in JavaScript, demonstrating how to create UI components with different themes (light and dark).
 
@@ -1852,7 +1882,7 @@ class LightThemeFactory extends UIFactory {
     createButton() {
         return new LightThemeButton();
     }
-    
+
     createInputField() {
         return new LightThemeInputField();
     }
@@ -1863,7 +1893,7 @@ class DarkThemeFactory extends UIFactory {
     createButton() {
         return new DarkThemeButton();
     }
-    
+
     createInputField() {
         return new DarkThemeInputField();
     }
@@ -1903,7 +1933,6 @@ clientCode(new DarkThemeFactory());
 
 `This design pattern promotes flexibility and scalability, making it easier to introduce new product families without altering existing code significantly.`
 ```
-
 
 ### When To Use Abstract Factory Pattern ? ✅
 

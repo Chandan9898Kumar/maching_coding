@@ -375,6 +375,26 @@ outer()
 })()
 
 
+
+### Example 5
+
+function f() {
+  var a = 1; // Step 1: Declare variable 'a' and initialize it to 1
+  a = 2;     // Step 2: Change the value of 'a' to 2
+  var b = g(); // Step 3: Call function 'g()' and assign its return value to 'b'
+  a = 3;     // Step 4: Change the value of 'a' to 3
+  return b;  // Step 5: Return the value of 'b'
+
+  function g() { // Step 6: Define function 'g'
+    return a;    // Step 7: Return the current value of 'a'
+  }
+}
+
+const result = f()
+console.log(result)
+
+
+
 ```
 
 ### 8. what is the output
