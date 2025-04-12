@@ -317,18 +317,44 @@ const result = books.reduce((acc, curr) => {
 const numbers = [1, 2, 6, 5, 4, 9];
 
 Solution .1.
+
 const result = Object.groupBy(numbers,(num)=> num%2===0 ? 'even' : 'odd')
 
-Solution .2.
-const res = numbers.reduce((acc,curr)=>{
-if(curr%2===0){
-acc['even']= acc['even'] ? [...acc['even'],curr] : [curr]
-}else{
-acc['odd']= acc['odd'] ? [...acc['odd'],curr] : [curr]
-}
-return acc
-},{})
 
+Solution .2.
+const res = numbers.reduce((acc, curr) => {
+  if (curr % 2 === 0) {
+    acc['even'] = acc['even'] ? [...acc['even'], curr] : [curr]
+  } else {
+    acc['odd'] = acc['odd'] ? [...acc['odd'], curr] : [curr]
+  }
+  return acc
+}, {})
+
+
+Solution 3.
+
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+const result = numbers.reduce((acc, curr) => ({
+  ...acc,
+  even: curr % 2 === 0 ? [...acc.even, curr] : acc.even,
+  odd: curr % 2 !== 0 ? [...acc.odd, curr] : acc.odd
+}), { even: [], odd: [] });
+
+console.log(result);
+
+
+
+Solution 4.
+const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+const result = {
+  even: numbers.filter(num => num % 2 === 0),
+  odd: numbers.filter(num => num % 2 !== 0)
+};
+
+console.log(result);
 
 ```
 
