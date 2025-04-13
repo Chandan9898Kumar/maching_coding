@@ -378,7 +378,7 @@ const obj2 = {
 
 // Answer : {d: 10, e: 12}
 
-// Solution
+// Solution 1.
 
 function cal(val1, val2) {
   let dup = {};
@@ -394,6 +394,30 @@ function cal(val1, val2) {
   return dup;
 }
 const res = cal(obj1, obj2);
+
+//  Solution 2.
+
+function findCommonKeyValues(obj1, obj2) {
+  // Input validation
+  if (!obj1 || !obj2) {
+    return {};
+  }
+
+  const duplicates = {};
+
+  for (const key in obj1) {
+    // Using hasOwnProperty to avoid prototype chain properties
+    if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key) && obj1[key] === obj2[key]) {
+      duplicates[key] = obj1[key];
+    }
+  }
+
+  return duplicates;
+}
+
+// Usage
+const result = findCommonKeyValues(obj1, obj2);
+
 ```
 
 ### 10. Design a Calulator interface for 2 number inputs which can perform sum, difference, product and dividend whenever invoked on the same interface.
