@@ -594,11 +594,12 @@ console.log(arrays);
 ### 15. Find The Missing Number From The Array
 
 ```ts
-const array =[0,1,2,3,5,6]
 
-// Brute force solution
+//                                1. Brute force solution
 // Time complexity - O(n^2)
 // Space complexity - O(1)
+
+const array = [0, 1, 2, 3, 5, 6] // it will wrong data with : const array = [1, 2, 3, 5, 6];
 function missingNumber1(nums) {
   for (let i = 0; i <= nums.length; i++) {
     let flag = 0;
@@ -610,15 +611,17 @@ function missingNumber1(nums) {
       }
     }
 
-    if (flag == 0) {
+    if (flag === 0) {
       return i;
     }
   }
 }
 
-// Better solution
+//                            2. Better solution
 // Time complexity - O(n logn) + O(n) = O(n logn)
 // Space complexity - O(1)
+
+const array = [0,1, 2, 3, 5, 6]; // it will wrong data with : const array = [1, 2, 3, 5, 6];
 function missingNumber2(nums) {
   nums.sort();
 
@@ -634,19 +637,36 @@ function missingNumber2(nums) {
 }
 
 
-// Optimal solution
+// `                                3. Optimal solution
 // Time complexity - O(n)
 // Space complexity - O(1)
-- Using Arithmetic Progression Formula
+- Using Arithmetic Progression Formula.
+
+//  NOTE This function will give wrong data when use : const array = [1, 2, 3, 5, 6]
+const array = [0,1, 2, 3, 5, 6];
 function findMissingNumber(value) {
-  // We are aware that (n(n+1))/2 is the sum of all items in the range of 1 to n
+  // We are aware that (n(n+1))/2 is the sum of all items in the range of 1 to n.
   const n = value.length;
   const expectedSum = (n * (n + 1)) / 2;
   const actualSum = value.reduce((acc, curr) => acc + curr, 0);
   return expectedSum - actualSum;
 }
-
 const missingNumber = findMissingNumber(array);
+
+
+//                                 4. best Solution
+
+//  This function is suitable for both 1. [0,1, 2, 3, 5, 6] and  2. [1, 2, 3, 5, 6]
+const array = [1, 2, 3, 5, 6];
+function missing(array) {
+  const max = Math.max(...array);
+  const min = Math.min(...array);
+  const expectedSum = ((max * (max + 1)) / 2) - ((min * (min - 1)) / 2);
+  const actualSum = array.reduce((acc, curr) => acc + curr, 0);
+  return expectedSum - actualSum;
+}
+console.log(missing())
+
 
 ```
 
@@ -4342,4 +4362,48 @@ const chop = (str, size = str.length) => {
 
   return arr;
 };
+```
+
+### 82. Finding pairs that sum to a target value:
+
+```js
+function findPairs(array, targetSum) {
+  let pairs = [];
+
+  // Check every possible pair
+  for (let i = 0; i < array.length; i++) {
+    for (let j = i + 1; j < array.length; j++) {
+      if (array[i] + array[j] === targetSum) {
+        pairs.push([array[i], array[j]]);
+      }
+    }
+  }
+  return pairs;
+}
+
+const numbers = [2, 4, 6, 8, 10];
+console.log(findPairs(numbers, 12));
+// Output: [[2, 10], [4, 8]]
+```
+
+### 83. Finding all possible combinations of a string:
+
+```js
+function generateCombinations(str) {
+  let combinations = [];
+
+  // Start from length 1 to string length
+  for (let i = 0; i < str.length; i++) {
+    let temp = "";
+    // Generate combinations starting from each character
+    for (let j = i; j < str.length; j++) {
+      temp += str[j];
+      combinations.push(temp);
+    }
+  }
+  return combinations;
+}
+
+console.log(generateCombinations("dog"));
+// Output: ['d', 'do', 'dog', 'o', 'og', 'g']
 ```
