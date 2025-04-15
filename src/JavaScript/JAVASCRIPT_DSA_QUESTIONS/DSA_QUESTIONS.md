@@ -417,7 +417,6 @@ function findCommonKeyValues(obj1, obj2) {
 
 // Usage
 const result = findCommonKeyValues(obj1, obj2);
-
 ```
 
 ### 10. Design a Calulator interface for 2 number inputs which can perform sum, difference, product and dividend whenever invoked on the same interface.
@@ -4301,4 +4300,46 @@ const nestProperties = (objects, separator) => {
 const nestedObj = nestProperties(obj, separator);
 console.log(nestedObj,'nestedObj')
 
+```
+
+### 81. Chop string into chunks of given length
+
+Write a function to chop string into chunks of given length and return it as array.
+
+```js
+let strs = "javascript";
+let num = 3;
+
+//  Method 1.
+function chopString(strs, num) {
+  let choppedString = [];
+  let index = num;
+  let len = strs.length;
+  for (let i = 0; i < len; i++) {
+    choppedString.push(strs.substring(i, i + index));
+    i--;
+    i = i + index;
+  }
+
+  return choppedString;
+}
+
+console.log(chopString(strs, num));
+
+//  Method 2.
+
+const chop = (str, size = str.length) => {
+  const arr = [];
+  let i = 0;
+
+  //iterate the string
+  while (i < str.length) {
+    //slice the characters of given size
+    //and push them in output array
+    arr.push(str.slice(i, i + size));
+    i = i + size;
+  }
+
+  return arr;
+};
 ```
