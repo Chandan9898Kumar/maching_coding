@@ -4407,3 +4407,5 @@ function generateCombinations(str) {
 console.log(generateCombinations("dog"));
 // Output: ['d', 'do', 'dog', 'o', 'og', 'g']
 ```
+
+### 84.
