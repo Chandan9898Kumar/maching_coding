@@ -4408,4 +4408,72 @@ console.log(generateCombinations("dog"));
 // Output: ['d', 'do', 'dog', 'o', 'og', 'g']
 ```
 
-### 84.
+### 84. Find the most frequent element in an array.
+
+Given an array of elements, we have to find the element with most frequent or count. If there are two elements with most occurrence then return the first.
+
+```js
+let input1 = [1, 1, 1, 2, 2, 2, 3, 34];
+let input2 = [2, 2, 2, 3, 3, 3, 4, 4, 4, 2, 5, 5, 5, 6, 6];
+
+
+//  Method 1.
+function mostFrequent(input) {
+  let frequentElements = input.reduce((acc, curr) => {
+    acc[curr] = (acc[curr] || 0) + 1;
+    return acc;
+  }, {});
+  let max = 0;
+  let element = "";
+
+  for (let item in frequentElements) {
+    let value = frequentElements[item];
+    if (max < value) {
+      max = value;
+      element = item;
+    }
+  }
+
+  return element;
+}
+
+console.log(mostFrequent(input2));
+
+
+//  Method 2.
+
+function mostFrequent(input) {
+  // Early return for empty array
+  if (!input || input.length === 0) return null;
+  
+  // If array has only one element
+  if (input.length === 1) return input[0].toString();
+
+  // Use Map instead of object for better performance with numeric keys
+  const frequencyMap = new Map();
+  let maxFreq = 0;
+  let mostFreqElement = input[0];
+
+  // Single pass through the array
+  for (const num of input) {
+    const count = (frequencyMap.get(num) || 0) + 1;
+    frequencyMap.set(num, count);
+    
+    // Update max frequency and element in the same pass
+    if (count > maxFreq) {
+      maxFreq = count;
+      mostFreqElement = num;
+    }
+  }
+
+  return mostFreqElement.toString();
+}
+
+// Test cases
+const input1 = [1, 1, 1, 2, 2, 2, 3, 34];
+const input2 = [2, 2, 2, 3, 3, 3, 4, 4, 4, 2, 5, 5, 5, 6, 6];
+
+console.log(mostFrequent(input1)); // Output: "2"
+
+
+```
