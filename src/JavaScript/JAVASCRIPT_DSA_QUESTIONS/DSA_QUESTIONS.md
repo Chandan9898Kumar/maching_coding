@@ -844,11 +844,7 @@ const resultOne = arrayOfObject.reduce((acc,curr)=>{
 
 //  Method 2.
 const resultTwo = arrayOfObject.filter((item,index,arr)=>{
-      const isTrue=index === arr.findIndex((value,index,arr)=>item===value)
-      if(isTrue){
-        return item
-      }
-
+     return index === arr.findIndex((value,index,arr)=>item===value)
 })
 
 console.log(resultOne,resultTwo)
