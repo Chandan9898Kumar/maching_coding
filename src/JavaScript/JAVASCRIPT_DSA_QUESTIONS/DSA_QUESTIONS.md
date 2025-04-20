@@ -974,7 +974,7 @@ const obj = {
   name: "John Cena",
   homeName: "John Cena",
   place: "Manchester",
-  bithPlace: "Manchester",
+  birthPlace: "Manchester",
   age: 22,
   country: "United kingdom",
 };
