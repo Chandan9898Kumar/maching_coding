@@ -3564,6 +3564,8 @@ convertTo24HrsFormat("10:02PM"); // 22:02
 . If the match is not found, these methods return -1
 
 ```js
+
+// Method 1.
 function getTheGapX(str) {
   if (!str.includes("X")) {
     return -1;
@@ -3580,6 +3582,25 @@ getTheGapX("XeroX"); // 4
 getTheGapX("Xamarin"); // -1       (If there is only single character 'X')
 getTheGapX("JavaScript"); // -1       (If there is no character 'X')
 getTheGapX("F(X) !== G(X) !== F(X)"); // 18
+
+// Method 2.
+
+Using for...of with early return (More performant for large strings) :
+
+function getTheGapX(str) {
+    let first = -1;
+    let last = -1;
+    
+    for (let i = 0; i < str.length; i++) {
+        if (str[i] === 'X') {
+            if (first === -1) first = i;
+            last = i;
+        }
+    }
+    
+    return first === last ? -1 : last - first;
+}
+
 ```
 
 ### 50. Write a function which accepts two valid dates and returns the difference between them as number of days.
