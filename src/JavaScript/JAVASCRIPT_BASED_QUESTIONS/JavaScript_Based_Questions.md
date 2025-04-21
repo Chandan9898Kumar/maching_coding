@@ -3575,6 +3575,7 @@ function getTheGapX(str) {
 }
 
 // Example
+
 getTheGapX("XeroX"); // 4
 getTheGapX("Xamarin"); // -1       (If there is only single character 'X')
 getTheGapX("JavaScript"); // -1       (If there is no character 'X')
