@@ -848,5 +848,7 @@ This complete process is called a critical rendering path.
 
 5. `Paint :` Once the layout is ready, it can be painted pixel by pixel on the screen at the refresh rate of 60fps.
 
+6. Composing all layers together, to render the website on screen.
+
 NOTE :
 DOM parsing : DOM parsing is the process where the browser converts HTML code into a tree-like structure called the Document Object Model (DOM).
