@@ -1131,8 +1131,24 @@ function findData(arrayVal) {
 }
 
 const result = findData(studentDetails);
-
 console.log(result, "result");
+
+//                                     3rd Way:
+
+function findData(details) {
+  const registerData = details.reduce((acc, curr) => {
+    acc[curr.resgisterNo] = (acc[curr.resgisterNo] || 0) + curr.score;
+    return acc;
+  }, {});
+
+  const result = Object.entries(registerData).map(([key, value]) => {
+    return { resgisterNo: key, score: value };
+  });
+
+  console.log(registerData, result);
+}
+
+console.log(findData(studentDetails));
 
 /**                                                       For Better understanding of reference equal :
 const data = [1,2,3].reduce((acc,curr)=>{
@@ -4412,7 +4428,6 @@ Given an array of elements, we have to find the element with most frequent or co
 let input1 = [1, 1, 1, 2, 2, 2, 3, 34];
 let input2 = [2, 2, 2, 3, 3, 3, 4, 4, 4, 2, 5, 5, 5, 6, 6];
 
-
 //  Method 1.
 function mostFrequent(input) {
   let frequentElements = input.reduce((acc, curr) => {
@@ -4435,13 +4450,12 @@ function mostFrequent(input) {
 
 console.log(mostFrequent(input2));
 
-
 //  Method 2.
 
 function mostFrequent(input) {
   // Early return for empty array
   if (!input || input.length === 0) return null;
-  
+
   // If array has only one element
   if (input.length === 1) return input[0].toString();
 
@@ -4454,7 +4468,7 @@ function mostFrequent(input) {
   for (const num of input) {
     const count = (frequencyMap.get(num) || 0) + 1;
     frequencyMap.set(num, count);
-    
+
     // Update max frequency and element in the same pass
     if (count > maxFreq) {
       maxFreq = count;
@@ -4470,6 +4484,4 @@ const input1 = [1, 1, 1, 2, 2, 2, 3, 34];
 const input2 = [2, 2, 2, 3, 3, 3, 4, 4, 4, 2, 5, 5, 5, 6, 6];
 
 console.log(mostFrequent(input1)); // Output: "2"
-
-
 ```
