@@ -1343,8 +1343,47 @@ function count(arrayVal) {
 }
 
 const result = count(arr);
+console.log(result, "result");
+
+### When we have to count all the numbers even inside objects as well. o/p : 8
+
+const arr = [[1, [2, [3, 4, "foo", { a: 1, b: { c: 8 } }]], "bar", 5], 6];
+
+function countNumber(arrayVal) {
+
+  let totalCount = 0
+
+
+  function callback(arrays) {
+
+    for (let item of arrays) {
+
+
+      if (Array.isArray(item)) {
+        callback(item)
+      }
+
+      if (!Array.isArray(item) && typeof item === 'object') {
+        callback(Object.values(item))
+      }
+
+      if (typeof item === 'number') {
+        totalCount += 1
+      }
+    }
+
+
+  }
+  callback(arrayVal)
+
+
+  return totalCount
+}
+
+const result = countNumber(arr);
 
 console.log(result, "result");
+
 ```
 
 ### 30. Given a nested array and a callback function, count all the elements that pass the test in the callback and return the count.
@@ -1442,7 +1481,7 @@ const res = deepEqual(value, other);
 console.log(res, "RES ");
 ```
 
-### 32. Given two objects obj1 and obj2 and the task are to check that obj1 contains all the property values of obj2 in JavaScript.
+### 32. Given two objects obj1 and obj2 and the task are to check that obj1 contains all the keys and values of obj2 in JavaScript.
 
 ```ts
 
@@ -1482,7 +1521,7 @@ console.log(check(obj1, obj2))
 //                           Every Method
 const every = Object.keys(obj2).every((item)=>{
 
-  if(!obj1.hasOwnProperty(item) && obj1[item]!==obj2[item]){
+  if(!obj1.hasOwnProperty(item) || obj1[item]!==obj2[item]){
     return false
   }
   return true
