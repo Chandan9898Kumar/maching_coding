@@ -3472,6 +3472,28 @@ function func(a, b, c) {
 }
 ```
 
+### 35. Find the output
+
+```js
+function func() {
+    try {
+        console.log(1)     // First this executes and prints 1
+        return 'hola'            // Return statement is encountered
+    } catch (e) {
+        console.log(2)     // This block is skipped as no error occurred
+    } finally {
+        console.log(3)     // Finally block always executes
+    }
+    console.log(4)         // This never executes due to return statement
+}
+
+console.log(func())
+
+
+//  The Code after the try-catch-finally blocks won't execute if a return statement is encountered in the try or catch blocks.
+
+```
+
 ### 45. Show how an array in JavaScript can act like a stack and queue.
 
 ```js
@@ -4197,6 +4219,20 @@ function removeDuplicates() {
     console.log(newArray);
 }
 removeDuplicates();
+
+
+//   OR
+
+function removeDup(books){
+  let newItem= {}
+  for(let item of books){
+    newItem[item.title] = item
+  }
+  return Object.values(newItem)
+}
+
+console.log(removeDup(books))
+
 
 
 Method 4.
