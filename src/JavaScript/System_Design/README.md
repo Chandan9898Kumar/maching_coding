@@ -8,6 +8,18 @@ In the context of front end system design interviews, the systems you are asked 
 
 1. `Requirements exploration:` Understand the problem thoroughly and determine the scope by asking a number of clarifying questions
 
+
+**After Requirements exploration : Tell interviewer about your Tech choices**
+
+`Example :`
+    1. Library / Framework you are going to pick to build this App / Feature.
+    2. State Management.
+    3. Folder Structure.
+    4. packages.
+    5. Dependencies
+    6. Design System ( MUI )
+    7. Build tools ( Webpack, Rollup, Parcel )
+
 2. `Architecture / High-level design:` Identify the key components of the product and how they are related to each other
 
 3. `Data model / Core entities:` Describe the core entities and its data – the fields each entity contains and which component(s) they belong to
@@ -38,7 +50,7 @@ Firstly, what are functional and non-functional requirements?
 `Functional requirements:` Basic requirements of the product such that the product cannot function without them. This is usually whether a user can complete the core flows correctly.
 
 
-Functional requirements specify what the system should do. They describe the features, functionalities, and behaviors of the system. In the context of a frontend design system, functional requirements might include:
+Functional requirements specify what the system should do. They describe the features ( Search, add/remove product, products details,reviews ), functionalities, and behaviors of the system. In the context of a frontend design system, functional requirements might include:
 
 1. `User Interface Components:`
     Buttons, forms, modals, navigation bars, etc.
@@ -61,6 +73,102 @@ Functional requirements specify what the system should do. They describe the fea
 7. `Error Handling:`
     How the system responds to errors (e.g., validation messages, error pages).
 
+
+
+`When discussing functional requirements in a front-end system design interview, you need to clearly understand what the application needs to do from the user's perspective. Here are key questions you should ask to gather comprehensive functional requirements:`
+
+*Core Functionality Questions*
+
+1. `User Interactions`
+
+    "What are the primary actions users will perform with this application?"
+
+    "What are the key user journeys/flows we need to support?"
+
+    "What specific interactions should trigger state changes or API calls?"
+
+2. `Feature Scope`
+
+    "What are the must-have features for the MVP (Minimum Viable Product)?"
+
+    "What features are considered nice-to-have but not essential?"
+
+    "Are there any features planned for future phases that we should design for now?"
+
+3. `User Roles and Permissions`
+
+    "What different types of users will interact with the application?"
+
+    "What actions are specific to certain user roles?"
+
+    "How should the UI adapt based on user permissions?"
+
+4. `Content and Data Display`
+
+    "What specific data needs to be displayed to users?"
+
+    "How should this data be organized and presented?"
+
+    "Are there any specific sorting, filtering, or search capabilities required?"
+
+5. `Form Handling`
+
+    "What forms will users need to complete?"
+
+    "What validation rules apply to user inputs?"
+
+    "What happens after form submission (success/failure flows)?"
+
+6. `Navigation and Information Architecture`
+
+    "How will users navigate between different sections of the application?"
+
+    "What is the hierarchy of information in the application?"
+
+    "Are there any specific routing requirements or URL structures needed?"
+
+7. `Feedback and Notifications`
+
+    "What types of feedback should be provided to users after actions?"
+
+    "Are there any notification requirements (alerts, toasts, etc.)?"
+
+    "How should errors be communicated to users?"
+
+8. `State Transitions`
+
+    "What are the different states each view can be in (loading, error, empty, populated)?"
+
+    "How should transitions between these states be handled?"
+
+    "Are there any complex multi-step processes that need state management?"
+
+*Integration Questions*
+
+
+9. `Backend Dependencies`
+
+    "What backend services will the front-end need to interact with?"
+
+    "Are there existing API contracts we need to adhere to?"
+
+    "What data will be needed from the backend for each view?"
+
+10. `Third-Party Integrations`
+
+    "Are there any third-party services or APIs we need to integrate with?"
+
+    "What authentication mechanisms are required for these integrations?"
+
+    "Are there any rate limits or usage constraints we need to consider?"
+
+11. `Authentication and Authorization`
+
+    "What authentication method will be used (OAuth, JWT, etc.)?"
+
+    "How should authenticated vs. unauthenticated states be handled?"
+
+    "What happens when a user's session expires?"
 
 *Questions to Ask for Functional Requirements:*
     1. What specific features must the system provide?
@@ -127,6 +235,7 @@ These define HOW the system should perform. Non-functional requirements include 
 9. Reliability.
 10. Maintainability.
 11. Caching.
+12. csr / ssr 
 
 
 
@@ -147,6 +256,28 @@ These define HOW the system should perform. Non-functional requirements include 
 11. What security measures need to be implemented?
 12. cWhich browsers and devices must the system support?
 13. Are there any localization requirements for different regions?
+14. Offline Functionality
+    a. "Does the application need to work offline?"
+    b. "What features should be available without an internet connection?"
+    c. "How should data synchronization work when connection is restored?"
+
+15. Internationalization and Localization
+    a. "Will the application support multiple languages?"
+    b. "Are there any right-to-left (RTL) language requirements?"
+    c.  "How should date formats, currencies, and other locale-specific content be handled?"
+    d. "Will the application support multiple languages?"
+    e. "Are there any right-to-left (RTL) language requirements?"
+    f. "How should date formats, currencies, and other locale-specific content be handled?"
+
+16. Accessibility Requirements
+    a. "What level of accessibility compliance is required (WCAG A, AA, AAA)?"
+    b. "Are there specific accessibility features that need special attention?"
+    c. "How should screen readers and keyboard navigation be supported?"
+
+17. Device and Browser Support
+    a. "What devices and screen sizes must be supported?"
+    b. "What browsers and browser versions need to be supported?"
+    c. "Are there any specific mobile or tablet requirements?"
 
 
 `NOTE : ` At the very minimum, your design has to meet the functional requirements. After meeting all the function requirements, move on to talk about how to fulfill the non-functional requirements.
@@ -193,6 +324,36 @@ After drawing out the architecture diagram, verbally describe the responsibiliti
 
 
 
+`When discussing architecture in a front-end system design interview, you need to focus on how the application will be structured, what patterns will be used, and how different components will interact. Here are key questions you should ask to develop a comprehensive architectural approach:`
+
+
+1. `Overall Architecture Pattern`
+    a. "What architectural pattern would be most appropriate for this application (MVC, MVVM, Flux, etc.)?"
+
+    b. "Should we use a monolithic or micro-frontend approach?"
+
+    c. "Would a component-based architecture be suitable for this application?"
+
+2. `Component Hierarchy`
+    a. "What should be the component hierarchy for this application?"
+    b. "How granular should our components be?"
+    c. "Which components should be stateful vs. stateless?"
+
+3. `State Management`
+    a. "What state management approach is most appropriate (Redux, Context API, MobX, etc.)?"
+    b. "Should state be centralized or distributed across components?"
+    c. "How will we handle global vs. local state?"
+
+4. `Routing and Navigation`
+    a. "What routing strategy should we implement?"
+    b. "How will we handle nested routes and route parameters?"
+    c. "Should we implement code-splitting at the route level?"
+
+5. `Data Fetching Strategy`
+    a. "What data fetching pattern should we use (fetch on render, fetch then render, render as fetch)?"
+    b. "Should we implement a data layer/service layer?"
+    c. "How will we handle caching of API responses?"
+
 **Data model**
 
 Data model for components will refer to the component state. The concept of state should be familiar to most front end developers who have used front end UI libraries/frameworks such as React, Angular, Vue, Svelte, etc. In every of these libraries/frameworks, state is a common concept.
@@ -231,6 +392,116 @@ Depending on how far you progress along in the question and how the requirements
 You might want to write these fields near the components which owns them in your architecture diagram.
 
 
+`When discussing data models in a front-end system design interview, you need to focus on how data will be structured, managed, and flow through your application. Here are the key considerations and questions to ask:`
+
+
+**Key Considerations in Data Model Design**
+
+1. `Component State Management`
+    a. What data needs to be stored in each component?
+
+    b. Which state management approach is appropriate (local state, context, Redux, etc.)?
+
+    c. How will state be shared between components?
+
+2. `Data Types and Structures`
+
+    a. What are the primary entities in the application?
+
+    b. What properties/fields does each entity have?
+
+    c. What are the relationships between different data entities?
+
+3. `Data Flow`
+
+    a. How does data flow between components?
+
+    b. Where should data transformations happen?
+
+    c. How will you handle derived state?
+
+4. `Data Persistence`
+
+    a. What data needs to be persisted locally (localStorage, sessionStorage)?
+
+    b. What data is server-originated vs. client-only?
+
+    c. How will you handle offline capabilities if needed?
+
+5. `Data Synchronization`
+
+    a. How will you keep client and server data in sync?
+
+    b. How will you handle optimistic updates?
+
+    c. What's the strategy for conflict resolution?
+
+**Questions to Ask as a Front-End Developer**
+
+1. `About Data Sources`
+
+    "What are the primary data entities we need to work with?"
+
+    "Where does the data originate from? APIs, user input, or both?"
+
+    "What's the expected response format from the backend APIs?"
+
+2. `About State Management`
+
+    "How complex is the state management requirement? Do we need a global state solution?"
+
+    "Which components need to share state, and which can maintain isolated state?"
+
+    "Are there any performance concerns with the amount of data we'll be handling?"
+
+3. `About Data Flow`
+
+    "How frequently will the data change? Do we need real-time updates?"
+
+    "What's the expected user flow, and how does that impact data requirements?"
+
+    "Are there any complex data transformations needed between API responses and UI display?"
+
+4. `About Caching and Performance`
+
+    "What data should be cached on the client side?"
+
+    "How long should cached data be considered valid?"
+
+    "Are there any large data sets that might require pagination or virtualization?"
+
+5. `About Data Validation`
+
+    "What validation rules need to be applied to user inputs?"
+
+    "Should validation happen on the client side, server side, or both?"
+
+    "How should validation errors be communicated to users?"
+
+6. `About Error Handling`
+
+    "How should we handle API failures or data loading errors?"
+
+    "What fallback data should be displayed when primary data is unavailable?"
+
+    "Are there any specific error states we need to account for?"
+
+7. `About Data Security`
+
+    "Is there any sensitive data that requires special handling?"
+
+    "Are there any data privacy concerns we need to address?"
+
+    "What authentication/authorization requirements impact our data model?"
+
+8. `About Scalability`
+
+    "How might the data model need to evolve as the application grows?"
+
+    "Are there any foreseeable changes to the data structure we should plan for?"
+
+    "How will our data model handle increasing amounts of data?"
+
 
 *Interface definition (API)*
 
@@ -260,7 +531,100 @@ There are a few ways to go about this in React:
 . With the components and data within each components, we can move on to discuss the interface (APIs) between the components. API is an overloaded term and generally refer to the protocol which software components communicate and request/send data between components. Client and server communicate via network layer APIs (HTTP/WebSockets). Client components generally communicate via functions in the browser runtime. 
 
 
+`In frontend high-level design, an interface definition (API) refers to the explicit specification of how different components or systems communicate with each other. It defines the contract between the frontend (client-side) and backend (server-side) or between UI components themselves. This includes:`
 
+1. Endpoints and Methods: The URLs and HTTP methods (GET, POST, PUT, DELETE, etc.) that the frontend will use to interact with backend services.
+
+2. Data Formats: The structure of requests and responses, typically JSON or XML.
+
+3. Parameters and Configuration: Inputs the frontend can send (query parameters, headers, body data) and expected outputs.
+
+4. Functionality: What each API call does-fetching data, submitting forms, updating resources, etc.
+
+5. Error Handling: How errors are communicated and managed.
+
+In component design (e.g., React), the API also refers to the component’s props or configuration options exposed to other developers for reuse without exposing internal complexity
+
+
+
+`Interface definition in front-end system design refers to establishing clear contracts between different parts of your application. This includes defining how components communicate with each other, how the front-end interacts with back-end services, and how developers can use and extend your components. A well-defined interface is crucial for creating maintainable, reusable, and scalable front-end architectures.`
+
+
+*Types of Interfaces in Front-End Development*
+
+
+1. `Component Interfaces`
+Component interfaces define how components communicate with each other and how they can be used by developers. This includes:
+
+    1. Props/Inputs: The data and callbacks a component accepts
+
+    2. Events/Outputs: The events or data a component emits
+
+    3. Slots/Children: How a component can be extended with custom content
+
+    4. Public Methods: Functions exposed for parent components to call
+
+
+
+2. `Service Interfaces`
+Service interfaces define how the application interacts with data sources and business logic:
+
+    1. API Client Services: How the front-end communicates with back-end APIs
+
+    2. State Management Services: How components access and modify shared state
+
+    3. Utility Services: How components access common functionality
+
+
+3. `External API Interfaces`
+These define how your front-end interacts with external systems:
+
+    1. REST/GraphQL APIs: Endpoints, request/response formats, authentication
+
+    2. WebSocket Interfaces: Event types, message formats, connection handling
+
+    3. Third-Party Library Interfaces: How your code interacts with external libraries
+
+
+*Questions to Ask When Defining Interfaces*
+
+1. `Component Interface Questions`
+    "What props should this component accept, and which should be required vs. optional?"
+
+    "What events should this component emit to its parent?"
+
+    "How can developers extend or customize this component's behavior?"
+
+    "What are reasonable default values for optional props?"
+
+    "How will this component handle invalid prop values?"
+
+2. `API Interface Questions`
+    "What endpoints will the front-end need to interact with?"
+
+    "What request/response formats should be used?"
+
+    "How should authentication and authorization be handled?"
+
+    "What error formats should be standardized across APIs?"
+
+    "How will versioning be handled for API changes?"
+
+3. `State Management Interface Questions`
+    "What actions can modify the application state?"
+
+    "How will components access shared state?"
+
+    "What patterns will be used for asynchronous state updates?"
+
+    "How will we handle derived state and memoization?"
+
+4. `Cross-Component Communication Questions`
+    "How will deeply nested components communicate with each other?"
+
+    "Should we use events, callbacks, or a state management solution?"
+
+    "How will we avoid prop drilling in the component hierarchy?"
 
 
 *Optimizations and deep dive*
