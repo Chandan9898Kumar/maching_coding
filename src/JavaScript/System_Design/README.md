@@ -223,10 +223,9 @@ Non-functional requirements define how the system performs its functions. They f
 
 These define HOW the system should perform. Non-functional requirements include things like:
 
-1. Performance :
- a. Performance optimization example using memoization,Callback,Code splitting etc.
+1. Performance ( Performance optimization example using memoization,Callback,Code splitting etc. )
 2. Security:
-3. Accessibility.
+3. Accessibility (Internationalization, Keyboard ,Screen Reader, Contrast Etc.).
 4. Responsiveness.
 5. Error Handling.
 6. Loading States.
@@ -235,7 +234,8 @@ These define HOW the system should perform. Non-functional requirements include 
 9. Reliability.
 10. Maintainability.
 11. Caching.
-12. csr / ssr 
+12. csr / ssr .
+13. Availability ( Offline Support )
 
 
 
