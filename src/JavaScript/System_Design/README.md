@@ -535,13 +535,62 @@ There are a few ways to go about this in React:
 
 1. Endpoints and Methods: The URLs and HTTP methods (GET, POST, PUT, DELETE, etc.) that the frontend will use to interact with backend services.
 
+```js
+1. GET /api/products - List all products
+2. GET /api/products/{id} - Get a specific product
+3. POST /api/products - Create a new product
+4. PUT /api/products/{id} - Update a product
+5. DELETE /api/products/{id} - Delete a product
+
+```
+
 2. Data Formats: The structure of requests and responses, typically JSON or XML.
+
+```js
+### Example JSON Response:
+
+{
+  "id": 123,
+  "name": "Product Name",
+  "price": 99.99,
+  "inStock": true,
+  "categories": ["electronics", "accessories"]
+}
+
+```
 
 3. Parameters and Configuration: Inputs the frontend can send (query parameters, headers, body data) and expected outputs.
 
+```js
+
+### Example Request:
+
+GET /api/products?category=electronics&sort=price&order=asc
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+```
+
 4. Functionality: What each API call does-fetching data, submitting forms, updating resources, etc.
 
+
 5. Error Handling: How errors are communicated and managed.
+
+```js
+
+### Example Error Response:
+
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Invalid input data",
+    "details": [
+      {"field": "email", "message": "Must be a valid email address"}
+    ]
+  }
+}
+
+```
+
 
 In component design (e.g., React), the API also refers to the component’s props or configuration options exposed to other developers for reuse without exposing internal complexity
 
