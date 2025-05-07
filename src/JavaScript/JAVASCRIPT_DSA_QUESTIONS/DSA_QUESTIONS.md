@@ -1714,6 +1714,7 @@ console.log(countDigits(-1211413131)); // 10
 
 ```ts
 //       By Replace Method
+
 const removeDecimal = (value) => {
   const reg = value.replace(/[.]/g, "");
   return reg;
