@@ -757,3 +757,71 @@ Most of the time, components aren't exposed to security vulnerabilities, but it 
     3. Clickjacking
     
     4. rel=noopener
+
+
+
+### Radio In Simple Term.
+
+`R - Requirements: Laying the Foundation`
+Learn how to define functional and non-functional requirements, identifying core features, good-to-have features, device and platform support, offline functionality, user personas, and more. Lay a strong foundation for your frontend system design.
+
+`A - Architecture and High-Level Design`
+Explore the key components of a frontend architecture, including the server, view, controller, and model/client store. Understand the importance of separation of concerns and the decision between server-side and client-side computation. A well-structured architecture is crucial for building scalable and maintainable frontend applications.
+
+`D - Data Model: Managing Client-Only Data`
+Discover how to manage client-only data efficiently. Categorize data into that to be persistent and ephemeral. Learn how to handle user input data and ensure proper data validation and storage strategies.
+
+`I - Interface Definition and API Design: Making Informed Choices`
+Gain insights into various API design options, including polling, long polling, WebSockets, Server-Sent Events, REST APIs, and GraphQL. Understand the trade-offs and choose the right API design for your project. Plus, learn about common API considerations, like status codes, throttling, and pagination.
+
+`O - Optimizations and Deep Dive in Frontend System Design`
+Dive deep into optimization strategies for performance, network efficiency, and user experience. Learn about network optimizations, bundle splitting, rendering, server-side rendering, CSS best practices, application caching, and mobile-friendly design. Ensure accessibility and security in your frontend system design.
+
+
+### MVC IN React.
+
+
+`Model`
+    Represents the application data and business logic
+
+    Manages data, logic, and rules of the application
+
+    Responds to instructions to change its state
+
+    Notifies observers when changes occur
+
+`View`
+    Represents the UI components
+
+    Renders the model data to the user
+
+    Sends user actions to the controller
+
+`Controller`
+    Acts as an interface between Model and View
+
+    Processes all user requests
+
+    Manipulates data using the Model
+
+    Interacts with the View to render the final output
+
+**Diagram**
+
++-------------------+         +-------------------+         +-------------------+
+|                   |         |                   |         |                   |
+|      MODEL        |<--------|    CONTROLLER     |<--------|      VIEW         |
+|                   |         |                   |         |                   |
+| - Application     |         | - Handles user    |         | - React           |
+|   state/data      |         |   interactions    |         |   Components      |
+| - Business logic  |-------->| - Updates model   |-------->| - Renders UI      |
+| - API calls       |         | - Updates view    |         | - User interface  |
+|                   |         |                   |         |                   |
++-------------------+         +-------------------+         +-------------------+
+
+In React:
+- Model: Redux/Context API/State Hooks
+- Controller: Event handlers, Custom hooks, Service classes
+- View: React components (JSX)
+
+
