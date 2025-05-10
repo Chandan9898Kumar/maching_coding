@@ -4525,3 +4525,54 @@ const input2 = [2, 2, 2, 3, 3, 3, 4, 4, 4, 2, 5, 5, 5, 6, 6];
 
 console.log(mostFrequent(input1)); // Output: "2"
 ```
+
+### 85. Put attach first letter of of word with last letter of next word
+
+```js
+### Method 1.
+
+const data = ["cat", "dog", "ball"];
+
+function getData(data) {
+  let length = data.length;
+  let newData = [];
+  let firstElem = data[0].charAt(length - 1);
+  let lastElem = data[length - 1].charAt(0);
+
+  for (let x = 0; x < length - 1; x++) {
+    let itemOne = data[x];
+    let itemTwo = data[x + 1];
+    newData.push(itemOne.charAt(0) + itemTwo.charAt(itemTwo.length - 1));
+  }
+  newData.push(lastElem + firstElem);
+  return newData;
+}
+
+console.log(getData(data));
+
+### Method 2.
+
+function getWordPairs(words) {
+  // Handle edge cases
+  if (!words || words.length === 0) return [];
+  if (words.length === 1) return [words[0].charAt(0) + words[0].charAt(words[0].length - 1)];
+
+  // Process all consecutive word pairs
+  const pairs = words.slice(0, -1).map((word, index) => {
+    const nextWord = words[index + 1];
+    return word.charAt(0) + nextWord.charAt(nextWord.length - 1);
+  });
+
+  // Add the connection between last word and first word to complete the circle
+  pairs.push(words[words.length - 1].charAt(0) + words[0].charAt(0));
+
+  return pairs;
+}
+
+console.log(getWordPairs(data)); // Output: ["cg", "dl", "bc"]
+// Test with edge cases
+console.log(getWordPairs([])); // Output: []
+console.log(getWordPairs(["single"])); // Output: ["se"]
+console.log(getWordPairs(["hello", "world"])); // Output: ["hd", "wh"]
+
+```
