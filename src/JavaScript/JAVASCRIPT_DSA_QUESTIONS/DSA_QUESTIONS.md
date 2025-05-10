@@ -4555,7 +4555,7 @@ console.log(getData(data));
 function getWordPairs(words) {
   // Handle edge cases
   if (!words || words.length === 0) return [];
-  if (words.length === 1) return [words[0].charAt(0) + words[0].charAt(words[0].length - 1)];
+  if (words.length === 1) return [words[0].charAt(0)];
 
   // Process all consecutive word pairs
   const pairs = words.slice(0, -1).map((word, index) => {
