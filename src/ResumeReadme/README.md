@@ -826,9 +826,10 @@ Explain Execution Context and Global Execution Context (GEC)
 **Global Execution Context (GEC) :**
 GEC is the default context created when JavaScript code starts running. It represents the global scope. Only one GEC exists per JavaScript program
 
-# Question 8.
+# Question 8. How a web page is rendered in browser? OR Critical Rendering Path
 
-How a web page is rendered in browser?
+`The Critical Rendering Path (CRP) is the sequence of steps the browser takes to convert HTML, CSS, and JavaScript into pixels on the screen. Understanding and optimizing the CRP is crucial for improving website performance and user experience.`
+
 
 In each HTTP request that browser makes for an HTML page, the server returns the data into bytes, these bytes are then converted to Characters, Tokens, Nodes, and finally DOM (Document Object Model).
 
@@ -842,11 +843,11 @@ This complete process is called a critical rendering path.
 
 2.` Creation of CSSOM. ( CSSOM stores all the styling information ) :` It blocks the rendering of the webpage until all the CSS style is loaded, parsed, and applied to each DOM node. It is blocking in nature because CSS styles can be overridden.
 
-3. `Formation of Render tree (Combines DOM and CSSOM):` Once the DOM and the CSSOM are ready, the browser engine combines them together to create the render tree.
+3. `Formation of Render tree (Combines DOM and CSSOM):` Once the DOM and the CSSOM are ready, the browser engine combines them together to create the render tree. Only includes visible elements (excludes <head>, display: none, etc.)
 
 4. `Layouting ( Reflow ) :` Once the render tree is ready the layout can be created, the layout is bounded on the device dimension. Calculate exact position and size of each element.
 
-5. `Paint :` Once the layout is ready, it can be painted pixel by pixel on the screen at the refresh rate of 60fps.
+5. `Paint :` Once the layout is ready, it can be painted pixel by pixel on the screen at the refresh rate of 60fps. Includes text, colors, images, borders, shadows, etc.
 
 6. Composing all layers together, to render the website on screen.
 
