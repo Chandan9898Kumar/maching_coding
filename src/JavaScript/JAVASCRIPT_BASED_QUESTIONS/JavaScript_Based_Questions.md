@@ -3476,22 +3476,93 @@ function func(a, b, c) {
 
 ```js
 function func() {
-    try {
-        console.log(1)     // First this executes and prints 1
-        return 'hola'            // Return statement is encountered
-    } catch (e) {
-        console.log(2)     // This block is skipped as no error occurred
-    } finally {
-        console.log(3)     // Finally block always executes
-    }
-    console.log(4)         // This never executes due to return statement
+  try {
+    console.log(1); // First this executes and prints 1
+    return "hola"; // Return statement is encountered
+  } catch (e) {
+    console.log(2); // This block is skipped as no error occurred
+  } finally {
+    console.log(3); // Finally block always executes
+  }
+  console.log(4); // This never executes due to return statement
 }
 
-console.log(func())
-
+console.log(func());
 
 //  The Code after the try-catch-finally blocks won't execute if a return statement is encountered in the try or catch blocks.
+```
 
+### 36. What is The Output
+
+```js
+const result = Promise.resolve("Hola");
+
+function ab() {
+  result.then((res) => {
+    console.log(res, "res");
+  });
+
+  setTimeout(() => {
+    console.log("timer 111111111");
+  });
+  console.log("console 1");
+}
+
+async function bc() {
+  const data = await result;
+  console.log(data, "data");
+  setTimeout(() => {
+    console.log("timer 2222222222");
+  });
+  console.log("console 2");
+}
+ab();
+bc();
+
+`Execution Flow Explanation:`
+  1. First, a Promise is created with Promise.resolve('Hola') and stored in the variable result. This is an immediately resolved promise with the value 'Hola'.
+
+2. `Two functions are defined:`
+
+    ab(): A regular function that uses .then() to handle the promise
+
+    bc(): An async function that uses await to handle the promise
+
+3. When the code runs, both functions are called in sequence: ab() followed by bc().
+
+`Execution Order:`
+
+1. ab() is called first:
+
+  The .then() callback is registered to run when the promise resolves (this gets added to the microtask queue)
+
+  A setTimeout is scheduled to run after the current execution (this gets added to the task queue)
+
+  console.log('console 1') executes immediately (synchronous code)
+
+2. bc() is called next:
+
+  Since it's an async function with await, it pauses at the await result line
+
+  The function continues execution once the promise resolves (also added to the microtask queue)
+
+3. After the synchronous code finishes, the JavaScript event loop processes the microtask queue before the task queue:
+
+  The .then() callback from ab() runs, logging Hola res
+
+  The awaited promise in bc() resolves, and execution continues in that function
+
+  console.log(data,'dataaaaaaaa') runs, logging Hola dataaaaaaaa
+
+  Another setTimeout is scheduled
+
+  console.log('console 2') executes
+
+4. Finally, the task queue (setTimeout callbacks) is processed:
+
+  The first setTimeout callback runs, logging timer 111111111
+
+  The second setTimeout callback runs, logging timer 2222222222
 ```
 
 ### 45. Show how an array in JavaScript can act like a stack and queue.
@@ -3612,14 +3683,14 @@ Using for...of with early return (More performant for large strings) :
 function getTheGapX(str) {
     let first = -1;
     let last = -1;
-    
+
     for (let i = 0; i < str.length; i++) {
         if (str[i] === 'X') {
             if (first === -1) first = i;
             last = i;
         }
     }
-    
+
     return first === last ? -1 : last - first;
 }
 
