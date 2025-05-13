@@ -927,6 +927,7 @@ You can use React, Angular, Vue, etc to create single-page applications. It effe
 
 
 `Disadvantages of Single page application (CSR)`
+
 1. Poor SEO, As there is a single HTML page, it becomes difficult to handle the SEO and update the search engine crawlers.
 
 2. Navigation, at times when an application becomes bigger, it becomes difficult to handle the browser history and navigation.
