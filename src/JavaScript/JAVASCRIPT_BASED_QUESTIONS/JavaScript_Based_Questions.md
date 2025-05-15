@@ -3565,6 +3565,16 @@ bc();
   The second setTimeout callback runs, logging timer 2222222222
 ```
 
+### 37. What is the output
+
+```js
+function ab(a) {
+  delete a;
+  return a;
+}
+console.log(ab(5));
+```
+
 ### 45. Show how an array in JavaScript can act like a stack and queue.
 
 ```js
