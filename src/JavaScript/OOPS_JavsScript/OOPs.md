@@ -1,6 +1,8 @@
 ### JavaScript Inheritance.
 
-JavaScript inheritance is the method through which the objects inherit the properties and the methods from the other objects. It enables code reuse and structuring of relationships between objects, creating a hierarchy where a child object can access features of its parent object. Inheritance in JavaScript can be achieved in the following ways:
+JavaScript inheritance is the method through which the objects inherit the properties and the methods from the other objects. It enables code reuse and structuring of relationships between objects, creating a hierarchy where a child object can access features of its parent object. 
+
+`Inheritance in JavaScript can be achieved in the following ways:`
 
 - Table of Content :
 
