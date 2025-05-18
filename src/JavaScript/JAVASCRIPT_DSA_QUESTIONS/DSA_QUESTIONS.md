@@ -2202,6 +2202,15 @@ let arr = [123, "Prashant Yadav", "India", null, undefined, { abc: "xyz" }, { pq
 
 console.log(filterObjects(arr));
 //[123, 'Prashant Yadav', 'India', null, undefined]
+
+//     Optmized Solution :
+
+function removeObject(arr) {
+  return arr.filter(item => typeof item !== 'object' || item === null || Array.isArray(item));
+}
+console.log(removeObject(arr));
+
+
 ```
 
 ### 49. Remove object from an array whose key:value pair matches.
