@@ -2562,6 +2562,32 @@ function changeString(stringValue) {
 const result = changeString(stringValue);
 
 console.log(result, "result");
+
+### Other Way : using for loop only.
+
+
+let str = "abcd"
+function strings(str){
+  
+  let newStr = ''
+  let len = str.length
+  
+  for(let x=0;x<len;x++){
+    let strs =''
+    
+    for(let j=0;j<x+2;j++){
+      strs = strs +str[x]
+    }
+    
+    let newValue = strs.charAt(0).toUpperCase()+strs.slice(1)
+    newStr =  newStr ? newStr+"-"+newValue : newStr+newValue
+  }
+  
+  return newStr
+}
+
+console.log(strings(str))
+
 ```
 
 ### 57. Find the solution of following query.
