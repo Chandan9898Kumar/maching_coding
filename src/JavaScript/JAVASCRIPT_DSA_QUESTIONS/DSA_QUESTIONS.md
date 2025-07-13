@@ -200,7 +200,7 @@ const sortName = items.sort((a, b) => {
   // names must be equal
   return 0;
 });
-console.log(sortName,'sortName)
+console.log(sortName,'sortName')
 
 
 //    Sort On the Basis of Height , If Height is same then sort on the basis of name.
@@ -283,6 +283,28 @@ function sortArr() {
 }
 const result = sortArr();
 console.log(result);
+
+
+//  Most Optimized Solution
+
+function secLarge(arr) {
+  let first = -Infinity;
+  let second = -Infinity;
+
+  for (let num of arr) {
+    if (num > first) {
+      second = first;
+      first = num;
+    } else if (num > second && num < first) {
+      second = num;
+    }
+  }
+  return second === -Infinity ? null : second; // null if no second largest unique number
+}
+
+const arr = [2, 6, 3, 8, 9, 11, 4, 4, 2, 3];
+console.log(secLarge(arr)); // Output: 9
+
 ```
 
 ### 8 . Group book objects by genre:
