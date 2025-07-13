@@ -269,15 +269,13 @@ console.log(result);
 // 2. when duplicates are there.
 function sortArr() {
   const arr2 = [4, 2, 14, 11, 5, 14];
-  const newArr = arr2
-    .reduce((acc, curr) => {
-      if (acc.includes(curr)) {
-        return acc;
+  const newArr = arr2.reduce((acc, curr) => {
+      if (!acc.includes(curr)) {
+         acc.push(curr);
       }
-      acc.push(curr);
+     
       return acc;
-    }, [])
-    .sort((a, b) => b - a)[1];
+    }, []).sort((a, b) => b - a)[1];
 
   return newArr;
 }
