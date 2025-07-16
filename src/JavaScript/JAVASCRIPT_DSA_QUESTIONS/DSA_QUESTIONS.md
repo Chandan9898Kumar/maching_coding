@@ -269,19 +269,20 @@ console.log(result);
 // 2. when duplicates are there.
 function sortArr() {
   const arr2 = [4, 2, 14, 11, 5, 14];
-  const newArr = arr2.reduce((acc, curr) => {
+  const newArr = arr2
+    .reduce((acc, curr) => {
       if (!acc.includes(curr)) {
-         acc.push(curr);
+        acc.push(curr);
       }
-     
+
       return acc;
-    }, []).sort((a, b) => b - a)[1];
+    }, [])
+    .sort((a, b) => b - a)[1];
 
   return newArr;
 }
 const result = sortArr();
 console.log(result);
-
 
 //  Most Optimized Solution
 
@@ -302,7 +303,6 @@ function secLarge(arr) {
 
 const arr = [2, 6, 3, 8, 9, 11, 4, 4, 2, 3];
 console.log(secLarge(arr)); // Output: 9
-
 ```
 
 ### 8 . Group book objects by genre:
@@ -2226,11 +2226,9 @@ console.log(filterObjects(arr));
 //     Optmized Solution :
 
 function removeObject(arr) {
-  return arr.filter(item => typeof item !== 'object' || item === null || Array.isArray(item));
+  return arr.filter((item) => typeof item !== "object" || item === null || Array.isArray(item));
 }
 console.log(removeObject(arr));
-
-
 ```
 
 ### 49. Remove object from an array whose key:value pair matches.
@@ -2588,21 +2586,21 @@ console.log(result, "result");
 
 let str = "abcd"
 function strings(str){
-  
+
   let newStr = ''
   let len = str.length
-  
+
   for(let x=0;x<len;x++){
     let strs =''
-    
+
     for(let j=0;j<x+2;j++){
       strs = strs +str[x]
     }
-    
+
     let newValue = strs.charAt(0).toUpperCase()+strs.slice(1)
     newStr =  newStr ? newStr+"-"+newValue : newStr+newValue
   }
-  
+
   return newStr
 }
 
@@ -4629,5 +4627,73 @@ console.log(getWordPairs(data)); // Output: ["cg", "dl", "bc"]
 console.log(getWordPairs([])); // Output: []
 console.log(getWordPairs(["single"])); // Output: ["se"]
 console.log(getWordPairs(["hello", "world"])); // Output: ["hd", "wh"]
+
+```
+
+### 86. Find the leftmost and rightmost index of a target in a sorted array.
+
+```ts
+
+### 1. Method. By Using Inbuilt Methods.
+
+const arr = [1, 2, 3, 4, 5, 5, 5, 6, 7, 8, 8, 9];
+const target = 5;
+
+function findIndexOfElement(arr,target){
+
+  const firstIndex = arr.indexOf(target)
+  const lastIndex= arr.lastIndexOf(target)
+
+  return [firstIndex,lastIndex]
+}
+
+console.log(findIndexOfElement(arr,target))
+
+
+
+### 2. Method.
+
+To find the leftmost (first) and rightmost (last) index of a given target in a sorted array using JavaScript, the most efficient approach is to use binary search twice—once to find each index. This gives you O(logn) time complexity, which is optimal for sorted arrays.
+
+function findFirst(arr, target) {
+    let left = 0, right = arr.length - 1, first = -1;
+    while (left <= right) {
+        let mid = Math.floor((left + right) / 2);
+        if (arr[mid] === target) {
+            first = mid;
+            right = mid - 1; // Keep searching to the left
+        } else if (arr[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return first;
+}
+
+function findLast(arr, target) {
+    let left = 0, right = arr.length - 1, last = -1;
+    while (left <= right) {
+        let mid = Math.floor((left + right) / 2);
+        if (arr[mid] === target) {
+            last = mid;
+            left = mid + 1; // Keep searching to the right
+        } else if (arr[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return last;
+}
+
+function findFirstAndLast(arr, target) {
+    return [findFirst(arr, target), findLast(arr, target)];
+}
+
+// Example usage:
+const arr = [1, 2, 3, 4, 5, 5, 5, 6, 7, 8, 8, 9];
+const target = 5;
+console.log(findFirstAndLast(arr, target)); // Output: [4, 6]
 
 ```
