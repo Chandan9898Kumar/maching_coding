@@ -4672,7 +4672,7 @@ function findFirst(arr, target) {
 }
 
 function findLast(arr, target) {
-  
+
     let left = 0, right = arr.length - 1, last = -1;
     while (left <= right) {
         let mid = Math.floor((left + right) / 2);
@@ -4697,4 +4697,40 @@ const arr = [1, 2, 3, 4, 5, 5, 5, 6, 7, 8, 8, 9];
 const target = 5;
 console.log(findFirstAndLast(arr, target)); // Output: [4, 6]
 
+```
+
+### 87. 1. Pair With Sum in a Sorted Array
+
+Find if there is any pair of numbers in a sorted array that add up to a given target sum.
+
+```ts
+function hasPairWithSum(arr, target) {
+  let left = 0;
+  let right = arr.length - 1;
+
+  while (left < right) {
+    const sum = arr[left] + arr[right];
+    if (sum === target) {
+      return true; // Found a pair
+    } else if (sum < target) {
+      left++; // Move left pointer right to increase sum
+    } else {
+      right--; // Move right pointer left to decrease sum
+    }
+  }
+  return false; // No such pair
+}
+
+// Example Usage:
+const arr = [10, 20, 35, 50, 75, 80];
+console.log(hasPairWithSum(arr, 70)); // Output: true (20+50=70)
+console.log(hasPairWithSum(arr, 1150)); // Output: false
+
+Explanation:
+
+Start with two pointers at each end.
+
+If the sum is too small, move the left pointer right to make the sum bigger.
+
+If the sum is too large, move the right pointer left to make the sum smaller
 ```
