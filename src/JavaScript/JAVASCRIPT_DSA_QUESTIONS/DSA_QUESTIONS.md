@@ -4734,3 +4734,36 @@ If the sum is too small, move the left pointer right to make the sum bigger.
 
 If the sum is too large, move the right pointer left to make the sum smaller
 ```
+
+
+### 88 . Finding the First Occurrence Greater Than a Target.
+
+```ts
+function findFirstGreater(arr, target) {
+    let left = 0, right = arr.length - 1;
+    let result = -1;
+
+    while (left <= right) {
+        let mid = Math.floor((left + right) / 2);
+        console.log(`left: ${left}, right: ${right}, mid: ${mid}, arr[mid]: ${arr[mid]}`);
+
+        if (arr[mid] > target) {
+            result = mid;          // Potential answer
+            right = mid - 1;       // Search left half for earlier candidate
+        } else {
+            left = mid + 1;        // Discard left half including mid
+        }
+    }
+    return result;
+}
+
+const arr = [1, 3, 5, 6, 8, 12];
+// Try with different targets:
+console.log(findFirstGreater(arr, 5));  // Output: 3  (arr[3] = 6)
+console.log(findFirstGreater(arr, 8));  // Output: 5  (arr[5] = 12)
+console.log(findFirstGreater(arr, 12)); // Output: -1 (none greater)
+
+
+
+
+```
