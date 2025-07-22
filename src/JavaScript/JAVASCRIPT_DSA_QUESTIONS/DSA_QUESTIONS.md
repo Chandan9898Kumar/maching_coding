@@ -4732,7 +4732,7 @@ Start with two pointers at each end.
 
 If the sum is too small, move the left pointer right to make the sum bigger.
 
-If the sum is too large, move the right pointer left to make the sum smaller
+If the sum is too large, move the right pointer left to make the sum smaller.
 ```
 
 
@@ -4740,7 +4740,7 @@ If the sum is too large, move the right pointer left to make the sum smaller
 
 ```ts
 function findFirstGreater(arr, target) {
-  
+
     let left = 0, right = arr.length - 1;
     let result = -1;
 
