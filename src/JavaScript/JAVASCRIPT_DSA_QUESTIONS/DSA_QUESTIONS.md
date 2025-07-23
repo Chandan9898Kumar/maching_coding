@@ -619,7 +619,7 @@ console.log(arrays);
 // Time complexity - O(n^2)
 // Space complexity - O(1)
 
-const array = [0, 1, 2, 3, 5, 6] // it will wrong data with : const array = [1, 2, 3, 5, 6];
+const array = [0, 1, 2, 3, 5, 6] // it will give wrong data with : const array = [1, 2, 3, 5, 6];
 function missingNumber1(nums) {
   for (let i = 0; i <= nums.length; i++) {
     let flag = 0;
