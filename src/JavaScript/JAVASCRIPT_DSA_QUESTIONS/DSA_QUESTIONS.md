@@ -843,6 +843,26 @@ function removeDuplicates(arr) {
 
 var uniquePeople = removeDuplicates(arrayOfObject);
 console.log(uniquePeople);
+
+//                                       New way:
+
+function removeDuplicate(arrayOfObject) {
+  let seen = {};
+
+  let update = [];
+
+  for (let item of arrayOfObject) {
+    let key = `${item.name}-${item.height}`;
+
+    if (!seen[key]) {
+      update.push(item);
+      seen[key] = key;
+    }
+  }
+  return update;
+}
+
+console.log(removeDuplicate(arrayOfObject));
 ```
 
 ### 19. Remove Duplicate items From An Array Without using built-in functions. It should not return new array.
