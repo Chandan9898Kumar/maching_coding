@@ -4731,6 +4731,7 @@ function findFirst(arr, target) {
 function findLast(arr, target) {
 
     let left = 0, right = arr.length - 1, last = -1;
+    
     while (left <= right) {
         let mid = Math.floor((left + right) / 2);
         if (arr[mid] === target) {
