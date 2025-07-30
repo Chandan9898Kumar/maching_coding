@@ -1393,6 +1393,35 @@ function compare(val1, val2) {
 const result = compare(arr1, arr2);
 
 console.log(result, "result");
+
+
+//                               Most Optimized Solution:
+
+function isEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) return false;
+
+  const freq = {};
+
+  // Increment frequency for arr1
+  for (const num of arr1) {
+    freq[num] = (freq[num] || 0) + 1;
+  }
+
+  // Decrement frequency for arr2
+  for (const num of arr2) {
+    if (!freq[num]) return false;
+    freq[num]--;
+  }
+
+  // If all counts are zero, arrays are equal
+  // (Actually, above loop already confirms equality due to length check)
+  return true;
+}
+
+const arr1 = [2, 2, 5];
+const arr2 = [5, 2, 2];
+console.log(isEqual(arr1, arr2)); // true
+
 ```
 
 ### 29. Count elements whose type is number in a nested array.
