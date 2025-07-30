@@ -1192,7 +1192,7 @@ function findData(arrayVal) {
   const studentData = arrayVal.reduce((acc, curr) => {
     const studentDetails = acc.find((student) => student.resgisterNo === curr.resgisterNo);
     // Note:  Here in studentDetails we are directly changing values  inside it and it will reflect in acc because acc data and return data of acc.find are referential equal.
-    //  Also you might notice that  we are pushing studentDetails in acc because it is not need reason is that data of studentDetails and acc both are equal by reference.
+    //  Also you might notice that  we are pushing studentDetails in acc because it is not needed. reason is that data of studentDetails and acc both are equal by reference.
     //  Meaning changing any values in acc or studentDetails will reflect in both.
 
     if (studentDetails) {
@@ -4731,7 +4731,7 @@ function findFirst(arr, target) {
 function findLast(arr, target) {
 
     let left = 0, right = arr.length - 1, last = -1;
-    
+
     while (left <= right) {
         let mid = Math.floor((left + right) / 2);
         if (arr[mid] === target) {
