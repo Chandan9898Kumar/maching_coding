@@ -1435,7 +1435,7 @@ function count(arrayVal) {
   function findTotal(values) {
     for (let x of values) {
       if (Array.isArray(x)) {
-        find(x);
+        findTotal(x);
       } else {
         if (typeof x === "number") {
           total += 1;
