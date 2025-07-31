@@ -1489,7 +1489,6 @@ function countNumber(arrayVal) {
 const result = countNumber(arr);
 
 console.log(result, "result");
-
 ```
 
 ### 30. Given a nested array and a callback function, count all the elements that pass the test in the callback and return the count.
