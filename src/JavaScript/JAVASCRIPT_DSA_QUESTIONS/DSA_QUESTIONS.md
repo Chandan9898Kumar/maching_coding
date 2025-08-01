@@ -1590,7 +1590,7 @@ console.log(res, "RES ");
 
 ```ts
 
-const obj1= { name: "John", age: 23; degree: "CS" }
+const obj1= { name: "John", age: 23, degree: "CS" }
 const obj2= {age: 23, degree: "CS"}
 
 // Output: true
