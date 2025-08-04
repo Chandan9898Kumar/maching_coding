@@ -1603,6 +1603,7 @@ const obj2={name: "Max", age: 23, degree: "CS"}
 
 //                                         For Loop
 // Define the function check
+
 function check(obj1, obj2) {
 
 	// Iterate the obj2 using for..in
