@@ -1567,6 +1567,7 @@ function deepEqual(obj1, obj2) {
   // Get the keys of both objects.
   const keys1 = Object.keys(obj1);
   const keys2 = Object.keys(obj2);
+  
   // Check if the number of keys is the same.
   if (keys1.length !== keys2.length) {
     return false;
