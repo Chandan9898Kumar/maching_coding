@@ -376,7 +376,7 @@ outer()
 
 
 
-### Example 5
+### Example 6
 
 function f() {
   var a = 1; // Step 1: Declare variable 'a' and initialize it to 1
