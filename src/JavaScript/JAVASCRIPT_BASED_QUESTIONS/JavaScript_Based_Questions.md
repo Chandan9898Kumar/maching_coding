@@ -407,6 +407,7 @@ function print(name) {
   var name = "Ajay";
   console.log(name);
 }
+
 print(name);
 
 - NOTE :  We are capturing the variable in function arguments.
