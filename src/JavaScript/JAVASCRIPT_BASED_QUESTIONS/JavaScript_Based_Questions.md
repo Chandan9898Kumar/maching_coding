@@ -411,6 +411,7 @@ function print(name) {
 print(name);
 
 - NOTE :  We are capturing the variable in function arguments.
+
 // OUTPUT:
 1. "Yomesh"
 2.  "Ajay"
