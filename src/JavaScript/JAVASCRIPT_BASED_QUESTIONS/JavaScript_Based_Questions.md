@@ -432,6 +432,7 @@ print();
 
 
 - NOTE : Here we did not pass variable inside function arguments, so value will not be retained and hence due to hoisting it will show undefined.
+
 // OUTPUT :
 1. undefined
 2. "Ajay"
