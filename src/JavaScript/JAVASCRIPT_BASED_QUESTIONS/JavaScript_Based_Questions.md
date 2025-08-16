@@ -762,6 +762,7 @@ console.log(result);
 ### 14. What is Reconciliation in React JS
 
 ```ts
+
 1️⃣ When a component's state is updated in ReactJS, it generates a new virtual DOM tree, referred to as the "updated tree", which mirrors the new state of the UI.
 
 2️⃣ React compares this "updated tree" with the previous virtual DOM tree, known as the "current tree", to pinpoint the differences.
