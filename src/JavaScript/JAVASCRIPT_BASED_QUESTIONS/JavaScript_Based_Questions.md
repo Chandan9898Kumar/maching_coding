@@ -896,7 +896,9 @@ you need to design and implement the localStorage API. It should mimic the behav
 Make sure you handle different edge cases
 
 ```ts
-// 1.                                               Implementation using Objects:
+
+// 1.                          Implementation using Objects:
+
 class LocalStorage {
   constructor() {
     this.store = {};
