@@ -1001,6 +1001,7 @@ class LocalStorage {
 const localStorageItem = new LocalStorage();
 
 //  3.                                       Implementation using Map
+
 class LocalStorage {
   constructor() {
     this.store = new Map();
