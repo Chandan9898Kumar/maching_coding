@@ -1057,6 +1057,7 @@ console.log(localStorageItem, "before clear");
 console.log(localStorageItem.getItem("3"));
 localStorageItem.removeItem("2");
 console.log(localStorageItem, "after clear");
+
 ```
 
 ### 18. LocalStorage with expiry
