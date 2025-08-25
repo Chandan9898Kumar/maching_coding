@@ -1101,7 +1101,7 @@ window.myLocalStorage = {
   // add an entry
 
   // default expiry is 30 days in milliseconds
-  
+
   setItem(key, value, maxAge = 30 * 60 * 60 * 1000) {
     // store the value as object
     // along with expiry date
@@ -1208,6 +1208,7 @@ class LocalStorage {
 }
 
 const localStorageItem = new LocalStorage();
+
 localStorageItem.setItem("1", "part one",30);
 
 setTimeout(()=>{
