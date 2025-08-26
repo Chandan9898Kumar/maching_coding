@@ -1339,6 +1339,7 @@ const Circles = ({ n }) => {
 2. It is easy to use and abstracts the traditional XMLHttpRequest object and helps to do better to Ajax calls.
 
 ```ts
+
 `This is how we make requests using fetch,`
 async function networkCall(){
   try{
