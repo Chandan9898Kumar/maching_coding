@@ -1340,7 +1340,7 @@ const Circles = ({ n }) => {
 
 ```ts
 
-`This is how we make requests using fetch,`
+`This is how we make requests using fetch`
 async function networkCall(){
   try{
     const response = await fetch('https://learnersbucket.com/dummy');
