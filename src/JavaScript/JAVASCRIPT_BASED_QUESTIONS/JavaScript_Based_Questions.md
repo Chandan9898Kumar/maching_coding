@@ -1383,6 +1383,7 @@ async function networkCall(){
 
 ```ts
 //to store all the interval ids
+
 window.intervalIds = [];
 
 //original interval function
