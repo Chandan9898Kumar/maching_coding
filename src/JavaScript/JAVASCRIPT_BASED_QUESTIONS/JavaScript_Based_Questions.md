@@ -1450,6 +1450,7 @@ const MY_TIMERS = {
 };
 
 //  Execution:
+
 MY_TIMERS.setInterval(() => {
   console.log("Hello");
 }, 2000);
