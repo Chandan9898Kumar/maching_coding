@@ -1677,13 +1677,13 @@ const ramdaMergedObj = R.mergeDeepRight(obj1, obj2);
 - 7. Using ES6 Spread Operator for Deep Merge : shallow copy
 Leveraging the ES6 spread operator with recursion allows for a concise syntax while achieving a deep merge.
 
-function deepMergeWithSpread(obj1, obj2) {
+function deepMergeShallow(obj1, obj2) {
   const result = { ...obj1 };
 
   for (let key in obj2) {
     if (obj2.hasOwnProperty(key)) {
       if (obj2[key] instanceof Object && obj1[key] instanceof Object) {
-        result[key] = deepMergeWithSpread(obj1[key], obj2[key]);
+        result[key] = deepMergeShallow(obj1[key], obj2[key]);
       } else {
         result[key] = obj2[key];
       }
@@ -1693,17 +1693,17 @@ function deepMergeWithSpread(obj1, obj2) {
   return result;
 }
 
-const deepMergedObjSpread = deepMergeWithSpread(obj1, obj2);
+const deepMergedObjSpread = deepMergeShallow(obj1, obj2);
 
 
 - 8. Deep Merge with Recursive Function : shallow copy
 For a deep merge, a recursive function can be employed to traverse and merge nested objects at all levels.
 
-function deepMerge(obj1, obj2) {
+function deepMergeShallow(obj1, obj2) {
   for (let key in obj2) {
     if (obj2.hasOwnProperty(key)) {
       if (obj2[key] instanceof Object && obj1[key] instanceof Object) {
-        obj1[key] = deepMerge(obj1[key], obj2[key]);
+        obj1[key] = deepMergeShallow(obj1[key], obj2[key]);
       } else {
         obj1[key] = obj2[key];
       }
@@ -1712,10 +1712,10 @@ function deepMerge(obj1, obj2) {
   return obj1;
 }
 
-const deepMergedObj = deepMerge(obj1, obj2);
+const deepMergedObj = deepMergeShallow(obj1, obj2);
 
 - 9 Shallow copy
-function deepMerge(...objs){
+function deepMergeShallow(...objs){
   let result = {}
 
   for(let item of objs){
@@ -1726,7 +1726,10 @@ function deepMerge(...objs){
   return result
 }
 
-const result = deepMerge(obj1,obj2)
+const result = deepMergeShallow(obj1,obj2)
+
+
+# Above all are shallow copy examples.
 ```
 
 ### 24. What is a deep copy ?
