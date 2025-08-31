@@ -1714,7 +1714,8 @@ function deepMergeShallow(obj1, obj2) {
 
 const deepMergedObj = deepMergeShallow(obj1, obj2);
 
-- 9 Shallow copy
+- 9 Shallow copy.
+
 function deepMergeShallow(...objs){
   let result = {}
 
