@@ -1742,6 +1742,7 @@ const result = deepMergeShallow(obj1,obj2)
 - Shallow Copy Example
 
 ```ts
+
 1. Array.from,
 let a = [{x:1,y:2,z:3}];
 let b = Array.from(a);
