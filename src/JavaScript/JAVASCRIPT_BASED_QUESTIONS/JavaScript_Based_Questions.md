@@ -2739,8 +2739,21 @@ export async function fetchRetry(url: string, delay: number, tries: number, call
 
 ### 30.A How to implement custom map function with limit on number of operations?
 
+ ### NOTE : This question is not of batching sort of question.
+This is different from batching Where:
+
+A. Each time an individual item completes, the next item starts immediately without waiting for all in the batch.( rolling window / mapLimit)
+
+
+> In batching : code runs  :-
+1. First batch: limit items concurrently
+2. When all these complete, it runs the next batch of limit items concurrently, and so on
+
+
 Implement a mapLimit function that is similar to the Array.map() which returns a promise that resolves on the list of output by mapping
 each input through an asynchronous iteratee function or rejects it if any error occurs. It also accepts a limit to decide how many operations can occur at a time.
+
+
 
 `The mapLimit function` is a utility that allows you to process an array of items asynchronously with a limit on the number of concurrent operations.
 This is useful when you want to avoid overwhelming a resource (like a database or an API) by controlling how many asynchronous tasks are running at the same time.
