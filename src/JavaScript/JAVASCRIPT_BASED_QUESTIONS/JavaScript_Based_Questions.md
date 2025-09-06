@@ -896,7 +896,6 @@ you need to design and implement the localStorage API. It should mimic the behav
 Make sure you handle different edge cases
 
 ```ts
-
 // 1.                          Implementation using Objects:
 
 class LocalStorage {
@@ -1057,7 +1056,6 @@ console.log(localStorageItem, "before clear");
 console.log(localStorageItem.getItem("3"));
 localStorageItem.removeItem("2");
 console.log(localStorageItem, "after clear");
-
 ```
 
 ### 18. LocalStorage with expiry
@@ -2748,6 +2746,18 @@ each input through an asynchronous iteratee function or rejects it if any error 
 This is useful when you want to avoid overwhelming a resource (like a database or an API) by controlling how many asynchronous tasks are running at the same time.
 This is useful for scenarios where you want to avoid overwhelming a server or API with too many requests at once.
 
+`NOTE :`The statement about mapLimit means at any time, up to the defined limit of async operations run concurrently. For example, if the limit is 2:
+
+The first two items are started simultaneously.
+
+When either one finishes, the next item in the list starts running immediately.
+
+This continues, always keeping up to 2 running concurrently, not waiting for both first operations to finish before starting the next two.
+
+This concurrency control is a rolling or sliding window behavior, where the concurrency is continuously maintained at the limit (if there are still inputs to process) until all inputs are completed. So it does not work in isolated batches one after another; rather it dynamically starts a new async task as soon as a running one finishes.
+
+> With a mapLimit function and a limit of 2, the correct behavior is that exactly two async operations start immediately. As soon as one of those two finishes, the next input (if any) begins processing—but not before. This means at any moment, a maximum of 2 operations can be running, but as soon as a spot is free, a new one is started. This is sometimes called a “sliding window” or “rolling pool” approach.
+
 `In this question, you need to implement a custom mapLimit function that takes 4 arguments`
 
 1. inputs: An array of inputs
@@ -3018,6 +3028,154 @@ mapLimit(arr, limit, callback)
 ### This implementation uses a promise to manage the asynchronous operations and ensures that the concurrency limit is not exceeded.
 The execute function is used to apply the asynchronous function to each item in the array, and the results are stored in the results array.
 Once all operations have been completed, the promise is resolved with the results.
+
+
+
+
+
+
+### NOTE at above examples we did not handle error cases: Below is the most correct Code.
+function getUserById(id, callback, activeIndex) {
+  // simulating async request that may fail for id 3
+  const randomRequestTime = Math.floor(Math.random() * 100) + 200;
+
+  setTimeout(() => {
+    console.log('Id:', id);
+    if (id === 3) {
+      callback(new Error("Failed to fetch user with id 3"), activeIndex);
+    } else {
+      callback(null, "User" + id, activeIndex);
+    }
+  }, randomRequestTime);
+}
+
+function mapLimit(inputs, limit, iterateeFn, callback) {
+  let index = 0;
+  let completed = 0;
+  const outputs = [];
+  let hasError = false;
+
+  function postCompletionCallback(err, result, activeIndex) {
+    if (hasError) return; // ignore calls after error
+
+    if (err) {
+      hasError = true;
+      callback(err);
+      return;
+    }
+
+    outputs[activeIndex] = result;
+    completed++;
+
+    if (completed === inputs.length) {
+      callback(null, outputs);
+      return;
+    }
+
+    if (index < inputs.length) {
+      iterateeFn(inputs[index], postCompletionCallback, index);
+      index++;
+    }
+  }
+
+  while (index < limit && index < inputs.length) {
+    iterateeFn(inputs[index], postCompletionCallback, index);
+    index++;
+  }
+}
+
+mapLimit([1, 2, 3, 4, 5], 2, getUserById, (err, results) => {
+  if (err) {
+    console.error('Error:', err.message);
+  } else {
+    console.log('Results:', results);
+  }
+});
+
+
+Explanation:
+The async function getUserById simulates failure for id 3.
+
+When an error occurs, it is passed as the first argument to the callback.
+
+The mapLimit function checks for errors in postCompletionCallback and calls the final callback immediately on error.
+
+After an error, no further tasks are processed.
+
+If no error, results are accumulated and returned once all are done.
+
+This example shows proper error propagation and concurrency control in mapLimit.
+
+
+
+
+### Other Example:
+
+function mapLimit(inputs, limit, iterateeFn, callback) {
+  const output = [];
+  let running = 0;
+  let current = 0;
+  let completed = 0;
+  let hasError = false;
+
+  function runNext() {
+    if (hasError) return;  // stop starting new tasks on error
+
+    if (completed === inputs.length) {
+      callback(null, output);
+      return;
+    }
+
+    while (running < limit && current < inputs.length) {
+      const idx = current;
+      running++;
+
+      iterateeFn(inputs[idx], function (err, result) {
+        running--;
+        if (hasError) return;  // ignore callbacks after error occurred
+
+        if (err) {
+          hasError = true;
+          callback(err);
+          return;
+        }
+
+        output[idx] = result;
+        completed++;
+        runNext();
+      });
+
+      current++;
+    }
+  }
+
+  runNext();
+}
+
+
+
+
+function getUserById(id, cb) {
+  const randomTime = Math.floor(Math.random() * 200) + 100;
+  console.log('Id:', id);
+  setTimeout(() => {
+    if (id === 3) {
+      cb(new Error("Failed to fetch user " + id));
+    } else {
+      cb(null, "User" + id);
+    }
+  }, randomTime);
+}
+
+mapLimit([1, 2, 3, 4, 5], 2, getUserById, (err, results) => {
+  if (err) {
+    console.error("Error:", err.message);
+  } else {
+    console.log("Results:", results);
+  }
+});
+
+
 
 ```
 

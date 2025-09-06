@@ -1,7 +1,7 @@
-import React from 'react';
-import './App.css';
-import FilterableListDemo from './Components/FilterableList/FilterableListDemo';
-import './Components/FilterableList/FilterableListDemo.css';
+import React from "react";
+import "./App.css";
+import FilterableListDemo from "./Components/FilterableList/FilterableListDemo";
+import "./Components/FilterableList/FilterableListDemo.css";
 
 function App() {
   return (
