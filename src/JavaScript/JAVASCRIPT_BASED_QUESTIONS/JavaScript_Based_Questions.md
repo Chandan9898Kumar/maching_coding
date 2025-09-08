@@ -2746,6 +2746,7 @@ A. Each time an individual item completes, the next item starts immediately with
 
 
 > In batching : code runs  :-
+
 1. First batch: limit items concurrently
 2. When all these complete, it runs the next batch of limit items concurrently, and so on
 
