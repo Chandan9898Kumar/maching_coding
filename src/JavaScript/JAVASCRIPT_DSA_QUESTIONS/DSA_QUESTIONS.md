@@ -1394,7 +1394,6 @@ const result = compare(arr1, arr2);
 
 console.log(result, "result");
 
-
 //                               Most Optimized Solution:
 
 function isEqual(arr1, arr2) {
@@ -1421,7 +1420,6 @@ function isEqual(arr1, arr2) {
 const arr1 = [2, 2, 5];
 const arr2 = [5, 2, 2];
 console.log(isEqual(arr1, arr2)); // true
-
 ```
 
 ### 29. Count elements whose type is number in a nested array.
@@ -1572,7 +1570,7 @@ function deepEqual(obj1, obj2) {
   if (keys1.length !== keys2.length) {
     return false;
   }
-  
+
   // Iterate through the keys and compare their values recursively.
   for (const key of keys1) {
     if (!keys2.includes(key) || !deepEqual(obj1[key], obj2[key])) {
@@ -1591,52 +1589,44 @@ console.log(res, "RES ");
 ### 32. Given two objects obj1 and obj2 and the task are to check that obj1 contains all the keys and values of obj2 in JavaScript.
 
 ```ts
-
-const obj1= { name: "John", age: 23, degree: "CS" }
-const obj2= {age: 23, degree: "CS"}
+const obj1 = { name: "John", age: 23, degree: "CS" };
+const obj2 = { age: 23, degree: "CS" };
 
 // Output: true
 
-const obj1={ name: "John", degree: "CS" }
-const obj2={name: "Max", age: 23, degree: "CS"}
+const obj1 = { name: "John", degree: "CS" };
+const obj2 = { name: "Max", age: 23, degree: "CS" };
 
 // Output: false
-
 
 //                                         For Loop
 // Define the function check
 
 function check(obj1, obj2) {
-
-	// Iterate the obj2 using for..in
-	for (key in obj2) {
-
-		// Check if both objects do
-		// not have the equal values
-		// of same key
-		if (obj1[key] !== obj2[key]) {
-			return false;
-		}
-	}
-	return true
+  // Iterate the obj2 using for..in
+  for (key in obj2) {
+    // Check if both objects do
+    // not have the equal values
+    // of same key
+    if (obj1[key] !== obj2[key]) {
+      return false;
+    }
+  }
+  return true;
 }
 
 // Call the function
-console.log(check(obj1, obj2))
-
-
+console.log(check(obj1, obj2));
 
 //                           Every Method
-const every = Object.keys(obj2).every((item)=>{
-
-  if(!obj1.hasOwnProperty(item) || obj1[item]!==obj2[item]){
-    return false
+const every = Object.keys(obj2).every((item) => {
+  if (!obj1.hasOwnProperty(item) || obj1[item] !== obj2[item]) {
+    return false;
   }
-  return true
-})
+  return true;
+});
 
-console.log(every,'every')
-
+console.log(every, "every");
 ```
 
 ### 33. Flat an array to up to given depth.
@@ -4828,7 +4818,6 @@ If the sum is too large, move the right pointer left to make the sum smaller.
 
 ```ts
 function findFirstGreater(arr, target) {
-
   let left = 0,
     right = arr.length - 1;
   let result = -1;
@@ -4852,4 +4841,90 @@ const arr = [1, 3, 5, 6, 8, 12];
 console.log(findFirstGreater(arr, 5)); // Output: 3  (arr[3] = 6)
 console.log(findFirstGreater(arr, 8)); // Output: 5  (arr[5] = 12)
 console.log(findFirstGreater(arr, 12)); // Output: -1 (none greater)
+```
+
+### 89. Given a string which contains lower alphabetic characters, we need to remove at most one character from this string in such a way that frequency of each distinct character becomes same in the string.
+
+```ts
+//  Method : 1
+
+function can_make_same_frequency_by_one_removal(strings) {
+  let countFrequency = {};
+
+  for (let strs of strings) {
+    countFrequency[strs] = (countFrequency[strs] || 0) + 1;
+  }
+
+  let frequency = Object.values(countFrequency);
+
+  let uniqueFrequency = new Set(frequency);
+
+  if (uniqueFrequency.size === 1) {
+    return true;
+  }
+
+  if (uniqueFrequency.size === 2) {
+    let max_freq = Math.max(...frequency);
+    let min_freq = Math.min(...frequency);
+
+    const max_Count = frequency.reduce((acc, curr) => {
+      if (curr === max_freq) {
+        acc = acc + 1;
+      }
+      return acc;
+    }, 0);
+
+    const min_Count = frequency.reduce((acc, curr) => {
+      if (curr === min_freq) {
+        acc = acc + 1;
+      }
+      return acc;
+    }, 0);
+
+    if (min_Count === 1 && min_freq === 1) {
+      return true;
+    }
+
+    if (max_Count === 1 && max_freq - min_freq === 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  return false;
+}
+
+test_strings = ["aabbcc", "aabbc", "aabbccc", "aabbcccdd", "abc", "abcc", "aabbcccddde", "xyyz", "xyyzz", "xxxxyyzz"];
+
+for (let item of test_strings) {
+  console.log(can_make_same_frequency_by_one_removal(item));
+}
+
+//  Method 2:
+
+function can_make_same_frequency_by_one_removal(strings) {
+  const frequency = Object.values(
+    [...strings].reduce((acc, char) => {
+      acc[char] = (acc[char] || 0) + 1;
+      return acc;
+    }, {})
+  );
+
+  const uniqueFreqs = [...new Set(frequency)];
+
+  if (uniqueFreqs.length === 1) return true;
+  if (uniqueFreqs.length !== 2) return false;
+
+  const [min, max] = uniqueFreqs.sort((a, b) => a - b);
+  const minCount = frequency.filter((f) => f === min).length;
+  const maxCount = frequency.filter((f) => f === max).length;
+
+  return (minCount === 1 && min === 1) || (maxCount === 1 && max - min === 1);
+}
+
+// Test cases
+const test_strings = ["aabbcc", "aabbc", "aabbccc", "aabbcccdd", "abc", "abcc", "aabbcccddde", "xyyz", "xyyzz", "xxxxyyzz"];
+
+test_strings.forEach((item) => console.log(`${item}: ${can_make_same_frequency_by_one_removal(item)}`));
 ```
