@@ -2952,7 +2952,47 @@ mapLimit([1,2,3,4,5], 2, getUserById, (allResults) => {
 })
 
 
-- 5. Using Promises
+
+//  5.
+
+function getUserById(id, callback) {
+  const randomRequestTime = Math.floor(Math.random() * 100) + 200;
+  setTimeout(() => {
+    callback("User" + id);
+  }, randomRequestTime * 10);
+}
+
+function mapLimit(arrayInputs, limit, itratorFun, callback) {
+  let next = 0;
+  let completed = 0;
+  const results = new Array(arrayInputs.length);
+
+  function run() {
+    if (next >= arrayInputs.length) return;
+    const current = next++;
+    itratorFun(arrayInputs[current], (result) => {
+      results[current] = result;
+      completed++;
+      if (next < arrayInputs.length) {
+        run();
+      }
+      if (completed === arrayInputs.length) {
+        callback(results);
+      }
+    });
+  }
+
+  for (let i = 0; i < Math.min(limit, arrayInputs.length); i++) {
+    run();
+  }
+}
+
+mapLimit([1, 2, 3, 4, 5], 2, getUserById, (allResults) => {
+  console.log("final result:", allResults);
+});
+
+
+- 6. Using Promises
 
 /**
  * Applies an asynchronous function to each item in an array, with a specified concurrency limit.
