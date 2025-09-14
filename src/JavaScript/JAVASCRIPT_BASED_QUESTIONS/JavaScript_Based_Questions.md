@@ -2739,22 +2739,19 @@ export async function fetchRetry(url: string, delay: number, tries: number, call
 
 ### 30.A How to implement custom map function with limit on number of operations?
 
- ### NOTE : This question is not of batching sort of question.
+### NOTE : This question is not of batching sort of question.
+
 This is different from batching Where:
 
 A. Each time an individual item completes, the next item starts immediately without waiting for all in the batch.( rolling window / mapLimit)
 
-
-> In batching : code runs  :-
+> In batching : code runs :-
 
 1. First batch: limit items concurrently
 2. When all these complete, it runs the next batch of limit items concurrently, and so on
 
-
 Implement a mapLimit function that is similar to the Array.map() which returns a promise that resolves on the list of output by mapping
 each input through an asynchronous iteratee function or rejects it if any error occurs. It also accepts a limit to decide how many operations can occur at a time.
-
-
 
 `The mapLimit function` is a utility that allows you to process an array of items asynchronously with a limit on the number of concurrent operations.
 This is useful when you want to avoid overwhelming a resource (like a database or an API) by controlling how many asynchronous tasks are running at the same time.
@@ -3003,80 +3000,74 @@ mapLimit([1, 2, 3, 4, 5], 2, getUserById, (allResults) => {
  * @returns {Promise} A promise that resolves with the results of the asynchronous operations.
  */
 
-async function mapLimit(arr, limit, asyncFn) {
-  // Initialize an empty array to store the results
-  const results = new Array(arr.length);
-
-  // Initialize a counter to keep track of the current index
-  let index = 0;
-
-  // Initialize a counter to keep track of the number of completed operations
-  let completed = 0;
-
-  // Return a promise that resolves with the results
+function mapLimit(arr, limit, callback) {
   return new Promise((resolve, reject) => {
-   // Define a function to execute the asynchronous operation
-   function execute() {
-    // Check if all operations have been completed
-    if (completed === arr.length) {
-      // Resolve the promise with the results
-      resolve(results);
-      return;
+    let completed = 0;
+    let next = 0;
+    
+    let response = new Array(arr.length);
+    let rejected = false;
+
+    function runNext() {
+      // If already rejected or all tasks are scheduled, exit
+      if (rejected || next >= arr.length) return;
+
+      const current = next++;
+      
+
+      callback(arr[current])
+        .then(res => {
+          response[current] = res;
+        })
+        .catch(err => {
+          if (!rejected) {
+            rejected = true;
+            reject(err);
+          }
+        })
+        .finally(() => {
+          
+          completed++;
+          // Only schedule the next if we didn't reject
+          if (!rejected && next < arr.length) {
+            runNext();
+          }
+          // If all have completed or an error occurred, resolve
+          if (!rejected && completed === arr.length) {
+            resolve(response);
+          }
+        });
     }
 
-    // Check if the concurrency limit has been reached
-    if (index >= arr.length) {
-      return;
+    // Launch up to `limit` concurrent operations
+    for (let i = 0; i < Math.min(limit, arr.length); i++) {
+      runNext();
     }
-
-    // Get the current item and increment the index
-    const currentItem = arr[index++];
-
-    // Apply the asynchronous function to the current item
-    asyncFn(currentItem)
-      .then((result) => {
-       // Store the result in the results array
-       results[completed++] = result;
-        console.log(result,'result')
-       // Execute the next operation
-       execute();
-      })
-      .catch((error) => {
-       // Reject the promise with the error
-       reject(error);
-      });
-   }
-
-   // Execute the first 'limit' operations
-   for (let i = 0; i < limit; i++) {
-    execute();
-   }
   });
-
-
 }
 
 // Example usage:
 const arr = [1, 2, 3, 4, 5];
 const limit = 2;
-
-const callback =async (item) => {
-  // Simulate an asynchronous operation
- return await new Promise((resolve) => {
-   setTimeout(() => {
-    resolve(item * 2);
-   }, 1000);
+const callback = (item) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (item === 3) {
+        reject("user reject" + item);
+      } else {
+        resolve("user resolve" + item);
+      }
+    }, 1000);
   });
 }
-
 mapLimit(arr, limit, callback)
-.then((results) => {
-  // Use globalThis.console to make sure console is defined
-  globalThis.console.log(results); // Output: [2, 4, 6, 8, 10]
-})
-.catch((error) => {
-  globalThis.console.error(error);
-});
+  .then((results) => {
+    console.log(results, "results final");
+  })
+  .catch((error) => {
+    console.error(error, " : Final error");
+  });
+
 
 
 ### This implementation uses a promise to manage the asynchronous operations and ensures that the concurrency limit is not exceeded.
