@@ -3004,7 +3004,7 @@ function mapLimit(arr, limit, callback) {
   return new Promise((resolve, reject) => {
     let completed = 0;
     let next = 0;
-    
+
     let response = new Array(arr.length);
     let rejected = false;
 
@@ -3013,7 +3013,7 @@ function mapLimit(arr, limit, callback) {
       if (rejected || next >= arr.length) return;
 
       const current = next++;
-      
+
 
       callback(arr[current])
         .then(res => {
@@ -3026,7 +3026,7 @@ function mapLimit(arr, limit, callback) {
           }
         })
         .finally(() => {
-          
+
           completed++;
           // Only schedule the next if we didn't reject
           if (!rejected && next < arr.length) {
@@ -10332,4 +10332,40 @@ Remember:
   Empty strings are technically in alphabetical order
 
   The solution returns an empty string if no alphaword is found
+```
+
+### 123 . Create a sampling function.
+
+> Create a function in javascript that accepts a function as a input and a count and executes that input function once for a given count of calls, known as Sampling function.
+
+```ts
+function message() {
+  console.log("Hi, your message has been hit");
+}
+
+const count = 4;
+
+function sampleCounter(callback, limit) {
+  let counter = 0;
+
+  return function () {
+    counter++;
+    console.log(counter, "counter");
+    if (counter === limit) {
+      callback();
+      counter = 0;
+    }
+  };
+}
+
+const sample = sampleCounter(message, count);
+sample();
+sample();
+sample();
+sample(); // call will happen here, as counter will be equal to count.
+
+sample();
+sample();
+sample();
+sample(); // call will happen here, as counter will be equal to count.
 ```
