@@ -10289,6 +10289,7 @@ Let's break down how it works:
   Returns true if all characters are in order
 
 2. findLongestAlphaWord function:
+
   Keeps track of the longest alphaword found
 
   Checks each word if it's an alphaword
