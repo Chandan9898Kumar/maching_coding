@@ -3446,6 +3446,7 @@ result.then((response) => {
 ### 31. Create an array sequence from 1 to N in a single line in JavaScript
 
 ```js
+
 - 1. Using Array.from() function
 const N = 5;
 const arr = Array.from({length: N}, (_, index) => index + 1);
