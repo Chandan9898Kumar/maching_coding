@@ -3226,7 +3226,6 @@ mapLimit([1, 2, 3, 4, 5], 2, getUserById, (err, results) => {
 
 ### Below is sort of batching not above ^ .
 
-
 ### 30.B Implement a mapLimit function that is similar to the Array.map() which returns a promise that resolves on the list of output by mapping each input through an asynchronous iteratee function or rejects it if any error occurs. It also accepts a limit to decide how many operations can occur at a time.
 
 The asynchronous iteratee function will accept a input and a callback. The callback function will be called when the input is finished processing, the first argument of the callback will be the error flag and the second will be the result.
@@ -3246,6 +3245,9 @@ The asynchronous iteratee function will accept a input and a callback. The callb
 6. sub-array will run in parallel but store result in sequence, So use index to store result.
 
 ```js
+
+### Method 1.
+
 // helper function to chop array in chunks of given size
 Array.prototype.chop = function (size) {
   //temp array
@@ -3333,6 +3335,47 @@ let numPromise = mapLimit([1, 2, 3, 4, 5], 3, function (num, callback) {
 });
 
 numPromise.then((result) => console.log("success:" + result)).catch(() => console.log("no success"));
+
+
+
+### Method 2. Items in each Sub-array will run in parallel.
+
+function mapLimit(arrays,limit,callback){
+
+  const choppedArray = arrays.chop(limit)
+  let index= 0
+  let taskCompleted = 0
+  let result = []
+
+
+     async function iteratorFun(){
+
+      let newArray = choppedArray[index]
+
+     if(index>=choppedArray.length && taskCompleted>=choppedArray.length){
+       callback(result)
+        return
+      }
+
+
+       const response = await Promise.all(newArray.map((fn,ind)=>{
+         taskCompleted++
+         return fn(taskCompleted)
+       }))
+       console.log(response,'response')
+       result = [...result,...response]
+       index++
+       iteratorFun()
+
+    }
+    iteratorFun()
+
+}
+mapLimit(arr,limit=3,function(result){
+ console.log('FinalResult:',result)
+ })
+
+
 ```
 
 ### 30.c "Design a custom function that executes a series of operations in batches, where the batch size is determined by a specified limit. For instance, if the limit is set to 2, the function will execute the first two operations sequentially, followed by the next two operations, and so on, ensuring that each batch of operations is executed in series before proceeding to the next batch."
@@ -3342,6 +3385,9 @@ numPromise.then((result) => console.log("success:" + result)).catch(() => consol
 `Create a custom function that throttles the execution of multiple operations by limiting the number of concurrent executions to a specified limit. For example, if the limit is set to 2, the function will execute the first two operations in series, then the next two operations in series, and continue this pattern until all operations have been executed."`
 
 ```js
+
+### Method 1.
+
 Array.prototype.chop = function (size) {
   //temp array
   const temp = [...this];
@@ -3441,6 +3487,54 @@ let result = callbackManager(arr.chop(limit));
 result.then((response) => {
   console.log(response, "response");
 });
+
+
+
+### Method 2. Each Items in Sub-array will run in sequence, when all sub-array item ran in sequence then next batch will start and item will run sequence ( One after another )
+
+
+function mapLimit(arrays,limit,callback){
+
+
+  const choppedArray = arrays.chop(limit)
+  let index= 0
+  let taskCompleted = 0
+  let result = []
+
+  function postCallback(){
+
+    if(index>=choppedArray.length && taskCompleted>=choppedArray.length){
+      callback(result)
+      return
+    }
+
+    let newArray = choppedArray[index]
+
+     function iteratorFun(){
+      let iterator = newArray.shift()
+        iterator(++taskCompleted).then((res)=>{
+          console.log(res,'result')
+          result.push(res)
+
+          if(newArray.length){
+            iteratorFun()
+          }else{
+            index++
+            postCallback()
+          }
+        })
+
+    }
+    iteratorFun()
+  }
+
+  postCallback()
+
+}
+mapLimit(arr,limit=3,function(result){
+ console.log('FinalResult:',result)
+ })
+
 ```
 
 ### 31. Create an array sequence from 1 to N in a single line in JavaScript
