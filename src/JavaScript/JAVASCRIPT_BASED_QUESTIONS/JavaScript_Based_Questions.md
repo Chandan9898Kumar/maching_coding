@@ -3897,6 +3897,74 @@ function ab(a) {
 console.log(ab(5));
 ```
 
+### 38. use Promise chains for Sequential Async tasks? Perform async task in sequence.
+
+```ts
+function asyncFunc1(value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value + 1);
+    }, 6000);
+  });
+}
+
+function asyncFunc2(value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value + 2);
+    }, 4000);
+  });
+}
+
+function asyncFunc3(value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value + 3);
+    }, 5000);
+  });
+}
+
+function asyncFunc4(value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value + 4);
+    }, 7000);
+  });
+}
+
+function asyncFunc5(value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value + 5);
+    }, 2000);
+  });
+}
+
+function asyncFunc6(value) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(value + 6);
+    }, 1000);
+  });
+}
+
+const arr = [asyncFunc6, asyncFunc2, asyncFunc5, asyncFunc4, asyncFunc3, asyncFunc1];
+function chainTasks(tasks) {
+  let chain = Promise.resolve();
+  tasks.forEach((performTask, index) => {
+    chain = chain
+      .then(() => {
+        return performTask(index);
+      })
+      .then((result) => {
+        console.log(result);
+      });
+  });
+}
+
+chainTasks(arr);
+```
+
 ### 45. Show how an array in JavaScript can act like a stack and queue.
 
 ```js
