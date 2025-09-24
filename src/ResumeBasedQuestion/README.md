@@ -830,7 +830,6 @@ GEC is the default context created when JavaScript code starts running. It repre
 
 `The Critical Rendering Path (CRP) is the sequence of steps the browser takes to convert HTML, CSS, and JavaScript into pixels on the screen. Understanding and optimizing the CRP is crucial for improving website performance and user experience.`
 
-
 In each HTTP request that browser makes for an HTML page, the server returns the data into bytes, these bytes are then converted to Characters, Tokens, Nodes, and finally DOM (Document Object Model).
 
 Once the DOM is generated, the parsing of the page starts, the HTML contains CSS code or links, JavaScript code or links, media elements such as images, etc, each of them is then parsed separately and plugged together to create a render tree, which is then converted to the layout and then is painted on the screen at the refresh rate of 60 frames per second.
@@ -854,8 +853,6 @@ This complete process is called a critical rendering path.
 NOTE :
 DOM parsing : DOM parsing is the process where the browser converts HTML code into a tree-like structure called the Document Object Model (DOM).
 
-
-
 <!--             Micro Front - End             -->
 
 <!-- There are different approaches for architecturing a micro-frontends application. Certain architectural decisions have to be made upfront because they will cave the road for future decisions. The decision majorly covers four key areas.
@@ -865,15 +862,11 @@ DOM parsing : DOM parsing is the process where the browser converts HTML code in
 3. Routing micro-frontends.
 4. Communicating between micro-frontends. -->
 
-
-
 ### Server-Side Rendering (SSR) and Client-Side Rendering (CSR) :
-
 
 1. **Multi page application (Server Side rendered or SSR)**
 
 The term Multi-page refers that every time you navigate on the web application, a new HTML page is generated on the server and is returned to the browser, where the browser parses the HTML and displays the content.
-
 
 These are the traditional rendering patterns that have been followed since the inception of web applications.
 
@@ -881,34 +874,31 @@ When a request to the server is made, the server generates the HTML page with al
 
 While introduction of Ajax has reduced the number of round-trips to the server as the data can be fetched asynchronously and the UI can be updated on the run-time. But it can be only used for minor operations.
 
-
 `Advantages of Multi-page application (SSR)`
 
-  1. Better SEO, As the HTML is generated on the server side, all the meta tags, title, description, and other things that affect SEO are generated beforehand making it easier for the search engine crawlers to crawl the page which results in a better ranking.
+1. Better SEO, As the HTML is generated on the server side, all the meta tags, title, description, and other things that affect SEO are generated beforehand making it easier for the search engine crawlers to crawl the page which results in a better ranking.
 
-  2. Scalable, As the pages are generated on the server, you can create as many extended pages as possible without really making any code changes.
+2. Scalable, As the pages are generated on the server, you can create as many extended pages as possible without really making any code changes.
 
-  3. More Secure, Better for security as the forms that handle user’s data can be prevented from the Cross-site scripting attacks.
+3. More Secure, Better for security as the forms that handle user’s data can be prevented from the Cross-site scripting attacks.
 
-  4. Faster Initial load, As the HTML page is generated on the server with the data already populated, it is faster to load it.
-
+4. Faster Initial load, As the HTML page is generated on the server with the data already populated, it is faster to load it.
 
 `Disadvantages of Multi-page application (SSR)`
 
-  1. Slow, as every time the user navigates, the request goes back to the server and it returns the new HTML (that also increases the response payload size) which has to be parsed, rendered, and shown in the browser.
+1. Slow, as every time the user navigates, the request goes back to the server and it returns the new HTML (that also increases the response payload size) which has to be parsed, rendered, and shown in the browser.
 
-  2. Tightly coupled, The frontend and backend code are strongly coupled, as while the HTML is being generated it is populated with the data.
+2. Tightly coupled, The frontend and backend code are strongly coupled, as while the HTML is being generated it is populated with the data.
 
 `Applications of Multi-page application (SSR)`
-  1. Best suited for applications that require search engine optimization.
 
+1. Best suited for applications that require search engine optimization.
 
 2. **Single page application (Client Side rendered or CSR)**
 
 Single page application as the term suggests, is composed of a single HTML file that is loaded only once along with all the static files such as CSS, JavaScript, and media assets and renders the application on the client side after loading the assets in the browser.
 
 It uses client-side navigation (JavaScript based on the browser) that on page change, requests for only data from the server and updates the UI on run time.
-
 
 In the multi-page application, every time the server returns a fresh HTML page, that has to be parsed, constructed, and then rendered again. Even though modern browsers are more capable, it is still a performance-inefficient process to render HTML, especially in the mobile browser.
 
@@ -918,13 +908,11 @@ You can use React, Angular, Vue, etc to create single-page applications. It effe
 
 `Advantages of Single page application (CSR)`
 
-
 1. Blazing fast, as the static files are loaded only once on the initial render, and after that only required data is pulled from the server and UI is updated on runtime. Also the the JavaScript code that is not required on initial load can be split in different bundles and lazy loaded, reducing the JavaScript execution time in browser.
 
 2. Decoupled, the frontend and backend can be developed independently resulting in faster development.
 
 3. Extendable, the same frontend application can be used to create mobile or desktop apps without any major code changes, all thanks to these modern JavaScript frameworks.
-
 
 `Disadvantages of Single page application (CSR)`
 
@@ -939,9 +927,8 @@ You can use React, Angular, Vue, etc to create single-page applications. It effe
 5. Memory usage, As the page building heavily relies on the JavaScript, large builds consume lots of memory and there is also chance of memory leakage if it is not handled properly.
 
 `Applications of Single page application (CSR)`
+
 1. It is best suited for web applications that do not require SEO like Analytics dashboard, Admin dashboards, Personal portfolios, Real time data showcase, etc.
-
-
 
 **Conclusion: SPA (CSR) vs MPA (SSR)**
 While both of them have their use cases, they are suited for the different requirements.
@@ -952,87 +939,256 @@ While both of them have their use cases, they are suited for the different requi
 
 3. For the multi-page applications, you can use the hybrid approach with modern JavaScript frameworks such as Nextjs to take advantage of both of these.
 
-
-
-###  Differences between Server-Side Rendering (SSR) and Client-Side Rendering (CSR)
+### Differences between Server-Side Rendering (SSR) and Client-Side Rendering (CSR)
 
 1. `Rendering Location and Process:`
 
-*SSR:*
+_SSR:_
+
 1. HTML is generated on the server
 2. Complete HTML is sent to browser
 3. Browser displays content immediately
 4. Subsequent interactions may require new server requests
 
-*CSR:*
+_CSR:_
+
 1. Server sends minimal HTML and JavaScript bundle
 2. Browser runs JavaScript to generate content
 3. Initial page is empty until JS executes
 4. Content renders in the browser
 
-2. `Performance Characteristics:`
+5. `Performance Characteristics:`
 
 **SSR:**
+
 1. Faster initial page load
 2. Better First Contentful Paint (FCP)
 3. Higher server resource usage
 4. Slower subsequent page transitions
 
 **CSR:**
+
 1. Slower initial load
 2. Faster subsequent navigation
 3. Lower server load
 4. Smoother user experience after initial load
 
-
-3. `SEO Considerations:`
+5. `SEO Considerations:`
 
 **SSR:**
+
 1. Better for SEO as content is ready for crawlers
 2. Search engines see full content immediately
 3. Metadata is pre-rendered
 
 **CSR:**
+
 1. Can be challenging for SEO
 2. Requires additional setup for crawler support
 3. Some content might not be indexed properly
 
-
 4. `Use Cases:`
 
-*SSR is better for:*
+_SSR is better for:_
+
 1. Content-focused websites
 2. SEO-critical applications
 3. Sites requiring fast initial load
 4. Low-interaction pages
 
-*CSR is better for:*
+_CSR is better for:_
+
 1. Highly interactive applications
 2. Dynamic content updates
 3. Single Page Applications (SPAs)
 4. Web applications with frequent user interactions
 
-
 5. `Resource Usage:`
 
-*SSR:*
+_SSR:_
+
 1. Higher server CPU/memory usage
 2. Lower client-side resource usage
 3. More bandwidth efficient for static content
 
 **CSR:**
+
 1. Lower server resource usage
 2. Higher client-side resource usage
 3. More bandwidth efficient for dynamic content
 
-6. `Maintenance and Scaling:`
+4. `Maintenance and Scaling:`
 
-*SSR:*
+_SSR:_
+
 1. Requires server maintenance
 2. Scaling involves server infrastructure
 3. Server-side caching strategies needed
 
-*CSR:*
+_CSR:_
+
 1. Easier to scale (mostly static files)
 2. CDN-friendly
 3. Less server maintenance required
+
+# What is concurrent rendering and Why React 18 added concurrent rendering .
+
+Concurrent rendering in React is a set of features that allows React to interrupt, pause, and resume rendering work to keep the application responsive. It's a fundamental shift from the traditional synchronous rendering model.
+
+> Traditional Rendering (Blocking)
+
+React renders the entire component tree synchronously
+Once rendering starts, it can't be interrupted
+Can cause UI freezing for complex updates
+
+> Concurrent Rendering (Non-blocking)
+
+React can pause rendering work and yield control back to the browser
+Allows high-priority updates to interrupt low-priority ones
+Keeps the UI responsive during heavy computations.
+
+> Why React 18 added concurrent rendering ?
+
+`Use Before react 18 :`
+
+1. React 17 and earlier used synchronous rendering
+2. Once rendering started, it couldn't be interrupted
+3. Long renders would freeze the entire UI
+4. User interactions became unresponsive during heavy computations
+
+`Solution in React 18 :`
+
+1. Keep the UI interactive even during heavy rendering work.
+2. More efficient CPU usage.
+3. Prevents JavaScript from hogging the main thread.
+4. Automatic batching
+
+# How to profile a React app and fix bottlenecks.
+
+1. Profiling Tools.
+
+> React DevTools Profiler
+
+```ts
+// Wrap components to profile
+import { Profiler } from "react";
+
+function App() {
+  return (
+    <Profiler id="App" onRender={onRenderCallback}>
+      <MyComponent />
+    </Profiler>
+  );
+}
+
+function onRenderCallback(id, phase, actualDuration) {
+  console.log("Component:", id, "Duration:", actualDuration);
+}
+
+//                  Open Browser DevTools :
+// Performance Tab: Record and analyze runtime performance
+// Memory Tab: Check for memory leaks
+// Network Tab: Analyze bundle sizes and loading times
+```
+
+2. Common Bottlenecks & Fixes
+
+A. Unnecessary Re-renders
+
+```ts
+// Problem: Component re-renders on every parent update
+function ExpensiveChild({ data }) {
+  return <div>{heavyComputation(data)}</div>;
+}
+
+// Fix: Memoize component
+const ExpensiveChild = React.memo(({ data }) => {
+  return <div>{heavyComputation(data)}</div>;
+});
+```
+
+B. Expensive Computations
+
+```ts
+// Problem: Computation runs on every render
+function Component({ items, filter }) {
+  const filteredItems = items.filter((item) => item.includes(filter));
+  return (
+    <div>
+      {filteredItems.map((item) => (
+        <div key={item}>{item}</div>
+      ))}
+    </div>
+  );
+}
+
+// Fix: Use useMemo
+function Component({ items, filter }) {
+  const filteredItems = useMemo(() => items.filter((item) => item.includes(filter)), [items, filter]);
+  return (
+    <div>
+      {filteredItems.map((item) => (
+        <div key={item}>{item}</div>
+      ))}
+    </div>
+  );
+}
+```
+
+C. Large Lists
+
+```ts
+// Problem: Rendering thousands of items
+function LargeList({ items }) {
+  return (
+    <div>
+      {items.map((item) => (
+        <Item key={item.id} data={item} />
+      ))}
+    </div>
+  );
+}
+
+// Fix: Use virtualization
+import { FixedSizeList as List } from "react-window";
+
+function LargeList({ items }) {
+  return (
+    <List height={600} itemCount={items.length} itemSize={50}>
+      {({ index, style }) => (
+        <div style={style}>
+          <Item data={items[index]} />
+        </div>
+      )}
+    </List>
+  );
+}
+```
+
+D. Bundle Size Issues.
+
+```ts
+// Problem: Large bundle size
+import { debounce } from "lodash";
+
+// Fix: Import only what you need
+import debounce from "lodash/debounce";
+
+// Or use dynamic imports
+const LazyComponent = React.lazy(() => import("./LazyComponent"));
+```
+
+3. Performance Monitoring
+
+A. Web Vitals
+
+```ts
+import { getCLS, getFID, getFCP, getLCP, getTTFB } from "web-vitals";
+
+getCLS(console.log);
+getFID(console.log);
+getFCP(console.log);
+getLCP(console.log);
+getTTFB(console.log);
+```
+> NOTE : The key is to profile first, then optimize based on actual bottlenecks rather than premature optimization.
