@@ -10408,6 +10408,7 @@ function isBalanced(s) {
 
 // Driver Code
 let s = "{([])}";
+
 console.log(isBalanced(s) ? "true" : "false");
 ```
 
