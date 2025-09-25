@@ -36,6 +36,7 @@ Malicious files can execute server-side code, leading to:
 - Data theft
 
 ### Solution:
+
 ```javascript
 const multer = require('multer');
 const fileType = require('file-type');
