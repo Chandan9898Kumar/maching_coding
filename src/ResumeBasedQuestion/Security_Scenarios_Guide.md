@@ -983,8 +983,10 @@ function getToken() {
 
 ### How to Stop It:
 
+> Domain validation
+
 ```javascript
-// Domain validation
+
 const ALLOWED_DOMAINS = ["myapp.com", "www.myapp.com"];
 
 function validateDomain() {
