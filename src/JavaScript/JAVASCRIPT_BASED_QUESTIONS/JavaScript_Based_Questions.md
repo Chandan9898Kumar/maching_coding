@@ -3900,6 +3900,9 @@ console.log(ab(5));
 ### 38. use Promise chains for Sequential Async tasks? Perform async task in sequence.
 
 ```ts
+Example 1: using async function
+
+
 function asyncFunc1(value) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -3963,6 +3966,45 @@ function chainTasks(tasks) {
 }
 
 chainTasks(arr);
+
+
+> Example 2. using URLS
+
+
+async function fetchSequentially(urls) {
+  const results = [];
+  let chain = Promise.resolve();
+
+  urls.forEach((url) => {
+    chain = chain
+      .then(() => fetch(url))
+      .then((res) => res.json())
+      .then((data) => {
+        results.push(data);
+        console.log(data);
+      });
+  });
+
+  // Wait for the chain to complete
+  await chain;
+  return results;
+}
+
+
+
+// Example usage for parallel fetch
+const urls = [
+  'https://jsonplaceholder.typicode.com/posts/1',
+  'https://jsonplaceholder.typicode.com/posts/2',
+  'https://jsonplaceholder.typicode.com/posts/3',
+];
+
+
+// Example usage for sequential fetch
+fetchSequentially(urls).then((results) => console.log('Sequential Results:', results));
+
+
+
 ```
 
 ### 45. Show how an array in JavaScript can act like a stack and queue.
