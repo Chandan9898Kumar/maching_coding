@@ -1192,3 +1192,24 @@ getLCP(console.log);
 getTTFB(console.log);
 ```
 > NOTE : The key is to profile first, then optimize based on actual bottlenecks rather than premature optimization.
+
+# How does React's Fiber architecture actually work and why does it matter for performance?
+
+> WWhat is React Fiber?
+React Fiber is React's reconciliation engine - the algorithm that decides what changes need to be made to the DOM. Think of it as React's "brain" that figures out how to update your UI efficiently.
+
+> Why Fiber Matters for Performance
+
+ 1. Responsiveness :
+User interactions stay responsive and Your app never freezes, Even during heavy updates
+
+2. Better User Experience
+
+3. Efficient Updates
+Fiber can batch and prioritize updates
+
+4. Better Performance
+Browser can handle other tasks while React works
+
+5: Smart Priorities
+Important things (like user input) happen first and  LOW PRIORITY Update notifications later : using startTransition()
