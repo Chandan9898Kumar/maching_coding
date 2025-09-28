@@ -3991,6 +3991,22 @@ async function fetchSequentially(urls) {
 }
 
 
+>   OR using reduce method:
+
+async function fetchSequentially(urls) {
+  const results = [];
+  await urls.reduce(
+    (promise, url) =>
+      promise.then(() =>
+        fetch(url)
+          .then(res => res.json())
+          .then(data => results.push(data))
+      ),
+    Promise.resolve()
+  );
+  return results;
+}
+
 
 // Example usage for parallel fetch
 const urls = [
