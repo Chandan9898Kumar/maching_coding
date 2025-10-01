@@ -10595,3 +10595,145 @@ sample();
 sample();
 sample(); // call will happen here, as counter will be equal to count.
 ```
+
+### 124. Build Cancelable Promises.
+
+```ts
+>>>>> 1
+// Function to create a cancellable Promise
+function createCancelablePromise(executor) {
+  let cancel;
+
+  const promise = new Promise((resolve, reject) => {
+    cancel = () => reject(new Error("Promise cancelled")); // Define cancel function
+    executor(resolve, reject);
+  });
+
+  promise.cancel = cancel; // Attach cancel function to the promise
+  return promise;
+}
+
+// Example usage of the cancellable Promise
+const cancellable = createCancelablePromise((resolve) => {
+  setTimeout(() => resolve("Operation completed!"), 5000); // Simulates an async task
+});
+
+cancellable.then(console.log).catch(console.error); // Handle resolution or rejection
+
+setTimeout(() => {
+  cancellable.cancel(); // Cancel the promise after 2 seconds
+}, 2000);
+
+>>>>>> 2.
+
+function createCancelablePromise() {
+  let cancel;
+  let promise = new Promise((resolve, reject) => {
+    cancel = function () {
+      reject(new Error("Promise cancelled"));
+    };
+
+    setTimeout(() => {
+      resolve("This is resolved");
+    }, 1000);
+  });
+
+  promise.cancel = cancel;
+  return promise;
+}
+
+let chainPromise = createCancelablePromise();
+
+chainPromise
+  .then((res) => {
+    console.log(res, "res");
+  })
+  .catch((err) => {
+    console.log(err, "err");
+  });
+
+setTimeout(() => {
+  chainPromise.cancel();
+}, 100);
+
+
+>>>>> 3.
+
+function createCancelablePromise() {
+  let timer;
+  let rejectFn;
+  const promise = new Promise((resolve, reject) => {
+    rejectFn = reject;
+    timer = setTimeout(() => {
+      resolve("This is resolved");
+    }, 3000);
+  });
+
+  promise.cancel = function(reason = "Promise is cancelled") {
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+      rejectFn(new Error(reason));
+    }
+  };
+
+  return promise;
+}
+
+let chainPromise = createCancelablePromise();
+
+chainPromise
+  .then((res) => {
+    console.log(res, "res");
+  })
+  .catch((err) => {
+    console.log(err, "err");
+  });
+
+setTimeout(() => {
+  chainPromise.cancel("Cancelled at 100ms");
+}, 100);
+
+
+>>>>> 5.
+
+// Function to create a cancellable Promise with a flag
+function createFlaggedCancelablePromise(executor) {
+  let isCancelled = false; // Cancellation flag
+
+  const promise = new Promise((resolve, reject) => {
+    executor(
+      (value) => {
+        if (isCancelled) {
+          reject(new Error('Promise cancelled'));
+        } else {
+          resolve(value);
+        }
+      },
+      reject
+    );
+  });
+
+  promise.cancel = () => {
+    isCancelled = true; // Set the cancellation flag
+  };
+
+  return promise;
+}
+
+// Example usage of the flagged cancellable Promise
+const flaggedCancellable = createFlaggedCancelablePromise((resolve) => {
+  setTimeout(() => resolve('Task finished!'), 5000); // Simulates an async task
+});
+
+// Handle resolution or rejection
+flaggedCancellable
+  .then(console.log) // Log resolved value
+  .catch((error) => console.error(error.message)); // Log the error message explicitly
+
+// Cancel the promise after 2 seconds
+setTimeout(() => {
+  flaggedCancellable.cancel();
+}, 2000);
+
+```
