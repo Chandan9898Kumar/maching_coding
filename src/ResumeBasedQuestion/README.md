@@ -1191,25 +1191,99 @@ getFCP(console.log);
 getLCP(console.log);
 getTTFB(console.log);
 ```
+
 > NOTE : The key is to profile first, then optimize based on actual bottlenecks rather than premature optimization.
 
 # How does React's Fiber architecture actually work and why does it matter for performance?
 
 > WWhat is React Fiber?
-React Fiber is React's reconciliation engine - the algorithm that decides what changes need to be made to the DOM. Think of it as React's "brain" that figures out how to update your UI efficiently.
+> React Fiber is React's reconciliation engine - the algorithm that decides what changes need to be made to the DOM. Think of it as React's "brain" that figures out how to update your UI efficiently.
 
 > Why Fiber Matters for Performance
 
- 1. Responsiveness :
-User interactions stay responsive and Your app never freezes, Even during heavy updates
+1. Responsiveness :
+   User interactions stay responsive and Your app never freezes, Even during heavy updates
 
 2. Better User Experience
 
 3. Efficient Updates
-Fiber can batch and prioritize updates
+   Fiber can batch and prioritize updates
 
 4. Better Performance
-Browser can handle other tasks while React works
+   Browser can handle other tasks while React works
 
 5: Smart Priorities
-Important things (like user input) happen first and  LOW PRIORITY Update notifications later : using startTransition()
+Important things (like user input) happen first and LOW PRIORITY Update notifications later : using startTransition()
+
+### How does lazy works in react
+
+> React.lazy() Architecture & How It Works
+
+1. Code Splitting Mechanism
+
+```ts
+const AccountPage = lazy(() => import("./pages/Account").then((m) => ({ default: m.AccountPage })));
+
+
+`What happens internally:`
+
+> Dynamic Import: import('./pages/Account') creates a separate JavaScript bundle
+
+> Promise Resolution: Returns a Promise that resolves to the module
+
+> Default Export Mapping: .then(m => ({ default: m.AccountPage })) ensures the component is the default export
+
+> Lazy Wrapper: lazy() wraps this in a special React component that handles loading states
+```
+
+2. Bundle Splitting Architecture
+
+```ts
+Before lazy loading:
+main.bundle.js (500KB) - Contains everything
+
+After lazy loading:
+main.bundle.js (200KB) - Core app
+account.chunk.js (50KB) - Account page (loaded on demand)
+profile.chunk.js (40KB) - Profile page (loaded on demand)
+
+```
+
+3. Suspense Component Deep Dive
+
+```ts
+<Suspense fallback={<PageLoader />}>
+  <AccountPage />
+</Suspense>
+
+
+`Architecture:`
+
+> Boundary Component: Acts as an error boundary for loading states
+
+> Fallback Rendering: Shows loading UI while chunks download
+
+> Promise Tracking: Monitors lazy component loading promises
+
+> State Management: Handles loading → loaded transitions
+```
+
+> Can You Use Lazy Without Suspense?
+
+`Answer : No, Because`
+
+1. Lazy components throw promises during loading
+2. Suspense catches these promises and shows fallback
+3. Without Suspense, promises bubble up and crash the app
+
+`Key Takeaways`
+
+1. lazy() + Suspense are mandatory partners
+
+2. lazy() handles code splitting and dynamic imports
+
+3. Suspense manages loading states and fallback UI
+
+4. They enable progressive loading for better performance
+
+5. Each lazy component creates a separate bundle chunk
