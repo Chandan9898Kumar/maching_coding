@@ -1259,7 +1259,9 @@ profile.chunk.js (40KB) - Profile page (loaded on demand)
 
 `Architecture:`
 
-> Boundary Component: Acts as an error boundary for loading states
+> Boundary Component: Acts as an error boundary for loading states / Suspense is the boundary that catches promises
+
+> Any component can throw promises (not just lazy components) and Suspense catches and  Shows fallback .
 
 > Fallback Rendering: Shows loading UI while chunks download
 
@@ -1287,3 +1289,56 @@ profile.chunk.js (40KB) - Profile page (loaded on demand)
 4. They enable progressive loading for better performance
 
 5. Each lazy component creates a separate bundle chunk
+
+NOTE : Any Component throws promise → Suspense catches → Shows fallback → Re-renders when resolved
+
+### Important :
+
+`The Real Rule`
+
+> lazy() CANNOT be used without Suspense ❌
+
+```ts
+// ❌ This will crash your app
+const LazyComponent = lazy(() => import("./Component"));
+
+function App() {
+  return <LazyComponent />; // Error: Component suspended while rendering
+}
+
+
+`Why it crashes:`
+
+> lazy() components throw promises during loading
+
+> Without Suspense to catch these promises, they bubble up and crash the app
+```
+
+> Suspense CAN be used without lazy() ✅
+
+```ts
+// ✅ This works perfectly
+function DataComponent() {
+  const data = someDataResource.read(); // Throws promise while loading
+  return <div>{data}</div>;
+}
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DataComponent /> {/* No lazy() involved */}
+    </Suspense>
+  );
+}
+
+`Why it works:`
+
+> Suspense catches any promise thrown by any component
+
+> Data fetching, resource loading, or custom async operations can all use Suspense
+
+> lazy() is just one way to throw promises - not the only way
+```
+. `lazy() → Always throws promises → MUST have Suspense`
+
+. `Suspense → Catches any promises → Can work with or without lazy()`
