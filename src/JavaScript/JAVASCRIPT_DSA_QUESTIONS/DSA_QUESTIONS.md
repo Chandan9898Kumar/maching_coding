@@ -4924,6 +4924,7 @@ function can_make_same_frequency_by_one_removal(strings) {
 }
 
 // Test cases
+
 const test_strings = ["aabbcc", "aabbc", "aabbccc", "aabbcccdd", "abc", "abcc", "aabbcccddde", "xyyz", "xyyzz", "xxxxyyzz"];
 
 test_strings.forEach((item) => console.log(`${item}: ${can_make_same_frequency_by_one_removal(item)}`));
