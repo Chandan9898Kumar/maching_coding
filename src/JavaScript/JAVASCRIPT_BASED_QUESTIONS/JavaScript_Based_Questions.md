@@ -4023,6 +4023,61 @@ fetchSequentially(urls).then((results) => console.log('Sequential Results:', res
 
 ```
 
+### 39. What is the output:
+
+```js
+function parent() {
+  const child = () => {
+    console.log(this, "this child 1");
+  };
+  child();
+}
+
+const parent1 = () => {
+  function child() {
+    console.log(this, "this child 2");
+  }
+  child();
+};
+
+parent();
+parent1();
+
+
+> Explanation:
+
+1. parent()
+Calls the normal function parent.
+
+Inside, you define child as an arrow function.
+
+You call child() from inside parent.
+
+What does this mean here?
+In a regular function (not running as a method of an object), this refers to the global object (window in browsers, global in Node), unless you're in strict mode (where it's undefined).
+
+Arrow functions do not have their own this—they "capture" or "inherit" this from where they are created, not where they are called.
+
+So, in this code, child uses the same this as the parent function.
+
+Since parent is called as a regular function, this is the global object (or undefined in 'strict mode').
+
+
+2. parent1()
+parent1 is an arrow function.
+
+Inside, you define child as a regular function (not arrow!), and call it.
+
+What does this mean here?
+Arrow function (parent1) grabs this from where it's created, which at the top level in your file is again the global object (or undefined in strict mode).
+
+Inside parent1, you create a regular function child. In a regular function, this depends on how the function is called.
+
+Here, you call child() as a normal function, not as an object method.
+
+So, this inside child is also the global object (or undefined in strict mode).
+```
+
 ### 45. Show how an array in JavaScript can act like a stack and queue.
 
 ```js
