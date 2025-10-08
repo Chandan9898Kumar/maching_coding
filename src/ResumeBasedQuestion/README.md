@@ -522,6 +522,10 @@ b. Target: Under 1.8 seconds for good user experience
 
 `Impact:` A fast FCP indicates that users can start engaging with the content quickly, which enhances their perception of the site's speed.
 
+ `FCP Happens due to :`
+ > Heavy imports block FCP
+ > External CSS blocks FCP
+
 Optimization strategies:
 
 ```js
@@ -548,6 +552,8 @@ Improvement Strategies:
   Minimize render-blocking resources (e.g., CSS and JavaScript).
   Use efficient caching strategies.
   Implement a Content Delivery Network (CDN) to reduce latency.
+  External CSS must load before content shows.
+  Code splitting and progressive loading for importing Heavy  files.
 
 ```
 
@@ -560,6 +566,10 @@ b. Target: Under 2.5 seconds
 `Definition:` LCP measures the time it takes for the largest visible content element (such as an image or video or Text blocks or SVG elements ) to load and become visible in the viewport.
 
 `Impact:` A good LCP score is crucial for user satisfaction, as it reflects how quickly the main content of the page is loaded.
+
+ `LCP element depends on :`
+> slow API
+> Large Hero Images,Hero Contents.
 
 Optimization strategies:
 
@@ -594,11 +604,12 @@ Improvement Strategies:
   Optimize images and videos (e.g., use next-gen formats like WebP).
   Ensure that critical resources are loaded quickly.
   Improve server response times and leverage lazy loading for offscreen images.
+  Don't lazy load LCP element, use eager instead.
 ```
 
 3. `Total Blocking Time (TBT):`
 
-a. Measures the total time between FCP and Time to Interactive where the main thread was blocked
+a. Measures the total time between FCP and Time to Interactive( TTI )where the main thread was blocked for more than 50ms, preventing user interactions.
 
 b. Target: Under 200 milliseconds
 
@@ -691,6 +702,7 @@ Improvement Strategies :
   Always specify size attributes for images and videos.
   Avoid inserting content above existing content (e.g., ads) without reserving space.
   Use CSS to create a stable layout and avoid layout thrashing.
+  Reserve space for dynamic content by Reserving space with skeleton/placeholder
 
 ```
 
