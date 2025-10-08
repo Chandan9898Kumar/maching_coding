@@ -522,9 +522,10 @@ b. Target: Under 1.8 seconds for good user experience
 
 `Impact:` A fast FCP indicates that users can start engaging with the content quickly, which enhances their perception of the site's speed.
 
- `FCP Happens due to :`
- > Heavy imports block FCP
- > External CSS blocks FCP
+`FCP Happens due to :`
+
+> Heavy imports files block FCP
+> External CSS blocks FCP
 
 Optimization strategies:
 
@@ -557,6 +558,84 @@ Improvement Strategies:
 
 ```
 
+```ts
+### Why FCP Issues Happen:
+
+`Render-Blocking Resources:`
+
+  Large CSS files in document head
+
+  Synchronous JavaScript in head
+
+  Multiple external stylesheets
+
+  Unoptimized web fonts
+
+  Heavy framework bundles
+
+  Server/Network Issues:
+
+  Slow Time to First Byte (TTFB)
+
+  No HTTP/2 or HTTP/3 usage
+
+  Missing compression (gzip/brotli)
+
+  Slow DNS resolution
+
+  No CDN implementation
+
+`Code Issues:`
+
+  Heavy JavaScript execution on page load
+
+  Large bundle sizes
+
+  Synchronous operations blocking rendering
+
+  Missing critical CSS inlining
+
+  Unused CSS and JavaScript
+
+### How to Prevent FCP:
+
+`Critical Resource Optimization:`
+
+  Inline critical CSS in HTML head
+
+  Use async/defer for non-critical JavaScript
+
+  Preload critical resources
+
+  Minimize render-blocking resources
+
+  Use font-display: swap for web fonts
+
+`Bundle Optimization:`
+
+  Implement code splitting
+
+  Remove unused code (tree shaking)
+
+  Use compression (gzip/brotli)
+
+  Minimize CSS and JavaScript
+
+  Use HTTP/2 for multiplexing
+
+`Server Optimization:`
+
+  Optimize server response times
+
+  Use CDN for static assets
+
+  Implement proper caching strategies
+
+  Use service workers for caching
+
+  Enable HTTP/2 or HTTP/3
+```
+
 2. `Largest Contentful Paint (LCP):`
 
 a. Measures loading performance by timing when the largest content element becomes visible
@@ -567,7 +646,8 @@ b. Target: Under 2.5 seconds
 
 `Impact:` A good LCP score is crucial for user satisfaction, as it reflects how quickly the main content of the page is loaded.
 
- `LCP element depends on :`
+`LCP element depends on :`
+
 > slow API
 > Large Hero Images,Hero Contents.
 
@@ -605,6 +685,73 @@ Improvement Strategies:
   Ensure that critical resources are loaded quickly.
   Improve server response times and leverage lazy loading for offscreen images.
   Don't lazy load LCP element, use eager instead.
+```
+
+```ts
+### Why LCP Issues Happen:
+
+`Image-Related Issues:`
+
+  Large, unoptimized hero images
+
+  Images in wrong formats (JPEG instead of WebP)
+
+  Missing image optimization
+
+  No image preloading for critical images
+
+  Lazy loading applied to above-fold images
+
+`Server/Network Issues:`
+
+  Slow server response times
+
+  No CDN usage
+
+  Large resource sizes
+
+  Missing caching headers
+
+  Slow database queries
+
+`Resource Loading Issues:`
+
+  Critical resources not prioritized
+
+  Render-blocking CSS/JS
+
+  Missing resource hints (preload, prefetch)
+
+  Sequential loading instead of parallel
+
+  Heavy third-party resources
+
+### How to Prevent LCP:
+
+`Image Optimization:`
+
+  Use modern formats (WebP, AVIF)
+
+  Implement responsive images with srcset
+
+  Preload critical images with <link rel="preload">
+
+  Use eager loading for above-fold images
+
+  Optimize image compression and sizing
+
+`Performance Optimization:`
+
+  Use CDN for faster delivery
+
+  Implement server-side rendering (SSR)
+
+  Optimize server response times
+
+  Use resource hints (preload, prefetch, preconnect)
+
+  Minimize critical resource sizes
+
 ```
 
 3. `Total Blocking Time (TBT):`
@@ -652,6 +799,69 @@ Improvement Strategies:
   Minimize JavaScript execution time and optimize scripts.
   Split long tasks into smaller, asynchronous tasks.
   Use web workers to handle heavy computations off the main thread.
+```
+
+```ts
+### Why TBT Issues Happen:
+
+`JavaScript-Related Causes:`
+
+  Heavy synchronous computations in main thread
+
+  Large bundle sizes requiring parsing/compilation
+
+  Massive state updates in React
+
+  Synchronous API calls or data processing
+
+  Heavy third-party scripts (analytics, ads)
+
+  Large loops without yielding control
+
+  Complex DOM manipulations
+
+  Heavy event handlers
+
+`Resource-Related Causes:`
+
+  Large JavaScript files blocking execution
+
+  Unoptimized libraries and frameworks
+
+  Inline scripts in HTML head
+
+  Multiple render-blocking scripts
+
+  Heavy polyfills for older browsers
+
+  ### How to Prevent TBT:
+
+  `Code Optimization:`
+
+    Break long tasks into smaller chunks using setTimeout(0)
+
+    Use requestIdleCallback for non-critical work
+
+    Implement Web Workers for heavy computations
+
+    Use React.memo and useMemo to prevent unnecessary re-renders
+
+    Debounce/throttle expensive operations
+
+    Lazy load non-critical components
+
+`Bundle Optimization:`
+
+  Code splitting with dynamic imports
+
+  Tree shaking to remove unused code
+
+  Use async/defer for non-critical scripts
+
+  Minimize and compress JavaScript
+
+  Use service workers for caching
+
 ```
 
 4. `Cumulative Layout Shift (CLS):`
@@ -703,6 +913,71 @@ Improvement Strategies :
   Avoid inserting content above existing content (e.g., ads) without reserving space.
   Use CSS to create a stable layout and avoid layout thrashing.
   Reserve space for dynamic content by Reserving space with skeleton/placeholder
+
+```
+
+```ts
+### Why CLS Issues Happen:
+
+`Image/Media Issues:`
+
+  Images without specified dimensions
+
+  Videos loading without reserved space
+
+  SVGs that change size after loading
+
+  Responsive images with incorrect aspect ratios
+
+`Dynamic Content Issues:`
+
+  Ads loading without reserved space
+
+  Pop-ups and notifications appearing
+
+  Dynamic content injection above existing content
+
+  FOUC (Flash of Unstyled Content)
+
+  Font loading causing text reflow
+
+`CSS/Layout Issues:`
+
+  Animations using layout-triggering properties
+
+  Missing CSS dimensions
+
+  Web fonts loading with different metrics
+
+  Dynamic height changes
+
+  Sidebar content loading late
+
+### How to Prevent CLS:
+
+`Reserve Space:`
+
+  Always specify width/height for images and videos
+
+  Use aspect-ratio CSS property
+
+  Reserve space for ads with min-height
+
+  Use skeleton screens for loading states
+
+  Set dimensions for iframes and embeds
+
+`Stable Layouts:`
+
+  Use CSS transforms instead of changing position/size
+
+  Preload critical fonts with font-display: swap
+
+  Use fixed positioning for overlays
+
+  Avoid inserting content above existing content
+
+  Use CSS Grid/Flexbox for stable layouts
 
 ```
 
@@ -1351,6 +1626,7 @@ function App() {
 
 > lazy() is just one way to throw promises - not the only way
 ```
+
 . `lazy() → Always throws promises → MUST have Suspense`
 
 . `Suspense → Catches any promises → Can work with or without lazy()`
