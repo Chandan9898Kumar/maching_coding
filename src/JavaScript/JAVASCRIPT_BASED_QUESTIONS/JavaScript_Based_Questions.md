@@ -10787,6 +10787,7 @@ flaggedCancellable
   .catch((error) => console.error(error.message)); // Log the error message explicitly
 
 // Cancel the promise after 2 seconds.
+
 setTimeout(() => {
   flaggedCancellable.cancel();
 }, 2000);
