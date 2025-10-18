@@ -1630,3 +1630,420 @@ function App() {
 . `lazy() → Always throws promises → MUST have Suspense`
 
 . `Suspense → Catches any promises → Can work with or without lazy()`
+
+### What’s the difference between horizontal and vertical sliced microfrontends?
+
+> The difference between horizontal and vertical sliced microfrontends relates to how you divide your application architecture:
+
+1. `Horizontal Slicing (By Technical Layer) / Cut by UI Parts`
+
+> Horizontal slicing splits the application by layers or UI sections rather than full features. Here, each microfrontend handles a part of the UI that may appear across multiple pages, like a search bar or navigation menu. Teams focus on specialized layers, so one team might maintain a UI component used everywhere, while another handles a different reusable part. This approach allows UI components to be reused but involves more coordination between teams and more complexity to maintain a consistent look and shared state.
+
+Divides the application by technical concerns or UI layers:
+
+. Header/Navigation microfrontend
+. Sidebar microfrontend
+. Footer microfrontend
+. Main Content Area microfrontend
+
+```js
+┌─────────────────────────────────┐
+│        Header MFE               │
+├─────────────┬───────────────────┤
+│  Sidebar    │   Main Content    │
+│    MFE      │      MFE          │
+│             │                   │
+├─────────────┴───────────────────┤
+│        Footer MFE               │
+└─────────────────────────────────┘
+
+
+Pros:
+
+. Shared UI components across domains
+. Consistent look and feel
+. Easier to maintain design systems
+
+Cons:
+
+. Teams need to coordinate across business domains
+. Changes often require multiple team involvement
+. Harder to achieve true team autonomy
+```
+
+2. `Vertical Slicing (By Business Domain)`
+
+> Vertical slicing means dividing the application by complete features or user journeys. Each vertical slice is a self-contained module that includes everything needed for a feature, including UI and sometimes backend parts. For example, in an e-commerce site, one vertical slice might handle the entire product page while another handles the shopping cart. Each vertical microfrontend runs independently with its own routing and logic, making teams responsible for entire features end-to-end. This approach is simpler technically and keeps each feature cohesive and autonomous.
+
+Divides the application by business capabilities or domains:
+
+. User Management microfrontend
+. Product Catalog microfrontend
+. Shopping Cart microfrontend
+. Payment microfrontend
+
+```js
+┌─────────┬─────────┬─────────┬─────────┐
+│  User   │Product  │Shopping │Payment  │
+│  Mgmt   │Catalog  │  Cart   │   MFE   │
+│  MFE    │  MFE    │   MFE   │         │
+│         │         │         │         │
+│         │         │         │         │
+│         │         │         │         │
+└─────────┴─────────┴─────────┴─────────┘
+
+
+Pros:
+
+. True team autonomy per business domain
+. Independent deployment and development
+. Clear ownership boundaries
+. Easier to scale teams
+
+Cons:
+
+. Potential UI inconsistencies
+. More complex integration
+. Possible code duplication
+
+```
+
+`Which to Choose?`
+
+1. Vertical slicing is generally preferred because:
+
+Aligns with business goals
+
+Enables independent team scaling
+
+Reduces cross-team dependencies
+
+Supports domain-driven design principles
+
+2. Horizontal slicing works better when:
+
+You have strong design system requirements
+
+Teams are organized by technical expertise
+
+UI consistency is critical
+
+```js
+Aspect                |  Vertical Slicing                                  |  Horizontal Slicing
+----------------------+----------------------------------------------------+------------------------------------------
+Splitting basis       |  By full features or pages                         |  By layers or reusable UI components
+
+Ownership             |  Feature-specific, cross-functional teams          |  Specialized teams per UI section
+
+Technical complexity  |  Simpler to manage feature-wise                    |  More complex due to shared components
+
+Deployment            |  Independent feature deployments                   |  Layer/component-specific deployments
+
+Cohesion              |  Features are cohesive and autonomous              |  UI parts reused across multiple features
+
+Example               |  Product page vs shopping cart in e-commerce site  |  Search bar used on multiple pages
+
+```
+
+### How does Module Federation work in your single-page React app?
+
+> Module Federation in a single-page React app works by letting your app dynamically load and share code—like React components or utilities—from other independently built apps at runtime, instead of bundling everything upfront.
+
+`Here's the simplified process:`
+
+1. You set up two or more React apps, with one acting as the "host" (the main app) and others as "remotes" (apps exposing modules).
+
+2. Each remote app uses Webpack's ModuleFederationPlugin to declare which components or modules it exposes.
+
+3. The host app configures ModuleFederationPlugin to know the remote apps' URLs and which exposed modules it wants to use.
+
+4. At runtime, when the host app needs a component from a remote, it loads it over the network dynamically, sharing dependencies like React to avoid duplicates.
+
+5. This allows your React SPA to compose features from multiple independently deployed microfrontends, enabling team autonomy and on-demand loading.
+
+### Who manages the routes if it’s a microfrontend SPA?
+
+> In a microfrontend SPA, routing is managed through different approaches. Let me explain each:
+
+1. `Shell/Container App Manages Routes (Most Common)` : The main app (shell) controls all routing and decides which microfrontend to load:
+
+```js
+// Shell App - Main Router
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/users/*" element={<UserMicrofrontend />} />
+        <Route path="/products/*" element={<ProductMicrofrontend />} />
+        <Route path="/cart/*" element={<CartMicrofrontend />} />
+      </Routes>
+    </Router>
+  );
+}
+
+
+How it works:
+
+User visits /users/profile
+
+Shell app sees /users/* and loads User microfrontend
+
+User microfrontend handles /profile part internally
+
+```
+
+2. `Each Microfrontend Manages Its Own Routes` : Each microfrontend has its own router for internal navigation:
+
+```js
+// User Microfrontend
+function UserApp() {
+  return (
+    <Router basename="/users">
+      <Routes>
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
+    </Router>
+  );
+}
+```
+
+3. `Shared Routing Service`: A central service coordinates routing between microfrontends:
+
+```js
+// Shared Router Service
+class RouterService {
+  navigate(path) {
+    // Determines which microfrontend should handle this route
+    if (path.startsWith("/users")) {
+      loadUserMicrofrontend();
+    }
+    // Updates browser URL
+    window.history.pushState({}, "", path);
+  }
+}
+```
+
+`Key Points:`
+
+1. Shell app = Traffic controller (decides which microfrontend loads)
+
+2. Each microfrontend = Handles its own internal routes
+
+3. Browser URL = Always stays in sync
+
+4. Navigation = Can happen between or within microfrontends
+
+`Most teams use approach #1 because it's simpler and gives clear ownership boundaries.`
+
+### When building a micro-frontend application, is a container or root app necessary, or can I do without it?
+
+> No, a container/root app is NOT compulsory, but it's highly recommended for most cases. Here are your options:
+
+`NOTE`
+
+1. Need shared UI/navigation? → Use container/root app
+
+2. Completely separate apps? → Skip container/root app
+
+`Most teams choose container app because users expect consistent navigation and shared elements across feature`s.
+
+### How is session management handled across multiple microfrontends? explain in simples way ?
+
+> Session management in microfrontends is like having a shared locker that all apps can access. Here are the simple approaches:
+
+1. Shared Browser Storage (Most Common): All microfrontends read/write to the same place:
+
+```js
+// User logs in via Auth MFE
+localStorage.setItem('userToken', 'abc123');
+localStorage.setItem('userId', '456');
+
+// Product MFE reads the same data
+const token = localStorage.getItem('userToken');
+const userId = localStorage.getItem('userId');
+
+// Cart MFE also reads the same data
+if (localStorage.getItem('userToken')) {
+  // User is logged in
+}
+
+
+Storage Options:
+
+localStorage - Persists after browser close
+
+sessionStorage - Gone when tab closes
+
+Cookies - Can be shared across subdomains
+
+```
+
+2. Container App Manages Session : The shell app handles login and shares session data:
+
+```js
+// User logs in
+window.dispatchEvent(
+  new CustomEvent("userLogin", {
+    detail: { userId: "123", token: "abc" },
+  })
+);
+
+// Other MFEs listen for changes
+window.addEventListener("userLogin", (event) => {
+  const { userId, token } = event.detail;
+  // Update local state
+});
+
+// User logs out
+window.dispatchEvent(new CustomEvent("userLogout"));
+```
+
+3. Event-Based Communication. Microfrontends notify each other about session changes:
+
+```js
+// User logs in
+window.dispatchEvent(
+  new CustomEvent("userLogin", {
+    detail: { userId: "123", token: "abc" },
+  })
+);
+
+// Other MFEs listen for changes
+window.addEventListener("userLogin", (event) => {
+  const { userId, token } = event.detail;
+  // Update local state
+});
+
+// User logs out
+window.dispatchEvent(new CustomEvent("userLogout"));
+```
+
+4. Shared Session Service : A common library handles all session logic:
+
+```js
+// Shared Session Service
+class SessionService {
+  login(token) {
+    localStorage.setItem("token", token);
+    this.notifyAll("login", token);
+  }
+
+  logout() {
+    localStorage.removeItem("token");
+    this.notifyAll("logout");
+  }
+
+  getUser() {
+    return localStorage.getItem("token");
+  }
+}
+
+// All MFEs use the same service
+const session = new SessionService();
+```
+
+`Simple Rules:`
+
+1. Same domain = Use localStorage/sessionStorage
+2. Need real-time sync = Use events
+3. Complex session logic = Use shared service
+4. Simple setup = Container app manages it
+
+> NOTE :
+
+If the micro-frontend apps run inside the host app—like the host running on port 3000 and displaying the UI of all micro apps—they can easily access shared data. However, if a micro app runs separately on a different port or domain, it typically cannot access that shared data directly due to browser security restrictions like the same-origin policy."
+
+`Explanation:`
+Microfrontends running inside a single host app (same origin, port) can share data using browser storage or in-memory communication.
+
+When microfrontends run on different ports or domains, they face cross-origin restrictions and cannot directly access shared data such as localStorage or in-memory variables.
+
+To communicate across different origins, additional techniques like cross-window messaging (postMessage), shared backend sessions, or APIs are needed.
+
+1. Scenario 1: Microfrontends Running on Different Ports ❌
+
+```js
+Host App:     localhost:3000
+User MFE:     localhost:3001
+Product MFE:  localhost:3002
+Cart MFE:     localhost:3003
+
+
+Problem: They CANNOT share localStorage/sessionStorage because:
+
+1. Browser treats each port as a different origin
+
+2. localhost:3000 and localhost:3001 are separate domains
+
+3. Security policy blocks cross-origin storage access
+```
+
+2. Scenario 2: All Running Under Host App ✅
+
+```js
+Host App: localhost:3000
+├── /users/*    → User MFE (loaded into host)
+├── /products/* → Product MFE (loaded into host)
+└── /cart/*     → Cart MFE (loaded into host)
+
+
+Works: All microfrontends share the same origin (localhost:3000), so they can access the same localStorage.
+```
+
+> Solutions for Different Ports:
+
+1. Use Cookies with Domain Setting.
+
+```js
+// Set cookie that works across subdomains
+document.cookie = "userToken=abc123; domain=.localhost";
+
+// All ports can read this cookie
+const token = getCookie("userToken");
+```
+
+2. PostMessage Communication.
+
+```js
+// MFE on port 3001 sends message to host on port 3000
+window.parent.postMessage(
+  {
+    type: "SESSION_UPDATE",
+    data: { userId: "123" },
+  },
+  "http://localhost:3000"
+);
+
+// Host receives and broadcasts to other MFEs
+window.addEventListener("message", (event) => {
+  if (event.data.type === "SESSION_UPDATE") {
+    // Notify other MFEs
+  }
+});
+```
+
+3. Shared Backend Session.
+
+```js
+// All MFEs call same API for session data
+const session = await fetch("http://api.localhost:8000/session");
+```
+
+4. Use Same Domain with Reverse Proxy
+
+```js
+// Nginx routes different paths to different ports
+myapp.com/users     → localhost:3001
+myapp.com/products  → localhost:3002
+myapp.com/cart      → localhost:3003
+
+
+```
+
+`Simple Rule:`
+
+1. Same origin (same protocol + domain + port) = Can share storage
+2. Different origins = Need special solutions
+
+`Most production microfrontends use Module Federation or iframes to run everything under the same domain, avoiding this issue entirely.`
