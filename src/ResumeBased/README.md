@@ -2047,3 +2047,35 @@ myapp.com/cart      → localhost:3003
 2. Different origins = Need special solutions
 
 `Most production microfrontends use Module Federation or iframes to run everything under the same domain, avoiding this issue entirely.`
+
+
+
+> Scope
+
+`The context in which variables are declared and accessed`
+
+1. Global Scope:
+    Variables declared outside of any function or block;
+    Accessible from anywhere in the code.
+
+2. Function Scope:
+    Variables declared within a function are accessible only within that function.
+
+3. Block Scope:
+    Introduced by {} blocks; variables declared inside a block are limited to that block's scope.
+    Let and Const follow block scope.
+
+4. Scope Chain:
+    Nested functions search for variables in their own scope, then in the scope of their parent functions, creating a chain.
+
+5. Global Object Access:
+    Variables declared without var, let, or const become properties of the global object (e.g., window in browsers).
+
+
+> Strict Mode
+When you enable strict mode in your JavaScript code, the JavaScript interpreter becomes less forgiving and enforces a stricter set of rules. It was introduced in ES5.
+
+1. Variables without var doesn't create a global variable
+2. The value of this inside a regular function is undefined contrary to a global context.
+3. Disallow eval
+4. Do not allow undeclared variables
