@@ -43,7 +43,7 @@ _Disadvantages:_
 
 _Choose Virtualization when:_
 
-    1. You have thousands of items to render
+    1. You have thousands of items to render(Only creates DOM nodes for visible items (~10-50 elements)).
     2. Performance is critical
     3. Memory usage is a concern
     4. You're working with a JavaScript framework
@@ -51,7 +51,7 @@ _Choose Virtualization when:_
 
 _Choose content-visibility when:_
 
-    1. You have hundreds (not thousands) of items
+    1. You have hundreds (not thousands) of items. ( Creates ALL DOM nodes upfront (thousands of elements in memory). Each DOM node consumes ~100-500 bytes of memory and Browser still maintains references to all elements.)
     2. Implementation simplicity is important
     3. SEO is a priority
     4. You prefer a CSS-only solution
