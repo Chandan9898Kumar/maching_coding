@@ -2078,4 +2078,4 @@ When you enable strict mode in your JavaScript code, the JavaScript interpreter 
 1. Variables without var doesn't create a global variable
 2. The value of this inside a regular function is undefined contrary to a global context.
 3. Disallow eval
-4. Do not allow undeclared variables
+4. Do not allow undeclared variables.
