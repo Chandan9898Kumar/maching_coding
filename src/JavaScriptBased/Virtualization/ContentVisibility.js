@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useContentVisibility } from "./useContentVisibility";
 import "./style.css";
 
 function App() {
@@ -48,12 +49,7 @@ function App() {
 export default App;
 
 const ContentVisibilityList = ({ items }) => {
-  const [isContentVisibilitySupported, setIsContentVisibilitySupported] = useState(false);
-
-  useEffect(() => {
-    //Since content-visibility is not supported in all browsers, you might want to add a feature detection mechanism:  Check if content-visibility is supported
-    setIsContentVisibilitySupported(CSS.supports && CSS.supports("content-visibility", "auto"));
-  }, []);
+  const isContentVisibilitySupported = useContentVisibility();
 
   return (
     <div className="list-container">
