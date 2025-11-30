@@ -4928,5 +4928,31 @@ function can_make_same_frequency_by_one_removal(strings) {
 const test_strings = ["aabbcc", "aabbc", "aabbccc", "aabbcccdd", "abc", "abcc", "aabbcccddde", "xyyz", "xyyzz", "xxxxyyzz"];
 
 test_strings.forEach((item) => console.log(`${item}: ${can_make_same_frequency_by_one_removal(item)}`));
+```
+
+### 90. Check if Strings Are Rotations of Each Other.
+
+```js
+Input: s1 = "abcd", s2 = "cdab"
+Output: true
+Explanation: After 2 right rotations, s1 will become equal to s2.
+
+Input: s1 = "aab", s2 = "aba"
+Output: true
+Explanation: After 1 left rotation, s1 will become equal to s2.
+
+Input: s1 = "abcd", s2 = "acbd"
+Output: false
+Explanation: Strings are not rotations of each other.
+
+function checks(){
+  if (s1.length!==s2.length){
+    return false
+  }
+  return (s1+s1).includes(s2)
+
+}
+console.log(checks())
+
 
 ```
