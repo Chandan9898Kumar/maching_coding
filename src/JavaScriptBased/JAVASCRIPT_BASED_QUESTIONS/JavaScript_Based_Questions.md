@@ -1,15 +1,16 @@
 ### 1. Find The OutPut
 
 ```ts
-foo(); // Output: "Hello 2"
+foo(); // Output: "Hello 1"
 function foo() {
   console.log("Hello 1");
 }
-// The above code is equivalent to:
+
+//                  The above code is equivalent to:
 function foo() {
-  console.log("Hello 2");
+  console.log("Hello 1");
 }
-foo(); // Output: "Hello 2"
+foo(); // Output: "Hello 1"
 
 
 - In above example, we define `a function foo()` and call it before the actual declaration. Surprisingly, the code works without any errors. This is `because function declarations are hoisted to the top of their scope`, allowing us to `call the function before its declaration in the code`.
@@ -64,6 +65,27 @@ function foo(){
 }
 
 console.log(foo) // O/p 'foo
+
+> The Real Equivalent Code (What JS Actually Executes)
+
+// This is exactly what the engine sees:
+
+var foo;                                   // 1. var hoisted
+function foo() {                           // 2. function declaration hoisted → foo = function
+  console.log('fun');
+}
+
+// Execution starts
+console.log(foo);     // → [Function: foo]   (function is in foo right now)
+
+foo = 'foo';          // ← Assignment overwrites the function with string
+
+// The function declaration below is ignored (already hoisted)
+function foo() {
+  console.log('fun');
+}
+
+console.log(foo);     // → 'foo'             (now it's a string)
 
 
 // During hoisting ( memory creation phase ):
