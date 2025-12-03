@@ -187,10 +187,24 @@ ReactJS Virtual DOM is an in-memory representation of the actual DOM (Document O
 
 `How Does the Virtual DOM Work ? `
 
-1. **Rendering the Virtual DOM:** React creates a virtual representation of the UI as a tree of JavaScript objects.
-2. **Updating State:** It generates a new Virtual DOM tree to reflect the updated state when the application state changes.
-3. **Diffing Algorithm:** React compares the new Virtual DOM tree with the previous one using its efficient diffing algorithm to identify the minimal set of changes required.
-4. **Updating the Real DOM:** React applies only the necessary changes to the real DOM, optimizing rendering performance.
+1. Initial Render (Create Virtual DOM): React creates a virtual representation of the UI as a lightweight tree of JavaScript objects. This Virtual DOM mirrors the structure of the actual DOM but exists entirely in memory for faster manipulation.
+
+2. State/Props Change: When the application state or props change, React generates a new Virtual DOM tree reflecting the updated UI. This does not immediately affect the real DOM but prepares a fresh virtual representation.
+
+3. Diffing Algorithm (Reconciliation - Phase 1): React compares the new Virtual DOM tree with the previous version using an efficient O(n) diffing algorithm. It identifies the minimal set of changes by comparing nodes:
+  . If nodes are of the same type, it compares their props and children recursively.
+  . If nodes differ in type, it replaces entire subtrees.
+  . For lists, it uses key-based matching to detect additions, deletions, or reorderings.
+
+4. Reconciliation ( Phase 2 - "Reconciliation is a instruction generator" between diffing (find changes) and commit (apply changes)): After Diffing finds differences, Reconciliation creates an "instruction list" (patch) telling React exactly what to change.
+  `What it does:`
+    . Collects all changes from diffing (text updates, add/remove nodes, prop changes)
+    . Prioritizes mutations (minimal operations needed)
+    . Batches instructions (groups multiple changes)
+
+5. Real DOM Update (Commit Phase): Based on the diffing results, React batches and applies only the necessary changes to the real DOM( React executes single batch), minimizing costly reflows and repaints, resulting in optimized rendering performance.
+
+> This triggers one reflow/repaint instead of multiple costly DOM operations.
 
 <p align="center">
   <img src="../../Assests/virtual.webp" width="450" title="Virtual Dom">
