@@ -183,7 +183,7 @@ B. Callbacks in the Callback Queue are typically used for less critical tasks, s
 
 ### 3. Virtual DOM.
 
-ReactJS Virtual DOM is an in-memory representation of the actual DOM (Document Object Model). React uses this lightweight JavaScript object to track changes in the application state and efficiently update the actual DOM only where necessary.
+ReactJS Virtual DOM( invisible, for fast diffing ) is an in-memory representation( copy of your webpage) of the actual DOM(visible on screen) (Document Object Model). React uses this lightweight JavaScript object to track changes in the application state and efficiently update the actual DOM only where necessary.
 
 `How Does the Virtual DOM Work ? `
 
