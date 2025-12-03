@@ -192,15 +192,21 @@ ReactJS Virtual DOM is an in-memory representation of the actual DOM (Document O
 2. State/Props Change: When the application state or props change, React generates a new Virtual DOM tree reflecting the updated UI. This does not immediately affect the real DOM but prepares a fresh virtual representation.
 
 3. Diffing Algorithm (Reconciliation - Phase 1): React compares the new Virtual DOM tree with the previous version using an efficient O(n) diffing algorithm. It identifies the minimal set of changes by comparing nodes:
-  . If nodes are of the same type, it compares their props and children recursively.
-  . If nodes differ in type, it replaces entire subtrees.
-  . For lists, it uses key-based matching to detect additions, deletions, or reorderings.
+
+```js
+   . If nodes are of the same type, it compares their props and children recursively.
+   . If nodes differ in type, it replaces entire subtrees.
+   . For lists, it uses key-based matching to detect additions, deletions, or reorderings.
+```
 
 4. Reconciliation ( Phase 2 - "Reconciliation is a instruction generator" between diffing (find changes) and commit (apply changes)): After Diffing finds differences, Reconciliation creates an "instruction list" (patch) telling React exactly what to change.
+
+```js
   `What it does:`
     . Collects all changes from diffing (text updates, add/remove nodes, prop changes)
     . Prioritizes mutations (minimal operations needed)
     . Batches instructions (groups multiple changes)
+```
 
 5. Real DOM Update (Commit Phase): Based on the diffing results, React batches and applies only the necessary changes to the real DOM( React executes single batch), minimizing costly reflows and repaints, resulting in optimized rendering performance.
 
