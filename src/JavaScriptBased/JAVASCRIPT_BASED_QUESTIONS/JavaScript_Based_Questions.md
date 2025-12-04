@@ -405,7 +405,7 @@ outer()
 (function (){
   console.log(x,'x1')
 
-  var x= 10
+  var x= 10;
 
   (function (){
   console.log(x,'x2')
