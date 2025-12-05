@@ -83,6 +83,18 @@ const result = arrs.reduce((acc, curr) => {
 }, {});
 
 console.log(result, "result");
+
+> OR
+
+function countName(){
+  return arrs.reduce((acc,curr)=>{
+    acc[curr.name] = (acc[curr.name] || 0)+1
+    return acc
+  },{})
+}
+
+console.log(countName())
+
 ```
 
 ### 3. Given a number in string format, return a single-digit no by recursively adding the digits in a string format .
