@@ -230,38 +230,31 @@ console.log(sortedData,'sortedData)
 ### 6. find smallest word by length in an array.if length match then compare by ascii character.
 
 ```js
-const arr=['hello','cat','data','sata','apple','game','do','famous','bo','ba']
+const arr = ["hello", "cat", "data", "sata", "apple", "game", "do", "famous", "bo", "ba"];
 
 function smallest(arr) {
- 
-  let s = arr[0]
-  for(let x=1;x<arr.length;x++){
-    if(arr[x].length<=s.length && arr[x]<s){
-        s= arr[x]
+  let s = arr[0];
+  for (let x = 1; x < arr.length; x++) {
+    if (arr[x].length <= s.length && arr[x] < s) {
+      s = arr[x];
     }
   }
-  return s
+  return s;
 }
-const result = smallest(arr)
+const result = smallest(arr);
 
 //              2nd way :
 function smallest() {
-  return arr.reduce((acc,curr)=>{
-     if (acc.length > curr.length) {
-      acc = curr
+  return arr.reduce((acc, curr) => {
+    if (curr.length <= acc.length && curr < acc) {
+      acc = curr;
     }
-    if (acc.length === curr.length && acc > curr) {
-      acc = curr
-    }
-
-    return acc
-
-  },arr[0])
+    return acc;
+  }, arr[0]);
 }
 
-const result = smallest()
-console.log(result)
-
+const result = smallest();
+console.log(result);
 ```
 
 ### 7. find 2nd largest Number.
