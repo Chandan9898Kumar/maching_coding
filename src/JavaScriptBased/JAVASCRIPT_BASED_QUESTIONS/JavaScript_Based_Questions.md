@@ -440,7 +440,6 @@ console.log(result)
 ```
 
 ### 8. what is the output
-
 ```ts
 var name = "Yomesh";
 
