@@ -387,6 +387,7 @@ outer()
 ### Example 4.
 
 let a=10
+
 function outer(){
     console.log(a,'a1')
 
