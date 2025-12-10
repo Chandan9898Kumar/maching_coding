@@ -924,6 +924,19 @@ const resultTwo = arrayOfObject.filter((item,index,arr)=>{
 })
 
 console.log(resultOne,resultTwo)
+
+
+// New way
+
+let s = 0;
+for (let f = 1; f < arr.length; f++) {
+  if (arr[s] !== arr[f]) {
+    s++;
+    arr[s] = arr[f];
+  }
+}
+console.log(arr.slice(0, s + 1));
+
 ```
 
 ### 20. Write a JavaScript program to list the keys and values of a JavaScript object and get the length of a JavaScript object.
