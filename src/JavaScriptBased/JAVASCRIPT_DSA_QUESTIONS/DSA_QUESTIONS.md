@@ -926,7 +926,7 @@ const resultTwo = arrayOfObject.filter((item,index,arr)=>{
 console.log(resultOne,resultTwo)
 
 
-// New way
+// Method 3.
 
 let s = 0;
 for (let f = 1; f < arr.length; f++) {
