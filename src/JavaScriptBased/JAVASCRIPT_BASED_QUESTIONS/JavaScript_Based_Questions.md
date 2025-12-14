@@ -2478,12 +2478,15 @@ asyncParallel(taskList, (error, result) => {
  }
 
  setInterval(function(){
-   count(start++, 'count');
+   count(start++, 'count');  // ← this executes EVERY SECOND
  }, 1000);
 
 //count is 0
 //count is 1
 //count is 2
+
+
+NOTE : Above > The anonymous function creates a new scope in each interval, so start++ gets re-evaluated with the current start value every time.
 
 
 - 2. Passing params separately
@@ -2494,7 +2497,11 @@ asyncParallel(taskList, (error, result) => {
    console.log(`${message} is ${count}`);
  }
 
- setInterval(count, 1000, start++, 'count');
+// Direct args = "save values once at setup"
+ setInterval(count, 1000, start++, 'count'); //  `start++` executes HERE, only ONCE.
+
+
+NOTE : JavaScript setInterval with direct arguments works like taking a photo of those values once - it never updates them.
 
 //count is 0
 //count is 0
