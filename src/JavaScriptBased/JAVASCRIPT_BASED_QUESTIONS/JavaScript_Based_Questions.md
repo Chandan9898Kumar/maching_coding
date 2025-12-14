@@ -2503,14 +2503,18 @@ NOTE : Above > The anonymous function creates a new scope in each interval, so s
 
 NOTE : JavaScript setInterval with direct arguments works like taking a photo of those values once - it never updates them.
 
+> count is 0 repeats because it's reading the frozen recipe arg, not the live start.
+
 //count is 0
 //count is 0
 //count is 0
 
 ### Explanation :
-// The setInterval function does not update the count variable on each iteration because the count variable is passed by value, not by reference. This means that the setInterval function receives a copy of the current value of count when it is called, and any changes made to the count variable inside the setInterval function do not affect the original count variable.
+```js
+> The setInterval function does not update the count variable on each iteration because the count variable is passed by value, not by reference. This means that the setInterval function receives a copy of the current value of count when it is called, and any changes made to the count variable inside the setInterval function do not affect the original count variable.
 
-// you are passing start++ as the first argument to the count function. However, start++ uses the value of start (which is 0 initially) and then increments it afterwards. This means that every time count is called by setInterval, it receives the initial value of start (which is 0), and only after that does start get incremented. As a result, the value of count (the first parameter) remains 0 in all invocations of the count function.
+> you are passing start++ as the first argument to the count function. However, start++ uses the value of start (which is 0 initially) and then increments it afterwards. This means that every time count is called by setInterval, it receives the initial value of start (which is 0), and only after that does start get incremented. As a result, the value of count (the first parameter) remains 0 in all invocations of the count function.
+```
 
 `NOTE :`  Here the start is not getting increment because the value is accessed from the global scope. Also this method won’t work in IE9 and less.
 
