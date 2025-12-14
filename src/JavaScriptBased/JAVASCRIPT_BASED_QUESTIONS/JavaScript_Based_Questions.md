@@ -1985,6 +1985,49 @@ console.log(result,obj1);
 
 - Hexadecimal is a base 16 system numbering system where a Hex code can be any of these 16 digits: 0 1 2 3 4 5 6 7 8 9 A B C D E F
 
+```js
+
+Step 1: Understanding Hexadecimal Digits
+
+> Hexadecimal (base-16) uses digits 0-9 and A-F (where A=10, B=11, C=12, D=13, E=14, F=15):
+
+
+. Hex digit: 0 1 2 3 4 5 6 7 8 9 A  B  C  D  E  F
+. Decimal:   0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+
+
+So "ff" means:
+  First f = 15 (decimal)
+  Second f = 15 (decimal)
+
+
+Step 2: Positional Value (Place Values)
+
+> In any base system, digits have positional weight (right to left):
+
+Position:  1     0   (for 2-digit number)
+Place value: 16¹   16⁰  = 16    1
+Digits:       f     f
+
+
+"ff"₁₆ = (15 × 16¹) + (15 × 16⁰)
+       = (15 × 16) + (15 × 1) 
+       = 240      + 15
+       = **255**₁₀
+
+Step 3: parseInt() Internal Process.
+
+parseInt(string, radix) does this automatically:
+
+parseInt("ff", 16)
+// Internally:
+// 1. Read "f" (position 1): 15 × 16¹ = 240
+// 2. Read "f" (position 0): 15 × 16⁰ = 15  
+// 3. Sum: 240 + 15 = 255
+// Returns: 255
+
+```
+
 - RGB format is a combination of three colors, red, green, and blue in the range of 0 – 255. A hex color code is the hexadecimal representation of the RGB numbers.
 
 `NOTE :`
