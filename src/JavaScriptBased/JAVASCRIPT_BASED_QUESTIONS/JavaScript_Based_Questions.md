@@ -2498,7 +2498,7 @@ NOTE : Above > The anonymous function creates a new scope in each interval, so s
  }
 
 // Direct args = "save values once at setup"
- setInterval(count, 1000, start++, 'count'); //  `start++` executes HERE, only ONCE.
+ setInterval(count, 1000, start++, 'count'); // `start++` executes HERE, only ONCE. and ↑ Increments ONCE. Global start is now 1 forever - NO ONE INCREMENTS IT AGAIN!.
 
 
 NOTE : JavaScript setInterval with direct arguments works like taking a photo of those values once - it never updates them.
