@@ -2010,6 +2010,8 @@ parseInt(string, radix)
 2. the first non-whitespace character cannot be converted to a number.
 
 `Examples :`
+
+```js
 console.log(parseInt('123'));
 // 123 (default base-10)
 console.log(parseInt('123', 10));
@@ -2026,6 +2028,7 @@ console.log(parseInt('0xFF', 16));
 // 255 (upper-case hexadecimal with "0x" prefix)
 console.log(parseInt('xyz'));
 // NaN (input can't be converted to an integer)
+```
 
 ```ts
 const Input = "#ff33ff"
