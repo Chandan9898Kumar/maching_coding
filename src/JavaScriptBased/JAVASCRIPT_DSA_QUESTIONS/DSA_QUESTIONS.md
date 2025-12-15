@@ -919,6 +919,7 @@ const resultOne = arrayOfObject.reduce((acc,curr)=>{
 },[])
 
 //  Method 2.
+
 const resultTwo = arrayOfObject.filter((item,index,arr)=>{
      return index === arr.findIndex((value,index,arr)=>item===value)
 })
