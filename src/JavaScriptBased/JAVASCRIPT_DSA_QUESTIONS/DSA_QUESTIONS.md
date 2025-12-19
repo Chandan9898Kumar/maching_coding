@@ -943,6 +943,7 @@ console.log(arr.slice(0, s + 1));
 ### 20. Write a JavaScript program to list the keys and values of a JavaScript object and get the length of a JavaScript object.
 
 ```ts
+
 const student = {
   name: "David Rayy",
   sclass: "VI",
