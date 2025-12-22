@@ -928,7 +928,6 @@ console.log(resultOne,resultTwo)
 
 
 // Method 3.
-
 let s = 0;
 for (let f = 1; f < arr.length; f++) {
   if (arr[s] !== arr[f]) {
