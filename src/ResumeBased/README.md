@@ -2048,34 +2048,76 @@ myapp.com/cart      → localhost:3003
 
 `Most production microfrontends use Module Federation or iframes to run everything under the same domain, avoiding this issue entirely.`
 
-
-
 > Scope
 
 `The context in which variables are declared and accessed`
 
 1. Global Scope:
-    Variables declared outside of any function or block;
-    Accessible from anywhere in the code.
+   Variables declared outside of any function or block;
+   Accessible from anywhere in the code.
 
 2. Function Scope:
-    Variables declared within a function are accessible only within that function.
+   Variables declared within a function are accessible only within that function.
 
 3. Block Scope:
-    Introduced by {} blocks; variables declared inside a block are limited to that block's scope.
-    Let and Const follow block scope.
+   Introduced by {} blocks; variables declared inside a block are limited to that block's scope.
+   Let and Const follow block scope.
 
 4. Scope Chain:
-    Nested functions search for variables in their own scope, then in the scope of their parent functions, creating a chain.
+   Nested functions search for variables in their own scope, then in the scope of their parent functions, creating a chain.
 
 5. Global Object Access:
-    Variables declared without var, let, or const become properties of the global object (e.g., window in browsers).
-
+   Variables declared without var, let, or const become properties of the global object (e.g., window in browsers).
 
 > Strict Mode
-When you enable strict mode in your JavaScript code, the JavaScript interpreter becomes less forgiving and enforces a stricter set of rules. It was introduced in ES5.
+> When you enable strict mode in your JavaScript code, the JavaScript interpreter becomes less forgiving and enforces a stricter set of rules. It was introduced in ES5.
 
 1. Variables without var doesn't create a global variable
 2. The value of this inside a regular function is undefined contrary to a global context.
 3. Disallow eval
 4. Do not allow undeclared variables.
+
+### How does an HTML page actually render in the browser?
+
+```js
+When a user requests a page, the browser first downloads the HTML and starts parsing it top-down.
+While parsing:
+
+• External CSS files are requested
+• External JavaScript files are requested
+
+Now the important part most people miss:
+
+CSS is render-blocking
+The browser cannot paint anything until the CSSOM is fully built, because it doesn’t know how elements should look.
+
+JavaScript is parser-blocking
+When the parser hits a <​script> tag (without async/defer), HTML parsing pauses until the script is:
+
+1. Downloaded
+2. Parsed
+3. Converted to AST
+4. Compiled to bytecode
+5. Executed
+
+Only after this does HTML parsing resume.
+
+Next phases:
+
+• HTML parsing builds the DOM
+• CSS parsing builds the CSSOM
+• DOM + CSSOM → Render Tree (this is where FCP is measured)
+• Layout phase: calculate sizes and positions
+• Paint phase: draw pixels for each node
+• Compositing phase: GPU combines layers and pushes pixels to the screen
+
+That’s the moment you actually see the page.
+
+Then comes the follow-up that separates seniors from juniors:
+What happens on re-render?
+
+• DOM changes → Reflow (layout recalculation)
+• Visual-only changes → Repaint
+• Transform/opacity → Compositing only
+
+```
