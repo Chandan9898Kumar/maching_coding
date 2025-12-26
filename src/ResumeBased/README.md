@@ -1941,6 +1941,7 @@ class SessionService {
 
 // All MFEs use the same service
 const session = new SessionService();
+
 ```
 
 `Simple Rules:`
