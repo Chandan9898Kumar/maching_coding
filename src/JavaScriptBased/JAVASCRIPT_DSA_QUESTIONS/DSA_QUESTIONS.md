@@ -942,7 +942,6 @@ console.log(arr.slice(0, s + 1));
 ### 20. Write a JavaScript program to list the keys and values of a JavaScript object and get the length of a JavaScript object.
 
 ```ts
-
 const student = {
   name: "David Rayy",
   sclass: "VI",
@@ -1992,6 +1991,30 @@ const answer = mostUsedWord(text);
 const answer = mostUsedWord(text, bannedWords);
 // answer => ball
 
+
+
+> Second way :
+
+function mostfrequent(text,banned=[]){
+  const obj = {}
+  let maxValue = -Infinity
+  let item =''
+  const updatedText = text.replace(/[,.\s]/g," ").trim().split(" ")
+
+  for(let x of updatedText){
+    if(!banned.includes(x) && x!==""){
+      obj[x] = (obj[x] || 0) +1
+    }
+    if(obj[x]>maxValue){
+      maxValue=obj[x]
+      item =x
+    }
+  }
+
+  return {item,maxValue}
+}
+
+console.log(mostfrequent(text,bannedWords))
 
 ```
 
