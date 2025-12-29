@@ -4819,6 +4819,7 @@ console.log(findFirstAndLast(arr, target)); // Output: [4, 6]
 Find if there is any pair of numbers in a sorted array that add up to a given target sum.
 
 ```ts
+
 function hasPairWithSum(arr, target) {
   let left = 0;
   let right = arr.length - 1;
