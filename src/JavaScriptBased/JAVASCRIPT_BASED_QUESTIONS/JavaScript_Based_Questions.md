@@ -441,6 +441,7 @@ console.log(result)
 ```
 
 ### 8. what is the output
+
 ```ts
 var name = "Yomesh";
 
@@ -2011,7 +2012,7 @@ Digits:       f     f
 
 
 "ff"₁₆ = (15 × 16¹) + (15 × 16⁰)
-       = (15 × 16) + (15 × 1) 
+       = (15 × 16) + (15 × 1)
        = 240      + 15
        = **255**₁₀
 
@@ -2022,7 +2023,7 @@ parseInt(string, radix) does this automatically:
 parseInt("ff", 16)
 // Internally:
 // 1. Read "f" (position 1): 15 × 16¹ = 240
-// 2. Read "f" (position 0): 15 × 16⁰ = 15  
+// 2. Read "f" (position 0): 15 × 16⁰ = 15
 // 3. Sum: 240 + 15 = 255
 // Returns: 255
 
@@ -2055,21 +2056,21 @@ parseInt(string, radix)
 `Examples :`
 
 ```js
-console.log(parseInt('123'));
+console.log(parseInt("123"));
 // 123 (default base-10)
-console.log(parseInt('123', 10));
+console.log(parseInt("123", 10));
 // 123 (explicitly specify base-10)
-console.log(parseInt(' 123 '));
+console.log(parseInt(" 123 "));
 // 123 (whitespace is ignored)
-console.log(parseInt('077'));
+console.log(parseInt("077"));
 // 77 (leading zeros are ignored)
-console.log(parseInt('1.9'));
+console.log(parseInt("1.9"));
 // 1 (decimal part is truncated)
-console.log(parseInt('ff', 16));
+console.log(parseInt("ff", 16));
 // 255 (lower-case hexadecimal)
-console.log(parseInt('0xFF', 16));
+console.log(parseInt("0xFF", 16));
 // 255 (upper-case hexadecimal with "0x" prefix)
-console.log(parseInt('xyz'));
+console.log(parseInt("xyz"));
 // NaN (input can't be converted to an integer)
 ```
 
@@ -2467,7 +2468,7 @@ asyncParallel(taskList, (error, result) => {
 
 ### 28. Javascript setInterval method And Same will go for setTimeout.
 
-```js
+````js
 
 - 1. Calling predefined function
  let start = 0;
@@ -2514,21 +2515,19 @@ NOTE : JavaScript setInterval with direct arguments works like taking a photo of
 > The setInterval function does not update the count variable on each iteration because the count variable is passed by value, not by reference. This means that the setInterval function receives a copy of the current value of count when it is called, and any changes made to the count variable inside the setInterval function do not affect the original count variable.
 
 > you are passing start++ as the first argument to the count function. However, start++ uses the value of start (which is 0 initially) and then increments it afterwards. This means that every time count is called by setInterval, it receives the initial value of start (which is 0), and only after that does start get incremented. As a result, the value of count (the first parameter) remains 0 in all invocations of the count function.
-```
+````
 
-`NOTE :`  Here the start is not getting increment because the value is accessed from the global scope. Also this method won’t work in IE9 and less.
-
-
+`NOTE :` Here the start is not getting increment because the value is accessed from the global scope. Also this method won’t work in IE9 and less.
 
 - 3. Handling this with setInterval.
-let increment = {
-  count: 1,
-  start: function(){
-    setInterval(function(){
-      console.log(this.count++);
-    }, 1000)
-  }
-}
+     let increment = {
+     count: 1,
+     start: function(){
+     setInterval(function(){
+     console.log(this.count++);
+     }, 1000)
+     }
+     }
 
 increment.start();
 //NaN
@@ -2536,6 +2535,7 @@ increment.start();
 //NaN
 
 ### Explanation :
+
 // The issue you're experiencing is due to the way JavaScript handles the this keyword in different contexts. In your case, the this keyword inside the setInterval function is referring to the global object, which is window in a browser environment, instead of the increment object.
 
 // This is because the setInterval function is a method of the window object, and when it calls the callback function, it sets the this keyword to the global object, which is window. This is a common gotcha in JavaScript, known as the "this" context issue.
@@ -2545,14 +2545,14 @@ increment.start();
 1. Use a closure to capture the this context.
 
 let increment = {
-  count: 1,
-  start: function(){
-    //Assign this to a variable that
-    var that = this;
-    setInterval(function(){
-      console.log(that.count++);
-    }, 1000)
-  }
+count: 1,
+start: function(){
+//Assign this to a variable that
+var that = this;
+setInterval(function(){
+console.log(that.count++);
+}, 1000)
+}
 }
 
 increment.start();
@@ -2560,15 +2560,15 @@ increment.start();
 //2
 //3
 
-2. with introduction of Arrow Function  => function in ES6 we can handle this easily.
+2. with introduction of Arrow Function => function in ES6 we can handle this easily.
 
 let increment = {
-  count: 1,
-  start: function(){
-    setInterval(() => {
-      console.log(this.count++);
-    }, 1000)
-  }
+count: 1,
+start: function(){
+setInterval(() => {
+console.log(this.count++);
+}, 1000)
+}
 }
 
 increment.start();
@@ -2576,18 +2576,17 @@ increment.start();
 //2
 //3
 
-
 ### Explanation:
+
 // When you use an arrow function inside setInterval, it helps to set the this keyword to the object increment by leveraging the lexical scoping rules of arrow functions.
 
-//  Lexical scoping is a crucial concept in JavaScript that allows functions to access variables from their enclosing scopes. This feature enables powerful programming patterns, such as closures, which can help manage state and encapsulate data effectively.
+// Lexical scoping is a crucial concept in JavaScript that allows functions to access variables from their enclosing scopes. This feature enables powerful programming patterns, such as closures, which can help manage state and encapsulate data effectively.
 
 // Enclosing scopes are a fundamental aspect of JavaScript's lexical scoping model. They allow inner functions to access variables defined in their outer functions, enabling powerful programming patterns like closures. enclosing scopes refer to the outer contexts in which a function is defined.
 
-//  NOTE :
+// NOTE :
 
 // In the context of lexical scoping, the “enclosing scope” is often used to explain how variables and functions declared in an outer scope are accessible in an inner scope. When a function is defined inside another function, it creates a nested lexical scope, where the inner function can access variables and functions defined in its containing (or enclosing) scope.
-
 
 // Here's what happens:
 
@@ -2601,19 +2600,17 @@ increment.start();
 
 // 8. By using an arrow function, you can ensure that the this keyword inside the setInterval callback refers to the increment object, rather than the global object window. This allows you to access the count property and increment it correctly.
 
-
-
 3. Use the bind method to set the this context explicitly:
-let increment = {
-  count: 1,
-  start: function(){
- setInterval(function(){
- console.log(this.count++, this);
- }.bind(this), 1000)
-  }
-}
+   let increment = {
+   count: 1,
+   start: function(){
+   setInterval(function(){
+   console.log(this.count++, this);
+   }.bind(this), 1000)
+   }
+   }
 
-```
+````
 
 ### 29. Retry promises N number of times in JavaScript.
 
@@ -2741,7 +2738,7 @@ To retry the promise we have to call the same function recursively with reduced 
     .catch(({ message }) => {
       console.log('final error >>>>>>>>>>>>>', message);
     });
-```
+````
 
 ### 2. NEW Way Of Retry promises N number of times in JavaScript.
 
@@ -10891,4 +10888,76 @@ setTimeout(() => {
   flaggedCancellable.cancel();
 }, 2000);
 
+```
+
+### Write a function that satisfies the following.
+
+```js
+add(1)(2).value() = 3;
+add(1, 2)(3).value() = 6;
+add(1)(2)(3).value() = 6;
+add(1)(2) + 3 = 6;
+```
+
+1. Currying in JavaScript is a concept of functional programming in which we can pass functions as arguments (callbacks) and return functions without any side effects (Changes to program states).
+
+2. This is a little tricky question and requires us to use and modify the `valueOf() method`.
+
+3. When JavaScript wants to turn an object into a primitive value, it uses the function `valueOf() `method. JavaScript automatically calls the function `valueOf() method` when it comes across an object where a primitive value is anticipated, so you don’t even need to do it yourself.
+
+> Example
+
+```js
+function MyNumberType(n) {
+  this.number = n;
+}
+
+MyNumberType.prototype.valueOf = function () {
+  return this.number + 1;
+};
+
+const myObj = new MyNumberType(4);
+myObj + 3; // 8
+```
+
+Thus we can form closure and track the arguments in an Array and return a new function every time that will accept new arguments.
+
+We will also override the valueOf() method and return the sum of all the arguments for each primitive action, also add a new method value() that will reference the valueOf() thus when invoked will return the sum of arguments.
+
+> Solution :
+
+```js
+function add(...x) {
+  // store the current arguments
+  let sum = x;
+
+  function resultFn(...y) {
+    // merge the new arguments
+    sum = [...sum, ...y];
+    return resultFn;
+  }
+
+  // override the valueOf to return sum
+  resultFn.valueOf = function () {
+    return sum.reduce((a, b) => a + b, 0);
+  };
+
+  // extend the valueOf
+  resultFn.value = resultFn.valueOf;
+
+  // return the inner function
+  // on any primitive action .valueOf will be invoked
+  // and it will return the value
+  return resultFn;
+}
+
+Input: console.log(add(1)(2).value() == 3);
+console.log(add(1, 2)(3).value() == 6);
+console.log(add(1)(2)(3).value() == 6);
+console.log(add(1)(2) + 3);
+
+Output: true;
+true;
+true;
+6;
 ```
