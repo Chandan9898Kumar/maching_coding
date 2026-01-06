@@ -10161,6 +10161,7 @@ const circuitBreaker = (fn, failureCount, recoveryTime) => {
 
   return function (...args) {
     // if service is closed
+    
     if (isClosed) {
       const timeSinceFailure = Date.now() - lastFailureTime;
 
