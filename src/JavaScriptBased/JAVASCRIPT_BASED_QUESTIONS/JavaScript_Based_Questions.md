@@ -10919,6 +10919,7 @@ MyNumberType.prototype.valueOf = function () {
 
 const myObj = new MyNumberType(4);
 myObj + 3; // 8
+
 ```
 
 Thus we can form closure and track the arguments in an Array and return a new function every time that will accept new arguments.
