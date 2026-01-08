@@ -4993,3 +4993,97 @@ console.log(checks())
 
 
 ```
+
+### 91 . Given an array of objects and two keys “on” and “who”, aggregate the “who” values on the “on” values.
+
+```js
+const endorsements = [
+  { skill: "css", user: "Bill" },
+  { skill: "javascript", user: "Chad" },
+  { skill: "javascript", user: "Bill" },
+  { skill: "css", user: "Sue" },
+  { skill: "javascript", user: "Sue" },
+  { skill: "html", user: "Sue" },
+];
+
+> Method 1. Using For Loop.
+
+function aggregate(endorsements, on, who) {
+  let newArray = [];
+  let user = [];
+
+  for (let item of endorsements) {
+    if (!user.includes(item.user)) {
+      user.push(item.user);
+    }
+  }
+
+  for (let users of user) {
+    let obj = {};
+
+    for (let item of endorsements) {
+      if (users === item.user) {
+        obj = { ...obj, [on]: users, [who]: obj.skill ? [...obj.skill, item.skill] : [item.skill] };
+      }
+    }
+
+    newArray.push(obj);
+  }
+
+  return newArray;
+}
+
+console.log(aggregate(endorsements, "user", "skill"));
+
+
+> Method 2. Using reduce Method.
+
+function aggregate(endorsements,on,who){
+
+
+  return endorsements.reduce((acc,curr)=>{
+
+    const endorsed= acc.find((item)=>item.user===curr.user)
+
+    if(endorsed){
+
+      endorsed.skill =[...endorsed.skill,curr.skill]
+    }else{
+      acc.push({[on]:curr.user,[who]:[curr.skill]})
+    }
+
+    return acc
+
+  },[])
+
+}
+
+console.log(aggregate(endorsements, "user", "skill"));
+
+
+> Output :
+
+[
+    {
+        "user": "Bill",
+        "skill": [
+            "css",
+            "javascript"
+        ]
+    },
+    {
+        "user": "Chad",
+        "skill": [
+            "javascript"
+        ]
+    },
+    {
+        "user": "Sue",
+        "skill": [
+            "css",
+            "javascript",
+            "html"
+        ]
+    }
+]
+```
