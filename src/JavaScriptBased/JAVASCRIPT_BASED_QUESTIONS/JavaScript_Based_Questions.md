@@ -3991,6 +3991,15 @@ function ab(a) {
   return a;
 }
 console.log(ab(5));
+
+NOTE : The delete operator cannot delete function parameters and has no effect on them.
+1. delete only works on object properties, global variables, or array elements.
+2. Function parameters, var, let, const declarations cannot be deleted.
+
+
+// ✅ Works - global variable
+globalVar = 5;
+delete globalVar;  // true
 ```
 
 ### 38. use Promise chains for Sequential Async tasks? Perform async task in sequence.
