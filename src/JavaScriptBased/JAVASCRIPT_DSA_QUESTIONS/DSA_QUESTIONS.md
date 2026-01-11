@@ -2610,14 +2610,16 @@ console.log(result, "result");
 ### 55. write a function to give chunk of item in an array based on K value
 
 ```ts
+
+
 const arr = [1, 2, 3, 4, 5];
 const k = 1;
 
+> Method 1.
+
 function chunk(array, k) {
   let len = array.length;
-
   const chunkData = [];
-
   let initialValue = 0;
   let nextValue = k;
   for (let x = 0; x < len; x++) {
@@ -2633,6 +2635,40 @@ function chunk(array, k) {
 }
 
 const result = chunk(arr, k);
+
+
+> Method 2.
+function covert(){
+  let chunk = []
+  let i=0
+  let len = arr.length
+
+  while(i<len){
+    chunk.push(arr.slice(i,i+k))
+    i=i+k
+  }
+  console.log(chunk)
+}
+
+covert()
+
+
+
+> Method 3.
+
+function covert(){
+  let chunk = []
+  for(let x=0;x<arr.length;x=x+k){
+    chunk.push(arr.slice(x,x+k))
+  }
+  console.log(chunk)
+
+}
+
+covert()
+
+
+
 
 // O/P:
 // 1 . when k is 1 :  [[1], [2], [3], [4], [5]]
