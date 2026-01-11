@@ -10170,7 +10170,7 @@ const circuitBreaker = (fn, failureCount, recoveryTime) => {
 
   return function (...args) {
     // if service is closed
-    
+
     if (isClosed) {
       const timeSinceFailure = Date.now() - lastFailureTime;
 
@@ -10900,7 +10900,7 @@ setTimeout(() => {
 
 ```
 
-### Write a function that satisfies the following.
+### 125. Write a function that satisfies the following.
 
 ```js
 add(1)(2).value() = 3;
@@ -10928,7 +10928,6 @@ MyNumberType.prototype.valueOf = function () {
 
 const myObj = new MyNumberType(4);
 myObj + 3; // 8
-
 ```
 
 Thus we can form closure and track the arguments in an Array and return a new function every time that will accept new arguments.
@@ -10971,4 +10970,23 @@ Output: true;
 true;
 true;
 6;
+```
+
+### 126.
+
+```js
+const obj = {
+  name: "Hola",
+  pattern: {
+    regular: function () {
+      console.log("this top", this.name);
+    },
+    callback: () => {
+      console.log("this bottom", this.name);
+    },
+  },
+};
+
+obj.pattern.regular();
+obj.pattern.callback();
 ```
