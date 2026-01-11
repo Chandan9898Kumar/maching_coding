@@ -10972,7 +10972,7 @@ true;
 6;
 ```
 
-### 126.
+### 126. Guess The Ouput.
 
 ```js
 const obj = {
