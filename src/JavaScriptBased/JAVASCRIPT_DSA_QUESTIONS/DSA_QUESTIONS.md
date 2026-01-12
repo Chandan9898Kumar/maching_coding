@@ -5084,6 +5084,10 @@ function aggregate(endorsements,on,who){
     if(endorsed){
 
       endorsed.skill =[...endorsed.skill,curr.skill]
+
+      //               OR We can use like below:
+      //  const index = acc.indexOf(endorsed); // Here , indexOf Finding by reference that's why we are getting data.
+      //  acc[index]={...endorsed,'skill':[...endorsed.skill,curr.skill]}
     }else{
       acc.push({[on]:curr.user,[who]:[curr.skill]})
     }
