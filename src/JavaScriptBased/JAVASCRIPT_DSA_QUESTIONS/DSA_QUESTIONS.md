@@ -5123,3 +5123,102 @@ console.log(aggregate(endorsements, "user", "skill"));
     }
 ]
 ```
+
+### 92.
+
+Q. Given an array of integers representing the lengths of sides, find the number of triangles that can be formed.
+Ans. Find the number of triangles that can be formed from an array of side lengths. Approach
+Sort the array of side lengths.
+Use a three-pointer approach where the largest side is fixed, and the other two pointers find valid pairs.
+For each fixed largest side, move the other two pointers to count all valid triangles efficiently.
+
+```js
+
+> In Python.
+
+def countTriangles(arr):
+    arr.sort()
+    n = len(arr)
+    count = 0
+    for k in range(n - 1, 1, -1):
+        i = 0
+        j = k - 1
+        while i < j:
+            if arr[i] + arr[j] > arr[k]:
+                count += j - i
+                j -= 1
+            else:
+                i += 1
+    return count
+
+
+> In JavaScript
+
+function countTriangles(arr) {
+    arr.sort((a, b) => a - b);
+    let n = arr.length;
+    let count = 0;
+    for (let k = n - 1; k >= 2; k--) {
+        let i = 0, j = k - 1;
+        while (i < j) {
+            if (arr[i] + arr[j] > arr[k]) {
+                count += j - i;
+                j--;
+            } else {
+                i++;
+            }
+        }
+    }
+    return count;
+}
+
+```
+
+### 93.
+
+// Q. Given an array, rotate the array to the left by k steps, where k is non-negative.
+// Ans. Rotate an array to the left by k steps.
+// Approach
+// Normalize k by taking k modulo the length of the array to avoid redundant rotations.
+// Reverse the first k elements of the array.
+// Reverse the remaining elements from k to the end of the array.
+// Reverse the entire array to achieve the left rotation.
+
+```js
+
+> In Js
+
+function rotateLeft(nums, k) {
+    const n = nums.length;
+    k %= n;
+    const reverse = (arr, start, end) => {
+        while (start < end) {
+            [arr[start], arr[end]] = [arr[end], arr[start]];
+            start++;
+            end--;
+        }
+    };
+    reverse(nums, 0, k - 1);
+    reverse(nums, k, n - 1);
+    reverse(nums, 0, n - 1);
+    return nums;
+}
+
+
+
+> In Python
+
+def rotateLeft(nums, k):
+    n = len(nums)
+    k %= n
+    def reverse(arr, start, end):
+        while start < end:
+            arr[start], arr[end] = arr[end], arr[start]
+            start += 1
+            end -= 1
+    reverse(nums, 0, k - 1)
+    reverse(nums, k, n - 1)
+    reverse(nums, 0, n - 1)
+    return nums
+
+```
