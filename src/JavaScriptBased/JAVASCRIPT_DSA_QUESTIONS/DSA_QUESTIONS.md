@@ -2756,6 +2756,24 @@ function strings(str){
 
 console.log(strings(str))
 
+
+
+> Using Single For Loop and Repeat method.
+
+let str = 'abcd'
+function convert(){
+  let s=''
+  let len = str.length
+  for(let x=0;x<str.length;x++){
+
+    s= x<len-1 ?   s+str[x].toUpperCase()+str[x].repeat(x+1)+ '-'  : s+str[x].toUpperCase()+str[x].repeat(x+1)
+  }
+
+  return s
+
+}
+
+console.log(convert())
 ```
 
 ### 57. Find the solution of following query.
